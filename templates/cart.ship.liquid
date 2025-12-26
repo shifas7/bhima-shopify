@@ -1,0 +1,25 @@
+{% if settings.freeshipping_enable %}
+  {% layout none %}
+  {%- liquid 
+    assign freeshipping_value         = settings.free_shipping | plus: 0
+    assign price_without_currency     = cart.total_price | money_without_currency
+    unless "EUR INR ANG ARS BRL BYN BYR CLF CLP COP CRC CZK DKK EUR HRK HUF IDR ISK MZN NOK PLN RON RUB SEK TRY UYU VES VND" contains shop.currency
+      assign price                    = price_without_currency | replace: ',' | plus: 0
+    else
+      assign price                    = price_without_currency | replace: '.' | plus: 0
+    endunless
+    assign spend_value = freeshipping_value | minus: price | times: 100 | money
+    assign w = price | times: 100 | divided_by: freeshipping_value | round
+  -%}
+  {% if price < freeshipping_value %}
+    <div class="threshold_spend">{{ 'cart.general.spend_html' | t: spend: spend_value }}</div>
+    <div class="threshold_bar">
+      <span class="animate" style="width: {{ w }}%!important">
+        <span><i class="rbb-icon-delivery-11"></i></span>
+      </span>
+    </div>
+  {% else %}
+    <div class="threshold_spend spend_congrats"><span>{{ 'cart.general.content_threshold' | t }}<i class="rbb-icon-delivery-11"></i></span></div>
+    <div class="threshold_bar threshold_congrats"><span class="animate" style="width: 100% !important;"><span><i class="rbb-icon-delivery-11"></i></span></span></div>
+  {% endif %}
+{% endif %}

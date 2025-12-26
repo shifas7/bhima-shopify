@@ -1,0 +1,195 @@
+<div class="promo-wrapper" style="background-color: {{ section.settings.bg_color }};">
+  <div class="promo-container">
+    
+    <div class="app-promo-section">
+      <div class="app-content">
+        <h2 class="app-main-heading">{{ section.settings.app_heading | escape }}</h2>
+        <div class="app-description">{{ section.settings.app_description }}</div>
+        
+        <div class="app-buttons">
+          {%- if section.settings.app_store_img != blank -%}
+            <a href="{{ section.settings.app_store_link }}" class="store-btn" aria-label="Download on the App Store">
+              {{ section.settings.app_store_img | image_url: width: 300 | image_tag: 
+                width: 150, 
+                height: 45, 
+                loading: 'lazy', 
+                alt: 'App Store Badge',
+                class: 'store-img'
+              }}
+            </a>
+          {%- endif -%}
+
+          {%- if section.settings.play_store_img != blank -%}
+            <a href="{{ section.settings.play_store_link }}" class="store-btn" aria-label="Get it on Google Play">
+              {{ section.settings.play_store_img | image_url: width: 300 | image_tag: 
+                width: 150, 
+                height: 45, 
+                loading: 'lazy', 
+                alt: 'Play Store Badge',
+                class: 'store-img'
+              }}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="plans-section">
+      <div class="section-header">
+        <h2 class="plans-main-heading">{{ section.settings.plans_heading | escape }}</h2>
+        <p>{{ section.settings.plans_subheading | escape }}</p>
+      </div>
+
+      <div class="plans-grid">
+        {% for block in section.blocks %}
+          <div class="plan-card" {{ block.shopify_attributes }}>
+            <div class="plan-icon">
+              {% if block.settings.plan_logo != blank %}
+                {{ block.settings.plan_logo | image_url: width: 400 | image_tag: 
+                  width: 150, 
+                  height: 150, 
+                  loading: 'lazy', 
+                  alt: block.settings.title,
+                  class: 'plan-logo-img'
+                }}
+              {% else %}
+                <div class="placeholder-icon">★</div>
+              {% endif %}
+            </div>
+            
+            <h3 class="plan-title">{{ block.settings.title | escape }}</h3>
+            <div class="plan-price">{{ block.settings.price | escape }}<span>/mo</span></div>
+            
+            <div class="plan-features">
+              {{ block.settings.features }}
+            </div>
+            
+            {% if block.settings.whatsapp_number != blank %}
+              {%- assign message = "Hi, I am interested in the " | append: block.settings.title | url_encode -%}
+              <a href="https://wa.me/{{ block.settings.whatsapp_number | replace: ' ', '' | replace: '+', '' }}?text={{ message }}" 
+                 class="plan-btn whatsapp-btn" 
+                 target="_blank"
+                 rel="noopener">
+                {{ block.settings.button_text | escape }}
+              </a>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<style>
+  .promo-wrapper { width: 100%; padding: 60px 0; }
+  .promo-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; font-family: sans-serif; }
+  
+  /* App Section */
+  .app-promo-section { text-align: center; margin-bottom: 40px; }
+  .app-main-heading { font-size: 3rem; margin-bottom: 15px; color: #121212; font-weight: 800; }
+  .app-description { font-size: 1.2rem; color: #555; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .app-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+  .store-img { height: 45px; width: auto; transition: transform 0.2s ease; }
+  .store-img:hover { transform: scale(1.05); }
+
+  .section-divider { border: 0; border-top: 1px solid #e5e5e5; margin: 60px 0; }
+
+  /* Plans Section */
+  .section-header { text-align: center; margin-bottom: 50px; }
+  .plans-main-heading { font-size: 2.8rem; margin-bottom: 10px; font-weight: 700; }
+  .section-header p { color: #666; font-size: 1.1rem; }
+
+  .plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+  .plan-card { 
+    background: #fff; 
+    border: 1px solid #ebebeb; 
+    padding: 40px 30px; 
+    border-radius: 12px; 
+    text-align: center; 
+    display: flex; 
+    flex-direction: column; 
+    transition: all 0.3s ease;
+  }
+  .plan-card:hover { border-color:rgb(144, 144, 144); box-shadow: 0 10px 30px rgba(0,0,0,0.05); transform: translateY(-5px); }
+  
+  /* LARGER LOGO STYLE */
+  .plan-icon { margin-bottom: 25px; display: flex; justify-content: center; align-items: center; min-height: 120px; }
+  .plan-logo-img { height: 120px; width: auto; object-fit: contain; }
+  .placeholder-icon { font-size: 60px; color:rgb(0, 0, 0); }
+  
+  /* BIG HEADING */
+  .plan-title { font-size: 2.2rem; margin-bottom: 10px; font-weight: 700; line-height: 1.2; }
+  
+  /* LITTLE SMALL PRICE */
+  .plan-price { font-size: 1.6rem; font-weight: 600; margin-bottom: 20px; color: #444; }
+  .plan-price span { font-size: 0.9rem; color: #888; font-weight: normal; }
+  
+  .plan-features { text-align: left; margin-bottom: 30px; flex-grow: 1; }
+  .plan-features ul { list-style: none; padding: 0; margin: 0; }
+  .plan-features li { padding: 10px 0; border-bottom: 1px solidrgb(0, 0, 0); color: #444; }
+
+  .plan-btn { 
+    display: block; 
+    background: #000; 
+    color: #fff; 
+    padding: 15px; 
+    text-decoration: none; 
+    border-radius: 6px; 
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .whatsapp-btn { background:rgb(4, 4, 4), 0); }
+  .whatsapp-btn:hover { background:rgb(255, 255, 255); transform: scale(1.02); }
+
+  @media (max-width: 768px) {
+    .app-main-heading, .plans-main-heading { font-size: 2.2rem; }
+    .plan-title { font-size: 1.8rem; }
+    .plan-logo-img { height: 100px; }
+    .plans-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "App & Plans Promo",
+  "settings": [
+    { "type": "color", "id": "bg_color", "label": "Background Color", "default": "#ffffff" },
+    { "type": "header", "content": "App Promotion" },
+    { "type": "text", "id": "app_heading", "label": "App Heading", "default": "Our Mobile App" },
+    { "type": "richtext", "id": "app_description", "label": "App Description", "default": "<p>Download our app for the best shopping experience.</p>" },
+    { "type": "image_picker", "id": "app_store_img", "label": "App Store Badge Image" },
+    { "type": "url", "id": "app_store_link", "label": "App Store Link" },
+    { "type": "image_picker", "id": "play_store_img", "label": "Play Store Badge Image" },
+    { "type": "url", "id": "play_store_link", "label": "Play Store Link" },
+    { "type": "header", "content": "Plans Promotion" },
+    { "type": "text", "id": "plans_heading", "label": "Plans Heading", "default": "Membership Plans" },
+    { "type": "text", "id": "plans_subheading", "label": "Plans Sub-heading", "default": "Choose a plan that works for you." }
+  ],
+  "blocks": [
+    {
+      "type": "plan",
+      "name": "Plan",
+      "settings": [
+        { "type": "image_picker", "id": "plan_logo", "label": "Plan Logo" },
+        { "type": "text", "id": "title", "label": "Plan Name", "default": "Premium Plan" },
+        { "type": "text", "id": "price", "label": "Price", "default": "$19.99" },
+        { "type": "richtext", "id": "features", "label": "Features", "default": "<ul><li>Feature 1</li><li>Feature 2</li></ul>" },
+        { "type": "text", "id": "button_text", "label": "Button Text", "default": "Enquire Now" },
+        { "type": "text", "id": "whatsapp_number", "label": "WhatsApp Number", "info": "Include country code (e.g., 1234567890)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "App & Plans Promo",
+      "blocks": [
+        { "type": "plan" },
+        { "type": "plan" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,373 @@
+{%- assign sst = section.settings -%}
+{% style %}
+  #shopify-section-{{ section.id }} .nov-slick-carousel .item-content {
+    background-color: {{ sst.bg_item }};
+  }
+  #shopify-section-{{ section.id }} .nov-slick-carousel .item-content:hover {
+    background-color: {{ sst.bg_item_h }};
+  }
+  #shopify-section-{{ section.id }} .name_link {
+    color: {{ sst.color_link }};
+  }
+{% endstyle %}
+{% render 'nov-breadcrumb', class_br: 'breadcrumb_inner' %}
+<div class="color-{{ sst.color_section }}" data-section-id="{{ section.id }}" data-section-type="nov-slick">
+  <div class="container">
+    {% if page.content.size > 0 %}
+      <div class="rte">{{ page.content }}</div>
+    {% endif %}
+
+    <div class="nov-slick-carousel row mb-60 arrow_on_light"
+      data-autoplay="false" 
+      data-autoplaytimeout="6000"
+      data-loop="true"
+      data-dots="false"
+      data-nav="{{ sst.nav }}"
+      data-items_xxl="{{ sst.xl }}"
+      data-items_xl="{{ sst.xl }}"
+      data-items_lg="{{ sst.lg }}" 
+      data-items_md="{{ sst.md }}" 
+      data-items_sm="{{ sst.sm }}"
+      data-items_xs="{{ sst.xs }}">
+      {%- for i in (1..5) -%}
+        {%- assign image_id = 'image' | append: i -%}
+        {%- assign link_id = 'link' | append: i -%}
+        {%- assign text_id = 'text' | append: i -%}
+        {% if sst[image_id] != blank %}
+          <div class="col">
+            <div class="item-content text-center">
+              {% if sst[link_id] != blank %}
+                <a href="{{ sst[link_id] }}" class="item-content--block d-block w-100">
+              {% else %}
+                <div class="item-content--block d-block pt-20 pb-15">
+              {% endif %}
+              {% if sst[image_id] != blank %}
+                <div class="b_img"><img src="{{ sst[image_id] | image_url: width: 140 }}" alt="" width="140" height="{{ 140 | divided_by: sst[image_id].aspect_ratio }}" style="height: auto;"></div>
+              {% endif %}
+              {% if sst[text_id] != blank %}
+                <div class="name_link font-700">{{ sst[text_id] }}</div>
+              {% endif %}
+              {% if sst[link_id] != blank %}
+                </a>
+              {% else %}
+                </div>  
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      {%- endfor -%}
+    </div>
+
+    {% if sst.title != blank or sst.text_content != blank %}
+      <div class="faqText">
+        <div class="block_text">
+          {% if sst.title != blank %}
+            <div class="title font-700">{{ sst.title }}</div>
+          {% endif %}
+          {% if sst.text_content != blank %}
+            <div class="block_content">
+              <p>{{ sst.text_content }}</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="faqWrapper">
+      {% if section.blocks.size > 0 %}
+        <div id="Accordion" role="tablist">
+          {% for block in section.blocks %}
+            {%- assign bst = block.settings -%}
+            <div class="faqs-main {{ bst.class }}{% if forloop.first %} active{% endif %}">
+              <div class="panel-group">
+                <div class="panel-header collapsed"{% if forloop.first %} aria-expanded="true"{% endif %} data-toggle="collapse" href="#Item-{{ forloop.index }}" aria-expanded="false" aria-controls="#Item-{{ forloop.index }}">
+                  {{ block.settings.item_title }}
+                </div>
+                <div class="panel-body">
+                  <div id="Item-{{ forloop.index }}" data-parent="#Accordion" class="collapse{% if forloop.first %} show{% endif %}">
+                    <div class="item-content">
+                      {{ block.settings.item_content }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    {% if sst.eb_contact %}
+      <div class="faqContact text-center">
+        {% if sst.title_answer != blank or sst.text_content != blank %}
+          <div class="block_text {{ sst.class }}">
+            {% if sst.sub_answer != blank %}
+              <div class="sub_answer font-700">{{ sst.sub_answer }}</div>
+            {% endif %}
+            {% if sst.title_answer != blank %}
+              <div class="title_answer text-uppercase font-800">{{ sst.title_answer }}</div>
+            {% endif %}
+          </div>
+        {% endif %}
+        {% if sst.text_button %}
+          <button class="btn btn-large" type="submit" data-toggle="modal" data-target="#popup_contact_faq">
+            {{ sst.text_button }}
+          </button>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Vinova page FAQs",
+    "class": "page-inner page-faqs",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Block List Collection"
+      },
+      {
+        "type": "range",
+        "id": "xl",
+        "min": 1,
+        "max": 5,
+        "step": 1,
+        "label": "Large Laptop",
+        "default": 3,
+        "info": "Breakpoint 1200px ↑"
+      },
+      {
+        "type": "range",
+        "id": "lg",
+        "min": 1,
+        "max": 5,
+        "step": 1,
+        "label": "Laptop",
+        "default": 3,
+        "info": "Breakpoint 992px ↑"
+      },
+      {
+        "type": "range",
+        "id": "md",
+        "min": 1,
+        "max": 5,
+        "step": 1,
+        "label": "Tablet",
+        "default": 2,
+        "info": "Breakpoint 768px ↑"
+      },
+      {
+        "type": "range",
+        "id": "sm",
+        "min": 1,
+        "max": 5,
+        "step": 1,
+        "label": "Large mobile",
+        "default": 1,
+        "info": "Breakpoint 576px ↑"
+      },
+      {
+        "type": "range",
+        "id": "xs",
+        "min": 1,
+        "max": 5,
+        "step": 1,
+        "label": "Mobile",
+        "default": 1
+      },
+      {
+        "type": "image_picker",
+        "id": "image1",
+        "label": "Image 1"
+      },
+      {
+        "type": "text",
+        "id": "text1",
+        "label": "Name Link 1",
+        "default": "Delivery Policy"
+      },
+      {
+        "type": "url",
+        "id": "link1",
+        "label": "Link 1"
+      },
+      {
+        "type": "image_picker",
+        "id": "image2",
+        "label": "Image 2"
+      },
+      {
+        "type": "text",
+        "id": "text2",
+        "label": "Name Link 2",
+        "default": "Delivery Policy"
+      },
+      {
+        "type": "url",
+        "id": "link2",
+        "label": "Link 2"
+      },
+      {
+        "type": "image_picker",
+        "id": "image3",
+        "label": "Image 3"
+      },
+      {
+        "type": "text",
+        "id": "text3",
+        "label": "Name Link 3",
+        "default": "Delivery Policy"
+      },
+      {
+        "type": "url",
+        "id": "link3",
+        "label": "Link 3"
+      },
+      {
+        "type": "image_picker",
+        "id": "image4",
+        "label": "Image 4"
+      },
+      {
+        "type": "text",
+        "id": "text4",
+        "label": "Name Link ",
+        "default": "Delivery Policy"
+      },
+      {
+        "type": "url",
+        "id": "link4",
+        "label": "Link 4"
+      },
+      {
+        "type": "image_picker",
+        "id": "image5",
+        "label": "Image 5"
+      },
+      {
+        "type": "text",
+        "id": "text5",
+        "label": "Name Link 5",
+        "default": "Delivery Policy"
+      },
+      {
+        "type": "url",
+        "id": "link5",
+        "label": "Link 5"
+      },
+      {
+        "type": "header",
+        "content": "Style"
+      },
+      {
+        "type": "color",
+        "id": "color_link",
+        "label": "Label colors",
+        "default": "#666666"
+      },
+      {
+        "type": "color",
+        "id": "bg_item",
+        "label": "Background item",
+        "default": "#f0f0f0"
+      },
+      {
+        "type": "color",
+        "id": "bg_item_h",
+        "label": "Background hover item",
+        "default": "#e2e2e2"
+      },
+      {
+        "type": "header",
+        "content": "Block Faq"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+      },
+      {
+        "type": "textarea",
+        "id": "text_content",
+        "label": "Content"
+      },
+      {
+        "type": "header",
+        "content": "Contact"
+      },
+      {
+        "type": "checkbox",
+        "id": "eb_contact",
+        "label": "Show Contact",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "title_answer",
+        "label": "Title",
+        "default": "We're Here to Help!"
+      },
+      {
+        "type": "text",
+        "id": "sub_answer",
+        "label": "Sub Title",
+        "default": "Can't find the answer you are looking for?"
+      },
+      {
+        "type": "text",
+        "id": "text_button",
+        "label": "Text Button",
+        "default": "Contact us now"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "faq",
+        "name": "FAQs Item",
+        "settings": [
+          {
+            "type": "text",
+            "id": "item_title",
+            "label": "Item title"
+          },
+          {
+            "type": "color",
+            "id": "color_title",
+            "label": "Color Title",
+            "default": "#232630"
+          },
+          {
+            "type": "text",
+            "id": "fz_title",
+            "label": "Font Title",
+            "default": "16px"
+          },
+          {
+            "type": "textarea",
+            "id": "item_content",
+            "label": "Item Content"
+          },
+          {
+            "type": "color",
+            "id": "color_content",
+            "label": "Color Content",
+            "default": "#232630"
+          },
+          {
+            "type": "text",
+            "id": "fz_content",
+            "label": "Font Content",
+            "default": "14px"
+          },
+          {
+            "type": "text",
+            "id": "class",
+            "label": "Class"
+          } 
+        ]
+      }
+    ]
+  }
+{% endschema %}

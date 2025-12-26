@@ -1,0 +1,134 @@
+{%- assign sst = section.settings -%}
+{% render 'nov-breadcrumb', class_br: 'breadcrumb_inner' %}
+<div class="page-width">
+  {% if sst.has_fullwidth == false %}
+    <div class="container">
+  {% endif %}
+    {% if page.content.size > 0 %}
+      <div class="rte">
+        {{ page.content }}
+      </div>
+    {% endif %}
+
+    {% if sst.map == true %}
+      <div class="boxMap wow">
+        <div id="MapSection--{{ section.id }}" class="map-section w-100 position-relative" data-section-type="map">
+          <div class="page-width map-section__wrapper w-100 position-relative">
+            <div class="map-section__container h-870">
+              <iframe src="{{ sst.iframe_map }}" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+            </div>
+            {% if sst.boxInfor %}
+              <div class="map-section_content color-{{ sst.color_section }}">
+                <div class="boxInfor">
+                  {% if sst.address != blank %}
+                    <div class="address mb-25"><label>{{ 'page.contact.address' | t }}</label> {{ sst.address }}</div>
+                  {% endif %}
+                  {% if sst.email != blank %}
+                    <div class="email mb-5"><label>{{ 'page.contact.email' | t }}</label> {{ sst.email }}</div>
+                  {% endif %}
+                  {% if sst.call != blank %}
+                    <div class="call mb-20"><label>{{ 'page.contact.call' | t }}</label> {{ sst.call }}</div>
+                  {% endif %}
+                  {% if sst.time != true %}
+                    <div class="time mb-35"><label>{{ 'page.contact.time' | t }}</label> {{ sst.time }}</div>
+                  {% endif %}
+                  {% if sst.social %}
+                    {% render 'nov-social' %}
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% if sst.has_fullwidth == false %}
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+  {
+    "name": "Page Store Direction",
+    "class": "page-inner page-store-direction",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "has_fullwidth",
+        "label": "Full Width",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Maps"
+      },
+      {
+        "type": "checkbox",
+        "id": "map",
+        "label": "Show Map",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "iframe_map",
+        "label": "Google Maps Iframe",
+        "info": "You’ll need to embed the code on google map",
+        "default": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d23095.519254450588!2d-79.38263233337402!3d43.64941859273796!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x935ab2eb9fd5fb31!2sFirst%20Canadian%20Place!5e0!3m2!1sen!2s!4v1659598435154!5m2!1sen!2s"
+      },
+      {
+        "type": "paragraph",
+        "content": "[Google Maps](https://www.google.com/maps/place/First+Canadian+Place/@43.648611,-79.381667,14z/data=!4m5!3m4!1s0x0:0x935ab2eb9fd5fb31!8m2!3d43.6486111!4d-79.3816667?hl=en)"
+      },
+      {
+        "type": "header",
+        "content": "Info"
+      },
+      {
+        "type": "checkbox",
+        "id": "boxInfor",
+        "label": "Show BoxInfor",
+        "default": true
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_section",
+        "label": "Color section",
+        "default": "background-1"
+      },
+      {
+        "type": "text",
+        "id": "address",
+        "label": "Address",
+        "default": "123 Suspendis matti, Visaosang Building VST District, NY Accums, North American"
+      },
+      {
+        "type": "text",
+        "id": "email",
+        "label": "Email",
+        "default": "support@domain.com"
+      },
+      {
+        "type": "text",
+        "id": "call",
+        "label": "Call",
+        "default": "(012)-345-67890"
+      },
+      {
+        "type": "text",
+        "id": "time",
+        "label": "Time",
+        "default": "Our store has re-opened for shopping, exchanges every day 11am to 7pm"
+      },
+      {
+        "type": "header",
+        "content": "Social"
+      },
+      {
+        "type": "checkbox",
+        "id": "social",
+        "label": "Show social",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}

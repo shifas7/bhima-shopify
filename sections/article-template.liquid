@@ -1,0 +1,385 @@
+{%- assign new_comment = false -%}
+{% if comment and comment.created_at %}
+  {%- assign new_comment = true -%}
+  {%- assign new_comment_id = comment.id -%}
+{% endif %}
+{% if new_comment %}
+  {%- assign duplicate_comment = false %}
+  {% for comment in article.comments %}
+    {% if comment.id == new_comment_id %}
+      {%- assign duplicate_comment = true %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {% if duplicate_comment %}
+    {%- assign number_of_comments = article.comments_count -%}
+  {% else %}
+    {%- assign number_of_comments = article.comments_count | plus: 1 -%}
+  {% endif %}
+{% else %}
+  {%- assign number_of_comments = article.comments_count -%}
+{% endif %}
+{% if template == "article.rightsidebar" %}
+  {% assign viewtype = 'rightsidebar' %}
+{% elsif template == "article.withoutsidebar" %}
+  {% assign viewtype = 'withoutsidebar' %}
+{% else %}
+  {% if settings.type_sidebar_article == 'sidebar_right' %}
+    {% assign viewtype = 'rightsidebar' %}
+  {% elsif settings.type_sidebar_article == 'withoutsidebar' %}
+    {% assign viewtype = 'withoutsidebar' %}
+  {% else %}
+    {% assign viewtype = 'leftsidebar' %}
+  {% endif %}
+{% endif %}
+{{ 'css-blog.css' | asset_url | stylesheet_tag }}
+{% render 'nov-breadcrumb', class_br: 'breadcrumb_inner' %}
+<article>
+  <div class="container">
+    <div class="article-view-{{ viewtype }} row no-gutters" data-section-id="{{ section.id }}" data-section-type="nov-slick">
+      {% if viewtype != 'withoutsidebar' %}
+        <div class="sidebar-article col-lg-3 col-md-4 flex-xs-unordered{% if viewtype == 'rightsidebar' %} flex-last{% endif %}">
+          {% render 'sidebar-blog' %}
+        </div>
+      {% endif %}
+      <div class="{% if viewtype != 'withoutsidebar' %}col-lg-9 col-md-8 flex-xs-first{% else %}col-lg-12 col-md-12{% endif %}">
+        <div class="article__content-right">
+          {% if section.settings.blog_show_image_feature and article.image != blank  %}
+            <div class="article__thumnail">
+              {% render 'nov-aspect-image', image: article.image %}
+            </div>
+          {% endif %}
+          <div class="article__title">{{ article.title }}</div>
+          <div class="rte" itemprop="articleBody">
+            {{ article.content }}
+          </div>
+          <div class="article__info d-flex align-items-center">
+            <div class="blog_cs">
+              {% if section.settings.blog_show_date %}
+                <span class="article__date">
+                  <i class="zmdi zmdi-calendar-note"></i>{{ article.published_at | time_tag: format: 'month_day_year' }}
+                </span>
+              {% endif %}
+              
+              {% if blog.comments_enabled? %}
+                <span class="article__countcomment"><i class="zmdi zmdi-comment-alt"></i>{{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}</span>
+              {% endif %}
+
+              {% if section.settings.blog_show_author %}
+                <span class="article__author"><i class="zmdi zmdi-account"></i>{{ 'blogs.article.by_author' | t: author: article.author }}</span>
+              {% endif %}
+            </div>
+
+            <div class="blog_share">
+              {% if section.settings.show_share_buttons %}
+                <div class="article__share btn-group">
+                  <a class="dropdown-toggle" href="#" id="dropdownsharebutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="zmdi zmdi-share"></i><span>{{ 'blogs.article.share' | t }}</span>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownsharebutton">
+                    {% render 'social-sharing', share_title: article.title, share_permalink: article.url, share_image: article.image %}
+                  </div>
+                </div>
+              {% endif %}
+              <div class="article__print">
+                <a href="javascript:window.print()"><i class="zmdi zmdi-print"></i><span>{{ 'blogs.article.print' | t }}</span></a>
+              </div>
+            </div>
+          </div>
+          {% render 'nov-blog-related' %}
+          {% if blog.comments_enabled? %}
+            {% if number_of_comments > 0 %}
+            <div class="article__comments">
+              <div class="title-block uppercase">{{ 'blogs.comments.comments_with_count' | t: count: number_of_comments }}</div>
+              {% paginate article.comments by 5 %}
+                <div id="comments">
+                  {% if new_comment %}
+                    <p class="note form-success">
+                      {% if blog.moderated? %}
+                        {{ 'blogs.comments.success_moderated' | t }}
+                      {% else %}
+                        {{ 'blogs.comments.success' | t }}
+                      {% endif %}
+                    </p>
+                  {% endif %}
+                  <ul class="comments">
+                    {% comment %}
+                      If a comment was just submitted with no blank field, show it.
+                    {% endcomment %}
+                    {% if new_comment %}
+                      <li id="{{ comment.id }}" class="comment">{% render 'comment' %}</li>
+                    {% endif %}
+
+                    {% for comment in article.comments %}
+                      {% unless comment.id == new_comment_id %}
+                        <li id="{{ comment.id }}" class="comment">
+                          {% render 'comment' %}
+                        </li>
+                      {% endunless %}
+                    {% endfor %}
+                  </ul>
+
+                  {% if paginate.pages > 1 %}
+                    {% render 'pagination', paginate: paginate %}
+                  {% endif %}
+                </div>
+              {% endpaginate %}
+            </div>
+            {% endif %}
+            <div class="comment-form form-vertical">
+              {% form 'new_comment', article %}
+                <div class="title_block mb-30">{{ 'blogs.comments.title' | t }}</div>
+                {{ form.errors | default_errors }}
+                  <div class="row">
+                    <div class="col col-xs-12">
+                      <input type="text" name="comment[author]" id="CommentAuthor" placeholder="{{ 'blogs.comments.name' | t }} (*)" class="input-full{% if form.errors contains 'author' %} input--error{% endif %}" value="{{ form.author }}" required>
+                    </div>
+
+                    <div class="col col-xs-12">
+                      <input type="email" name="comment[email]" id="CommentEmail" placeholder="{{ 'blogs.comments.email' | t }} (*)" class="input-full{% if form.errors contains 'email' %} input--error{% endif %}" value="{{ form.email }}" required>
+                    </div>
+
+                    <div class="col col-xs-12">
+                      <input type="tel" name="comment[phone]" id="CommentPhone" placeholder="{{ 'blogs.comments.phone' | t }} (*)" class="input-full{% if form.errors contains 'phone' %} input--error{% endif %}" value="{{ form.phone }}">
+                    </div>
+                  </div>
+                  <div>
+                    <textarea rows="10" cols="50" name="comment[body]" id="CommentBody" placeholder="{{ 'blogs.comments.message' | t }}" class="input-full{% if form.errors contains 'body' %} input--error{% endif %}" required>{{ form.body }}</textarea>
+                  </div>
+                <input type="submit" class="btn" value="{{ 'blogs.comments.post' | t }}">
+              {% endform %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+{% schema %}
+  {
+    "name": "Blog Posts",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "blog_show_image_feature",
+        "label": "Show Image Feature",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_author",
+        "label": "Show author",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_date",
+        "label": "Show date",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_share_buttons",
+        "label": "Show social sharing buttons",
+        "default": true
+      }
+    ],
+    "blocks": [
+      {
+        "type": "block_search",
+        "name": "Block Search",
+        "settings": [
+          {
+            "type": "text",
+            "id": "block_class",
+            "label": "Class"
+          }
+        ]
+      },
+      {
+        "type": "block_categories",
+        "name": "Categories Product",
+        "settings": [
+          {
+            "type": "text",
+            "id": "sidebar_categories_title",
+            "label": "Title",
+            "default": "Categories"
+          },
+          {
+            "type": "text",
+            "id": "sidebar_categories_class",
+            "label": "Class"
+          },
+          {
+            "type": "link_list",
+            "id": "sidebar_categories_menu",
+            "label": "Choose Menu",
+            "info": "Choose menu for block. [Add new menu here](/admin/menus)"
+          }
+        ]
+      },
+      {
+        "type": "block_html",
+        "name": "Block HTML",
+        "settings": [
+          {
+            "type": "text",
+            "id": "block_title",
+            "label": "Title"
+          },
+          {
+            "type": "text",
+            "id": "block_class",
+            "label": "Class"
+          },
+          {
+           "type": "textarea",
+           "id": "html_content",
+           "label": "Content",
+           "placeholder": "You can input code html for content.",
+           "info": "You can input code html for content."
+         }
+       ]
+      },
+      {
+        "type": "block_recentpost",
+        "name": "Block Recent Post",
+        "settings": [
+          {
+            "type": "text",
+            "id": "block_title",
+            "label": "Title",
+            "default": "Recent post"
+          },
+          {
+            "type": "text",
+            "id": "block_class",
+            "label": "Class"
+          },
+          {
+            "type": "range",
+            "id": "number_show",
+            "min": 2,
+            "max": 10,
+            "step": 1,
+            "label": "Number Show",
+            "default": 2,
+            "info": "Select number post show"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_date",
+            "label": "Show date",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "show_comment",
+            "label": "Show Comment",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "show_author",
+            "label": "Show Author",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "id": "show_excerpt",
+            "label": "Show Excerpt",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "id": "show_more",
+            "label": "Show More",
+            "default": false
+          }
+        ]
+      },
+      {
+        "type": "block_blogtags",
+        "name": "Block Blog Tags",
+        "settings": [
+          {
+            "type": "text",
+            "id": "block_title",
+            "label": "Title",
+            "default": "Blog Tags"
+          },
+          {
+            "type": "select",
+            "id": "btn_type",
+            "label": "Tag type",
+            "default": "btn-primary",
+            "options": [
+              { "value": "btn-primary", "label": "Primary" },
+              { "value": "btn-secondary", "label": "Secondary" }
+            ]
+          },
+          {
+            "type": "color_scheme",
+            "id": "tag_color",
+            "label": "Tag color",
+            "default": "background-1"
+          },
+          {
+            "type": "text",
+            "id": "block_class",
+            "label": "Class"
+          },
+          {
+            "type": "range",
+            "id": "number_show",
+            "min": 2,
+            "max": 20,
+            "step": 1,
+            "label": "Number Show",
+            "default": 2,
+            "info": "Select number tags show"
+          }
+        ]
+      },
+      {
+        "type": "block_banner",
+        "name": "Block Banner",
+        "settings": [
+          {
+            "type": "text",
+            "id": "banner_title",
+            "label": "Title"
+          },
+          {
+            "type": "text",
+            "id": "banner_class",
+            "label": "Class"
+          },
+          {
+            "type": "image_picker",
+            "id": "banner_image",
+            "label": "Banner image"
+          },
+          {
+            "type": "range",
+            "id": "radius",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Border radius image",
+            "default": 0
+          },
+          {
+            "id": "banner_link",
+            "type": "url",
+            "label": "Banner button link"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

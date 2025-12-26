@@ -1,0 +1,299 @@
+{%- assign sst = section.settings -%}
+{% render 'nov-breadcrumb', class_br: 'breadcrumb_inner' %}
+<div class="page-width">
+  <div class="container">
+    {% if page.content.size > 0 %}
+      <div class="rte">{{ page.content }}</div>
+    {% endif %}
+    <div class="PageTestimonial">
+      <div class="block_quote d-flex flex-wrap align-items-center color-{{ sst.color_quote }}" style="background-color: {{ sst.background_quote }};">
+        {% if sst.image_quote != blank %}
+          <div class="cos-3 col-sm-3 cos-img">
+            {% render 'nov-aspect-image', image: sst.image_quote %}
+          </div>
+        {% endif %}
+        <div class="{% if sst.image_quote != blank %}cos-9 col-sm-9 {% endif %}cos-content">
+          <div class="d-flex">
+            {% if sst.icon_quotes != blank %}
+              <div class="icon-quote">
+                <img src="{{ sst.icon_quotes | image_url: width: 40, height: 32 }}" class="lazyload img-fluid" alt="{{ sst.icon_quotes.alt }}" width="40" height="32" style="height: auto;">
+              </div>
+            {% endif %}
+            <div class="item_content">
+              <span>{{ sst.text_content }}</span>
+              {% if sst.author != blank %}
+                <div class="item_author">{{ sst.author }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="block_content row">
+        {% for block in section.blocks %}
+          {%- assign bst = block.settings -%}
+          <div class="block_text col-xl-3 col-md-6 col-12 {{ bst.class }}">
+            {% for i in (1..5) %}
+              {%- assign item_id = 'item_' | append: i -%}
+              {%- assign text_content_id = 'text_content_' | append: i -%}
+              {%- assign img_author_id = 'img_author_' | append: i -%}
+              {%- assign info_name_id = 'info_name_' | append: i -%}
+              {%- assign info_trade_id = 'info_trade_' | append: i -%}
+              {% if bst[item_id] %}
+                <div class="content">
+                  {% if sst.icon_item != blank %}
+                    <div class="icon_quotes text-center">
+                      <img src="{{ sst.icon_item | image_url: width: 40, height: 32 }}" class="lazyload img-fluid" alt="{{ sst.icon_item.alt }}" width="40" height="30" style="height: auto;">
+                    </div>
+                  {% endif %}
+                  {% if bst[text_content_id] != blank %}
+                    <p class="item_content">{{ bst[text_content_id] }}</p>
+                  {% endif %}
+                  {% if bst[img_author_id] != blank or bst[info_name_id] != blank or bst[info_trade_id] != blank %}
+                    <div class="author d-flex align-items-center">
+                      {% if bst[img_author_id] != blank %}
+                        <img data-src="{{ bst[img_author_id] | image_url: width: 70, height: 70 }}" class="lazyload" alt="{{ bst[img_author_id].alt }}" width="70" height="70" style="height: auto;">
+                      {% endif %}
+                      <div class="info_other">
+                        {% if bst[info_name_id] != blank %}
+                          <div class="item_name font-700">{{ bst[info_name_id] }}</div>
+                        {% endif %}
+                        {% if bst[info_trade_id] != blank %}
+                          <div class="item_trade">{{ bst[info_trade_id] }}</div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Vinova Page Testimonial",
+    "class": "page-inner page-testimonial",
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_quote",
+        "label": "Color quote",
+        "default": "background-1"
+      },
+      {
+        "type": "color",
+        "id": "background_quote",
+        "label": "Background quote",
+        "default": "#f1f1f1"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_quote",
+        "label": "Image Quote"
+      },
+      {
+        "type": "image_picker",
+        "id": "icon_quotes",
+        "label": "Icon Quote"
+      },
+      {
+        "type": "richtext",
+        "id": "text_content",
+        "label": "Content"
+      },
+      {
+        "type": "text",
+        "id": "author",
+        "label": "Author",
+        "default": "Kwang Shang. - CEO Vinovathemes"
+      },
+      {
+        "type": "image_picker",
+        "id": "icon_item",
+        "label": "Icon item"
+      },
+      {
+        "type": "text",
+        "id": "class",
+        "label": "Class"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text",
+        "name": "Testimonial item",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Item 1"
+          },
+          {
+            "type": "checkbox",
+            "id": "item_1",
+            "label": "Show Item",
+            "default": true
+          },
+          {
+            "type": "textarea",
+            "id": "text_content_1",
+            "label": "Content"
+          },
+          {
+            "type": "image_picker",
+            "id": "img_author_1",
+            "label": "Icon Author"
+          },
+          {
+            "type": "text",
+            "id": "info_name_1",
+            "label": "Info Name",
+            "default": "Customer"
+          },
+          {
+            "type": "text",
+            "id": "info_trade_1",
+            "label": "Info Trade",
+            "default": "From Envato"
+          },
+          {
+            "type": "header",
+            "content": "Item 2"
+          },
+          {
+            "type": "checkbox",
+            "id": "item_2",
+            "label": "Show Item",
+            "default": true
+          },
+          {
+            "type": "textarea",
+            "id": "text_content_2",
+            "label": "Content"
+          },
+          {
+            "type": "image_picker",
+            "id": "img_author_2",
+            "label": "Icon Author"
+          },
+          {
+            "type": "text",
+            "id": "info_name_2",
+            "label": "Info Name",
+            "default": "Customer"
+          },
+          {
+            "type": "text",
+            "id": "info_trade_2",
+            "label": "Info Trade",
+            "default": "From Envato"
+          },
+          {
+            "type": "header",
+            "content": "Item 3"
+          },
+          {
+            "type": "checkbox",
+            "id": "item_3",
+            "label": "Show Item",
+            "default": true
+          },
+          {
+            "type": "textarea",
+            "id": "text_content_3",
+            "label": "Content 3"
+          },
+          {
+            "type": "image_picker",
+            "id": "img_author_3",
+            "label": "Icon Author"
+          },
+          {
+            "type": "text",
+            "id": "info_name_3",
+            "label": "Info Name",
+            "default": "Customer"
+          },
+          {
+            "type": "text",
+            "id": "info_trade_3",
+            "label": "Info Trade",
+            "default": "From Envato"
+          },
+          {
+            "type": "header",
+            "content": "Item 4"
+          },
+          {
+            "type": "checkbox",
+            "id": "item_4",
+            "label": "Item 4",
+            "default": true
+          },
+          {
+            "type": "textarea",
+            "id": "text_content_4",
+            "label": "Content"
+          },
+          {
+            "type": "image_picker",
+            "id": "img_author_4",
+            "label": "Icon Author"
+          },
+          {
+            "type": "text",
+            "id": "info_name_4",
+            "label": "Info Name",
+            "default": "Customer"
+          },
+          {
+            "type": "text",
+            "id": "info_trade_4",
+            "label": "Info Trade 4",
+            "default": "From Envato"
+          },
+          {
+            "type": "header",
+            "content": "Item 5"
+          },
+          {
+            "type": "checkbox",
+            "id": "item_5",
+            "label": "Show Item",
+            "default": false
+          },
+          {
+            "type": "textarea",
+            "id": "text_content_5",
+            "label": "Content"
+          },
+          {
+            "type": "image_picker",
+            "id": "img_author_5",
+            "label": "Icon Author"
+          },
+          {
+            "type": "text",
+            "id": "info_name_5",
+            "label": "Info Name",
+            "default": "Customer"
+          },
+          {
+            "type": "text",
+            "id": "info_trade_5",
+            "label": "Info Trade",
+            "default": "From Envato"
+          },
+          {
+            "type": "text",
+            "id": "class",
+            "label": "Class"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

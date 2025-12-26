@@ -1,0 +1,34 @@
+<div id="Shopshare" class="modal fade">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header close-icon" data-dismiss="modal"></div>
+      <div class="modal-body">
+        <div class="Shopshare_copy-title font-700 f_pr black mb-20">{{ 'general.copy.title' | t }}</div>
+        <div class="nov-copy d-flex">
+          <input type="text" value="{{ shop.url | append: product.url }}">
+          <div class="copy-btn btn" data-copy="{{ 'general.copy.copy' | t }}" data-copied="{{ 'general.copy.copied' | t }}">{{ 'general.copy.copy' | t }}</div>
+        </div>
+        <div class="Shopshare-title font-700 f_pr black mt-15 mb-10">{{ 'products.product.label_share' | t }}</div>
+        <div class="d-flex align-items-center">
+          {% if settings.share_facebook %}
+            <a target="_blank" href="//www.facebook.com/sharer.php?u={{ shop.url | append: product.url }}" class="btn--share share-facebook" title="{{ 'general.social.alt_text.share_on_facebook' | t }}">
+              <i class="rbb-icon-social-facebook-8"></i>
+            </a>
+          {% endif %}
+
+          {% if settings.share_twitter %}
+            <a target="_blank" href="//twitter.com/share?text={{ article.title | url_param_escape }}&amp;url={{ shop.url | append: product.url }}" class="btn--share share-twitter" title="{{ 'general.social.alt_text.share_on_twitter' | t }}">
+              <i class="rbb-icon-social-twitter-5"></i>
+            </a>
+          {% endif %}
+
+          {% if settings.share_pinterest %}
+            <a target="_blank" href="//pinterest.com/pin/create/button/?url={{ shop.url | append: product.url }}&amp;media={{ product.featured_image | image_url: width: 1024, height: 1024 }}" class="btn--share share-pinterest" title="{{ 'general.social.alt_text.share_on_pinterest' | t }}">
+              <i class="rbb-icon-social-pinterest-2"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

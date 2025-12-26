@@ -1,0 +1,932 @@
+{% doc %}
+  @prompt
+    Create a Terms & Conditions Section with the following requirements:
+    
+    Main Heading
+    
+    Editable text field
+    
+    Main Description
+    
+    Editable multi-line text field
+    
+    Policy List
+    
+    30 policy dropdowns
+    
+    Each policy should include:
+    
+    Policy Heading (text input)
+    
+    Policy Content (rich text or textarea)
+    
+    All 30 policies must be easily added, removed, or reordered in the Shopify customizer
+    
+    Dropdown Behavior
+    
+    Each policy should open/close as an accordion
+    
+    Clicking the heading expands the content
+    
+    The icon should rotate when open
+    
+    Only minimal, smooth animation
+    
+    Styling Requirements
+    
+    Clean
+    
+    Minimal
+    
+    Modern
+    
+    Fully responsive for mobile and desktop
+    
+    Simple lines, subtle spacing
+    
+    Typography should match the existing theme automatically
+    
+    Technical Requirements
+    
+    Use a Shopify section with schema
+    
+    Policies must be created as dynamic blocks with a limit of 30
+    
+    Include HTML, CSS, JavaScript inside the section
+    
+    Must work without any external libraries
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-terms-section-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .ai-terms-header-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .ai-terms-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: {{ block.settings.heading_weight }};
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 16px 0;
+    line-height: 1.3;
+  }
+
+  .ai-terms-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.description_color }};
+    line-height: 1.6;
+    margin: 50px;
+    white-space: pre-line;
+  }
+
+  .ai-terms-accordion-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: {{ block.settings.accordion_spacing }}px;
+  }
+
+  .ai-terms-item-{{ ai_gen_id }} {
+    border: {{ block.settings.border_width }}px solid {{ block.settings.border_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    background-color: {{ block.settings.item_background }};
+    overflow: hidden;
+  }
+
+  .ai-terms-item-header-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: {{ block.settings.item_padding }}px;
+    cursor: pointer;
+    user-select: none;
+    background-color: {{ block.settings.header_background }};
+    transition: background-color 0.2s ease;
+  }
+
+  .ai-terms-item-header-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.header_background_hover }};
+  }
+
+  .ai-terms-item-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.item_title_size }}px;
+    font-weight: {{ block.settings.item_title_weight }};
+    color: {{ block.settings.item_title_color }};
+    margin: 50px;
+    flex: 1;
+    padding-right: 16px;
+  }
+
+  .ai-terms-item-icon-{{ ai_gen_id }} {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    color: {{ block.settings.icon_color }};
+  }
+
+  .ai-terms-item-icon-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .ai-terms-item-{{ ai_gen_id }}.active .ai-terms-item-icon-{{ ai_gen_id }} {
+    transform: rotate(180deg);
+  }
+
+  .ai-terms-item-content-{{ ai_gen_id }} {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .ai-terms-item-content-inner-{{ ai_gen_id }} {
+    padding: 0 {{ block.settings.item_padding }}px {{ block.settings.item_padding }}px;
+    font-size: {{ block.settings.content_size }}px;
+    color: {{ block.settings.content_color }};
+    line-height: 1.7;
+  }
+
+  .ai-terms-item-content-inner-{{ ai_gen_id }} p {
+    margin: 0 0 12px 0;
+  }
+
+  .ai-terms-item-content-inner-{{ ai_gen_id }} p:last-child {
+    margin-bottom: 0;
+  }
+
+  .ai-terms-item-content-inner-{{ ai_gen_id }} ul,
+  .ai-terms-item-content-inner-{{ ai_gen_id }} ol {
+    margin: 0 0 12px 0;
+    padding-left: 24px;
+  }
+
+  .ai-terms-item-content-inner-{{ ai_gen_id }} li {
+    margin-bottom: 8px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-terms-section-{{ ai_gen_id }} {
+      padding: 30px 16px;
+    }
+
+    .ai-terms-heading-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.heading_size }}px * 0.8);
+    }
+
+    .ai-terms-description-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.description_size }}px * 0.9);
+    }
+
+    .ai-terms-item-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.item_title_size }}px * 0.9);
+    }
+
+    .ai-terms-item-header-{{ ai_gen_id }} {
+      padding: {{ block.settings.item_padding | times: 0.75 }}px;
+    }
+
+    .ai-terms-item-content-inner-{{ ai_gen_id }} {
+      padding: 0 {{ block.settings.item_padding | times: 0.75 }}px {{ block.settings.item_padding | times: 0.75 }}px;
+    }
+  }
+{% endstyle %}
+
+<terms-accordion-{{ ai_gen_id }} class="ai-terms-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-terms-header-{{ ai_gen_id }}">
+    {% if block.settings.main_heading != blank %}
+      <h1 class="ai-terms-heading-{{ ai_gen_id }}">{{ block.settings.main_heading }}</h1>
+    {% endif %}
+    {% if block.settings.main_description != blank %}
+      <div class="ai-terms-description-{{ ai_gen_id }}">{{ block.settings.main_description }}</div>
+    {% endif %}
+  </div>
+
+  <div class="ai-terms-accordion-{{ ai_gen_id }}">
+    {% for i in (1..30) %}
+      {% assign heading_key = 'policy_heading_' | append: i %}
+      {% assign content_key = 'policy_content_' | append: i %}
+      {% assign policy_heading = block.settings[heading_key] %}
+      {% assign policy_content = block.settings[content_key] %}
+
+      {% if policy_heading != blank %}
+        <div class="ai-terms-item-{{ ai_gen_id }}" data-accordion-item>
+          <div class="ai-terms-item-header-{{ ai_gen_id }}" data-accordion-trigger>
+            <h3 class="ai-terms-item-title-{{ ai_gen_id }}">{{ policy_heading }}</h3>
+            <div class="ai-terms-item-icon-{{ ai_gen_id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+          <div class="ai-terms-item-content-{{ ai_gen_id }}" data-accordion-content>
+            <div class="ai-terms-item-content-inner-{{ ai_gen_id }}">
+              {{ policy_content }}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</terms-accordion-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class TermsAccordion{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.items = this.querySelectorAll('[data-accordion-item]');
+        this.setupAccordion();
+      }
+
+      setupAccordion() {
+        this.items.forEach((item) => {
+          const trigger = item.querySelector('[data-accordion-trigger]');
+          const content = item.querySelector('[data-accordion-content]');
+
+          trigger.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+
+            if (isActive) {
+              this.closeItem(item, content);
+            } else {
+              this.openItem(item, content);
+            }
+          });
+        });
+      }
+
+      openItem(item, content) {
+        item.classList.add('active');
+        content.style.maxHeight = content.scrollHeight + 'px';
+      }
+
+      closeItem(item, content) {
+        item.classList.remove('active');
+        content.style.maxHeight = '0';
+      }
+    }
+
+    customElements.define('terms-accordion-{{ ai_gen_id }}', TermsAccordion{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Terms and conditions",
+  "tag": null,
+  "class": "section-terms-conditions",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Main heading"
+    },
+    {
+      "type": "text",
+      "id": "main_heading",
+      "label": "Heading",
+      "default": "Terms & Conditions"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "header",
+      "content": "Main description"
+    },
+    {
+      "type": "textarea",
+      "id": "main_description",
+      "label": "Description",
+      "default": "Please read these terms and conditions carefully before using our services."
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Description size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Accordion style"
+    },
+    {
+      "type": "range",
+      "id": "accordion_spacing",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Spacing between items",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "item_padding",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Item padding",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#eaeaea"
+    },
+    {
+      "type": "color",
+      "id": "item_background",
+      "label": "Item background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "header_background",
+      "label": "Header background",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "color",
+      "id": "header_background_hover",
+      "label": "Header background hover",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "header",
+      "content": "Policy heading"
+    },
+    {
+      "type": "range",
+      "id": "item_title_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "item_title_weight",
+      "label": "Title weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "color",
+      "id": "item_title_color",
+      "label": "Title color",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Policy content"
+    },
+    {
+      "type": "range",
+      "id": "content_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Content size",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "content_color",
+      "label": "Content color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Policy 1"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_1",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_1",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 2"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_2",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_2",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 3"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_3",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_3",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 4"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_4",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_4",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 5"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_5",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_5",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 6"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_6",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_6",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 7"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_7",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_7",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 8"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_8",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_8",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 9"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_9",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_9",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 10"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_10",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_10",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 11"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_11",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_11",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 12"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_12",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_12",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 13"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_13",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_13",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 14"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_14",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_14",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 15"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_15",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_15",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 16"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_16",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_16",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 17"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_17",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_17",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 18"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_18",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_18",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 19"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_19",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_19",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 20"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_20",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_20",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 21"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_21",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_21",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 22"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_22",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_22",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 23"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_23",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_23",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 24"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_24",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_24",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 25"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_25",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_25",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 26"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_26",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_26",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 27"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_27",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_27",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 28"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_28",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_28",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 29"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_29",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_29",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Policy 30"
+    },
+    {
+      "type": "text",
+      "id": "policy_heading_30",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content_30",
+      "label": "Content"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Terms and conditions"
+    }
+  ]
+}
+{% endschema %}

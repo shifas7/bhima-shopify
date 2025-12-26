@@ -1,0 +1,111 @@
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+<div class="product-single__stick-add p-2">
+  <div class="container d-flex align-items-center">
+    <div class="product__image">
+      <img src="{{ product.featured_image.src | image_url: width: 50 }}" width="50" height="{{ 50 | divided_by: product.featured_image.aspect_ratio | round }}" style="height: auto">
+    </div>
+    <div class="product__info-sticky">
+      <div class="product__title font-600 color-title">{{ product.title }}</div>
+      {%- liquid
+        assign discount_metafield = product.metafields.pricing.discount
+        assign discount_enabled = false
+        assign discount_amount = 0
+        if discount_metafield != blank
+          if discount_metafield.value != blank
+            assign discount_data = discount_metafield.value
+          else
+            assign discount_data = discount_metafield
+          endif
+          if discount_data.enabled == true or discount_data.enabled == "true"
+            assign discount_enabled = true
+            assign discount_amount = discount_data.discount_amount | default: 0
+          endif
+        endif
+        if discount_enabled and discount_amount != blank and discount_amount != 0
+          assign current_price_rupees = current_variant.price | divided_by: 100.0
+          assign price_before_discount = current_price_rupees | plus: discount_amount
+          assign price_before_discount_cents = price_before_discount | times: 100
+        endif
+      -%}
+      <div id="ProductPriceStick-{{ section.id }}" class="product-single__price-sticky d-flex align-items-center font-700">
+        {% if discount_enabled and discount_amount != blank and discount_amount != 0 %}
+          <s class="mr-10">{{ price_before_discount_cents | money }}</s>
+          <span class="product-price__sale color-title">
+            <span itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}" class="money">{{ current_variant.price | money }}</span>
+          </span>
+        {% elsif current_variant.compare_at_price > current_variant.price %}
+          <s>{{ current_variant.compare_at_price | money }}</s>
+          <span class="product-price__sale color-title">
+            <span itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}" class="money">{{ current_variant.price | money }}</span>
+          </span>
+        {% else %}
+          <span class="product-price__price">
+            <span itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}" class="money">{{ current_variant.price | money }}</span>
+          </span>
+        {% endif %}
+      </div>
+    </div>
+    <form action="/cart/add" method="post" enctype="multipart/form-data" id="product-form-sticky-{{ section.id }}" class="product-form product-form-{{ section.id }} d-flex align-items-center" data-section="{{ section.id }}"> 
+      <input id="variant_id-stick" type="hidden" name="id" value="{{current_variant.id}}" />
+      {%- unless product.has_only_default_variant -%}
+        <product-variant-selects-stick class="d-flex" data-section="{{ section.id }}" data-url="{{ product.url }}">
+          {%- for option in product.options_with_values -%}
+            <div class="product-form__input product-form__input--dropdown d-flex align-items-center">
+              <label class="form__label font-700 text-uppercase mb-0" for="Option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }} :</label>
+              <select id="Option-{{ section.id }}-{{ forloop.index0 }}" class="select__select" name="options[{{ option.name | escape }}]" form="product-form-{{ section.id }}">
+                {%- for value in option.values -%}
+                  <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
+                    {{ value }}
+                  </option>
+                {%- endfor -%}
+              </select>
+            </div>
+          {%- endfor -%}
+          <script type="application/json">{{ product.variants | json }}</script>
+        </product-variant-selects-stick>
+        <select id="productSelectStick" class="hide">
+          {% for variant in product.variants %}
+            {% if variant.available %}
+              <option value="{{ variant.id }}" data-sku="{{ variant.sku }}" data-qty="{{ variant.inventory_quantity }}"{% if variant == product.selected_or_first_available_variant %} selected="selected"{% endif %}>{{ variant.title }}</option>
+            {% else %}
+              <option value="{{ variant.id }}" data-sku="{{ variant.sku }}" data-qty="{{ variant.inventory_quantity }}" disabled="disabled">{{ variant.title }} - {{ 'products.product.sold_out' | t }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      {%- endunless -%}
+      <div class="product-form__item product-form__item--quantity d-flex align-items-center mt-0">
+        {% if section.settings.show_quantity_selector == true %}
+          <div class="quick_view_qty">
+            <a href="javascript:void(0);" class="quick_view-qty quick_view-qty-minus">-</a>
+            <input type="number" name="quantity" value="1" min="1" max="{{ current_variant.inventory_quantity }}" step="1" class="quantity-selector product-form__input" pattern="[0-9]*">
+            <a href="javascript:void(0);" class="quick_view-qty quick_view-qty-plus">+</a>
+          </div>
+          {% else %}
+            <input type="hidden" name="quantity" value="1" min="1" max="{{ current_variant.inventory_quantity }}" step="1"pattern="[0-9]*">
+        {% endif %}
+
+        <div class="product-form__item product-form__item--submit{% unless current_variant.available %} soldout{% endunless %}"{% unless current_variant.available %}data-toggle="modal" data-target="#Form_newletter"{% endunless %}>
+          <button data-handle="{{ product.handle }}" type="submit" name="add" id="AddToCart" class="btnAddToCart btn{% unless settings.cart_status_addtocart == 'goto_page_cart' %} product-form__cart-submit{% endunless %}">
+            {% if current_variant.available %}
+              {% if current_variant.inventory_policy == 'continue' and current_variant.inventory_management == 'shopify' %}
+                <span id="AddToCartText">{{ 'products.product.pre_order' | t }}</span>
+              {% else %}
+                <span id="AddToCartText">{{ 'products.product.add_to_bag' | t }}</span>
+              {% endif %}
+            {% else %}
+              <span id="AddToCartText" class="position-relative">{{ 'products.product.notify_me' | t }}</span>
+            {% endif %}
+            <span class="load"></span>
+          </button>
+        </div>
+        {% if settings.payment_button_enable %}
+          <div class="product-form__item product-form__item--checkout"{% if current_variant.available == false %} disabled{% endif %}>
+            {% form 'product', product, novalidate: 'novalidate', data-product-form: '' %}
+            {{ form | payment_button }}
+            {% endform %}
+          </div>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>

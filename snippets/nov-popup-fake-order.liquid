@@ -1,0 +1,50 @@
+{% if settings.show_fake_order  %}
+	{%- assign product_list = settings.product_list_fake_order -%}
+	{%- assign fake_time = settings.fake_order_time | split: '|' -%}
+	{%- assign fake_location = settings.fake_order_location | split: '|' -%}
+	{%- assign fake_name = settings.fake_order_name | split: '|' -%}
+	<div id="nov-popup-fake-order" data-time="{{ settings.fake_order_next_time }}000" data-xs="{{ settings.show_fake_order_xs }}">
+		<div class="close-popup pointer"><i class="zmdi zmdi-close"></i></div>
+		<div class="block-content d-flex align-items-center">
+			<a href="#" class="product-image"></a>
+			<div class="product-info">
+				<div class="d-flex flex-wrap align-items-center">
+					<span class="name"></span>&nbsp;<span>{{ 'general.popup_fake_order.purchased' | t }}</span>&nbsp;-&nbsp;<span>{{ 'general.popup_fake_order.from' | t }}</span>&nbsp;<span class="local"></span>
+				</div>
+				<div class="d-flex mt-10"><a class="product-title font-700" href="#" tabindex="0"></a><i class="zmdi zmdi-eye pointer"></i></div>
+				<div class="d-flex align-items-center mt-20">
+					<i class="rbb-icon-time-2"></i><span class="time"></span>
+					<span class="block-verified d-flex align-items-center">
+						<span class="icon-verified d-inline-flex"><i class="rbb-icon-check-4 position-relative"></i></span>
+						<span>{{ 'general.popup_fake_order.verified' | t }}</span>
+					</span>
+				</div>
+			</div>
+		</div>
+		<div id="fake-order-data" class="hidden">
+			<div class="product-data">
+				{% for product in product_list %}
+					<div class="product-item" data-img="{{ product.featured_image.src | image_url: width: 80 }}" data-title="{{ product.title }}" data-src="{{ product.url }}"></div>
+				{% endfor %}
+			</div>
+			<div class="time-data">
+				{{ fake_time }}
+				{% for time in fake_time %}
+					<div class="time-item" data-time="{{ time }}"></div>
+				{% endfor %}
+			</div>
+			<div class="location-data">
+				{% for location in fake_location %}
+					<div class="location-item" data-local="{{ location }}"></div>
+				{% endfor %}
+			</div>
+			<div class="name-data">
+				{% for name in fake_name %}
+					<div class="name-item" data-name="{{ name }}"></div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endif %}
+
+	

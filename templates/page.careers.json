@@ -1,0 +1,49 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "nov-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "blocks_feg7ay": {
+      "type": "_blocks",
+      "name": "Terms and conditions",
+      "settings": {}
+    },
+    "1766575062c2a69572": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_9bb2364_cQ8hjz": {
+          "type": "ai_gen_block_9bb2364",
+          "settings": {
+            "google_form_embed": "<iframe src=\"https://docs.google.com/forms/d/e/1FAIpQLSfzWSeJcblg75Qz4ygGM-1N3MQuUM1btL9gLO2BijVodSuWJg/viewform?embedded=true\" width=\"640\" height=\"2239\" frameborder=\"0\" marginheight=\"0\" marginwidth=\"0\">Loading…</iframe>",
+            "form_height": 800,
+            "padding_top": 50,
+            "padding_bottom": 50,
+            "padding_top_mobile": 30,
+            "padding_bottom_mobile": 30
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_9bb2364_cQ8hjz"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "blocks_feg7ay",
+    "1766575062c2a69572"
+  ]
+}

@@ -1,0 +1,328 @@
+{% doc %}
+  @prompt
+    Create a custom section named “Scrolling Text Bar” that appears above the header.
+    The section should display a continuously scrolling line of text (like a news ticker or announcement bar).
+    
+    Functional requirements:
+    
+    The bar must automatically adjust its height and width to fit on all screen sizes (desktop, tablet, and mobile).
+    
+    The height should be slim and customizable in settings (e.g., 20–60px).
+    
+    The scroll animation should be smooth and infinite (looping left to right).
+    
+    Users should be able to add multiple text items through the section settings (via dynamic “blocks”).
+    
+    A small • (bullet symbol) or customizable separator should appear between each text item.
+    
+    Each text item should support rich text (so links or bold text can be used).
+    
+    Include optional background color, text color, and font size settings.
+    
+    The scrolling speed should be adjustable in seconds.
+    
+    The section should be full-width and responsive.
+    
+    Schema controls to include:
+    
+    Background color picker
+    
+    Text color picker
+    
+    Font size slider
+    
+    Height slider (px)
+    
+    Scrolling speed slider (seconds)
+    
+    Text alignment (center, left, right)
+    
+    Option to toggle bullet separators on/off
+    
+    CSS & layout details:
+    
+    Use white-space: nowrap; and animation for the scrolling effect.
+    
+    Add media queries to keep height proportional on mobile and tablet.
+    
+    Bullets (•) should have spacing before and after.
+    
+    Text should vertically align to center within the bar.
+    
+    Example use case:
+    “Free Shipping Above $99 • 24/7 Customer Support • New Festive Collection Out Now”
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-scrolling-text-bar-{{ ai_gen_id }} {
+    width: 100%;
+    overflow: hidden;
+    background-color: {{ block.settings.background_color }};
+    height: {{ block.settings.bar_height }}px;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .ai-scrolling-text-bar-wrapper-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    animation: ai-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite;
+    will-change: transform;
+  }
+
+  .ai-scrolling-text-bar-content-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .ai-scrolling-text-bar-item-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.font_size }}px;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .ai-scrolling-text-bar-item-{{ ai_gen_id }} a {
+    color: {{ block.settings.text_color }};
+    text-decoration: none;
+  }
+
+  .ai-scrolling-text-bar-item-{{ ai_gen_id }} a:hover {
+    opacity: 0.8;
+  }
+
+  {% if block.settings.show_separator %}
+    .ai-scrolling-text-bar-separator-{{ ai_gen_id }} {
+      margin: 0 {{ block.settings.separator_spacing }}px;
+      color: {{ block.settings.text_color }};
+      opacity: 0.7;
+    }
+  {% endif %}
+
+  @keyframes ai-scroll-{{ ai_gen_id }} {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  {% if block.settings.pause_on_hover %}
+    .ai-scrolling-text-bar-wrapper-{{ ai_gen_id }}:hover {
+      animation-play-state: paused;
+    }
+  {% endif %}
+
+  @media screen and (max-width: 768px) {
+    .ai-scrolling-text-bar-{{ ai_gen_id }} {
+      height: {{ block.settings.bar_height | times: 0.8 }}px;
+    }
+
+    .ai-scrolling-text-bar-item-{{ ai_gen_id }} {
+      font-size: {{ block.settings.font_size | times: 0.9 }}px;
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .ai-scrolling-text-bar-{{ ai_gen_id }} {
+      height: {{ block.settings.bar_height | times: 0.7 }}px;
+    }
+
+    .ai-scrolling-text-bar-item-{{ ai_gen_id }} {
+      font-size: {{ block.settings.font_size | times: 0.85 }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-scrolling-text-bar-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-scrolling-text-bar-wrapper-{{ ai_gen_id }}">
+    <div class="ai-scrolling-text-bar-content-{{ ai_gen_id }}">
+      {% for i in (1..10) %}
+        {% assign text_key = 'text_' | append: i %}
+        {% assign text_content = block.settings[text_key] %}
+        {% if text_content != blank %}
+          <div class="ai-scrolling-text-bar-item-{{ ai_gen_id }}">
+            {{ text_content }}
+          </div>
+          {% if block.settings.show_separator %}
+            <span class="ai-scrolling-text-bar-separator-{{ ai_gen_id }}">{{ block.settings.separator_symbol }}</span>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="ai-scrolling-text-bar-content-{{ ai_gen_id }}" aria-hidden="true">
+      {% for i in (1..10) %}
+        {% assign text_key = 'text_' | append: i %}
+        {% assign text_content = block.settings[text_key] %}
+        {% if text_content != blank %}
+          <div class="ai-scrolling-text-bar-item-{{ ai_gen_id }}">
+            {{ text_content }}
+          </div>
+          {% if block.settings.show_separator %}
+            <span class="ai-scrolling-text-bar-separator-{{ ai_gen_id }}">{{ block.settings.separator_symbol }}</span>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Scrolling text bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Bar style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Height",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "s",
+      "label": "Speed",
+      "default": 30,
+      "info": "Lower is faster"
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Separator"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_separator",
+      "label": "Show separator",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "separator_symbol",
+      "label": "Separator symbol",
+      "default": "•"
+    },
+    {
+      "type": "range",
+      "id": "separator_spacing",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Separator spacing",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Text items"
+    },
+    {
+      "type": "richtext",
+      "id": "text_1",
+      "label": "Text 1",
+      "default": "<p>Free Shipping Above ₹1000</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "text_2",
+      "label": "Text 2",
+      "default": "<p>24/7 Customer Support</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "text_3",
+      "label": "Text 3",
+      "default": "<p>New Festive Collection Out Now</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "text_4",
+      "label": "Text 4"
+    },
+    {
+      "type": "richtext",
+      "id": "text_5",
+      "label": "Text 5"
+    },
+    {
+      "type": "richtext",
+      "id": "text_6",
+      "label": "Text 6"
+    },
+    {
+      "type": "richtext",
+      "id": "text_7",
+      "label": "Text 7"
+    },
+    {
+      "type": "richtext",
+      "id": "text_8",
+      "label": "Text 8"
+    },
+    {
+      "type": "richtext",
+      "id": "text_9",
+      "label": "Text 9"
+    },
+    {
+      "type": "richtext",
+      "id": "text_10",
+      "label": "Text 10"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling text bar"
+    }
+  ]
+}
+{% endschema %}

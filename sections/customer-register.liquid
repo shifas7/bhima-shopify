@@ -1,0 +1,39 @@
+{% render 'nov-breadcrumb', class_br: 'breadcrumb_inner' %}
+<div class="container pb-30">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="form-vertical">
+        {% form 'create_customer' %}
+          {{ form.errors | default_errors }}
+          <div class="block-form-login">
+            <div class="form-group novform-firstname">
+              <input type="text" name="customer[first_name]" id="FirstName" {% if form.first_name %} value="{{ form.first_name }}"{% endif %} placeholder="{{ 'customer.register.first_name' | t }}" required>
+            </div>
+            <div class="form-group novform-lastname">
+              <input type="text" name="customer[last_name]" id="LastName" {% if form.last_name %} value="{{ form.last_name }}"{% endif %} placeholder="{{ 'customer.register.last_name' | t }}" required >
+            </div>
+            <div class="form-group novform-email">
+              <input type="email" name="customer[email]" id="email-rigester" class="{% if form.errors contains 'email' %} input--error{% endif %}" {% if form.email %} value="{{ form.email }}"{% endif %} placeholder="{{ 'customer.register.email' | t }}" required >
+            </div>
+            <div class="form-group novform-password">
+              <input type="password" name="customer[password]" id="CreatePassword" class="{% if form.errors contains 'password' %} input--error{% endif %}" placeholder="{{ 'customer.register.password' | t }}" required >
+            </div>
+            <div class="form-checkbox novform-newsletter">
+              <label id="form-checkbox" class="custom_checkbox d-inline-flex mb-10">
+                <input type="checkbox" name="newsletter" value="1" class="mb-0">
+                <span class="text">{{ 'customer.register.checkbox_newsletter' | t }}</span>
+              </label>
+
+              <div class="bank_login mb-20">{{ 'customer.register.bank_login' | t }}
+                <a href="/account/login">{{ 'customer.register.log_in' | t }}</a>
+              </div>
+            </div>
+            <div class="form_submit">
+              <input type="submit" value="{{ 'customer.register.submit_register' | t }}" class="btn">
+            </div>
+          </div>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>

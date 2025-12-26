@@ -1,0 +1,264 @@
+{% comment %}
+  Section: Enhanced App Download Banner
+  - Fixed: Horizontal download buttons
+  - Fixed: Larger banner display
+  - Fixed: Width/Height attributes and modern image_url filter
+{% endcomment %}
+
+<style>
+  .app-section-container {
+    background-color: {{ section.settings.background_color }};
+    padding: 60px 0; /* Increased padding for a bigger feel */
+  }
+
+  .app-section-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    max-width: {{ section.settings.container_width }}px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* 3/4 Column for Image - Larger Banner */
+  .app-image-col {
+    flex: 0 0 70%;
+    max-width: 70%;
+    padding: 10px;
+  }
+
+  /* 1/4 Column for Content */
+  .app-content-col {
+    flex: 0 0 30%;
+    max-width: 30%;
+    padding: 30px;
+    color: {{ section.settings.text_color }};
+  }
+
+  .app-image-col img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 20px;
+    object-fit: cover;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* Adds depth to the larger banner */
+  }
+
+  .app-content-col h2 {
+    margin: 0 0 15px;
+    font-size: 2.2rem;
+    color: {{ section.settings.text_color }};
+    line-height: 1.2;
+  }
+
+  .app-content-col .description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    opacity: 0.9;
+  }
+
+  /* Buttons in the SAME LINE */
+  .download-buttons-row {
+    display: flex;
+    flex-direction: row; /* Horizontal alignment */
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+
+  .download-buttons-row a {
+    flex: 1; /* Makes buttons equal width */
+    max-width: 180px;
+  }
+
+  .download-buttons-row img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .know-more-btn {
+    display: inline-block;
+    padding: 15px 40px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    background-color: {{ section.settings.btn_bg }};
+    color: {{ section.settings.btn_text }};
+    transition: transform 0.2s ease;
+  }
+
+  .know-more-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 1024px) {
+    .app-image-col { flex: 0 0 60%; max-width: 60%; }
+    .app-content-col { flex: 0 0 40%; max-width: 40%; }
+  }
+
+  @media (max-width: 768px) {
+    .app-section-container { padding: 40px 0; }
+    .app-image-col, .app-content-col {
+      flex: 0 0 100%;
+      max-width: 100%;
+      text-align: center;
+    }
+    .download-buttons-row {
+      justify-content: center;
+    }
+  }
+</style>
+
+<div class="app-section-container">
+  <div class="app-section-wrapper">
+    
+    <div class="app-image-col">
+      {% if section.settings.main_image != blank %}
+        {%- assign img_alt = section.settings.main_image.alt | default: "App Banner" -%}
+        {{ section.settings.main_image | image_url: width: 2000 | image_tag: 
+          loading: 'lazy', 
+          widths: '800, 1200, 1600, 2000',
+          alt: img_alt,
+          class: 'banner-img'
+        }}
+      {% else %}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+
+    <div class="app-content-col">
+      <h2>{{ section.settings.heading }}</h2>
+      
+      <div class="description">
+        {{ section.settings.text }}
+      </div>
+
+      <div class="download-buttons-row">
+        {% if section.settings.google_play_img != blank %}
+          <a href="{{ section.settings.google_link }}" target="_blank">
+            {{ section.settings.google_play_img | image_url: width: 400 | image_tag: loading: 'lazy', alt: 'Get it on Google Play' }}
+          </a>
+        {% endif %}
+
+        {% if section.settings.app_store_img != blank %}
+          <a href="{{ section.settings.apple_link }}" target="_blank">
+            {{ section.settings.app_store_img | image_url: width: 400 | image_tag: loading: 'lazy', alt: 'Download on the App Store' }}
+          </a>
+        {% endif %}
+      </div>
+
+      {% if section.settings.btn_label != blank %}
+        <a href="{{ section.settings.btn_link }}" class="know-more-btn">
+          {{ section.settings.btn_label }}
+        </a>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Big App Promo Section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "label": "Section Width",
+      "default": 1400
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "Main Banner Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Download the app"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description Text",
+      "default": "<p>Start your savings today with our mobile app.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Store Buttons"
+    },
+    {
+      "type": "image_picker",
+      "id": "google_play_img",
+      "label": "Google Play Image"
+    },
+    {
+      "type": "url",
+      "id": "google_link",
+      "label": "Google Play Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "app_store_img",
+      "label": "App Store Image"
+    },
+    {
+      "type": "url",
+      "id": "apple_link",
+      "label": "App Store Link"
+    },
+    {
+      "type": "header",
+      "content": "Know More Button"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button Label",
+      "default": "Know More"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg",
+      "label": "Button Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "btn_text",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Big App Promo Section"
+    }
+  ]
+}
+{% endschema %}

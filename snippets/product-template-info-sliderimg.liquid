@@ -1,0 +1,54 @@
+{% if viewtype == 'sliderimgtwo' %}
+  <div class="container">
+{% endif %}
+  <div class="info-content__top mb-10 pb-30 mb-45">
+    <div class="d-flex align-items-center justify-content-center mb-10">
+      <h1 itemprop="name" class="product-single__title mb-0 text-capitalize">{{ product.title }}</h1>
+      {% if settings.wishlist_enable %}
+        <div class="product-single__wishlist productWishList">
+          <a class="wishlist btnProductWishlist d-flex align-items-center" data-icon-wishlist href="#" data-product-handle="{{ product.handle }}" data-id="{{ product.id | json }}">
+            <i class="rbb-icon-wishlist-8"></i>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+    {% if settings.show_rating %}
+      <div class="product-single__top-review mt-5 d-flex justify-content-center align-items-center">
+        <div class="AirReviews-Widget AirReviews-Widget--Stars"></div>
+      </div>
+    {% endif %}
+  </div>
+  <form action="/cart/add" method="post" enctype="multipart/form-data" id="product-form-{{ section.id }}" class="row product-form product-form-{{ section.id }}" data-section="{{ section.id }}"> 
+    <div class="col-md-6">
+      <div class="product-single__left">
+        {% render 'product-single-price', current_variant: product.selected_or_first_available_variant %}
+
+        {% if section.settings.show_des %}
+          <div class="product-single__shortdes" itemprop="description">{{ product.description | strip_html | truncatewords: 35}}</div> 
+        {% endif %}
+
+        {% render 'product-single-deal' %}
+
+        {% if section.settings.show_available %}
+          {% render 'product-single-available' %}
+        {% endif %}
+
+        {% render 'product-single-info' %}
+
+        {% render 'product-single-variant', current_variant: product.selected_or_first_available_variant %}
+      </div>
+    </div>
+    <div class="col-md-6 d-flex">
+      <div class="product-single__right w-100">
+
+        {% render 'product-single-addtocart', current_variant: product.selected_or_first_available_variant %}
+
+        {% render 'product-single-share-ask' %}
+
+        {% render 'product-single-payment-shipping' %}
+      </div>
+    </div>
+  </form>
+{% if viewtype == 'sliderimgtwo' %}
+  </div>
+{% endif %}

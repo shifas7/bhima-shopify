@@ -1,0 +1,646 @@
+{%- liquid
+  assign sst = section.settings
+  assign collection_blog = blogs[sst.blog]
+  assign blog_limit = sst.limit
+
+  if section.settings.ss_bg_enable
+    assign bg = " bg"
+  endif
+  if section.settings.class_section != blank
+    assign class_section = section.settings.class_section | prepend: ' '
+  endif
+  assign class = 'distance' | append: bg | append: ' ' | append: section.settings.background_position | append: class_section
+  if sst.background_size == 'full'
+    assign bg_class_full = class | prepend: ' '
+  else
+    assign bg_class_contain = class | prepend: ' '
+  endif
+-%}
+{%- style -%}
+  {% render 'nov-section-style' %}
+  
+  #shopify-section-{{ section.id }} .article--listing {
+    border-radius: {{ sst.item_corner_radius }}px;
+  }
+{%- endstyle -%}
+
+<div class="container-outer{{ bg_class_full }} color-{{ sst.color_section }}" data-section-id="{{ section.id }}" data-section-type="nov-swiper">
+  <div class="{{ sst.container }}">
+    <div class="container-inner{{ bg_class_contain }}">
+      {% if sst.show_view_all_blog %}
+        <div class="d-sm-flex align-items-end justify-content-between mb-55">
+          {% render 'heading-section', sub_position: sst.subheading_position, class: 'mb-0' %}
+          <a href="{{ collection_blog.url }}" class="link d-inline-flex align-items-center mt-xs-15">
+            <span class="font-500 text-capitalize">{{ 'sections.blog.view_all_blog' | t }}</span>
+            <span class="zmdi zmdi-long-arrow-right"></span>
+          </a>
+        </div>
+      {% else %}
+        {% render 'heading-section', sub_position: sst.subheading_position %}
+      {% endif %}
+      <div class="nov-swiper-carousel swiper {{ sst.dots_color }} {{ sst.arrow_color }}"
+        data-autoplay="false" 
+        data-loop="false"
+        data-row="1"
+        data-row_mobile="1"
+        data-items_xxl="{{ sst.xxl }}"
+        data-items_xl="{{ sst.xl }}"
+        data-items_lg="{{ sst.lg }}"
+        data-items_md="{{ sst.md }}"
+        data-items_sm="{{ sst.sm }}"
+        data-items_xs="{{ sst.sm }}"
+        data-spacing="{{ sst.spacing }}">
+          <div class="swiper-wrapper">
+            {% for article in collection_blog.articles limit: blog_limit %}
+               <div class="swiper-slide item">
+                <div class="article--listing overflow_hidden{% if sst.animate %} wow fadeInUp{% endif %}" data-wow-delay="{{ forloop.index | times: 0.1 }}s">
+
+                  {% if sst.show_image and article.image %}
+                    <div class="article-content row spacing-0">
+                      <div class="col-md-6">
+                        <div class="article__list-image-container position-relative mb-sm-25 overflow_hidden h-100">
+                          <a href="{{ article.url }}" class="h-100">
+                            {% render 'nov-aspect-image', image: article.image, aspect: 81 %}
+                          </a>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                  {% endif %}
+                  
+                  <div class="media-body d-flex flex-column">
+                    {% if sst.blog_show_type %}
+                      <div class="article__type font-600 text-uppercase mb-15">
+                        <a href="{{ collection_blog.url }}" class="color-text color-hover">{{ collection_blog.title }}</a>
+                      </div>
+                    {% endif %}
+
+                    {% if sst.blog_show_author or sst.blog_show_date %}
+                      <div class="article_cs d-flex align-items-center color-text mb-15">
+                        {% if sst.blog_show_date %}
+                          <span class="article__date">
+                            <i class="rbb-icon-calendar-1"></i>
+                            {{ article.published_at | date: "%b" }} {{ article.published_at | date: "%d" }}, {{ article.published_at | date: "%Y" }}
+                          </span>
+                        {% endif %}
+                        {% if sst.blog_show_author %}
+                          <span class="article__author">
+                            <i class="rbb-icon-human-user-10"></i>
+                            <span>{{ article.author }}</span>
+                          </span>
+                        {% endif %}
+                      </div>
+                    {% endif %}
+
+                    <h2 class="article__title">
+                      <a href="{{ article.url }}" class="link">{{ article.title | truncate: 70 }}</a>
+                    </h2>
+                    
+                    {% if sst.blog_show_excerpt %}
+                      <div class="article__excerpt mt-15 color-text">
+                        {% if article.excerpt.size > 0 %}
+                        {{ article.excerpt | truncate: 170 }}
+                        {% else %}
+                        {{ article.content | strip_html | truncate: 170 }}
+                        {% endif %}
+                      </div>
+                    {% endif %}
+                    
+                    {% if sst.show_readmore %}
+                    <div class="view_all mt-auto pt-20">
+                      <a href="{{ article.url }}" class="btn">
+                        <i class="zmdi zmdi-long-arrow-right"></i>
+                      </a>
+                    </div>
+                    {% endif %}
+                  </div>
+
+                  {% if sst.show_image and article.image %}
+                      </div>
+                    </div>
+                  {% endif %}
+
+                </div>
+              </div>
+            {% else %}
+              {%- for i in (1..4) -%}
+                {%- capture current -%}{% cycle 1, 2, 3 %}{%- endcapture -%}
+                 <div class="swiper-slide item">
+                  {{ 'blog-apparel-' | append: current | placeholder_svg_tag : 'placeholder-svg' }}
+                </div>
+              {%- endfor -%}
+            {% endfor %}
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Vinova Blog",
+    "class": "section-blog",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "heading",
+        "label": "Heading",
+        "default": "<p>Vinova Blogs</p>"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading color",
+        "default": "#222222"
+      },
+      {
+        "type": "richtext",
+        "id": "subheading",
+        "label": "Sub heading",
+        "default": "<p>Subtitle from happy customers</p>"
+      },
+      {
+        "type": "color",
+        "id": "subheading_color",
+        "label": "Sub heading color",
+        "default": "#666666"
+      },
+      {
+        "type": "richtext",
+        "id": "descheading",
+        "label": "Description",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+      },
+      {
+        "type": "color",
+        "id": "descheading_color",
+        "label": "Description color",
+        "default": "#666666"
+      },
+      {
+        "type": "select",
+        "id": "subheading_position",
+        "label": "Sub heading position",
+        "default": "bottom",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          },
+          {
+            "value": "bottom",
+            "label": "Bottom"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_alignment",
+        "label": "Heading alignment",
+        "default": "text-left",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "show_view_all_blog",
+        "label": "Button view all blog"
+      },
+      {
+        "type": "blog",
+        "id": "blog",
+        "label": "Blog"
+      },
+      {
+        "type":  "header",
+        "content": "Blog Item Option"
+      },
+      {
+        "type": "range",
+        "id": "item_corner_radius",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "label": "Corner radius",
+        "default": 0
+      },
+      {
+        "type": "checkbox",
+        "id": "show_image",
+        "label": "Show image",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_type",
+        "label": "Show type",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_author",
+        "label": "Show author",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_date",
+        "label": "Show date",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_excerpt",
+        "label": "Show excerpt",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_readmore",
+        "label": "Show read more blog",
+        "default": false
+      },
+      {
+        "type":  "header",
+        "content": "Blog Item Per Row"
+      },
+      {
+        "type": "range",
+        "id": "xxl",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Desktop",
+        "default": 3,
+        "info": "Breakpoint 1441px"
+      },
+      {
+        "type": "range",
+        "id": "xl",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Large laptop",
+        "default": 3,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "range",
+        "id": "lg",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Laptop",
+        "default": 3,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "range",
+        "id": "md",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Tablet",
+        "default": 3,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "range",
+        "id": "sm",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Mobile",
+        "default": 2
+      },
+      {
+        "type": "range",
+        "id": "limit",
+        "min": 4,
+        "max": 30,
+        "step": 1,
+        "label": "Limit",
+        "default": 8,
+        "info": "Select number limit post"
+      },
+      {
+        "type": "range",
+        "id": "spacing",
+        "min": 5,
+        "max": 70,
+        "step": 5,
+        "unit": "px",
+        "label": "Spacing item",
+        "default": 30,
+        "info": "Choose the spacing between items (px)"
+      },
+      {
+        "type": "header",
+        "content": "Dots Slider"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_dots",
+        "label": "Show dots",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "dots_color",
+        "label": "Dots color",
+        "default": "dots_on_light",
+        "options": [
+          {"value": "dots_on_light","label": "Dots on light background"},
+          {"value": "dots_on_dark","label": "Dots on dark background"}
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Arrow Slider"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_nav",
+        "label": "Show prev/next arrow",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "arrow_color",
+        "label": "Arrow color",
+        "default": "arrow_on_light",
+        "options": [
+          {"value": "arrow_on_light","label": "Dots on light background"},
+          {"value": "arrow_on_dark","label": "Dots on dark background"}
+        ]
+      },
+      {
+        "type":  "header",
+        "content": "Section Style"
+      },
+      {
+        "type": "checkbox",
+        "id": "animate",
+        "label": "Show animated",
+        "default":   true
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Container",
+        "default": "container",
+        "options": [
+          { "value": "container", "label": "Container" },
+          { "value": "container-fluid", "label": "Container fluid" },
+          { "value": "container-full", "label": "Container full width" }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_section",
+        "label": "Color section",
+        "default": "background-1"
+      },
+      {
+        "type": "text",
+        "id": "class_section",
+        "label": "Class"
+      },
+      {
+        "type":  "header",
+        "content": "Section Background"
+      },
+      {
+        "type": "checkbox",
+        "id": "ss_bg_enable",
+        "label": "Enable"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background colors",
+        "default": "#ffffff"
+      },
+      {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Background image"
+      },
+      {
+        "type": "range",
+        "id": "background_corner",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "label": "Corner background",
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "background_img_size",
+        "label": "Background image size",
+        "default": "cover",
+        "options": [
+          { "value": "auto", "label": "Auto" },
+          { "value": "cover", "label": "Cover" },
+          { "value": "contain", "label": "Contain" }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_background_img_size_custom",
+        "label": "Enable background image size custom"
+      },
+      {
+        "type": "text",
+        "id": "background_img_size_custom",
+        "label": "Background image size custom",
+        "info": "Replace base background size, unit % or px"
+      },
+      {
+        "type": "select",
+        "id": "background_img_position",
+        "label": "Background image position",
+        "default": "center center",
+        "options": [
+          { "value": "top left", "label": "Top left" },
+          { "value": "top center", "label": "Top center" },
+          { "value": "top right", "label": "Top right" },
+          { "value": "center left", "label": "Center left" },
+          { "value": "center center", "label": "Center middle" },
+          { "value": "center right", "label": "Center right" },
+          { "value": "bottom left", "label": "Bottom left" },
+          { "value": "bottom center", "label": "Bottom center" },
+          { "value": "bottom right", "label": "Bottom right" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "background_position",
+        "label": "Background position",
+        "default": "bg-center",
+        "options": [
+          { "value": "bg-top", "label": "Top" },
+          { "value": "bg-center", "label": "Center" },
+          { "value": "bg-bottom", "label": "Bottom" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "background_size",
+        "label": "Background size",
+        "default": "full",
+        "options": [
+          { "value": "full", "label": "Full" },
+          { "value": "contain", "label": "Contain"}
+        ]
+      },
+      {
+        "type": "range",
+        "id": "height_background_xxl",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 1441px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_xl",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 1200px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_lg",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 992px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_md",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 768px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_sm",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 576px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_xs",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 575px ↓"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Top (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_sm",
+        "label": "Mobile",
+        "default": 30
+      },
+      {
+        "type": "header",
+        "content": "Spacing Bottom (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_sm",
+        "label": "Mobile",
+        "default": 30
+      }
+    ],
+    "presets": [
+      {
+        "name": "Vinova Blog",
+        "category": "Blog"
+      }
+    ]
+  }
+{% endschema %}

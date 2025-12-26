@@ -1,0 +1,164 @@
+{% style %}
+  #shopify-section-{{ section.id }} .distance {
+  --di-pt-sm: {{ section.settings.distance_top_sm }}px;
+  --di-pb-sm: {{ section.settings.distance_bottom_sm }}px;
+  --di-pt-md: {{ section.settings.distance_top_md }}px;
+  --di-pb-md: {{ section.settings.distance_bottom_md }}px;
+  --di-pt-lg: {{ section.settings.distance_top_lg }}px;
+  --di-pb-lg: {{ section.settings.distance_bottom_lg }}px;
+  --di-pt-xl: {{ section.settings.distance_top_xl }}px;
+  --di-pb-xl: {{ section.settings.distance_bottom_xl }}px;
+}
+{% endstyle %}
+<div class="distance{% if section.settings.class != blank %} {{ section.settings.class }}{% endif %}{% if section.settings.animate == true %} wow fadeInUp animated{% endif %}" style="background-color: {{ section.settings.background_color }};">
+  <div class="{{ section.settings.container }}">
+    <div style="border-top: {{ section.settings.height }}px {{ section.settings.style }} {{ section.settings.color }}; opacity: {{ section.settings.opacity }}%;"></div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Vinova Line",
+    "class": "section-line",
+    "settings": [
+      {
+        "type": "number",
+        "id": "height",
+        "label": "Height",
+        "default": 1
+      },
+      {
+        "type": "color",
+        "id": "color",
+        "label": "Colors"
+      },
+      {
+        "type": "select",
+        "id": "style",
+        "label": "Style",
+        "options": [
+          {
+            "value": "solid",
+            "label": "Solid"
+          },
+          {
+            "value": "dashed",
+            "label": "Dashed"
+          },
+          {
+            "value": "dotted",
+            "label": "Dotted"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Opacity",
+        "default": 100
+      },
+      {
+        "type":  "header",
+        "content": "Section Style"
+      },
+      {
+        "type": "checkbox",
+        "id": "animate",
+        "label": "Show animated",
+        "default":   true
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Container",
+        "default": "container",
+        "options": [
+          { "value": "container", "label": "Container" },
+          { "value": "container-fluid", "label": "Container fluid" },
+          { "value": "container-full", "label": "Container full width" }
+        ]
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background colors",
+        "default": "#fff"
+      },
+      {
+        "type": "text",
+        "id": "class",
+        "label": "Class"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Top (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_sm",
+        "label": "Mobile",
+        "default": 30
+      },
+      {
+        "type": "header",
+        "content": "Spacing Bottom (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_sm",
+        "label": "Mobile",
+        "default": 30
+      }
+    ],
+    "presets": [
+      {
+        "name": "Vinova Line"
+      }
+    ]
+  }
+{% endschema %}

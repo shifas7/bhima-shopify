@@ -1,0 +1,658 @@
+{% doc %}
+  @prompt
+    Act as a Shopify Liquid developer. Create a custom section named 'Top Utility Bar' to be placed above the header.
+    
+    Layout Requirements:
+    
+    Left Side: A 'Store Locations' link and a clickable phone number using the tel: protocol.
+    
+    Center: A text field for a promotional announcement (e.g., 'Free Shipping').
+    
+    Right Side: A text link to a custom page and a 'Today's Rate' dropdown menu.
+    
+    Functional Requirements:
+    
+    The 'Today's Rate' dropdown must contain up to 8 metal rate items.
+    
+    Logic: Use Liquid to ensure a rate only displays in the dropdown if the price value is NOT empty in the schema settings.
+    
+    Use a simple JavaScript toggle for the dropdown visibility.
+    
+    Ensure the phone number is clickable on mobile.
+    
+    Technical Requirements:
+    
+    Provide the full Liquid code including a CSS <style> block for a clean, professional look (flexbox layout).
+    
+    Include a comprehensive {% schema %} so I can edit all text, links, and the 8 metal rates (label and price) directly from the Shopify Theme Customizer.
+    
+    Include a 'preset' so the section appears in the 'Add Section' list
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-utility-bar-{{ ai_gen_id }} {
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+    padding: {{ block.settings.padding_vertical }}px 0;
+    font-size: {{ block.settings.font_size }}px;
+    border-bottom: {{ block.settings.border_thickness }}px solid {{ block.settings.border_color }};
+    position: relative;
+    z-index: 100;
+  }
+
+  .ai-utility-bar-container-{{ ai_gen_id }} {
+    max-width: {{ settings.container }}px;
+    margin: 0 auto;
+    padding: 0 {{ settings.container_fluid }}px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .ai-utility-bar-left-{{ ai_gen_id }},
+  .ai-utility-bar-center-{{ ai_gen_id }},
+  .ai-utility-bar-right-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .ai-utility-bar-left-{{ ai_gen_id }} {
+    flex: 1;
+    justify-content: flex-start;
+  }
+
+  .ai-utility-bar-center-{{ ai_gen_id }} {
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .ai-utility-bar-right-{{ ai_gen_id }} {
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  .ai-utility-bar-link-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    text-decoration: none;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .ai-utility-bar-link-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.link_hover_color }};
+  }
+
+  .ai-utility-bar-phone-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    text-decoration: none;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .ai-utility-bar-phone-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.link_hover_color }};
+  }
+
+  .ai-utility-bar-announcement-{{ ai_gen_id }} {
+    margin: 0;
+    font-weight: {{ block.settings.announcement_font_weight }};
+  }
+
+  .ai-utility-bar-dropdown-{{ ai_gen_id }} {
+    position: relative;
+  }
+
+  .ai-utility-bar-dropdown-toggle-{{ ai_gen_id }} {
+    background: none;
+    border: none;
+    color: {{ block.settings.text_color }};
+    cursor: pointer;
+    font-size: {{ block.settings.font_size }}px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .ai-utility-bar-dropdown-toggle-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.link_hover_color }};
+  }
+
+  .ai-utility-bar-dropdown-icon-{{ ai_gen_id }} {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-utility-bar-dropdown-{{ ai_gen_id }}.active .ai-utility-bar-dropdown-icon-{{ ai_gen_id }} {
+    transform: rotate(180deg);
+  }
+
+  .ai-utility-bar-dropdown-menu-{{ ai_gen_id }} {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background-color: {{ block.settings.dropdown_bg_color }};
+    border: 1px solid {{ block.settings.border_color }};
+    border-radius: {{ block.settings.dropdown_border_radius }}px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    z-index: 1000;
+  }
+
+  .ai-utility-bar-dropdown-{{ ai_gen_id }}.active .ai-utility-bar-dropdown-menu-{{ ai_gen_id }} {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .ai-utility-bar-dropdown-item-{{ ai_gen_id }} {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: {{ block.settings.dropdown_text_color }};
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid {{ block.settings.border_color }};
+  }
+
+  .ai-utility-bar-dropdown-item-{{ ai_gen_id }}:last-child {
+    border-bottom: none;
+  }
+
+  .ai-utility-bar-dropdown-item-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.dropdown_hover_bg }};
+  }
+
+  .ai-utility-bar-rate-label-{{ ai_gen_id }} {
+    font-weight: 500;
+  }
+
+  .ai-utility-bar-rate-price-{{ ai_gen_id }} {
+    font-weight: 600;
+    color: {{ block.settings.price_color }};
+  }
+
+  @media screen and (max-width: 991px) {
+    .ai-utility-bar-container-{{ ai_gen_id }} {
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 20px;
+    }
+
+    .ai-utility-bar-left-{{ ai_gen_id }},
+    .ai-utility-bar-center-{{ ai_gen_id }},
+    .ai-utility-bar-right-{{ ai_gen_id }} {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .ai-utility-bar-dropdown-menu-{{ ai_gen_id }} {
+      right: 50%;
+      transform: translateX(50%) translateY(-10px);
+    }
+
+    .ai-utility-bar-dropdown-{{ ai_gen_id }}.active .ai-utility-bar-dropdown-menu-{{ ai_gen_id }} {
+      transform: translateX(50%) translateY(0);
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .ai-utility-bar-left-{{ ai_gen_id }},
+    .ai-utility-bar-right-{{ ai_gen_id }} {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ai-utility-bar-{{ ai_gen_id }} {
+      font-size: {{ block.settings.font_size | times: 0.9 }}px;
+    }
+  }
+{% endstyle %}
+
+<utility-bar-{{ ai_gen_id }} class="ai-utility-bar-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-utility-bar-container-{{ ai_gen_id }}">
+    <div class="ai-utility-bar-left-{{ ai_gen_id }}">
+      {% if block.settings.store_locations_text != blank and block.settings.store_locations_link != blank %}
+        <a href="{{ block.settings.store_locations_link }}" class="ai-utility-bar-link-{{ ai_gen_id }}">
+          {{ block.settings.store_locations_text }}
+        </a>
+      {% endif %}
+
+      {% if block.settings.phone_number != blank %}
+        <a href="tel:{{ block.settings.phone_number | replace: ' ', '' | replace: '-', '' }}" class="ai-utility-bar-phone-{{ ai_gen_id }}">
+          {{ block.settings.phone_number }}
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="ai-utility-bar-center-{{ ai_gen_id }}">
+      {% if block.settings.announcement_text != blank %}
+        <p class="ai-utility-bar-announcement-{{ ai_gen_id }}">{{ block.settings.announcement_text }}</p>
+      {% endif %}
+    </div>
+
+    <div class="ai-utility-bar-right-{{ ai_gen_id }}">
+      {% if block.settings.custom_page_text != blank and block.settings.custom_page_link != blank %}
+        <a href="{{ block.settings.custom_page_link }}" class="ai-utility-bar-link-{{ ai_gen_id }}">
+          {{ block.settings.custom_page_text }}
+        </a>
+      {% endif %}
+
+      {% assign has_rates = false %}
+      {% for i in (1..8) %}
+        {% assign rate_label_key = 'rate_' | append: i | append: '_label' %}
+        {% assign rate_price_key = 'rate_' | append: i | append: '_price' %}
+        {% assign rate_price = block.settings[rate_price_key] %}
+        {% if rate_price != blank %}
+          {% assign has_rates = true %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+
+      {% if has_rates %}
+        <div class="ai-utility-bar-dropdown-{{ ai_gen_id }}" data-dropdown>
+          <button 
+            class="ai-utility-bar-dropdown-toggle-{{ ai_gen_id }}" 
+            aria-expanded="false"
+            aria-label="Toggle metal rates dropdown"
+          >
+            {{ block.settings.dropdown_title }}
+            <svg class="ai-utility-bar-dropdown-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <div class="ai-utility-bar-dropdown-menu-{{ ai_gen_id }}">
+            {% for i in (1..8) %}
+              {% assign rate_label_key = 'rate_' | append: i | append: '_label' %}
+              {% assign rate_price_key = 'rate_' | append: i | append: '_price' %}
+              {% assign rate_label = block.settings[rate_label_key] %}
+              {% assign rate_price = block.settings[rate_price_key] %}
+              
+              {% if rate_price != blank %}
+                <div class="ai-utility-bar-dropdown-item-{{ ai_gen_id }}">
+                  <span class="ai-utility-bar-rate-label-{{ ai_gen_id }}">{{ rate_label }}</span>
+                  <span class="ai-utility-bar-rate-price-{{ ai_gen_id }}">{{ rate_price }}</span>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</utility-bar-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class UtilityBar{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.dropdown = this.querySelector('[data-dropdown]');
+        if (this.dropdown) {
+          this.toggle = this.dropdown.querySelector('.ai-utility-bar-dropdown-toggle-{{ ai_gen_id }}');
+          this.setupEventListeners();
+        }
+      }
+
+      setupEventListeners() {
+        this.toggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.toggleDropdown();
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!this.dropdown.contains(e.target)) {
+            this.closeDropdown();
+          }
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            this.closeDropdown();
+          }
+        });
+      }
+
+      toggleDropdown() {
+        const isActive = this.dropdown.classList.contains('active');
+        if (isActive) {
+          this.closeDropdown();
+        } else {
+          this.openDropdown();
+        }
+      }
+
+      openDropdown() {
+        this.dropdown.classList.add('active');
+        this.toggle.setAttribute('aria-expanded', 'true');
+      }
+
+      closeDropdown() {
+        this.dropdown.classList.remove('active');
+        this.toggle.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    customElements.define('utility-bar-{{ ai_gen_id }}', UtilityBar{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Top utility bar",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_color",
+      "label": "Link hover color",
+      "default": "#df9a7c"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "border_thickness",
+      "label": "Border thickness",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "label": "Vertical padding",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "min": 11,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "header",
+      "content": "Left side"
+    },
+    {
+      "type": "text",
+      "id": "store_locations_text",
+      "label": "Store locations text",
+      "default": "Store Locations"
+    },
+    {
+      "type": "url",
+      "id": "store_locations_link",
+      "label": "Store locations link"
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "Phone number",
+      "default": "+91 92077 29021"
+    },
+    {
+      "type": "header",
+      "content": "Center"
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Free Shipping on Orders Over ₹2000"
+    },
+    {
+      "type": "select",
+      "id": "announcement_font_weight",
+      "label": "Announcement font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "header",
+      "content": "Right side"
+    },
+    {
+      "type": "text",
+      "id": "custom_page_text",
+      "label": "Custom page text",
+      "default": "About Us"
+    },
+    {
+      "type": "url",
+      "id": "custom_page_link",
+      "label": "Custom page link"
+    },
+    {
+      "type": "header",
+      "content": "Today's rate dropdown"
+    },
+    {
+      "type": "text",
+      "id": "dropdown_title",
+      "label": "Dropdown title",
+      "default": "Today's Rate"
+    },
+    {
+      "type": "color",
+      "id": "dropdown_bg_color",
+      "label": "Dropdown background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "dropdown_text_color",
+      "label": "Dropdown text color",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "dropdown_hover_bg",
+      "label": "Dropdown hover background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price color",
+      "default": "#df9a7c"
+    },
+    {
+      "type": "range",
+      "id": "dropdown_border_radius",
+      "label": "Dropdown border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Metal rate 1"
+    },
+    {
+      "type": "text",
+      "id": "rate_1_label",
+      "label": "Label",
+      "default": "Gold 22K"
+    },
+    {
+      "type": "text",
+      "id": "rate_1_price",
+      "label": "Price",
+      "default": "₹6,850/g"
+    },
+    {
+      "type": "header",
+      "content": "Metal rate 2"
+    },
+    {
+      "type": "text",
+      "id": "rate_2_label",
+      "label": "Label",
+      "default": "Gold 18K"
+    },
+    {
+      "type": "text",
+      "id": "rate_2_price",
+      "label": "Price",
+      "default": "₹5,600/g"
+    },
+    {
+      "type": "header",
+      "content": "Metal rate 3"
+    },
+    {
+      "type": "text",
+      "id": "rate_3_label",
+      "label": "Label",
+      "default": "Silver"
+    },
+    {
+      "type": "text",
+      "id": "rate_3_price",
+      "label": "Price",
+      "default": "₹85/g"
+    },
+    {
+      "type": "header",
+      "content": "Metal rate 4"
+    },
+    {
+      "type": "text",
+      "id": "rate_4_label",
+      "label": "Label"
+    },
+    {
+      "type": "text",
+      "id": "rate_4_price",
+      "label": "Price"
+    },
+    {
+      "type": "header",
+      "content": "Metal rate 5"
+    },
+    {
+      "type": "text",
+      "id": "rate_5_label",
+      "label": "Label"
+    },
+    {
+      "type": "text",
+      "id": "rate_5_price",
+      "label": "Price"
+    },
+    {
+      "type": "header",
+      "content": "Metal rate 6"
+    },
+    {
+      "type": "text",
+      "id": "rate_6_label",
+      "label": "Label"
+    },
+    {
+      "type": "text",
+      "id": "rate_6_price",
+      "label": "Price"
+    },
+    {
+      "type": "header",
+      "content": "Metal rate 7"
+    },
+    {
+      "type": "text",
+      "id": "rate_7_label",
+      "label": "Label"
+    },
+    {
+      "type": "text",
+      "id": "rate_7_price",
+      "label": "Price"
+    },
+    {
+      "type": "header",
+      "content": "Metal rate 8"
+    },
+    {
+      "type": "text",
+      "id": "rate_8_label",
+      "label": "Label"
+    },
+    {
+      "type": "text",
+      "id": "rate_8_price",
+      "label": "Price"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Top utility bar"
+    }
+  ]
+}
+{% endschema %}

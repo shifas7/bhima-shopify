@@ -1,0 +1,114 @@
+{%- liquid
+  assign variants_available = product.variants | map: 'available'
+  assign variants_option_1 = product.variants | map: 'option1'
+  assign variants_option_2 = product.variants | map: 'option2'
+  assign variants_option_3 = product.variants | map: 'option3'
+-%}
+
+<input id="variant_id" type="hidden" name="id" value="{{ current_variant.id }}" />
+{%- unless product.has_only_default_variant -%}
+  {%- if section.settings.product_swatch_enable -%}
+    <product-variant-swatch class="mb-20 d-block" data-product-id="{{ section.id }}" data-product-url="{{ product.url }}">
+      {%- for option in product.options_with_values -%}
+        {%- liquid
+          assign option_name = option.name | downcase
+          assign option_color_swatch = settings.option_color_swatch | downcase
+          assign option_color = false
+          assign option_index = forloop.index0
+          if option_color_swatch contains option_name
+            assign option_color = true
+          endif
+        -%}
+        <fieldset class="product-variant-form-input{% if option_color == true %} variant-color{% endif %}{% if forloop.last == false %} mb-25{% endif %}">
+          <div class="product-single__control-label mb-15">
+            {{ option.name }}: <span class="variant_current">{{ current_variant.options[option_index] }}</span>
+          </div>
+          <div class="block-content d-flex flex-wrap">
+            {%- for value in option.values -%}
+              {%- liquid
+                assign option_disabled = true
+
+                for option1_name in variants_option_1
+                  case option.position
+                    when 1
+                      if variants_option_1[forloop.index0] == value and variants_available[forloop.index0]
+                        assign option_disabled = false
+                      endif
+                    when 2
+                      if option1_name == product.selected_or_first_available_variant.option1 and variants_option_2[forloop.index0] == value and variants_available[forloop.index0]
+                        assign option_disabled = false
+                      endif
+                    when 3
+                      if option1_name == product.selected_or_first_available_variant.option1 and variants_option_2[forloop.index0] == product.selected_or_first_available_variant.option2 and variants_option_3[forloop.index0] == value and variants_available[forloop.index0]
+                        assign option_disabled = false
+                      endif
+                  endcase
+                endfor
+
+                assign variant_available = false
+                  for variant in product.variants
+                    if variant.options[option_index] == value and variant.available
+                      assign variant_available = true
+                    endif
+                endfor
+              -%}
+              <div class="product-single__variant-item mb-10">
+                <input type="radio" id="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+                  name="{{ option.name }}"
+                  value="{{ value | escape }}"
+                  form="product-form-{{ section.id }}"
+                  {% if option.selected_value == value %}checked{% endif %}
+                  {% if option_disabled %}class="disabled"{% endif %}
+                >
+                <label class="variant-color-{{ value | downcase | handle }}{% if section.settings.img_swatch %} img{% else %} color{% endif %}{% if variant_available == false %} soldout{% endif %}" for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"{% if option_color and section.settings.img_swatch == false %} style="background-color: {% if value.swatch.color.rgb != blank %}rgb({{ value.swatch.color.rgb }}){% else %}{{ value }}{% endif %};"{% endif %}>
+                {% if option_color and section.settings.img_swatch %}
+                  {%- assign is_first_image = true -%}
+                  {% for variant in product.variants %}
+                    {% if variant.title contains value and is_first_image %}
+                      <img src="{{ variant.image.src | image_url: width: 160 }}" width="160" height="{{ 160 | divided_by: variant.image.aspect_ratio | round }}" alt="{{ variant.image.alt }}" style="height: auto;">
+                      {%- assign is_first_image = false -%}
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+                  {{ value }}
+                </label>
+              </div>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+      {%- endfor -%}
+      <script type="application/json">{{ product.variants | json }}</script>
+    </product-variant-swatch>
+  {%- else -%}
+    <product-variant-dropdown class="mb-20 d-block" data-product-id="{{ section.id }}" data-product-url="{{ product.url }}">
+      {%- for option in product.options_with_values -%}
+        {% assign option_name = option.name | downcase %}
+        {% assign option_index = forloop.index0 %}
+        <div class="product-form__input product-form__input--dropdown mb-15">
+          <div class="product-single__control-label mb-15">
+            {{ option.name }}: <span class="variant_current">{{ current_variant.options[option_index] }}</span>
+          </div>
+          <select id="Option-{{ section.id }}-{{ forloop.index0 }}" class="select__select variant-{{ option_name }}" name="options[{{ option.name | escape }}]" form="product-form-{{ section.id }}">
+            {%- for value in option.values -%}
+              <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
+                {{ value }}
+              </option>
+            {%- endfor -%}
+          </select>
+        </div>
+      {%- endfor -%}
+      <script type="application/json" data-variants-json>
+        {{ product.variants | json }}
+      </script>
+    </product-variant-dropdown>
+  {%- endif -%}
+{%- endunless -%}
+<select id="productSelect" class="hide">
+  {% for variant in product.variants %}
+    {% if variant.available %}
+      <option value="{{ variant.id }}" data-sku="{{ variant.sku }}" data-inventory_policy="{{ variant.inventory_policy }}" data-inventory_management="{{ variant.inventory_management }}"{% if variant == current_variant %} selected="selected"{% endif %}>{{ variant.title }}</option>
+    {% else %}
+      <option value="{{ variant.id }}" data-sku="{{ variant.sku }}" data-inventory_policy="{{ variant.inventory_policy }}" data-inventory_management="{{ variant.inventory_management }}" disabled="disabled">{{ variant.title }} - {{ 'products.product.sold_out' | t }}</option>
+    {% endif %}
+  {% endfor %}
+</select>

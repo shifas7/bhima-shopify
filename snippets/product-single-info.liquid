@@ -1,0 +1,44 @@
+<div class="product-single__info-item mb-25">
+  {% if section.settings.show_tags %}
+    <p itemprop="tags" class="product-single__tags d-flex align-items-center">
+      <span class="label product-single__control-label">{{ 'products.product.lable_tags' | t }}:</span>
+      <span class="list-tags">
+        {% for tag in product.tags %}
+          {% if tag != 'upsell' %}
+            {% capture url %}/collections/all/{{ tag | handle }}{% endcapture %}
+            {% if forloop.last %}
+              {{ tag | link_to: url }}
+            {% else %}
+              {{ tag | link_to: url }},
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </span>
+    </p>
+  {% endif %}
+  {% if section.settings.show_sku %}
+    <p itemprop="sku" class="product-single__sku d-flex align-items-center">
+      <span class="label product-single__control-label">{{ 'products.product.lable_sku' | t }}:</span>
+      <span id="variantSku" class="label-sku">{{ product.selected_or_first_available_variant.sku }}</span>
+    </p>
+  {% endif %}
+  {% if section.settings.show_categories %}
+    <p itemprop="cat" class="product-single__cat d-flex align-items-baseline">
+      <span class="label product-single__control-label">{{ 'products.product.lable_category' | t }}:</span>
+      <span class="label-cate">
+        {% for collection in product.collections %}
+          {% unless collection.title == 'home page' or collection.title == 'Home page' or collection.title == 'Upsell' %}
+            {% if forloop.last %}
+              <a href="{{ collection.url }}" title="{{ collection.title }}">{{ collection.title }}</a>
+            {% else %}
+              <a href="{{ collection.url }}" title="{{ collection.title }}">{{ collection.title }}</a>,
+            {% endif %}
+          {% endunless %}
+        {% endfor %}
+      </span>
+    </p>
+  {% endif %}
+  {% if section.settings.show_vendor %}
+    <p itemprop="brand" class="product-single__vendor"><span class="label product-single__control-label">{{ 'products.product.lable_vendor' | t }}:</span>{{ product.vendor }}</p>
+  {% endif %}
+</div>

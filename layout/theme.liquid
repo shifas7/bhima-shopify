@@ -1,0 +1,157 @@
+<!doctype html>
+<!-- Emillia 2 v.1.0 -->
+{%- if settings.lang_iso_rtl != blank -%}
+  {% assign list_iso_rtl = settings.lang_iso_rtl | downcase %}
+  {% if list_iso_rtl contains request.locale.iso_code and settings.enable_rtl %}
+    {% assign iso_rtl = true %}
+  {% else %}
+    {% assign iso_rtl = false %}
+  {% endif %}
+{%- endif -%}
+<html class="no-js{% if iso_rtl %} lang-rtl{% endif %}"{% if iso_rtl %} dir="rtl"{% endif %} lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+    {%- unless settings.type_header_family.system? and settings.type_base_family.system? -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
+    {% if settings.type_google == true %}
+      {%- assign type_base = settings.type_base_family_google | strip | replace: ' ', '+' -%}
+      {%- assign type_header = settings.type_header_family_google | strip | replace: ' ', '+' -%}
+      {{ "https://fonts.googleapis.com/css?family=" | append: type_base | append: ":100,100i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" | stylesheet_tag: preload: true }}
+      {% if type_base != type_header %}
+        {{ "https://fonts.googleapis.com/css?family=" | append: type_header | append: ":100,100i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" | stylesheet_tag: preload: true }}
+      {% endif %}
+    {% endif %}
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+    {% render 'social-meta-tags' %}
+    {{ content_for_header }}
+    {% render 'font-icon' %}
+    {% render 'css-variables' %}
+    {% render 'nov-head-css' %}
+    {% if iso_rtl %}
+      {{ 'css-theme-rtl.css' | asset_url | stylesheet_tag }}
+    {% endif %}
+    {% render 'nov-head-js' %}
+    {% render 'variant-options' %}
+
+    <script src="{{ 'vendor_global.js' | asset_url }}" defer></script>
+  </head>
+
+  <body class="template-{{ template | split: '.' | first }}">
+    {% if template.name != "index" and settings.enable_loadpage %}
+      <div class="preloader_nov">
+        <div class="nov_load"></div>
+      </div>
+    {% endif %}
+
+      {% case settings.header_layout %}
+        {% when 'header-1' %}
+          {% sections 'header-group-1' %}
+        {% when 'header-2' %}
+          {% sections 'header-group-2' %}
+        {% when 'header-3' %}
+          {% sections 'header-group-3' %}
+        {% when 'header-4' %}
+          {% sections 'header-group-4' %}
+        {% when 'header-5' %}
+          {% sections 'header-group-5' %}
+        {% when 'header-6' %}
+          {% sections 'header-group-6' %}
+        {% when 'header-7' %}
+          {% sections 'header-group-7' %}
+      {% endcase %}
+      
+      <main class="main-content" id="MainContent">
+        {{ content_for_layout }}
+      </main>
+
+      {% case settings.footer_layout %}
+        {% when 'footer-1' %}
+          {% sections 'footer-group-1' %}
+        {% when 'footer-2' %}
+          {% sections 'footer-group-2' %}
+        {% when 'footer-3' %}
+          {% sections 'footer-group-3' %}
+        {% when 'footer-4' %}
+          {% sections 'footer-group-4' %}
+        {% when 'footer-5' %}
+          {% sections 'footer-group-5' %}
+        {% when 'footer-6' %}
+          {% sections 'footer-group-6' %}
+        {% when 'footer-7' %}
+          {% sections 'footer-group-7' %}
+        {% when 'footer-8' %}
+          {% sections 'footer-group-8' %}
+      {% endcase %}
+
+    <div class="sidebar-overlay"></div>
+    {% render 'nov-cart-canvas' %}
+    {% render 'nov-popup-newsletter' %}
+    {% render 'nov-popup-login' %}
+    {% render 'nov-popup-faqs' %}
+    {% render 'nov-popup-video' %}
+    {% render 'nov-product-soldout-newsletter' %}
+    {% render 'nov-cart-empty' %}
+    {% render 'nov-mobile-canvas' %}
+    {% render 'nov-block-account' %}
+    <div id="mobileVerticalMenu"></div>
+    {% if settings.enable_stickymenu_mobile %}
+      {% render 'nov-stickymenu-mobile' %}
+    {% endif %}
+    {% if settings.show_fake_order_inner_page %}
+      {% render 'nov-popup-fake-order' %}
+    {% else %}
+      {% if template.name == 'index' %}
+        {% render 'nov-popup-fake-order' %}
+      {% endif %}
+    {% endif %}
+    {% if settings.wishlist_enable and settings.show_popup_wishlist %}
+      {% render 'nov-popup-wishlist' %}
+    {% endif %}
+    <div id="_desktop_back_top">
+      <div id="back-top">
+        <span><i class="zmdi zmdi-chevron-up"></i></span>
+      </div>
+    </div>
+    <script src="{{ 'nov-product-variants.js' | asset_url }}" defer></script>
+    <script src="{{ 'nuranium.js' | asset_url }}" defer></script>
+    {% if request.design_mode %}
+      {% render 'purchasecode' %}
+      {{ 'css-popup_purchase_code.css' | asset_url | stylesheet_tag }}
+    {% endif %}
+    <script>
+      window.addEventListener('load', function() {
+        var loader = document.querySelector('.preloader_nov');
+        if (loader) {
+          window.addEventListener('beforeunload', function() {
+            loader.style.transition = 'opacity 0.5s';
+            loader.style.opacity = '1';
+          });
+
+          setTimeout(function() {
+            loader.style.transition = 'opacity 1.5s';
+            loader.style.opacity = '0';
+          }, 0);
+        }
+      });
+    </script>
+    {% section 'whatsapp' %}
+  </body>
+</html>

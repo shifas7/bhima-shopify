@@ -1,0 +1,81 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "article-template",
+      "blocks": {
+        "65000c55-35bf-4941-ba47-66032dbdd092": {
+          "type": "block_categories",
+          "settings": {
+            "sidebar_categories_title": "CATEGORIES",
+            "sidebar_categories_class": "",
+            "sidebar_categories_menu": "category"
+          }
+        },
+        "8863b6b9-0dee-4688-8dba-2184cb63a3d1": {
+          "type": "block_search",
+          "settings": {
+            "block_class": ""
+          }
+        },
+        "ac3cbe97-01c3-4d2f-b5ed-35ba32766556": {
+          "type": "block_recentpost",
+          "settings": {
+            "block_title": "RECENT POST",
+            "block_class": "",
+            "number_show": 3,
+            "show_date": true,
+            "show_comment": false,
+            "show_author": false,
+            "show_excerpt": false,
+            "show_more": false
+          }
+        },
+        "282dd3ba-0005-45fd-b5dd-2375fa259b0e": {
+          "type": "block_blogtags",
+          "settings": {
+            "block_title": "BLOG TAGS",
+            "btn_type": "btn-secondary",
+            "tag_color": "",
+            "block_class": "",
+            "number_show": 12
+          }
+        },
+        "5280efdb-5d71-48d9-ba71-91acdbb9fa56": {
+          "type": "block_banner",
+          "settings": {
+            "banner_title": "BLOG BANNER",
+            "banner_class": "",
+            "banner_image": "shopify:\/\/shop_images\/BlogBanner.jpg",
+            "radius": 10,
+            "banner_link": "#"
+          }
+        }
+      },
+      "block_order": [
+        "65000c55-35bf-4941-ba47-66032dbdd092",
+        "8863b6b9-0dee-4688-8dba-2184cb63a3d1",
+        "ac3cbe97-01c3-4d2f-b5ed-35ba32766556",
+        "282dd3ba-0005-45fd-b5dd-2375fa259b0e",
+        "5280efdb-5d71-48d9-ba71-91acdbb9fa56"
+      ],
+      "settings": {
+        "blog_show_image_feature": true,
+        "blog_show_author": true,
+        "blog_show_date": true,
+        "show_share_buttons": true
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

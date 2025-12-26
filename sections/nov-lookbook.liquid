@@ -1,0 +1,1001 @@
+{%- liquid 
+  assign sst = section.settings
+
+  if section.settings.ss_bg_enable
+    assign bg = " bg"
+  endif
+  if section.settings.class_section != blank
+    assign class_section = section.settings.class_section | prepend: ' '
+  endif
+  assign class = 'distance' | append: bg | append: ' ' | append: section.settings.background_position | append: class_section
+-%}
+
+{% style %}
+  {% render 'nov-section-style' %}
+
+  #shopify-section-{{ section.id }} .nov-content-lookbook {
+    {% if sst.round %}
+      border-radius: 100%;
+    {% else %}
+      border-radius: {{ sst.radius }}px;
+    {% endif %}
+  }
+  #shopify-section-{{ section.id }} .lookbook-title {
+    color: {{ sst.lb_t }};
+  }
+  #shopify-section-{{ section.id }} .lookbook-desc {
+    color: {{ sst.lb_desc }};
+  }
+  #shopify-section-{{ section.id }} .lb_btn, #shopify-section-{{ section.id }} .btn_view {
+    color: {{ sst.c_btn }};
+    background-color: {{ sst.b_btn }};
+  }
+  #shopify-section-{{ section.id }} .lb_btn:hover, #shopify-section-{{ section.id }} .btn_view:hover {
+    color: {{ sst.c_btn_h }} !important;
+    background-color: {{ sst.b_btn_h }} !important;
+  }
+
+  #shopify-section-{{ section.id }} .countdownfree {
+    --color-dot: {{ sst.cd_cd }};
+  }
+  #shopify-section-{{ section.id }} .data-number {
+    color: {{ sst.c_cd }};
+    background-color: {{ sst.bg_cd }};
+    border: 1px solid {{ sst.bd_cd }};
+    border-radius: {{ sst.border_radius }}px;
+  }
+  #shopify-section-{{ section.id }} .name-time {
+    color: {{ sst.ct_cd }};
+  }
+{% endstyle %}
+<div class="{{ class }}{% if section.blocks.size > sst.limit %} h_sm{% endif %}">
+  <div class="{{ sst.container }}">
+
+    {% if sst.countdown_timeend != blank %}
+    <div class="row align-items-center">
+      <div class="block-countdown col-lg-6 mb-md-50">
+        {% render 'heading-section', sub_position: sst.subheading_position, class: 'text-center' %}
+        {% if sst.countdown_timeend != blank %}
+          <div class="countdownfree d-flex justify-content-center{% if sst.show_shadow %} shadow{% endif %}" data-countdown="{{ sst.countdown_timeend }}" data-show-days="{{ settings.show_day }}" data-restart="{{ settings.restart }}"></div>
+        {% endif %}
+        {% if sst.btn != blank %}
+          <div class="mt-30 text-center">
+            <a href="{{ sst.btn_link }}" class="btn btn-medium color-{{ sst.color_section }}" aria-label="{{ sst.btn }}">
+              <span>{{ sst.btn }}</span>
+              <i class="zmdi zmdi-long-arrow-right"></i>
+            </a>
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-lg-6">
+    {% endif %}
+
+    {% if sst.countdown_timeend == blank %}
+      {% render 'heading-section', sub_position: sst.subheading_position %}
+    {% endif %}
+
+    <div class="Look__content{% if sst.show_popup %} show-popup{% endif %}" data-limit="{{ sst.limit }}" data-xl="{{ sst.xl }}">
+      <div class="row spacing-{{ sst.spacing }}">
+      {% for block in section.blocks %}
+        {% assign bst = block.settings %}
+        <div class="item{% render 'number-to-col' %}{% if bst.class != blank %} {{ bst.class }}{% endif %}{% if forloop.index <= sst.limit %} show{% endif %}{% if forloop.index > sst.limit %} hide{% endif %}" data-position="{{ forloop.index }}">
+          <div class="nov-content-lookbook overflow_hidden position-relative">
+            <div class="position-relative">
+              {% if bst.lookbook_image != blank %}
+                {% render 'nov-aspect-image', image: bst.lookbook_image %}
+              {% else %}
+                {%- capture current -%}{% cycle 1, 2, 3 %}{%- endcapture -%}
+                {{ 'collection-apparel-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+
+              {% if sst.show_popup %}
+                <div class="btn lb_btn position-absolute" data-toggle="modal" data-target="#Lookbook{{ section.id }}{{ block.id }}">
+                  {{ 'sections.lookbook.shop_the_look' | t }}
+                </div>
+                <div id="Lookbook{{ section.id }}{{ block.id }}" class="lookbook-modal modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header close-icon" data-dismiss="modal" aria-label="Close"></div>
+                      <div class="modal-body Lookbook__modal">
+                        <div class="row spacing-0 h-100 align-items-center align-items-lg-start">
+                          <div class="col-xl-7 col-lg-8 col-md-7">
+                            <div class="lookbook__thumb position-relative">
+                              {% render 'nov-aspect-image', image: bst.lookbook_image %}
+                              {% if bst.pin_product_1 != blank %}
+                                <div class="item-lookbook position-absolute" style="top: {{ bst.pin_position_top_1 }}%; left: {{ bst.pin_position_left_1 }}%">
+                                  <span class="number-lookbook active" data-position="0">+</span>
+                                </div>
+                              {% endif %}
+                              {% if bst.pin_product_2 != blank %}
+                                <div class="item-lookbook position-absolute" style="top: {{ bst.pin_position_top_2 }}%; left: {{ bst.pin_position_left_2 }}%">
+                                  <span class="number-lookbook" data-position="1">+</span>
+                                </div>
+                              {% endif %}
+                              {% if bst.pin_product_3 != blank %}
+                                <div class="item-lookbook position-absolute" style="top: {{ bst.pin_position_top_3 }}%; left: {{ bst.pin_position_left_3 }}%">
+                                  <span class="number-lookbook" data-position="2">+</span>
+                                </div>
+                              {% endif %}
+                            </div>
+                          </div>
+                          <div class="col-xl-5 col-lg-4 col-md-5 text-center">
+                            <div class="bl_product pt-40 pt-lg-30 h-100 d-flex flex flex-column">
+                              {% if sst.heading_popup != blank %}
+                                <div class="h_popup" style="color: {{ sst.heading_popup_c }}">{{ sst.heading_popup }}</div>
+                              {% endif %}
+                              {% if sst.subheading_popup != blank %}
+                                <div class="sh_popup{% if sst.heading_popup != blank %} mt-15{% endif %}" style="color: {{ sst.subheading_popup_c }}">{{ sst.subheading_popup }}</div>
+                              {% endif %}
+                              <div class="Lookbook__carousel grid--view-items{% if sst.heading_popup != blank or sst.subheading_popup != blank %} mt-30 mt-lg-20{% endif %}">
+                                {% if bst.pin_product_1 != blank %}
+                                {% assign section_id = section.id | append: block.id | append: 1 %}
+                                {% assign product_1 = all_products[bst.pin_product_1] %}
+                                  {% render 'product-grid-item-style-1', product: product_1, section_id: section_id %}
+                                {% endif %}
+                                {% if bst.pin_product_2 != blank %}
+                                {% assign section_id = section.id | append: block.id | append: 2 %}
+                                {% assign product_2 = all_products[bst.pin_product_2] %}
+                                  {% render 'product-grid-item-style-1', product: product_2, section_id: section_id %}
+                                {% endif %}
+                                {% if bst.pin_product_3 != blank %}
+                                {% assign section_id = section.id | append: block.id | append: 3 %}
+                                {% assign product_3 = all_products[bst.pin_product_3] %}
+                                  {% render 'product-grid-item-style-1', product: product_3, section_id: section_id %}
+                                {% endif %}
+                              </div>
+                              {% if sst.social %}{% render 'nov-social' %}{% endif %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+ 
+              {% unless sst.show_popup %}
+                {% for i in (1..3) %}
+                  {% assign pin_product_id = 'pin_product_' | append: i %}
+                  {% assign pin_position_top_id = 'pin_position_top_' | append: i %}
+                  {% assign pin_position_left_id = 'pin_position_left_' | append: i %}
+
+                  {% if bst[pin_product_id] != blank %}
+                    {% assign product = all_products[bst[pin_product_id]] %}
+                    <div class="item-lookbook position-absolute grid--view-items d-flex" style="top: {{ bst[pin_position_top_id] }}%; left: {{ bst[pin_position_left_id] }}%">
+                      <span class="number-lookbook">+</span>
+                      <div class="content-lookbook position-absolute">
+                        <div class="lookbook-item-product">
+                          <div class="product__info">
+                            <div class="product__title"><a href="{{ product.url | within: collection }}">{{ product.title }}</a></div>
+                            <div class="price-box mt-10">
+                              {% if product.compare_at_price_min > product.price_min %}
+                                <div class="price-sale d-flex flex-wrap align-items-center">
+                                  <span class="special-price" data-price-grid>{{ product.variants[0].price | money }}</span>
+                                  <span class="old-price" data-compare-price-grid>{{ product.variants[0].compare_at_price | money }}</span>
+                                </div>
+                              {% else %}
+                                <div class="price-regular">
+                                  <span data-price-grid>{{ product.variants[0].price | money }}</span>
+                                </div>
+                              {% endif %}
+                            </div>
+                          </div>
+                          <div class="thumbnail-container{% if product.images.size > 1 %} has-multiimage{% endif %}">
+                            <a href="{{ product.url | within: collection }}">
+                              {% assign image_url = product.featured_image %}
+                              <img src="{{ image_url | image_url: width: 1 }}" data-src="{{ image_url | image_url: width: 200, height: 200, crop: 'center' }}" class="product__thumbnail lazyload" alt="{{ image_url.alt | default: 'image' }}" width="200" height="200" style="height: auto;">
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              {% endunless %}
+            </div>
+            {% unless sst.show_popup %}
+              {% if bst.btn != blank or bst.title != blank or bst.desc != blank %}
+                <div class="lookbook-block_text position-absolute {{ bst.bt_alignment }} {{ bst.t_pos }}">
+                  {% if bst.title != blank %}
+                    <div class="lookbook-title font-900">{{ bst.title }}</div>
+                  {% endif %}
+                  {% if bst.desc != blank %}
+                    <div class="lookbook-desc{% if bst.title != blank %} mt-15{% endif %}">{{ bst.desc }}</div>
+                  {% endif %}
+                  {% if bst.btn != blank %}
+                    <a href="{{ bst.btn_l }}" class="btn btn_view{% if bst.title != blank or bst.desc != blank %} mt-40 mt-md-20{% endif %}">
+                      <span>{{ bst.btn }}</span>
+                    </a>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endunless %}
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+      {% if section.blocks > sst.limit %}
+        <div class="text-center text-uppercase font-500 mt-20">
+          <span class="btn_loadmore d-inline-flex align-items-center justify-content-center pointer">
+            <span class="position-relative">{{ 'sections.lookbook.show_more_html' | t }}</span>
+          </span>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if sst.countdown_timeend != blank %}
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Vinova LookBook",
+    "class": "section-lookbook",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "heading",
+        "label": "Heading",
+        "default": "<p>Vinova Lookbook</p>"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading color",
+        "default": "#222222"
+      },
+      {
+        "type": "richtext",
+        "id": "subheading",
+        "label": "Sub heading",
+        "default": "<p>Subtitle from happy customers</p>"
+      },
+      {
+        "type": "color",
+        "id": "subheading_color",
+        "label": "Sub heading color",
+        "default": "#666666"
+      },
+      {
+        "type": "richtext",
+        "id": "descheading",
+        "label": "Description",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+      },
+      {
+        "type": "color",
+        "id": "descheading_color",
+        "label": "Description color",
+        "default": "#666666"
+      },
+      {
+        "type": "select",
+        "id": "subheading_position",
+        "label": "Sub heading position",
+        "default": "bottom",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          },
+          {
+            "value": "bottom",
+            "label": "Bottom"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_alignment",
+        "label": "Heading alignment",
+        "default": "text-left",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type":  "header",
+        "content": "Popup Content"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_popup",
+        "label": "Show popup",
+        "default": true
+      },
+      {
+        "type": "richtext",
+        "id": "heading_popup",
+        "label": "Heading popup",
+        "default": "<p>Vinova Lookbook</p>"
+      },
+      {
+        "type": "color",
+        "id": "heading_popup_c",
+        "label": "Heading popup color",
+        "default": "#222222"
+      },
+      {
+        "type": "richtext",
+        "id": "subheading_popup",
+        "label": "Sub heading popup",
+        "default": "<p>Subtitle from happy customers</p>"
+      },
+      {
+        "type": "color",
+        "id": "subheading_popup_c",
+        "label": "Sub heading popup color",
+        "default": "#666666"
+      },
+      {
+        "type": "checkbox",
+        "id": "social",
+        "label": "Show social",
+        "default": true
+      },
+      {
+        "type":  "header",
+        "content": "Item Per Row"
+      },
+      {
+        "type": "range",
+        "id": "xl",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Large laptop",
+        "default": 3,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "range",
+        "id": "lg",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Laptop",
+        "default": 3,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "range",
+        "id": "md",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Tablet",
+        "default": 3,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "range",
+        "id": "sm",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Large mobile",
+        "default": 2,
+        "info": "Breakpoint 576px"
+      },
+      {
+        "type": "range",
+        "id": "xs",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Mobile",
+        "default": 2
+      },
+      {
+        "type": "range",
+        "id": "spacing",
+        "min": 0,
+        "max": 60,
+        "step": 5,
+        "label": "Spacing items",
+        "default": 20,
+        "unit": "px"
+      },
+      {
+        "type": "number",
+        "id": "limit",
+        "label": "Limit",
+        "default": 8
+      },
+      {
+        "type":  "header",
+        "content": "Style Item"
+      },
+      {
+        "type": "range",
+        "id": "radius",
+        "min": 0,
+        "max": 60,
+        "step": 5,
+        "label": "Border radius image",
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "checkbox",
+        "id": "round",
+        "label": "Round image",
+        "default":   false
+      },
+      {
+        "type":  "header",
+        "content": "Block Text"
+      },
+      {
+        "type": "paragraph",
+        "content": "Display when pop-up is disabled"
+      },
+      {
+        "type": "color",
+        "id": "lb_t",
+        "label": "Title color",
+        "default": "#222222"
+      },
+      {
+        "type": "color",
+        "id": "lb_desc",
+        "label": "Desc color",
+        "default": "#222222"
+      },
+      {
+        "type":  "header",
+        "content": "Button Color"
+      },
+      {
+        "type": "color",
+        "id": "c_btn",
+        "label": "Button text color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "b_btn",
+        "label": "Button background color",
+        "default": "#222222"
+      },
+      {
+        "type": "color",
+        "id": "c_btn_h",
+        "label": "Button text color hover",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "b_btn_h",
+        "label": "Button background color hover",
+        "default": "#222222"
+      },
+      {
+        "type": "header",
+        "content": "Block Countdown"
+      },
+      {
+        "type": "text",
+        "id": "countdown_timeend",
+        "label": "Time end",
+        "placeholder": "YYYY\/MM\/DD"
+      },
+      {
+        "type": "paragraph",
+        "content": "Format: 'Year\/Month\/Day'"
+      },
+      {
+        "type": "paragraph",
+        "content": "Example: '2022\/01\/30'"
+      },
+      {
+        "type": "range",
+        "id": "border_radius",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Border radius",
+        "default": 0
+      },
+      {
+        "type": "color",
+        "id": "c_cd",
+        "label": "Number color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "bg_cd",
+        "label": "Number background",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "bd_cd",
+        "label": "Number border color",
+        "default": "#EAEAEA"
+      },
+      {
+        "type": "color",
+        "id": "ct_cd",
+        "label": "Text color",
+        "default": "#1c1c1c"
+      },
+      {
+        "type": "color",
+        "id": "cd_cd",
+        "label": "Dot color",
+        "default": "#1c1c1c"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_shadow",
+        "label": "Show shadow"
+      },
+      {
+        "type": "header",
+        "content": "Button"
+      },
+      {
+        "type": "text",
+        "id": "btn",
+        "label": "Button",
+        "default": "Shop now"
+      },
+      {
+        "type": "url",
+        "id": "btn_link",
+        "label": "Button link"
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_section",
+        "label": "Color button",
+        "default": "background-1"
+      },
+      {
+        "type":  "header",
+        "content": "Section Style"
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Container",
+        "default": "container",
+        "options": [
+          { "value": "container", "label": "Container" },
+          { "value": "container-fluid", "label": "Container fluid" },
+          { "value": "container-full", "label": "Container full width" }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "class_section",
+        "label": "Class"
+      },
+      {
+        "type":  "header",
+        "content": "Section Background"
+      },
+      {
+        "type": "checkbox",
+        "id": "ss_bg_enable",
+        "label": "Enable"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background colors",
+        "default": "#ffffff"
+      },
+      {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Background image"
+      },
+      {
+        "type": "select",
+        "id": "background_img_size",
+        "label": "Background image size",
+        "default": "cover",
+        "options": [
+          { "value": "auto", "label": "Auto" },
+          { "value": "cover", "label": "Cover" },
+          { "value": "contain", "label": "Contain" }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_background_img_size_custom",
+        "label": "Enable background image size custom"
+      },
+      {
+        "type": "text",
+        "id": "background_img_size_custom",
+        "label": "Background image size custom",
+        "info": "Replace base background size, unit % or px"
+      },
+      {
+        "type": "select",
+        "id": "background_img_position",
+        "label": "Background image position",
+        "default": "center center",
+        "options": [
+          { "value": "top left", "label": "Top left" },
+          { "value": "top center", "label": "Top center" },
+          { "value": "top right", "label": "Top right" },
+          { "value": "center left", "label": "Center left" },
+          { "value": "center center", "label": "Center middle" },
+          { "value": "center right", "label": "Center right" },
+          { "value": "bottom left", "label": "Bottom left" },
+          { "value": "bottom center", "label": "Bottom center" },
+          { "value": "bottom right", "label": "Bottom right" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "background_position",
+        "label": "Background position",
+        "default": "bg-center",
+        "options": [
+          { "value": "bg-top", "label": "Top" },
+          { "value": "bg-center", "label": "Center" },
+          { "value": "bg-bottom", "label": "Bottom" }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "height_background_xxl",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 1441px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_xl",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 1200px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_lg",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 992px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_md",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 768px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_sm",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 576px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_xs",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 575px ↓"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Top (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_sm",
+        "label": "Mobile",
+        "default": 30
+      },
+      {
+        "type": "header",
+        "content": "Spacing Bottom (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_sm",
+        "label": "Mobile",
+        "default": 30
+      }
+    ],
+    "blocks": [
+      {
+        "type": "lookbook",
+        "name": "Lookbook Item",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "lookbook_image",
+            "label": "Image"
+          },
+           {
+            "type": "header",
+            "content": "Block Text"
+          },
+          {
+            "type": "paragraph",
+            "content": "Display when pop-up is disabled"
+          },
+          {
+            "type": "select",
+            "id": "t_pos",
+            "label": "Position",
+            "default": "left-center",
+            "options": [
+              {
+                "value": "left-center",
+                "label": "Left center"
+              },
+              {
+                "value": "left-bottom",
+                "label": "Left bottom"
+              },
+              {
+                "value": "center-center",
+                "label": "Center"
+              },
+              {
+                "value": "right-center",
+                "label": "Right center"
+              },
+              {
+                "value": "right-bottom",
+                "label": "Right bottom"
+              },
+              {
+                "value": "bottom-center",
+                "label": "Bottom center"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "bt_alignment",
+            "label": "Block alignment",
+            "default": "text-left",
+            "options": [
+              {
+                "value": "text-left",
+                "label": "Left"
+              },
+              {
+                "value": "text-center",
+                "label": "Center"
+              },
+              {
+                "value": "text-right",
+                "label": "Right"
+              }
+            ]
+          },
+          {
+            "type": "inline_richtext",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "desc",
+            "label": "Decription"
+          },
+          {
+            "type": "text",
+            "id": "btn",
+            "label": "Button"
+          },
+          {
+            "type": "url",
+            "id": "btn_l",
+            "label": "Button link"
+          },
+          {
+            "type":  "header",
+            "content": "Pin List"
+          },
+          {
+            "type":  "header",
+            "content": "Pin 1"
+          },
+          {
+            "type": "product",
+            "id": "pin_product_1",
+            "label": "Select Pin Product 1"
+          },
+          {
+            "type": "range",
+            "id": "pin_position_top_1",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "Top",
+            "default": 5,
+            "unit": "%"
+          },
+          {
+            "type": "range",
+            "id": "pin_position_left_1",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "Left",
+            "default": 5,
+            "unit": "%"
+          },
+          {
+            "type":  "header",
+            "content": "Pin 2"
+          },
+          {
+            "type": "product",
+            "id": "pin_product_2",
+            "label": "Select Pin Product 2"
+          },
+          {
+            "type": "range",
+            "id": "pin_position_top_2",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "Top",
+            "default": 5,
+            "unit": "%"
+          },
+          {
+            "type": "range",
+            "id": "pin_position_left_2",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "Left",
+            "default": 5,
+            "unit": "%"
+          },
+          {
+            "type":  "header",
+            "content": "Pin 3"
+          },
+          {
+            "type": "product",
+            "id": "pin_product_3",
+            "label": "Select Pin Product 3"
+          },
+          {
+            "type": "range",
+            "id": "pin_position_top_3",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "Top",
+            "default": 5,
+            "unit": "%"
+          },
+          {
+            "type": "range",
+            "id": "pin_position_left_3",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "Left",
+            "default": 5,
+            "unit": "%"
+          },
+          {
+            "type":  "header",
+            "content": "Class"
+          },
+          {
+            "type": "text",
+            "id": "class",
+            "label": "Class"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Vinova Lookbook",
+        "category": "Image",
+        "blocks": [
+          {
+            "type": "lookbook"
+          },
+          {
+            "type": "lookbook"
+          },
+          {
+            "type": "lookbook"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

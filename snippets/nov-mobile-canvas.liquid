@@ -1,0 +1,20 @@
+<div id="mobile_menu">
+  {% if settings.mobile_search %}
+    {% render 'nov-formsearch-inline' %}
+  {% endif %}
+  <div class="canvas-menu">
+  </div>
+  <div class="mobile_bottom">
+    {% if settings.hotline != blank %}
+      <div class="mobile_contact">{{ settings.hotline }}</div>
+    {% endif %}
+    {% if settings.email != blank %}
+      <div class="mobile_email">{{ settings.email }}</div>
+    {% endif %}
+    {% if settings.mobile_social %}
+      <div class="color-{{ settings.color_social }}">
+        {% render 'nov-social' %}
+      </div>
+    {% endif %}
+  </div>
+</div>

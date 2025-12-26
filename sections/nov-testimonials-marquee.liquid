@@ -1,0 +1,847 @@
+{%- liquid
+  assign sst = section.settings
+
+  if section.settings.ss_bg_enable
+    assign bg = " bg"
+  endif
+  if section.settings.class_section != blank
+    assign class_section = section.settings.class_section | prepend: ' '
+  endif
+  assign class = 'distance' | append: bg | append: ' ' | append: section.settings.background_position | append: class_section
+  if section.settings.background_size == 'full'
+    assign bg_class_full = class | prepend: ' '
+  else
+    assign bg_class_contain = class | prepend: ' '
+  endif
+-%}
+{% style %}
+  {% render 'nov-section-style' %}
+
+  {% if sst.text_mw != blank %}
+    #shopify-section-{{ section.id }} .testimonial-item__quote p {
+      max-width: {{ sst.text_mw }}px;
+    }
+  {% endif %}
+  
+  {% if sst.s_star %}
+    #shopify-section-{{ section.id }} .testimonial-rating i.rating {
+      color: {{ sst.color_rating }}
+    }
+  {% endif %}
+  #shopify-section-{{ section.id }} .testimonial-item {
+    background: {{ sst.bg_item }};
+    border-radius: {{ sst.corner_item }}px;
+  }
+  {% if sst.show_quote %}
+    #shopify-section-{{ section.id }} .icon-quote {
+      color: {{ sst.quote_color }};
+    }
+  {% endif %}
+
+  #shopify-section-{{ section.id }} .testimonial-top {
+    border-color: {{ sst.border_color }};
+  }
+
+  #shopify-section-{{ section.id }} .block-marquee {
+    animation-duration: {{ sst.time }}s;
+  }
+  #shopify-section-{{ section.id }} .nov-marquee:before {
+    background: linear-gradient(180deg, {{ sst.color_overlay }}, rgba({{ sst.color_overlay | color_to_rgb | remove: 'rgb(' | remove: 'rgba(' | remove: ')' | remove: ', 0.0' }}, 0));
+  }
+  #shopify-section-{{ section.id }} .nov-marquee:after {
+    background: linear-gradient(180deg, rgba({{ sst.color_overlay | color_to_rgb | remove: 'rgb(' | remove: 'rgba(' | remove: ')' | remove: ', 0.0' }}, 0), {{ sst.color_overlay }});
+  }
+{% endstyle %}
+
+<div class="color-{{ sst.color_section }}{{ bg_class_full }}" data-section-id="{{ section.id }}" data-section-type="nov-slick">
+  <div class="{{ sst.container }}">
+    <div class="container-inner{{ bg_class_contain }}">
+      <div class="row align-items-center">
+        <div class="col-xl-4">
+          {% render 'heading-section', sub_position: sst.subheading_position %}
+          {% if sst.btn_label != blank %}
+            <a href="{{ sst.btn_link }}" class="btn {{ sst.btn_type }} {{ sst.btn_size }} mb-lg-50">{{ sst.btn_label }}</a>            
+          {% endif %}
+        </div>
+        <div class="col-xl-8">
+          <div class="nov-marquee position-relative">
+            <div class="row spacing-30">
+              {% for block in section.blocks %}
+                <div class="col-lg mb-md-20 d-flex d-lg-block {% if forloop.index == 2 %}marqueeUp{% else %}marqueeDown{% endif %}{% if sst.animate %} wow fadeInUp{% endif %}" data-wow-delay="{{ forloop.index | times: 0.1 }}s">
+                  {% assign bst = block.settings %}
+                  <div class="block-marquee pb-30 pb-md-0">
+                    {% for i in (1..4) %}
+
+                      {%- liquid 
+                        assign avatar_id = 'avatar' | append: i
+                        assign name_id = 'name' | append: i
+                        assign info_id = 'info' | append: i
+                        assign title_id = 'title' | append: i
+                        assign quote_id = 'quote' | append: i
+                        assign star_id = 'star' | append: i
+
+                        case bst[star_id]
+                          when 1
+                          assign ns = '<i class="rating"></i><i></i><i></i><i></i><i></i>'
+                          when 2
+                          assign ns = '<i class="rating"></i><i class="rating"></i><i></i><i></i><i></i>'
+                          when 3
+                          assign ns = '<i class="rating"></i><i class="rating"></i><i class="rating"></i><i></i><i></i>'
+                          when 4
+                          assign ns = '<i class="rating"></i><i class="rating"></i><i class="rating"></i><i class="rating"></i><i></i>'
+                          when 5
+                          assign ns = '<i class="rating"></i><i class="rating"></i><i class="rating"></i><i class="rating"></i><i class="rating"></i>'
+                        endcase
+                      -%}
+
+                      <div class="testimonial-item overflow_hidden">
+                        <div class="testimonial-top">
+                          {% if sst.s_star %}
+                            <div class="testimonial-rating mb-15">{{ ns }}</div>
+                          {% endif %}
+                          {% if bst[title_id] != blank %}<div class="testimonial-title font-600 mb-20 color-title">{{ bst[title_id] }}</div>{% endif %}
+                          {% if bst[quote_id] != blank %}<div class="testimonial-item__quote color-text">{{ bst[quote_id] }}</div>{% endif %}
+                        </div>
+                        <div class="testimonial-bottom d-flex align-items-center mt-25 pt-25">
+                          {% if sst.show_avatar %}
+                            <div class="testimonial-avatar overflow_hidden r-100">
+                              {% if bst[avatar_id] != blank %}
+                                {% render 'nov-aspect-image', image: bst[avatar_id], aspect: '11' %}
+                              {% else %}
+                                {%- capture current -%}{% cycle 1, 2, 3, 4 %}{%- endcapture -%}
+                                {{ 'collection-apparel-' | append: current | placeholder_svg_tag : 'placeholder-svg' }}
+                              {% endif %}
+                            </div>
+                          {% endif %}
+                          {% if bst[name_id] != blank or bst[info_id] != blank %}
+                            <div class="block-info">
+                              {% if bst[name_id] != blank %}<div class="testimonial-name font-600 f_pr color-title">{{ bst[name_id] }}</div>{% endif %}
+                              {% if bst[info_id] != blank %}<div class="testimonial-info font-600 mt-5 color-text">{{ bst[info_id] }}</div>{% endif %}
+                            </div>
+                          {% endif %}
+                          {% if sst.show_quote %}
+                            <div class="icon-quote">
+                              {% render 'icon-quote' %}
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                    {% endfor %}
+                  </div>
+                  <div class="block-marquee pb-30 pb-md-0">
+                    {% for i in (1..4) %}
+                      {%- liquid 
+                        assign avatar_id = 'avatar' | append: i
+                        assign name_id = 'name' | append: i
+                        assign info_id = 'info' | append: i
+                        assign title_id = 'title' | append: i
+                        assign quote_id = 'quote' | append: i
+                        assign star_id = 'star' | append: i
+
+                        case bst[star_id]
+                          when 1
+                          assign ns = '<i class="rating"></i><i></i><i></i><i></i><i></i>'
+                          when 2
+                          assign ns = '<i class="rating"></i><i class="rating"></i><i></i><i></i><i></i>'
+                          when 3
+                          assign ns = '<i class="rating"></i><i class="rating"></i><i class="rating"></i><i></i><i></i>'
+                          when 4
+                          assign ns = '<i class="rating"></i><i class="rating"></i><i class="rating"></i><i class="rating"></i><i></i>'
+                          when 5
+                          assign ns = '<i class="rating"></i><i class="rating"></i><i class="rating"></i><i class="rating"></i><i class="rating"></i>'
+                        endcase
+                      -%}
+
+                      <div class="testimonial-item overflow_hidden">
+                        <div class="testimonial-top">
+                          {% if sst.s_star %}
+                            <div class="testimonial-rating mb-15">{{ ns }}</div>
+                          {% endif %}
+                          {% if bst[title_id] != blank %}<div class="testimonial-title font-600 mb-20 color-title">{{ bst[title_id] }}</div>{% endif %}
+                          {% if bst[quote_id] != blank %}<div class="testimonial-item__quote color-text">{{ bst[quote_id] }}</div>{% endif %}
+                        </div>
+                        <div class="testimonial-bottom d-flex align-items-center mt-25 pt-25">
+                          {% if sst.show_avatar %}
+                            <div class="testimonial-avatar overflow_hidden r-100">
+                              {% if bst[avatar_id] != blank %}
+                                {% render 'nov-aspect-image', image: bst[avatar_id], aspect: '11' %}
+                              {% else %}
+                                {%- capture current -%}{% cycle 1, 2, 3, 4 %}{%- endcapture -%}
+                                {{ 'collection-apparel-' | append: current | placeholder_svg_tag : 'placeholder-svg' }}
+                              {% endif %}
+                            </div>
+                          {% endif %}
+                          {% if bst[name_id] != blank or bst[info_id] != blank %}
+                            <div class="block-info">
+                              {% if bst[name_id] != blank %}<div class="testimonial-name font-600 f_pr color-title">{{ bst[name_id] }}</div>{% endif %}
+                              {% if bst[info_id] != blank %}<div class="testimonial-info font-600 mt-5 color-text">{{ bst[info_id] }}</div>{% endif %}
+                            </div>
+                          {% endif %}
+                          {% if sst.show_quote %}
+                            <div class="icon-quote">
+                              {% render 'icon-quote' %}
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                      
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Testimonials Marquee",
+    "class": "section-testimonials-marquee",
+    "max_blocks": 3,
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "heading",
+        "label": "Heading",
+        "default": "<p>Vinova Testimonials Marquee</p>"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading color",
+        "default": "#222222"
+      },
+      {
+        "type": "richtext",
+        "id": "subheading",
+        "label": "Sub heading",
+        "default": "<p>Subtitle from happy customers</p>"
+      },
+      {
+        "type": "color",
+        "id": "subheading_color",
+        "label": "Sub heading color",
+        "default": "#666666"
+      },
+      {
+        "type": "richtext",
+        "id": "descheading",
+        "label": "Description",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+      },
+      {
+        "type": "color",
+        "id": "descheading_color",
+        "label": "Description color",
+        "default": "#666666"
+      },
+      {
+        "type": "image_picker",
+        "id": "img_heading",
+        "label": "Image heading"
+      },
+      {
+        "type": "select",
+        "id": "subheading_position",
+        "label": "Sub heading position",
+        "default": "bottom",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          },
+          {
+            "value": "bottom",
+            "label": "Bottom"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_alignment",
+        "label": "Heading alignment",
+        "default": "text-left",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Button"
+      },
+      {
+        "type": "text",
+        "id": "btn_label",
+        "label": "Button label"
+      },
+      {
+        "type": "url",
+        "id": "btn_link",
+        "label": "Button link"
+      },
+      {
+        "type": "select",
+        "id": "btn_size",
+        "label": "Button size",
+        "default": "btn-normal",
+        "options": [
+          { "value": "btn-normal", "label": "Normal" },
+          { "value": "btn-medium", "label": "Medium" },
+          { "value": "btn-large", "label": "Large" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "btn_type",
+        "label": "Button type",
+        "default": "btn-primary",
+        "options": [
+          { "value": "btn-primary", "label": "Primary" },
+          { "value": "btn-secondary", "label": "Secondary" }
+        ]
+      },
+      {
+        "type":  "header",
+        "content": "Marquee Time"
+      },
+      {
+        "type": "range",
+        "id": "time",
+        "min": 5,
+        "max": 100,
+        "step": 5,
+        "unit": "s",
+        "label": "Marquee run time",
+        "default": 60
+      },
+      {
+        "type": "header",
+        "content": "Background overlay"
+      },
+      {
+        "type": "color",
+        "id": "color_overlay",
+        "label": "Background",
+        "default": "#fff"
+      },
+      {
+        "type":  "header",
+        "content": "Design Item"
+      },
+      {
+        "type": "color",
+        "id": "bg_item",
+        "label": "Background item",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "label": "Border color",
+        "default": "#ebebeb"
+      },
+      {
+        "type": "range",
+        "id": "corner_item",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "label": "Corner radius",
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "checkbox",
+        "id": "s_star",
+        "label": "Show rating"
+      },
+      {
+        "type": "color",
+        "id": "color_rating",
+        "label": "Color rating",
+        "default": "#fdad09"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_avatar",
+        "label": "Show avatar",
+        "default": true
+      },
+      {
+        "type": "number",
+        "id": "text_mw",
+        "label": "Text max width (px)"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_quote",
+        "label": "Show quote",
+        "default": true
+      },
+      {
+        "type": "color",
+        "id": "quote_color",
+        "label": "Quote color",
+        "default": "#b2b2b2"
+      },
+      {
+        "type":  "header",
+        "content": "Section Style"
+      },
+      {
+        "type": "checkbox",
+        "id": "animate",
+        "label": "Show animated",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Container",
+        "default": "container",
+        "options": [
+          { "value": "container", "label": "Container"},
+          { "value": "container-fluid", "label": "Container fluid"},
+          { "value": "container-full", "label": "Container full width"}
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_section",
+        "label": "Color section",
+        "default": "background-1"
+      },
+      {
+        "type": "text",
+        "id": "class_section",
+        "label": "Class"
+      },
+      {
+        "type":  "header",
+        "content": "Section Background"
+      },
+      {
+        "type": "checkbox",
+        "id": "ss_bg_enable",
+        "label": "Enable"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background colors",
+        "default": "#ffffff"
+      },
+      {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Background image"
+      },
+      {
+        "type": "range",
+        "id": "background_corner",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "label": "Corner background",
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "background_img_size",
+        "label": "Background image size",
+        "default": "cover",
+        "options": [
+          { "value": "auto", "label": "Auto" },
+          { "value": "cover", "label": "Cover" },
+          { "value": "contain", "label": "Contain" }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_background_img_size_custom",
+        "label": "Enable background image size custom"
+      },
+      {
+        "type": "text",
+        "id": "background_img_size_custom",
+        "label": "Background image size custom",
+        "info": "Replace base background size, unit % or px"
+      },
+      {
+        "type": "select",
+        "id": "background_img_position",
+        "label": "Background image position",
+        "default": "center center",
+        "options": [
+          { "value": "top left", "label": "Top left" },
+          { "value": "top center", "label": "Top center" },
+          { "value": "top right", "label": "Top right" },
+          { "value": "center left", "label": "Center left" },
+          { "value": "center center", "label": "Center middle" },
+          { "value": "center right", "label": "Center right" },
+          { "value": "bottom left", "label": "Bottom left" },
+          { "value": "bottom center", "label": "Bottom center" },
+          { "value": "bottom right", "label": "Bottom right" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "background_position",
+        "label": "Background position",
+        "default": "bg-center",
+        "options": [
+          { "value": "bg-top", "label": "Top" },
+          { "value": "bg-center", "label": "Center" },
+          { "value": "bg-bottom", "label": "Bottom" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "background_size",
+        "label": "Background size",
+        "default": "full",
+        "options": [
+          { "value": "full", "label": "Full" },
+          { "value": "contain", "label": "Contain"}
+        ]
+      },
+      {
+        "type": "range",
+        "id": "height_background_xxl",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 1441px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_xl",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 1200px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_lg",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 992px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_md",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 768px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_sm",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 576px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_xs",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 575px ↓"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Top (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_sm",
+        "label": "Mobile",
+        "default": 30
+      },
+      {
+        "type": "header",
+        "content": "Spacing Bottom (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_sm",
+        "label": "Mobile",
+        "default": 30
+      }
+    ],
+    "blocks": [
+      {
+        "type": "quote",
+        "name": "Testimonial",
+        "settings": [
+          {
+            "type": "header",
+            "content": "===== Item 1 ====="
+          },
+          {
+            "type": "image_picker",
+            "id": "avatar1",
+            "label": "Avatar"
+          },
+          {
+            "type": "range",
+            "id": "star1",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "Rating",
+            "default": 5
+          },
+          {
+            "type": "inline_richtext",
+            "id": "title1",
+            "label": "Title",
+            "default": "CUSTOMER REVIEWS"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "name1",
+            "label": "Name",
+            "default": "Christina M."
+          },
+          {
+            "type": "inline_richtext",
+            "id": "info1",
+            "label": "Info",
+            "default": "From Canada"
+          },
+          {
+            "type": "richtext",
+            "id": "quote1",
+            "label": "Text",
+            "default": "<p>Add customer reviews and testimonials to showcase your store’s happy customers.</p>"
+          },
+          {
+            "type": "header",
+            "content": "===== Item 2 ====="
+          },
+          {
+            "type": "image_picker",
+            "id": "avatar2",
+            "label": "Avatar"
+          },
+          {
+            "type": "range",
+            "id": "star2",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "Rating",
+            "default": 5
+          },
+          {
+            "type": "inline_richtext",
+            "id": "title2",
+            "label": "Title",
+            "default": "CUSTOMER REVIEWS"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "name2",
+            "label": "Name",
+            "default": "Christina M."
+          },
+          {
+            "type": "inline_richtext",
+            "id": "info2",
+            "label": "Info",
+            "default": "From Canada"
+          },
+          {
+            "type": "richtext",
+            "id": "quote2",
+            "label": "Text",
+            "default": "<p>Add customer reviews and testimonials to showcase your store’s happy customers.</p>"
+          },
+          {
+            "type": "header",
+            "content": "===== Item 3 ====="
+          },
+          {
+            "type": "image_picker",
+            "id": "avatar3",
+            "label": "Avatar"
+          },
+          {
+            "type": "range",
+            "id": "star3",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "Rating",
+            "default": 5
+          },
+          {
+            "type": "inline_richtext",
+            "id": "title3",
+            "label": "Title",
+            "default": "CUSTOMER REVIEWS"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "name3",
+            "label": "Name",
+            "default": "Christina M."
+          },
+          {
+            "type": "inline_richtext",
+            "id": "info3",
+            "label": "Info",
+            "default": "From Canada"
+          },
+          {
+            "type": "richtext",
+            "id": "quote3",
+            "label": "Text",
+            "default": "<p>Add customer reviews and testimonials to showcase your store’s happy customers.</p>"
+          },
+          {
+            "type": "header",
+            "content": "===== Item 4 ====="
+          },
+          {
+            "type": "image_picker",
+            "id": "avatar4",
+            "label": "Avatar"
+          },
+          {
+            "type": "range",
+            "id": "star4",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "Rating",
+            "default": 5
+          },
+          {
+            "type": "inline_richtext",
+            "id": "title4",
+            "label": "Title",
+            "default": "CUSTOMER REVIEWS"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "name4",
+            "label": "Name",
+            "default": "Christina M."
+          },
+          {
+            "type": "inline_richtext",
+            "id": "info4",
+            "label": "Info",
+            "default": "From Canada"
+          },
+          {
+            "type": "richtext",
+            "id": "quote4",
+            "label": "Text",
+            "default": "<p>Add customer reviews and testimonials to showcase your store’s happy customers.</p>"
+          },
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Vinova Testimonials Marquee",
+        "blocks": [
+          {
+            "type": "quote"
+          },
+          {
+            "type": "quote"
+          },
+          {
+            "type": "quote"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

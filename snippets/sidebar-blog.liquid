@@ -1,0 +1,162 @@
+{% for block in section.blocks %}
+  {% if block.type == 'block_search' %}
+    <div class="sidebar-block search__sidebar{% if block.settings.block_class !=blank %} {{ block.settings.block_class }}{% endif %}">
+      <form action="/search" method="get" class="d-flex align-items-center position-relative" role="search">
+        <input type="hidden" name="type" value="article">
+        <input class="search__input"
+          type="search"
+          name="q"
+          placeholder="{{ 'general.search.submit' | t }}"
+          aria-label="{{ 'general.search.title' | t }}">
+        <button class="search__submit pointer" type="submit">
+          <i class="rbb-icon-search-10"></i>
+        </button>
+      </form>
+    </div>
+  {% endif %}
+
+  {% if block.type == 'block_categories' %}
+    {% assign nov_categories = block.settings.sidebar_categories_menu %}
+    <div class="sidebar-block categories__sidebar{% if block.settings.block_class !=blank %} {{ block.settings.block_class }}{% endif %}">
+      <div class="title-block">
+        <i class="zmdi zmdi-sort-amount-desc"></i>
+        <span>{{ block.settings.sidebar_categories_title }}</span>
+      </div>
+      {% if linklists[nov_categories] != empty %}
+      <div class="block__content">
+        {% for link in linklists[nov_categories].links %}
+          {%- assign child_list_handle = link.title | handleize -%}
+
+          {% if linklists[child_list_handle].links != blank %}
+            {% for childlink in linklists[child_list_handle].links %}
+              {% assign grand_child_list_handle = childlink.title | handleize %}
+              {% if linklists[grand_child_list_handle].links != blank %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+
+          {% if linklists[child_list_handle].links != blank %}
+          <div class="cateTitle hasSubCategory open level1">
+            <span class="arrow collapsed" data-toggle="collapse" data-target="#subCategory-{{ child_list_handle }}" aria-expanded="true"></span>
+            <a class="cateItem {% if link.active %}active{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+            <div class="subCategory collapse" id="subCategory-{{ child_list_handle }}" aria-expanded="true">
+              {% for childlink in linklists[child_list_handle].links %}
+              {% assign grand_child_list_handle = childlink.title | handle %}
+              {% if linklists[grand_child_list_handle].links != blank %}
+              <div class="cateTitle hasSubCategory level2">
+                <span class="arrow collapsed" data-toggle="collapse" data-target="#subCategory-{{ grand_child_list_handle }}{{ forloop.index }}"aria-expanded="true"></span>
+                <a class="cateItem {% if childlink.active %}active{% endif %}" href="{{ childlink.url }}">{{ childlink.title }}</a>
+                <div class="subCategory collapse" id="subCategory-{{ grand_child_list_handle }}{{ forloop.index }}" aria-expanded="true">
+                  {% for grandchildlink in linklists[grand_child_list_handle].links %}
+                  <div class="cateTitle">
+                    <a href="{{ grandchildlink.url }}" class="cateItem{% if grandchildlink.active %} active{% endif %}{% if forloop.last %} cateItem--last{% endif %}">{{ grandchildlink.title | escape }}</a>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              {% else %}
+              <div class="cateTitle">
+                <a href="{{ childlink.url }}" class="cateItem{% if childlink.active %} active{% endif %}{% if forloop.last %} cateItem--last{% endif %}">{{ childlink.title | escape }}</a>
+              </div>
+              {% endif %}
+
+              {% endfor %}
+            </div>
+          </div>
+          {% else %}
+          <div class="cateTitle">
+            <a class="cateItem {% if link.active %}active{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if block.type == 'block_recentpost' %}
+    <div class="sidebar-block sidebar-blog__item recentpost__sidebar{% if block.settings.block_class !=blank %} {{ block.settings.block_class }}{% endif %}">
+      {% if block.settings.block_title != blank %}
+      <div class="title-block">{{ block.settings.block_title }}</div>
+      {% endif %}
+      {% if block.settings.number_show != blank %}
+      {% assign number_limit = block.settings.number_show %}
+      <div class="block__content">
+        {%- assign blog_cate = blog.title | handle -%}
+        {% for article in blogs[blog_cate].articles limit: number_limit %}
+        <div class="post_groups d-xl-flex">
+          <div class="post__image mb-lg-20">
+            {% if article.image %}
+            <a href="{{ article.url }}" class="article__list-image-container d-block h-100">
+              {% render 'nov-aspect-image', image: article.image, aspect: '11' %}
+            </a>
+            {% endif %}
+          </div>
+          <div class="post-item">
+            <div class="post__info">
+              {% if block.settings.show_comment and blog.comments_enabled? %}
+                <span class="post__countcomment">
+                  <i class="zmdi zmdi-comments"></i>{{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}
+                </span>
+              {% endif %}
+
+              {% if block.settings.show_date %}
+              <span class="post__date">
+                <i class="zmdi zmdi-calendar-note"></i>{{ article.published_at | time_tag: '%d %b, %Y' }}
+              </span>
+              {% endif %}
+
+              {% if block.settings.show_author %}
+              <span class="article__author"><i class="zmdi zmdi-account"></i>{{ 'blogs.article.by_author' | t: author: article.author }}</span>
+              {% endif %}
+            </div>
+            <div class="post__title"><a href="{{ article.url }}">{{ article.title | strip_html | truncate: 55 }}</a></div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if block.type == 'block_blogtags' %}
+    <div class="sidebar-block sidebar-blog__item blogtags__sidebar{% if block.settings.block_class !=blank %} {{ block.settings.block_class }}{% endif %}">
+      {% if block.settings.block_title != blank %}
+      <div class="title-block">{{ block.settings.block_title }}</div>
+      {% endif %}
+      {% if block.settings.number_show != blank %}
+        <div class="block__content color-{{ block.settings.tag_color }}">
+          {% assign number_limit = block.settings.number_show %}
+          <ul class="list-unstyled">
+            {% for tag in blog.all_tags limit:number_limit %}
+              <li class="{{ block.settings.btn_type }}{% if current_tags contains tag %} act{% endif %}">{{ tag | link_to_tag: tag }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if block.type == 'block_banner' %}
+    <div class="sidebar-block sidebar-blog__item{% if block.settings.block_class !=blank %} {{ block.settings.block_class }}{% endif %}">
+      {% if block.settings.banner_title != blank %}
+      <div class="title-block">{{ block.settings.banner_title }}</div>
+      {% endif %}
+      <div class="block__content">
+        {% if block.settings.banner_link != blank %}
+          <a href="{{ block.settings.banner_link }}">
+        {% endif %}
+          {% if block.settings.banner_image != blank %}
+            <div class="overflow_hidden nov-sh-image-2" style="border-radius: {{ block.settings.radius }}px">
+              {% render 'nov-aspect-image', image: block.settings.banner_image %}
+            </div>
+          {% else %}
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          {% endif %}
+        {% if block.settings.banner_link != blank %}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}

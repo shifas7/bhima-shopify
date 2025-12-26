@@ -1,0 +1,56 @@
+{% if section.settings.show_progress_deals or section.settings.show_countdown %}
+  {%- if settings.lang_iso_rtl != blank -%}
+    {% assign list_iso_rtl = settings.lang_iso_rtl | downcase %}
+    {% if list_iso_rtl contains request.locale.iso_code %}
+      {% assign iso_rtl = true %}
+    {% else %}
+      {% assign iso_rtl = false %}
+    {% endif %}
+  {%- endif -%}
+  <div class="product-single__deal mb-35">
+    {%- assign product_start_count = product.metafields.stock.initial -%}
+    {% if product_start_count != blank and section.settings.show_progress_deals %}
+      <div class="deal-flash__sale">
+        {% if product.variants.size < 2 %}
+          {%- assign available = product.selected_or_first_available_variant.inventory_quantity -%}
+          {%- assign sold = product_start_count | minus:available | times: 100 | divided_by : product_start_count -%}
+          <div class="deal-flash__sale-progress position-relative" style="background-color: {{ settings.progress_deal }}">
+            <div class="progress__bar position-absolute" style="width: {{ sold }}%;background: {% if settings.enable_rtl and iso_rtl %}{{ settings.gradient_deal | replace: '90deg', '-90deg' }}{% else %}{{ settings.gradient_deal }}{% endif %};"></div>
+            {% if settings.i_flash != blank %}
+              <img src="{{ settings.i_flash | image_url: width: 66 }}" width="66" height="{{ 66  |divided_by: settings.i_flash.aspect_ratio | round }}" class="position-absolute i_flash" style="height: auto">
+            {% endif %}
+          </div>
+          <div class="flash__sale-bottom font-500 mt-15">
+            {{ 'products.deals.flash_deals_html' | t: sold: sold, available: available }}
+          </div>
+        {% elsif product.variants.size > 1 %}
+          {% assign available = 0 %}
+          {% for variant in product.variants %}
+            {% assign available = available | plus: variant.inventory_quantity %}
+          {% endfor %}
+          {%- assign sold = product_start_count | minus:available | times: 100 | divided_by : product_start_count -%}
+          <div class="deal-flash__sale-progress position-relative" style="background-color: {{ settings.progress_deal }}">
+            <div class="progress__bar position-absolute" style="width: {{ sold }}%;background: {% if settings.enable_rtl and iso_rtl %}{{ settings.gradient_deal | replace: '90deg', '-90deg' }}{% else %}{{ settings.gradient_deal }}{% endif %};"></div>
+            {% if settings.i_flash != blank %}
+              <img src="{{ settings.i_flash | image_url: width: 66 }}" width="66" height="{{ 66  |divided_by: settings.i_flash.aspect_ratio | round }}" class="position-absolute i_flash" style="height: auto">
+            {% endif %}
+          </div>
+          <div class="flash__sale-bottom font-500 mt-15">
+            {{ 'products.deals.flash_deals_html' | t: sold: sold, available: available }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+    {%- assign countdown = product.metafields.sale.countdown -%}
+    {% if countdown != blank and section.settings.show_countdown %}
+      <div class="product-single__countdown d-flex align-items-center mt-15">
+        <div class="product-single__countdown-title font-800 f_pr text-uppercase d-none d-lg-block">
+          <img class="lazyload" data-src="{{ 'icon-bolt.gif' | asset_url }}" width="20" height="20" style="height: auto;">
+          {{ 'products.deals.flash_sale' | t }}
+        </div>
+        <div class="product-single__countdown-subtitle font-800 f_pr text-uppercase">{{ 'products.deals.end_in' | t }}</div>
+        <div class="countdownfree" data-countdown="{{ countdown }}" data-show-days="{{ settings.show_day }}" data-restart="{{ settings.restart }}"></div>
+      </div>
+    {% endif %}
+  </div>
+{% endif %}

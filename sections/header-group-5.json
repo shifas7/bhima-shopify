@@ -1,0 +1,272 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "Header 5",
+  "type": "header",
+  "sections": {
+    "header": {
+      "type": "nov-header-5",
+      "blocks": {
+        "8636628f-f6bb-4897-b492-38e4ba08d959": {
+          "type": "text",
+          "settings": {
+            "title": "Collections",
+            "desc": "",
+            "novmenu_menu_enable": true,
+            "show_title": true,
+            "novmenu_xl": "col-xl-8",
+            "submenu_xl": "col-xl-4",
+            "banner_br": 5,
+            "novmenu_banner_enable1": false,
+            "banner_xl_1": "col-xl-4",
+            "image_size1": "255x300",
+            "novmenu_banner_link1": "",
+            "class_bn1": "",
+            "novmenu_banner_enable2": false,
+            "banner_xl_2": "col-xl-4",
+            "image_size2": "255x300",
+            "novmenu_banner_link2": "",
+            "class_bn2": "",
+            "novmenu_banner_enable3": false,
+            "banner_xl_3": "col-xl-4",
+            "image_size3": "255x300",
+            "novmenu_banner_link3": "",
+            "class_bn3": "",
+            "collection_enable": true,
+            "collection_xl": "col-xl-3",
+            "name_collec_1": "Best Sellers",
+            "link_1": "",
+            "name_collec_2": "New Arrival",
+            "link_2": "",
+            "name_collec_3": "Top Trending",
+            "link_3": "",
+            "name_collec_4": "Top Trending",
+            "link_4": "",
+            "name_collec_5": "Denim Collection",
+            "link_5": "",
+            "product_enable": false,
+            "product_xl": "col-xl-4",
+            "title_product": "Featured Product",
+            "product_list": [],
+            "autoplay": true
+          }
+        },
+        "f5a5ac2b-38b6-4567-8a55-ca3cb5239f61": {
+          "type": "text",
+          "settings": {
+            "title": "Products",
+            "desc": "",
+            "novmenu_menu_enable": true,
+            "show_title": true,
+            "novmenu_xl": "col-xl-9",
+            "submenu_xl": "col-xl-4",
+            "banner_br": 5,
+            "novmenu_banner_enable1": false,
+            "banner_xl_1": "col-xl-4",
+            "image_size1": "255x300",
+            "novmenu_banner_link1": "",
+            "class_bn1": "",
+            "novmenu_banner_enable2": false,
+            "banner_xl_2": "col-xl-4",
+            "image_size2": "255x300",
+            "novmenu_banner_link2": "",
+            "class_bn2": "",
+            "novmenu_banner_enable3": false,
+            "banner_xl_3": "col-xl-4",
+            "image_size3": "255x300",
+            "novmenu_banner_link3": "",
+            "class_bn3": "",
+            "collection_enable": false,
+            "collection_xl": "col-xl-3",
+            "name_collec_1": "Best Sellers",
+            "link_1": "",
+            "name_collec_2": "New Arrival",
+            "link_2": "",
+            "name_collec_3": "Top Trending",
+            "link_3": "",
+            "name_collec_4": "Top Trending",
+            "link_4": "",
+            "name_collec_5": "Denim Collection",
+            "link_5": "",
+            "product_enable": true,
+            "product_xl": "col-xl-2",
+            "title_product": "Featured Product",
+            "product_list": [
+              "blossoming-rose-drops",
+              "celestial-diamond-glow",
+              "celestial-sparkle-chain",
+              "celestial-star-chain",
+              "cherry-blossom-delight",
+              "cowboy-lion-statement"
+            ],
+            "autoplay": true
+          }
+        },
+        "collection_item_LTHefx": {
+          "type": "collection_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/c-6-1.png",
+            "title": "Necklaces",
+            "link": "shopify:\/\/collections\/necklace"
+          }
+        },
+        "collection_item_PKxPBj": {
+          "type": "collection_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/c-6-2.png",
+            "title": "Earrings",
+            "link": "shopify:\/\/collections\/earrings"
+          }
+        },
+        "collection_item_hdjbzz": {
+          "type": "collection_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/c-6-3.png",
+            "title": "Charm Jewelry",
+            "link": "shopify:\/\/collections\/charm-jewelry"
+          }
+        },
+        "collection_item_JnTccG": {
+          "type": "collection_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/c-6-4.png",
+            "title": "Bracelets",
+            "link": "shopify:\/\/collections\/bracelets"
+          }
+        },
+        "collection_item_KdGc94": {
+          "type": "collection_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/c-6-5.png",
+            "title": "Rings",
+            "link": "shopify:\/\/collections\/rings"
+          }
+        },
+        "collection_item_bRPNNN": {
+          "type": "collection_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/c-6-6.png",
+            "title": "Brooches",
+            "link": "shopify:\/\/collections\/brooches"
+          }
+        },
+        "collection_item_LiXJqK": {
+          "type": "collection_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/c-6-7.png",
+            "title": "Anklets",
+            "link": "shopify:\/\/collections\/anklets"
+          }
+        },
+        "collection_item_PtTDFm": {
+          "type": "collection_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/c-6-8.png",
+            "title": "Cufflinks",
+            "link": "shopify:\/\/collections\/cufflinks"
+          }
+        },
+        "collection_item_8dM7UF": {
+          "type": "collection_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/c-6-9.png",
+            "title": "Body Jewelry",
+            "link": "shopify:\/\/collections\/body-jewelry"
+          }
+        },
+        "collection_item_hcwWNb": {
+          "type": "collection_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/c-6-10.png",
+            "title": "Hair Accessories",
+            "link": "shopify:\/\/collections\/hair-accessories"
+          }
+        },
+        "collection_item_9CDKgA": {
+          "type": "collection_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/c-6-11.png",
+            "title": "Nose Piercing",
+            "link": "shopify:\/\/collections\/nose-piercing"
+          }
+        },
+        "collection_item_qp9Cb8": {
+          "type": "collection_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/c-6-12.png",
+            "title": "Navel Piercing",
+            "link": "shopify:\/\/collections\/navel-piercing"
+          }
+        }
+      },
+      "block_order": [
+        "8636628f-f6bb-4897-b492-38e4ba08d959",
+        "f5a5ac2b-38b6-4567-8a55-ca3cb5239f61",
+        "collection_item_LTHefx",
+        "collection_item_PKxPBj",
+        "collection_item_hdjbzz",
+        "collection_item_JnTccG",
+        "collection_item_KdGc94",
+        "collection_item_bRPNNN",
+        "collection_item_LiXJqK",
+        "collection_item_PtTDFm",
+        "collection_item_8dM7UF",
+        "collection_item_hcwWNb",
+        "collection_item_9CDKgA",
+        "collection_item_qp9Cb8"
+      ],
+      "settings": {
+        "logo": "shopify:\/\/shop_images\/Logo-black.png",
+        "w_logo": 121,
+        "w_logo_lg": 121,
+        "w_logo_md": 121,
+        "logo_mobile": "shopify:\/\/shop_images\/Logo-black.png",
+        "wm_logo": 120,
+        "container": "container-fluid",
+        "color_header": "background-1",
+        "color_header_bottom": "scheme-231513b8-81b0-4a6e-8894-d7913cddf438",
+        "stickymenu": true,
+        "color_header_sticky": "background-1",
+        "stickymenu_sm": true,
+        "color_header_sm": "background-1",
+        "show_list_collection": true,
+        "list_collection_btn_color": "#1c1c1c",
+        "list_collection_btn_bg": "#f2f2f2",
+        "list_collection_color": "",
+        "xxl": 10,
+        "xl": 8,
+        "lg": 6,
+        "md": 5,
+        "sm": 3,
+        "xs": 2,
+        "one_slider": true,
+        "show_nav": true,
+        "list_collection_arrow_color": "#e2e2e2",
+        "list_collection_arrow_color_act": "#df9a7c",
+        "account_icon": "rbb-icon-human-user-11",
+        "account_svg": true,
+        "wishlist": "rbb-icon-wishlist-17",
+        "wishlist_svg": true,
+        "cart_type": "cart",
+        "cart": "3",
+        "cart_svg": true,
+        "badge_color": "#ffffff",
+        "badge_bg": "#1c1c1c",
+        "novmenu_enable": true,
+        "show_icons": true,
+        "main_linklist": "main-menu",
+        "color_menu": "background-1"
+      }
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

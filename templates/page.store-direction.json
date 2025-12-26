@@ -1,0 +1,31 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "nov-page-store-direction",
+      "settings": {
+        "has_fullwidth": true,
+        "map": true,
+        "iframe_map": "https:\/\/www.google.com\/maps\/embed?pb=!1m14!1m8!1m3!1d23095.519254450588!2d-79.38263233337402!3d43.64941859273796!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x935ab2eb9fd5fb31!2sFirst%20Canadian%20Place!5e0!3m2!1sen!2s!4v1659598435154!5m2!1sen!2s",
+        "boxInfor": true,
+        "color_section": "background-2",
+        "address": "123 Suspendis matti, Visaosang Building VST District, NY Accums, North American",
+        "email": "support@domain.com",
+        "call": "(012)-345-67890",
+        "time": "Our store has re-opened for shopping, exchanges every day 11am to 7pm",
+        "social": true
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

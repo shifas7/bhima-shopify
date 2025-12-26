@@ -1,0 +1,151 @@
+{%- assign sst = section.settings -%}
+
+{% style %}
+  #shopify-section-{{ section.id }}.nov-store-direction {
+    padding-top: {{ sst.distance_top }}px;
+    padding-bottom: {{ sst.distance_bottom }}px;
+    {% if sst.background_color != blank %}
+      background-color: {{ sst.background_color }};
+    {% endif %}
+    {%- assign bg_image = sst.background_image -%}
+    {% if bg_image.src != blank %}
+      background-image: url("{{ bg_image | image_url: width: 1920 }}");
+      background-size: cover;
+    {% endif %}
+  }
+{% endstyle %}
+
+{% render 'nov-breadcrumb', class_br: 'breadcrumb_inner' %}
+<div class="distance">
+  {% if sst.has_fullwidth == false %}
+    <div class="container">
+  {% endif %}
+    <div class="store-direction_content">
+      {% for block in section.blocks %}
+        <div class="item row align-items-center spacing-0{% if forloop.last == false %} mb-md-50{% endif %}">
+          {%- assign bst = block.settings -%}
+          <div class="col-md-6">
+            <div class="block-image">
+              {% if bst.img != blank %}
+                {% render 'nov-aspect-image', image: bst.img %}
+              {% else %}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-6 mt-sm-30">
+            <div class="block-text">
+              <div class="boxInfor">
+                {% if bst.store != blank %}
+                  <div class="store font-700 mb-20">{{ bst.store }}</div>
+                {% endif %}
+                {% if bst.address != blank %}
+                  <div class="address mb-20"><label>{{ 'page.contact.address' | t }}&nbsp;</label>{{ bst.address }}</div>
+                {% endif %}
+                {% if bst.email != blank %}
+                  <div class="email mb-5"><label>{{ 'page.contact.email' | t }}&nbsp;</label>{{ bst.email }}</div>
+                {% endif %}
+                {% if bst.call != blank %}
+                  <div class="call mb-15"><label>{{ 'page.contact.call' | t }}&nbsp;</label>{{ bst.call }}</div>
+                {% endif %}
+                {% if bst.time != true %}
+                  <div class="time mb-35"><label>{{ 'page.contact.time' | t }}&nbsp;</label>{{ bst.time }}</div>
+                {% endif %}
+                {% if bst.text_button %}
+                  <button class="btn btn-large" type="submit" data-toggle="modal" data-target="#popup_contact_faq">{{ bst.text_button }}</button>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% if sst.has_fullwidth == false %}
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+  {
+    "name": "Page Store Direction",
+    "class": "page-inner page-store-location",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "has_fullwidth",
+        "label": "Full width",
+        "default":   false
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background colors"
+      },
+      {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Background image"
+      },      {
+        "type": "number",
+        "id": "distance_top",
+        "label": "Top spacing section (px)",
+        "default": 30
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom",
+        "label": "Bottom spacing section (px)",
+        "default": 30
+      }
+    ],
+    "blocks": [
+      {
+        "type": "item",
+        "name": "Item",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "img",
+            "label": "Item image"
+          },
+          {
+            "type": "text",
+            "id": "store",
+            "label": "Store",
+            "default": "Store in New York"
+          },
+          {
+            "type": "text",
+            "id": "address",
+            "label": "Address",
+            "default": "123 Suspendis matti, Visaosang Building VST District, NY Accums, North American"
+          },
+          {
+            "type": "text",
+            "id": "email",
+            "label": "Email",
+            "default": "support@domain.com"
+          },
+          {
+            "type": "text",
+            "id": "call",
+            "label": "Call",
+            "default": "(012)-345-67890"
+          },
+          {
+            "type": "text",
+            "id": "time",
+            "label": "Time",
+            "default": "Our store has re-opened for shopping, exchanges every day 11am to 7pm"
+          },
+          {
+            "type": "text",
+            "id": "text_button",
+            "label": "Text Button",
+            "default": "Get Direction"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,605 @@
+<div class="product-single__tab mt-100"{% if section.settings.background_color != blank %} style="background-color: {{ section.settings.background_color }};"{% endif %}>
+  <div class="container">
+    {% comment %} Determine which tab should be active by default {% endcomment %}
+    {% assign configured = product.metafields.jewelry_config.configured %}
+    {% assign price_breakup_tab_index = null %}
+    {% assign should_price_breakup_be_active = false %}
+    
+    {% if section.settings.show_description == false %}
+      {% comment %} Find the first block_customtab with jewelry price breakdown (Price Break Up tab) {% endcomment %}
+      {% for block in section.blocks %}
+        {% if block.type == 'block_customtab' and price_breakup_tab_index == null %}
+          {% assign test_configured = product.metafields.jewelry_config.configured %}
+          {% assign is_price_breakup_title = false %}
+          {% if block.settings.custom_title != blank %}
+            {% assign title_lower = block.settings.custom_title | downcase %}
+            {% if title_lower contains 'price break' or title_lower contains 'price breakup' %}
+              {% assign is_price_breakup_title = true %}
+            {% endif %}
+          {% endif %}
+          {% if test_configured == true or test_configured == "true" or is_price_breakup_title %}
+            {% assign price_breakup_tab_index = forloop.index %}
+            {% assign should_price_breakup_be_active = true %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    
+    <ul class="nav nav-tabs">
+      {% if section.settings.show_description %}
+        <li><a {% unless should_price_breakup_be_active %}class="active"{% endunless %} href="#proTabs1" data-toggle="tab">{{ 'products.product.tabdes' | t }}</a></li>
+      {% endif %}
+      {% for block in section.blocks %}
+        {% if block.type == 'block_text' %}
+          <li><a href="#tabCustom-{{ forloop.index }}" data-toggle="tab">{{ block.settings.custom_title }}</a></li>
+        {% endif %}
+        {% if block.type == 'block_img' %}
+          <li><a href="#tabCustom-{{ forloop.index }}" data-toggle="tab">{{ block.settings.custom_title }}</a></li>
+        {% endif %}
+        {% if block.type == 'block_video' %}
+          <li><a href="#tabCustom-{{ forloop.index }}" data-toggle="tab">{{ block.settings.custom_title }}</a></li>
+        {% endif %}
+        {% if block.type == 'block_customtab' %}
+          {% assign is_price_breakup_tab = false %}
+          {% if forloop.index == price_breakup_tab_index %}
+            {% assign is_price_breakup_tab = true %}
+          {% endif %}
+          <li><a {% if is_price_breakup_tab and should_price_breakup_be_active %}class="active"{% endif %} href="#tabCustom-{{ forloop.index }}" data-toggle="tab">{{ block.settings.custom_title }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <div class="tab-content">
+      {% if section.settings.show_description %}
+      <div class="tab-pane {% unless should_price_breakup_be_active %}active{% endunless %}" id="proTabs1">{{ product.description }}</div>
+      {% endif %}
+      {% for block in section.blocks %}
+        {% if block.type == 'block_text' %}
+          <div class="tab-pane" id="tabCustom-{{ forloop.index }}">
+            <div class="block_text">{{ block.settings.custom_content }}</div>
+          </div>
+        {% endif %}
+        {% if block.type == 'block_img' %}
+          <div class="tab-pane" id="tabCustom-{{ forloop.index }}">
+            <div class="block_img mt-20">
+              {% assign img_url = block.settings.custom_content %}
+              <div class="respone_image" style="padding-top:{{ 1 | divided_by: img_url.aspect_ratio | times: 100}}%;">
+                <img class="lazyload"
+                  src="{{ img_url | image_url: width: 180 }}"
+                  data-src="{{ img_url | image_url: width: 180 }}"
+                  data-srcset="{{ img_url | image_url: width: 380 }} 380w,{{ img_url | image_url: width: 580 }} 580w,{{ img_url | image_url: width: 768 }} 768w,{{ img_url | image_url: width: 900 }} 900w,{{ img_url | image_url: width: 1080 }} 1080w,{{ img_url | image_url: width: 1296 }} 1296w,{{ img_url | image_url: width: 1512 }} 1512w,{{ img_url | image_url: width: 1728 }} 1728w, {{ img_url | image_url: width: 2048 }} 2048w" data-sizes="auto" alt="{{ img_url.alt }}" width="{{ img_url.width }}" height="{{ img_url.height }}" loading="lazy">
+              </div>
+            </div>
+          </div>
+        {% endif %}
+        {% if block.type == 'block_video' %}
+          <div class="tab-pane" id="tabCustom-{{ forloop.index }}">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ block.settings.video_url.id }}" id="video" allowfullscreen></iframe>
+            </div>
+          </div>
+        {% endif %}
+        {% if block.type == 'block_customtab' %}
+          {% assign is_price_breakup_tab = false %}
+          {% if forloop.index == price_breakup_tab_index %}
+            {% assign is_price_breakup_tab = true %}
+          {% endif %}
+          <div class="tab-pane {% if is_price_breakup_tab and should_price_breakup_be_active %}active{% endif %}" id="tabCustom-{{ forloop.index }}">
+            {% assign configured = product.metafields.jewelry_config.configured %}
+            
+            {% if configured == true or configured == "true" %}
+              <div class="jewelry-price-breakdown">
+                
+                <div class="price-section mb-30">
+                  <h3 class="section-heading">Product Details</h3>
+                  <ul class="product-single__customtab list-unstyled">
+                    {% assign product_sku = product.selected_or_first_available_variant.sku %}
+                    {% if product_sku != blank %}
+                    <li>
+                      <div class="row align-items-center p-4 pt-10 pb-10">
+                        <div class="title col-6 font-600">Product Code</div>
+                        <div class="content col-6 text-right">{{ product_sku }}</div>
+                      </div>
+                    </li>
+                    {% endif %}
+                    {% assign gross_weight = product.metafields.jewelry_config.gross_weight %}
+                    {% if gross_weight != blank and gross_weight != 0 %}
+                    <li>
+                      <div class="row align-items-center p-4 pt-10 pb-10">
+                        <div class="title col-6 font-600">Product Weight</div>
+                        <div class="content col-6 text-right">{{ gross_weight }} gram</div>
+                      </div>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </div>
+                
+                <div class="price-section mb-30">
+                  <h3 class="section-heading">Metal Details</h3>
+                  <ul class="product-single__customtab list-unstyled">
+                    {% assign mt = product.metafields.jewelry_config.metal_type %}
+                    {% if mt != blank %}
+                    <li>
+                      <div class="row align-items-center p-4 pt-10 pb-10">
+                        <div class="title col-6 font-600">Metal Type</div>
+                        <div class="content col-6 text-right">
+                          {% if mt contains "gold" %}Gold{% elsif mt == "silver" %}Silver{% elsif mt == "platinum" %}Platinum{% else %}{{ mt }}{% endif %}
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="row align-items-center p-4 pt-10 pb-10">
+                        <div class="title col-6 font-600">Purity</div>
+                        <div class="content col-6 text-right">
+                          {% if mt == "gold24kt" %}24K{% elsif mt == "gold22kt" %}22K{% elsif mt == "gold18kt" %}18K{% elsif mt == "gold14kt" %}14K{% elsif mt == "silver" %}Silver{% elsif mt == "platinum" %}Platinum{% else %}{{ mt }}{% endif %}
+                        </div>
+                      </div>
+                    </li>
+                    {% endif %}
+                    {% assign metal_weight = product.metafields.jewelry_config.metal_weight %}
+                    {% if metal_weight != blank and metal_weight != 0 %}
+                    <li>
+                      <div class="row align-items-center p-4 pt-10 pb-10">
+                        <div class="title col-6 font-600">Metal Weight</div>
+                        <div class="content col-6 text-right">{{ metal_weight }} gram</div>
+                      </div>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </div>
+                
+                {% assign stones_metafield = product.metafields.jewelry_config.stones %}
+                {% if stones_metafield != blank %}
+                  {% assign stones_array = stones_metafield.value %}
+                  {% if stones_array == blank or stones_array == null %}
+                    {% assign stones_array = stones_metafield %}
+                  {% endif %}
+                  {% assign show_stone_section = false %}
+                  {% if stones_array != blank %}
+                    {% for stone in stones_array %}
+                      {% if stone.stoneType != blank or stone.stoneWeight != blank or stone.stoneCost != blank %}
+                        {% assign show_stone_section = true %}
+                        {% break %}
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                  
+                  {% if show_stone_section %}
+                    <div class="price-section mb-30">
+                      <h3 class="section-heading">Stone Details</h3>
+                      <div class="product-single__customtab">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Stone Type</th>
+                              <th>Stone Weight</th>
+                              <th>Stone Cost</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for stone in stones_array %}
+                              {% if stone.stoneType != blank or stone.stoneWeight != blank or stone.stoneCost != blank %}
+                            <tr>
+                              <td>{{ stone.stoneType | default: '-' }}</td>
+                              <td>
+                                {% if stone.stoneWeight != blank and stone.stoneWeight != 0 %}
+                                  {% assign stone_type_to_check = stone.actualStoneType | default: stone.stoneType %}
+                                  {% assign stone_type_lower = stone_type_to_check | downcase %}
+                                  {% if stone_type_lower contains 'diamond' %}
+                                    {{ stone.stoneWeight }}ct
+                                  {% else %}
+                                    {{ stone.stoneWeight }}gms
+                                  {% endif %}
+                                {% else %}
+                                  -
+                                {% endif %}
+                              </td>
+                              <td>{% if stone.stoneCost != blank and stone.stoneCost != 0 %}₹{{ stone.stoneCost | round: 2 }}{% else %}-{% endif %}</td>
+                            </tr>
+                              {% endif %}
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endif %}
+                
+                <div class="price-section">
+                  <h3 class="section-heading">Price Breakdown</h3>
+                  <ul class="product-single__customtab list-unstyled">
+                    {% assign metal_cost = product.metafields.jewelry_config.metal_cost %}
+                    {% if metal_cost != blank and metal_cost != 0 %}
+                    <li>
+                      <div class="row align-items-center p-4 pt-10 pb-10">
+                        <div class="title col-6 font-600">Metal Rate</div>
+                        <div class="content col-6 text-right">₹{{ metal_cost | round: 2 }}</div>
+                      </div>
+                    </li>
+                    {% endif %}
+                    {% assign labour_charge = product.metafields.jewelry_config.labour_charge %}
+                    {% if labour_charge == blank or labour_charge == null %}{% assign labour_charge = 0 %}{% endif %}
+                    {% assign wastage_charge = product.metafields.jewelry_config.wastage_charge %}
+                    {% if wastage_charge == blank or wastage_charge == null %}{% assign wastage_charge = 0 %}{% endif %}
+                    {% assign making_charge = product.metafields.jewelry_config.making_charge %}
+                    {% if making_charge == blank or making_charge == null %}{% assign making_charge = 0 %}{% endif %}
+                    {% assign making_charge_temp = labour_charge | plus: wastage_charge %}
+                    {% assign making_charge_total = making_charge_temp | plus: making_charge %}
+                    {% if making_charge_total != blank and making_charge_total != 0 %}
+                    <li>
+                      <div class="row align-items-center p-4 pt-10 pb-10">
+                        <div class="title col-6 font-600">Making Charge</div>
+                        <div class="content col-6 text-right">₹{{ making_charge_total | round: 2 }}</div>
+                      </div>
+                    </li>
+                    {% endif %}
+                    {% assign stone_cost = product.metafields.jewelry_config.stone_cost %}
+                    {% if stone_cost != blank and stone_cost != 0 %}
+                    <li>
+                      <div class="row align-items-center p-4 pt-10 pb-10">
+                        <div class="title col-6 font-600">Stone Charge</div>
+                        <div class="content col-6 text-right">₹{{ stone_cost | round: 2 }}</div>
+                      </div>
+                    </li>
+                    {% endif %}
+                    {% assign tax_amount = product.metafields.jewelry_config.tax_amount %}
+                    {% if tax_amount != blank and tax_amount != 0 %}
+                    <li>
+                      <div class="row align-items-center p-4 pt-10 pb-10">
+                        <div class="title col-6 font-600">Tax</div>
+                        <div class="content col-6 text-right">₹{{ tax_amount | round: 2 }}</div>
+                      </div>
+                    </li>
+                    {% endif %}
+                    {% assign discount_metafield = product.metafields.pricing.discount %}
+                    {% assign discount_enabled = false %}
+                    {% assign discount_amount = 0 %}
+                    {% assign discount_title = '' %}
+                    {% if discount_metafield != blank %}
+                      {% if discount_metafield.value != blank %}
+                        {% assign discount_data = discount_metafield.value %}
+                      {% else %}
+                        {% assign discount_data = discount_metafield %}
+                      {% endif %}
+                      {% if discount_data.enabled == true or discount_data.enabled == "true" %}
+                        {% assign discount_enabled = true %}
+                        {% assign discount_amount = discount_data.discount_amount | default: 0 %}
+                        {% assign discount_title = discount_data.discount_title | default: '' %}
+                      {% endif %}
+                    {% endif %}
+                    {% if discount_enabled and discount_amount != blank and discount_amount != 0 %}
+                    <li class="price-before-discount-row">
+                      <div class="row align-items-center p-4 pt-10 pb-10">
+                        <div class="title col-6 font-600">Price Before Discount</div>
+                        <div class="content col-6 text-right">
+                          {% assign current_price_rupees = product.price | divided_by: 100.0 %}
+                          {% assign price_before_discount = current_price_rupees | plus: discount_amount %}
+                          <span class="strikethrough-price">₹{{ price_before_discount | round: 2 }}</span>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="discount-row">
+                      <div class="row align-items-center p-4 pt-10 pb-10">
+                        <div class="title col-6 font-600">
+                          Discount Amount
+                          {% if discount_title != blank %}
+                            <span class="discount-title">({{ discount_title }})</span>
+                          {% endif %}
+                        </div>
+                        <div class="content col-6 text-right discount-amount">-₹{{ discount_amount | round: 2 }}</div>
+                      </div>
+                    </li>
+                    {% endif %}
+                    <li class="total-row{% if discount_enabled and discount_amount != blank and discount_amount != 0 %} has-discount{% endif %}">
+                      <div class="row align-items-center total-row-wrapper">
+                        <div class="title col-6">Total To Pay</div>
+                        <div class="content col-6 text-right">₹{{ product.price | money_without_currency }}</div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            {% else %}
+              <ul class="product-single__customtab list-unstyled">
+                {% for i in (1..10) %}
+                  {%- assign t_id = 't' | append: i -%}
+                  {%- assign c_id = 'c' | append: i -%}
+                  {% if block.settings[t_id] != blank or block.settings[c_id] != blank %}
+                    <li>
+                      <div class="row align-items-center p-4 pt-10 pb-10">
+                        <div class="title col-4">{{ block.settings[t_id] }}</div>
+                        <div class="content col-8">{{ block.settings[c_id] }}</div>
+                      </div>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+/* Modern Jewelry Price Breakdown Styling */
+.jewelry-price-breakdown {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: #2c2c2c;
+}
+
+.jewelry-price-breakdown .price-section {
+  margin-bottom: 40px;
+}
+
+.jewelry-price-breakdown .section-heading {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+.jewelry-price-breakdown .section-heading::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #d4af37 0%, #f4d03f 100%);
+}
+
+.jewelry-price-breakdown .product-single__customtab {
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.3s ease;
+}
+
+.jewelry-price-breakdown .product-single__customtab:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.jewelry-price-breakdown .product-single__customtab li {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.jewelry-price-breakdown .product-single__customtab li:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.jewelry-price-breakdown .product-single__customtab li:hover {
+  background-color: #f8f8f8;
+}
+
+.jewelry-price-breakdown .product-single__customtab li:last-child {
+  border-bottom: none;
+}
+
+.jewelry-price-breakdown .product-single__customtab li .row {
+  padding: 16px 20px;
+  margin: 0;
+  align-items: center;
+}
+
+.jewelry-price-breakdown .title {
+  color: #555;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.jewelry-price-breakdown .content {
+  color: #2c2c2c;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* Discount Rows Styling */
+.jewelry-price-breakdown .price-before-discount-row {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.jewelry-price-breakdown .price-before-discount-row .strikethrough-price {
+  text-decoration: line-through;
+  color: #999;
+  font-weight: 400;
+}
+
+.jewelry-price-breakdown .discount-row {
+  border-bottom: 1px solid #f0f0f0;
+  background-color: #f9fff9;
+}
+
+.jewelry-price-breakdown .discount-row .title {
+  color: #28a745;
+  font-weight: 500;
+}
+
+.jewelry-price-breakdown .discount-row .discount-title {
+  font-size: 12px;
+  color: #666;
+  font-weight: 400;
+  margin-left: 8px;
+}
+
+.jewelry-price-breakdown .discount-row .discount-amount {
+  color: #28a745;
+  font-weight: 600;
+}
+
+/* Total Row - Card Style with Gold Border */
+.jewelry-price-breakdown .total-row {
+  margin-top: 8px;
+  border-top: none !important;
+}
+
+.jewelry-price-breakdown .total-row-wrapper {
+  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+  border: 2px solid #d4af37;
+  border-radius: 8px;
+  padding: 20px 24px !important;
+  margin: 0;
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Total Row with Discount - Green Border */
+.jewelry-price-breakdown .total-row.has-discount .total-row-wrapper {
+  border: 2px solid #28a745;
+  box-shadow: 0 4px 16px rgba(40, 167, 69, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.jewelry-price-breakdown .total-row.has-discount .total-row-wrapper::before {
+  background: linear-gradient(90deg, #28a745 0%, #34ce57 50%, #28a745 100%);
+}
+
+.jewelry-price-breakdown .total-row.has-discount .content {
+  color: #28a745 !important;
+}
+
+.jewelry-price-breakdown .total-row-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%);
+}
+
+.jewelry-price-breakdown .total-row .title {
+  color: #1a1a1a !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.jewelry-price-breakdown .total-row .content {
+  color: #d4af37 !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+}
+
+/* Table Styling */
+.jewelry-price-breakdown table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.jewelry-price-breakdown table thead tr {
+  background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
+  border-bottom: 2px solid #d4af37;
+}
+
+.jewelry-price-breakdown table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #2c2c2c;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.jewelry-price-breakdown table th:last-child,
+.jewelry-price-breakdown table td:last-child {
+  text-align: right;
+}
+
+.jewelry-price-breakdown table tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.jewelry-price-breakdown table tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.jewelry-price-breakdown table tbody tr:hover {
+  background-color: #f8f8f8;
+}
+
+.jewelry-price-breakdown table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.jewelry-price-breakdown table td {
+  padding: 14px 16px;
+  color: #2c2c2c;
+  font-size: 14px;
+}
+
+.mb-30 {
+  margin-bottom: 30px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 767px) {
+  .jewelry-price-breakdown .price-section {
+    margin-bottom: 30px;
+  }
+  
+  .jewelry-price-breakdown .section-heading {
+    font-size: 17px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+  }
+  
+  .jewelry-price-breakdown .product-single__customtab li .row {
+    padding: 14px 16px;
+  }
+  
+  .jewelry-price-breakdown .title {
+    font-size: 14px;
+  }
+  
+  .jewelry-price-breakdown .content {
+    font-size: 15px;
+  }
+  
+  .jewelry-price-breakdown .total-row-wrapper {
+    padding: 18px 20px !important;
+  }
+  
+  .jewelry-price-breakdown .total-row .title {
+    font-size: 16px !important;
+  }
+  
+  .jewelry-price-breakdown .total-row .content {
+    font-size: 20px !important;
+  }
+  
+  .jewelry-price-breakdown .discount-row .discount-title {
+    font-size: 11px;
+    margin-left: 4px;
+  }
+  
+  .jewelry-price-breakdown table th,
+  .jewelry-price-breakdown table td {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+  
+  .jewelry-price-breakdown table th {
+    font-size: 11px;
+  }
+}
+</style>

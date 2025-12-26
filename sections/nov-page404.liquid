@@ -1,0 +1,85 @@
+<style>
+  .template-404 .page-404 {
+    {% if section.settings.background_color != blank %}
+      background-color: {{ section.settings.background_color }};
+    {% endif %}
+  }
+</style>
+
+<section id="content">
+  <div class="content-404 text-center">
+    <div class="image">
+      {% if section.settings.image != blank %}
+        <img class="img-fluid" src="{{ section.settings.image | image_url: width: 1024 }}" alt="Image 404" width="1024" height="{{ 1024 | divided_by: section.settings.image.aspect_ratio }}" style="height: auto;">
+      {% else %}
+        <div class="font-800">404</div>
+      {% endif %}
+    </div>
+    <div class="content">
+      {% if section.settings.title != blank %}
+        <h1 class="font-800 text-uppercase mb-10">{{ section.settings.title }}</h1>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <div class="sub_title font-500 mb-5">
+          <span>{{ section.settings.subheading }}</span>
+        </div>
+      {% endif %}
+      <div class="d-sm-flex d-block justify-content-sm-center mt-50">
+        {% if section.settings.button_back_to_home %}
+          <a href="/" class="btn btn-large mb-xs-10">
+            <span>{{ 'page.404.link' | t }}</span>
+          </a>
+        {% endif %}
+        {% if section.settings.button_continue_shopping %}
+          <a href="/collections/all" class="btn btn-large">
+            <span>{{ 'page.404.continue_shopping' | t }}</span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Vinova Page 404",
+    "class": "page-404",
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_section",
+        "label": "Color section",
+        "default": "background-1"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Vinova Page 404"
+      },
+      {
+        "type": "text",
+        "id": "subheading",
+        "label": "Sub heading",
+        "default": "Subtitle from happy customers"
+      },
+      {
+        "type": "checkbox",
+        "id": "button_back_to_home",
+        "label": "Enable Back To Home",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "button_continue_shopping",
+        "label": "Enable Continue Shopping",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}

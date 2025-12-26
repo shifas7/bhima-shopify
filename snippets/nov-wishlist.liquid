@@ -1,0 +1,11 @@
+<div class="productWishList">
+  <a class="btnProductWishlist item-product__wishlist" 
+    data-icon-wishlist href="#" 
+    data-product-handle="{{ handle }}"
+    data-id="{{ id | json }}">
+    {% render 'icon-heart' %}
+    {% if settings.tooltip_enable %}
+      <span class="btn-tootip">{{ 'products.product.wishlist' | t }}</span>
+    {% endif %}
+  </a>
+</div>

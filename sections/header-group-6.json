@@ -1,0 +1,157 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "Header 6",
+  "type": "header",
+  "sections": {
+    "header": {
+      "type": "nov-header-6",
+      "blocks": {
+        "8636628f-f6bb-4897-b492-38e4ba08d959": {
+          "type": "text",
+          "settings": {
+            "title": "Collections",
+            "desc": "",
+            "novmenu_menu_enable": true,
+            "show_title": true,
+            "novmenu_xl": "col-xl-8",
+            "submenu_xl": "col-xl-4",
+            "banner_br": 5,
+            "novmenu_banner_enable1": false,
+            "banner_xl_1": "col-xl-4",
+            "image_size1": "255x300",
+            "novmenu_banner_link1": "",
+            "class_bn1": "",
+            "novmenu_banner_enable2": false,
+            "banner_xl_2": "col-xl-4",
+            "image_size2": "255x300",
+            "novmenu_banner_link2": "",
+            "class_bn2": "",
+            "novmenu_banner_enable3": false,
+            "banner_xl_3": "col-xl-4",
+            "image_size3": "255x300",
+            "novmenu_banner_link3": "",
+            "class_bn3": "",
+            "collection_enable": true,
+            "collection_xl": "col-xl-3",
+            "name_collec_1": "Best Sellers",
+            "link_1": "",
+            "name_collec_2": "New Arrival",
+            "link_2": "",
+            "name_collec_3": "Top Trending",
+            "link_3": "",
+            "name_collec_4": "Top Trending",
+            "link_4": "",
+            "name_collec_5": "Denim Collection",
+            "link_5": "",
+            "product_enable": false,
+            "product_xl": "col-xl-4",
+            "title_product": "Featured Product",
+            "product_list": [],
+            "autoplay": true
+          }
+        },
+        "f5a5ac2b-38b6-4567-8a55-ca3cb5239f61": {
+          "type": "text",
+          "settings": {
+            "title": "Products",
+            "desc": "",
+            "novmenu_menu_enable": true,
+            "show_title": true,
+            "novmenu_xl": "col-xl-9",
+            "submenu_xl": "col-xl-4",
+            "banner_br": 5,
+            "novmenu_banner_enable1": false,
+            "banner_xl_1": "col-xl-4",
+            "image_size1": "255x300",
+            "novmenu_banner_link1": "",
+            "class_bn1": "",
+            "novmenu_banner_enable2": false,
+            "banner_xl_2": "col-xl-4",
+            "image_size2": "255x300",
+            "novmenu_banner_link2": "",
+            "class_bn2": "",
+            "novmenu_banner_enable3": false,
+            "banner_xl_3": "col-xl-4",
+            "image_size3": "255x300",
+            "novmenu_banner_link3": "",
+            "class_bn3": "",
+            "collection_enable": false,
+            "collection_xl": "col-xl-3",
+            "name_collec_1": "Best Sellers",
+            "link_1": "",
+            "name_collec_2": "New Arrival",
+            "link_2": "",
+            "name_collec_3": "Top Trending",
+            "link_3": "",
+            "name_collec_4": "Top Trending",
+            "link_4": "",
+            "name_collec_5": "Denim Collection",
+            "link_5": "",
+            "product_enable": true,
+            "product_xl": "col-xl-2",
+            "title_product": "Featured Product",
+            "product_list": [
+              "blossoming-rose-drops",
+              "celestial-charm-loop",
+              "celestial-love-chain",
+              "celestial-star-chain",
+              "cherry-blossom-delight"
+            ],
+            "autoplay": true
+          }
+        }
+      },
+      "block_order": [
+        "8636628f-f6bb-4897-b492-38e4ba08d959",
+        "f5a5ac2b-38b6-4567-8a55-ca3cb5239f61"
+      ],
+      "settings": {
+        "logo": "shopify:\/\/shop_images\/White.png",
+        "w_logo": 121,
+        "w_logo_lg": 121,
+        "w_logo_md": 121,
+        "logo_mobile": "shopify:\/\/shop_images\/White.png",
+        "wm_logo": 120,
+        "container": "container-fluid",
+        "color_header": "scheme-c04ac8bc-43d1-46cd-886a-c84fb8eeacae",
+        "color_header_inner": "background-2",
+        "color_header_bottom": "scheme-c04ac8bc-43d1-46cd-886a-c84fb8eeacae",
+        "color_header_bottom_inner": "background-2",
+        "stickymenu": true,
+        "color_header_sticky": "background-2",
+        "stickymenu_sm": true,
+        "color_header_sm": "background-2",
+        "account_icon": "rbb-icon-human-user-11",
+        "account_svg": true,
+        "wishlist": "rbb-icon-wishlist-17",
+        "wishlist_svg": true,
+        "cart_type": "cart",
+        "cart": "3",
+        "cart_svg": true,
+        "badge_color": "#1c1c1c",
+        "badge_bg": "#ffffff",
+        "show_header_bottom": true,
+        "address": "1093 Hood Avenue, San Diego, CA",
+        "address_link": "shopify:\/\/pages\/page-store-locations",
+        "phone": "+(123)-456-7890",
+        "header_bottom_textright": "<p>Limited Time Offer! -35% on Selected Items!<\/p>",
+        "icon_text": "shopify:\/\/shop_images\/icon-fire.svg",
+        "novmenu_enable": true,
+        "show_icons": true,
+        "main_linklist": "main-menu",
+        "color_menu": "background-1"
+      }
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

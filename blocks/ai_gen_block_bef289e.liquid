@@ -1,0 +1,1040 @@
+{% doc %}
+  @prompt
+    Adjust the category boxes under the Jewellery section.
+    
+    Requirements:
+    Heading 
+    
+    Corner Radius
+    
+    Add rounded corners (increase corner radius as needed — e.g., 10–16px).
+    
+    Desktop Layout
+    
+    Display 6 category boxes per row.
+    
+    Mobile Layout
+    
+    Display 3 columns × 2 rows (total 6 boxes visible).
+    
+    Ensure auto-wrapping and equal spacing.
+    
+    Padding / Spacing
+    
+    Add padding inside each box so the content doesn’t touch the edges.
+    
+    Add outer margin or grid gap between boxes.
+    
+    Expected Output:
+    
+    CSS or theme code (Liquid + CSS) that:
+    
+    Controls box size and spacing.
+    
+    Works responsively on desktop and mobile.
+    
+    Applies rounded corners.
+    
+    Ensures padding inside each box.
+    
+    Selector Notes:
+    
+    Target the category cards or grid using classes such as:
+    
+    .collection-list
+    
+    .collection-card
+    
+    .collection-grid
+    (Use whichever matches theme.), also need heading for this section
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-category-section-{{ ai_gen_id }} {
+    padding: {{ block.settings.section_padding_top }}px {{ block.settings.section_padding_horizontal }}px {{ block.settings.section_padding_bottom }}px;
+  }
+
+  .ai-category-header-{{ ai_gen_id }} {
+    text-align: {{ block.settings.heading_alignment }};
+    margin-bottom: {{ block.settings.heading_spacing }}px;
+  }
+
+  .ai-category-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_font_size }}px;
+    font-weight: {{ block.settings.heading_font_weight }};
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 {{ block.settings.subheading_spacing }}px;
+    line-height: 1.2;
+  }
+
+  .ai-category-subheading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subheading_font_size }}px;
+    font-weight: {{ block.settings.subheading_font_weight }};
+    color: {{ block.settings.subheading_color }};
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .ai-category-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.desktop_columns }}, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+  }
+
+  .ai-category-card-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+    border-radius: {{ block.settings.corner_radius }}px;
+    background-color: {{ block.settings.card_background }};
+    border: {{ block.settings.border_width }}px solid {{ block.settings.border_color }};
+    padding: {{ block.settings.card_padding }}px;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: {{ block.settings.card_min_height }}px;
+  }
+
+  .ai-category-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-{{ block.settings.hover_lift }}px);
+    box-shadow: 0 {{ block.settings.hover_shadow }}px {{ block.settings.hover_shadow | times: 2 }}px rgba(0, 0, 0, 0.1);
+    border-color: {{ block.settings.border_hover_color }};
+  }
+
+  .ai-category-image-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: {{ block.settings.image_max_width }}px;
+    margin-bottom: {{ block.settings.image_spacing }}px;
+  }
+
+  .ai-category-image-{{ ai_gen_id }} img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: {{ block.settings.image_corner_radius }}px;
+  }
+
+  .ai-category-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_font_size }}px;
+    font-weight: {{ block.settings.title_font_weight }};
+    color: {{ block.settings.title_color }};
+    margin: 0;
+    transition: color 0.3s ease;
+  }
+
+  .ai-category-card-{{ ai_gen_id }}:hover .ai-category-title-{{ ai_gen_id }} {
+    color: {{ block.settings.title_hover_color }};
+  }
+
+  .ai-category-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_font_size }}px;
+    color: {{ block.settings.description_color }};
+    margin-top: {{ block.settings.description_spacing }}px;
+    line-height: 1.5;
+  }
+
+  .ai-category-link-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-category-section-{{ ai_gen_id }} {
+      padding: {{ block.settings.mobile_section_padding }}px {{ block.settings.mobile_padding }}px;
+    }
+
+    .ai-category-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.mobile_heading_font_size }}px;
+    }
+
+    .ai-category-subheading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.mobile_subheading_font_size }}px;
+    }
+
+    .ai-category-header-{{ ai_gen_id }} {
+      margin-bottom: {{ block.settings.mobile_heading_spacing }}px;
+    }
+
+    .ai-category-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.mobile_columns }}, 1fr);
+      gap: {{ block.settings.mobile_grid_gap }}px;
+    }
+
+    .ai-category-card-{{ ai_gen_id }} {
+      padding: {{ block.settings.mobile_card_padding }}px;
+      min-height: {{ block.settings.mobile_card_min_height }}px;
+    }
+
+    .ai-category-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.mobile_title_font_size }}px;
+    }
+
+    .ai-category-description-{{ ai_gen_id }} {
+      font-size: {{ block.settings.mobile_description_font_size }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-category-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.heading != blank or block.settings.subheading != blank %}
+    <div class="ai-category-header-{{ ai_gen_id }}">
+      {% if block.settings.heading != blank %}
+        <h2 class="ai-category-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+      {% endif %}
+      {% if block.settings.subheading != blank %}
+        <p class="ai-category-subheading-{{ ai_gen_id }}">{{ block.settings.subheading }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="ai-category-grid-{{ ai_gen_id }}">
+    {% for i in (1..12) %}
+      {% liquid
+        assign category_title_key = 'category_' | append: i | append: '_title'
+        assign category_image_key = 'category_' | append: i | append: '_image'
+        assign category_link_key = 'category_' | append: i | append: '_link'
+        assign category_description_key = 'category_' | append: i | append: '_description'
+        
+        assign category_title = block.settings[category_title_key]
+        assign category_image = block.settings[category_image_key]
+        assign category_link = block.settings[category_link_key]
+        assign category_description = block.settings[category_description_key]
+      %}
+
+      {% if category_title != blank or category_image != blank %}
+        <div class="ai-category-card-{{ ai_gen_id }}">
+          {% if category_link != blank %}
+            <a href="{{ category_link }}" class="ai-category-link-{{ ai_gen_id }}" aria-label="{{ category_title }}"></a>
+          {% endif %}
+
+          {% if category_image != blank %}
+            <div class="ai-category-image-{{ ai_gen_id }}">
+              <img
+                src="{{ category_image | image_url: width: 400 }}"
+                alt="{{ category_title | escape }}"
+                loading="lazy"
+                width="{{ category_image.width }}"
+                height="{{ category_image.height }}"
+              >
+            </div>
+          {% endif %}
+
+          {% if category_title != blank %}
+            <h3 class="ai-category-title-{{ ai_gen_id }}">{{ category_title }}</h3>
+          {% endif %}
+
+          {% if category_description != blank %}
+            <div class="ai-category-description-{{ ai_gen_id }}">{{ category_description }}</div>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Jewellery categories",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by category"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "label": "Heading font size",
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_font_size",
+      "min": 18,
+      "max": 40,
+      "step": 2,
+      "label": "Mobile heading font size",
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "heading_font_weight",
+      "label": "Heading font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "range",
+      "id": "subheading_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "label": "Subheading font size",
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_subheading_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "label": "Mobile subheading font size",
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "subheading_font_weight",
+      "label": "Subheading font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "subheading_spacing",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "label": "Subheading spacing",
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "label": "Heading bottom spacing",
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_spacing",
+      "min": 15,
+      "max": 60,
+      "step": 5,
+      "label": "Mobile heading bottom spacing",
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Desktop columns",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "mobile_columns",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Mobile columns",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "label": "Grid gap",
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "mobile_grid_gap",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "label": "Mobile grid gap",
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "label": "Corner radius",
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "label": "Card padding",
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "mobile_card_padding",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "label": "Mobile card padding",
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "card_min_height",
+      "min": 100,
+      "max": 400,
+      "step": 10,
+      "label": "Card minimum height",
+      "unit": "px",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "mobile_card_min_height",
+      "min": 80,
+      "max": 300,
+      "step": 10,
+      "label": "Mobile card minimum height",
+      "unit": "px",
+      "default": 150
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Background",
+      "default": "#fcf2ed"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "label": "Border width",
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#df9a7c"
+    },
+    {
+      "type": "color",
+      "id": "border_hover_color",
+      "label": "Border hover color",
+      "default": "#df9a7c"
+    },
+    {
+      "type": "header",
+      "content": "Hover effects"
+    },
+    {
+      "type": "range",
+      "id": "hover_lift",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "label": "Hover lift",
+      "unit": "px",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "hover_shadow",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "label": "Hover shadow",
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "label": "Section padding top",
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "label": "Section padding bottom",
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "label": "Section padding horizontal",
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "mobile_section_padding",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "label": "Mobile section padding",
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "label": "Mobile horizontal padding",
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "range",
+      "id": "image_max_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "label": "Image max width",
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "image_corner_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "label": "Image corner radius",
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "image_spacing",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "label": "Image spacing",
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Category title"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "label": "Title font size",
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_title_font_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "label": "Mobile title font size",
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight",
+      "label": "Title font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "title_hover_color",
+      "label": "Title hover color",
+      "default": "#df9a7c"
+    },
+    {
+      "type": "range",
+      "id": "description_font_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "label": "Description font size",
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "mobile_description_font_size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "label": "Mobile description font size",
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "description_spacing",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "label": "Description spacing",
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Category 1"
+    },
+    {
+      "type": "text",
+      "id": "category_1_title",
+      "label": "Title",
+      "default": "Rings"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_1_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_1_description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Category 2"
+    },
+    {
+      "type": "text",
+      "id": "category_2_title",
+      "label": "Title",
+      "default": "Necklaces"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_2_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_2_description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Category 3"
+    },
+    {
+      "type": "text",
+      "id": "category_3_title",
+      "label": "Title",
+      "default": "Earrings"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_3_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_3_description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Category 4"
+    },
+    {
+      "type": "text",
+      "id": "category_4_title",
+      "label": "Title",
+      "default": "Bracelets"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_4_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_4_description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Category 5"
+    },
+    {
+      "type": "text",
+      "id": "category_5_title",
+      "label": "Title",
+      "default": "Anklets"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_5_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_5_description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Category 6"
+    },
+    {
+      "type": "text",
+      "id": "category_6_title",
+      "label": "Title",
+      "default": "Pendants"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_6_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_6_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_6_description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Category 7"
+    },
+    {
+      "type": "text",
+      "id": "category_7_title",
+      "label": "Title"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_7_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_7_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_7_description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Category 8"
+    },
+    {
+      "type": "text",
+      "id": "category_8_title",
+      "label": "Title"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_8_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_8_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_8_description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Category 9"
+    },
+    {
+      "type": "text",
+      "id": "category_9_title",
+      "label": "Title"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_9_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_9_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_9_description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Category 10"
+    },
+    {
+      "type": "text",
+      "id": "category_10_title",
+      "label": "Title"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_10_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_10_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_10_description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Category 11"
+    },
+    {
+      "type": "text",
+      "id": "category_11_title",
+      "label": "Title"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_11_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_11_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_11_description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Category 12"
+    },
+    {
+      "type": "text",
+      "id": "category_12_title",
+      "label": "Title"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_12_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_12_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_12_description",
+      "label": "Description"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Jewellery categories"
+    }
+  ]
+}
+{% endschema %}

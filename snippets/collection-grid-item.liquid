@@ -1,0 +1,34 @@
+{% if collection.image %}
+  {%- assign collection_image = collection.image -%}
+{% elsif collection.products.first and collection.products.first.images != empty %}
+  {%- assign collection_image = collection.products.first.featured_image -%}
+{% else %}
+  {% assign collection_image = blank %}
+{% endif %}
+
+<div class="collection-grid-item text-center">
+  <a href="{% if collection.products == empty %}#{% else %}{{ collection.url }}{% endif %}" class="collection-grid-item__link">
+    {% if collection_image == blank %}
+      <div class="collection-grid-item__overlay" style="background-image: url('{{ collection_image | image_url: width: 300, height: 300 }}')">
+      </div>
+   {% else %}
+     {% if collection == empty %}
+        <div class="collection-grid-item__overlay">
+          {% capture current %}{% cycle 1, 2, 3 %}{% endcapture %}
+          {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {% else %}
+         <img class="lazyload" data-src="{{ collection_image | image_url: width: 1024, height: 1024, crop: 'center' }}" width="1024" height="1024" alt="img">
+      {% endif %}
+   {% endif %}
+    <div class="collection-grid-item__title-wrapper">
+      <div class="collection-grid-item__title mt-15">
+        {% if collection.title == blank %}
+          {{ 'homepage.onboarding.collection_title' | t }}
+        {% else %}
+          {{ collection.title }}
+        {% endif %}
+      </div>
+    </div>
+  </a>
+</div>

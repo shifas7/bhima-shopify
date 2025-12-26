@@ -1,0 +1,812 @@
+{% doc %}
+  @prompt
+    Sliding Image Showcase (3 per row)”
+    
+    Section Requirements
+    
+    Add up to 5 image blocks (each block for: image + title + subtitle + button link).
+    
+    Show blocks only if content is filled (if a block has no image, hide it automatically).
+    
+    Layout:
+    
+    Desktop → 3 items visible per slide
+    
+    Tablet → 2 items visible per slide
+    
+    Mobile → 1 item per slide
+    
+    Section must be a horizontal slider/carousel with:
+    
+    Left arrow
+    
+    Right arrow
+    
+    Pagination dots (optional toggle)
+    
+    Add editable border radius for each image block (global setting).
+    
+    Each image needs:
+    
+    1 editable image picker
+    
+    Title (optional, show/hide toggle)
+    
+    Subtitle (optional, show/hide toggle)
+    
+    Optional button text + link
+    
+    Arrow style:
+    
+    Round buttons
+    
+    User can change icon color and background color
+    
+    Slider should loop and support autoplay (toggle ON/OFF).
+    
+    Include spacing controls:
+    
+    Padding top/bottom
+    
+    Gap between items
+    
+    Code Output Requirement
+    
+    Output must be Shopify Liquid + JSON schema, ready for /sections/.
+{% enddoc %}
+
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-slider-showcase-{{ ai_gen_id }} {
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+    position: relative;
+  }
+
+  .ai-slider-showcase-container-{{ ai_gen_id }} {
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .ai-slider-showcase-wrapper-{{ ai_gen_id }} {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ai-slider-showcase-track-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.gap_between_items }}px;
+    transition: transform 0.5s ease;
+  }
+
+  .ai-slider-showcase-slide-{{ ai_gen_id }} {
+    flex: 0 0 calc((100% - ({{ block.settings.gap_between_items }}px * 2)) / 3);
+    max-width: calc((100% - ({{ block.settings.gap_between_items }}px * 2)) / 3);
+  }
+
+  @media screen and (max-width: 991px) {
+    .ai-slider-showcase-slide-{{ ai_gen_id }} {
+      flex: 0 0 calc((100% - {{ block.settings.gap_between_items }}px) / 2);
+      max-width: calc((100% - {{ block.settings.gap_between_items }}px) / 2);
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .ai-slider-showcase-slide-{{ ai_gen_id }} {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+
+  .ai-slider-showcase-item-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .ai-slider-showcase-image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    margin-bottom: 20px;
+  }
+
+  .ai-slider-showcase-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: {{ block.settings.image_border_radius }}px;
+  }
+
+  .ai-slider-showcase-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: {{ block.settings.image_border_radius }}px;
+  }
+
+  .ai-slider-showcase-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+  }
+
+  .ai-slider-showcase-content-{{ ai_gen_id }} {
+    text-align: center;
+  }
+
+  .ai-slider-showcase-title-{{ ai_gen_id }} {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 10px;
+    color: #1c1c1c;
+  }
+
+  .ai-slider-showcase-subtitle-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: #666666;
+    margin: 0 0 15px;
+  }
+
+  .ai-slider-showcase-button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #1c1c1c;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .ai-slider-showcase-button-{{ ai_gen_id }}:hover {
+    background-color: #df9a7c;
+  }
+
+  .ai-slider-showcase-arrow-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: {{ block.settings.arrow_bg_color }};
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-slider-showcase-arrow-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.arrow_bg_color }};
+    opacity: 0.8;
+  }
+
+  .ai-slider-showcase-arrow-{{ ai_gen_id }} svg {
+    width: 20px;
+    height: 20px;
+    fill: {{ block.settings.arrow_icon_color }};
+  }
+
+  .ai-slider-showcase-arrow-prev-{{ ai_gen_id }} {
+    left: 10px;
+  }
+
+  .ai-slider-showcase-arrow-next-{{ ai_gen_id }} {
+    right: 10px;
+  }
+
+  .ai-slider-showcase-pagination-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+  }
+
+  .ai-slider-showcase-dot-{{ ai_gen_id }} {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #d0d0d0;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+  }
+
+  .ai-slider-showcase-dot-{{ ai_gen_id }}.active {
+    background-color: #1c1c1c;
+  }
+
+  @media screen and (max-width: 767px) {
+    .ai-slider-showcase-arrow-{{ ai_gen_id }} {
+      width: 40px;
+      height: 40px;
+    }
+
+    .ai-slider-showcase-arrow-{{ ai_gen_id }} svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+{% endstyle %}
+
+<slider-showcase-{{ ai_gen_id }}
+  class="ai-slider-showcase-{{ ai_gen_id }}"
+  data-autoplay="{{ block.settings.enable_autoplay }}"
+  data-loop="{{ block.settings.enable_loop }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-slider-showcase-container-{{ ai_gen_id }}">
+    <div class="ai-slider-showcase-wrapper-{{ ai_gen_id }}">
+      <div class="ai-slider-showcase-track-{{ ai_gen_id }}">
+        {% for i in (1..5) %}
+          {% liquid
+            assign image_key = 'image_' | append: i
+            assign title_key = 'title_' | append: i
+            assign subtitle_key = 'subtitle_' | append: i
+            assign button_text_key = 'button_text_' | append: i
+            assign button_link_key = 'button_link_' | append: i
+            assign show_title_key = 'show_title_' | append: i
+            assign show_subtitle_key = 'show_subtitle_' | append: i
+
+            assign image = block.settings[image_key]
+            assign title = block.settings[title_key]
+            assign subtitle = block.settings[subtitle_key]
+            assign button_text = block.settings[button_text_key]
+            assign button_link = block.settings[button_link_key]
+            assign show_title = block.settings[show_title_key]
+            assign show_subtitle = block.settings[show_subtitle_key]
+          %}
+
+          {% if image != blank %}
+            <div class="ai-slider-showcase-slide-{{ ai_gen_id }}">
+              <div class="ai-slider-showcase-item-{{ ai_gen_id }}">
+                <div class="ai-slider-showcase-image-wrapper-{{ ai_gen_id }}">
+                  <img
+                    src="{{ image | image_url: width: 800 }}"
+                    alt="{{ image.alt | escape }}"
+                    class="ai-slider-showcase-image-{{ ai_gen_id }}"
+                    loading="lazy"
+                    width="{{ image.width }}"
+                    height="{{ image.height }}"
+                  >
+                </div>
+
+                <div class="ai-slider-showcase-content-{{ ai_gen_id }}">
+                  {% if show_title and title != blank %}
+                    <h3 class="ai-slider-showcase-title-{{ ai_gen_id }}">{{ title }}</h3>
+                  {% endif %}
+
+                  {% if show_subtitle and subtitle != blank %}
+                    <p class="ai-slider-showcase-subtitle-{{ ai_gen_id }}">{{ subtitle }}</p>
+                  {% endif %}
+
+                  {% if button_text != blank and button_link != blank %}
+                    <a
+                      href="{{ button_link }}"
+                      class="ai-slider-showcase-button-{{ ai_gen_id }}"
+                    >
+                      {{ button_text }}
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <button
+      class="ai-slider-showcase-arrow-{{ ai_gen_id }} ai-slider-showcase-arrow-prev-{{ ai_gen_id }}"
+      aria-label="Previous slide"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+      </svg>
+    </button>
+
+    <button
+      class="ai-slider-showcase-arrow-{{ ai_gen_id }} ai-slider-showcase-arrow-next-{{ ai_gen_id }}"
+      aria-label="Next slide"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+      </svg>
+    </button>
+
+    {% if block.settings.show_pagination %}
+      <div class="ai-slider-showcase-pagination-{{ ai_gen_id }}"></div>
+    {% endif %}
+  </div>
+</slider-showcase-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class SliderShowcase{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentIndex = 0;
+        this.autoplayInterval = null;
+        this.slidesPerView = 3;
+      }
+
+      connectedCallback() {
+        this.track = this.querySelector('.ai-slider-showcase-track-{{ ai_gen_id }}');
+        this.slides = this.querySelectorAll('.ai-slider-showcase-slide-{{ ai_gen_id }}');
+        this.prevButton = this.querySelector('.ai-slider-showcase-arrow-prev-{{ ai_gen_id }}');
+        this.nextButton = this.querySelector('.ai-slider-showcase-arrow-next-{{ ai_gen_id }}');
+        this.paginationContainer = this.querySelector('.ai-slider-showcase-pagination-{{ ai_gen_id }}');
+        
+        this.autoplay = this.dataset.autoplay === 'true';
+        this.loop = this.dataset.loop === 'true';
+
+        if (this.slides.length === 0) return;
+
+        this.updateSlidesPerView();
+        this.setupEventListeners();
+        this.createPagination();
+        this.updateSlider();
+
+        if (this.autoplay) {
+          this.startAutoplay();
+        }
+
+        window.addEventListener('resize', () => {
+          this.updateSlidesPerView();
+          this.updateSlider();
+        });
+      }
+
+      updateSlidesPerView() {
+        const width = window.innerWidth;
+        if (width <= 767) {
+          this.slidesPerView = 1;
+        } else if (width <= 991) {
+          this.slidesPerView = 2;
+        } else {
+          this.slidesPerView = 3;
+        }
+      }
+
+      setupEventListeners() {
+        this.prevButton.addEventListener('click', () => {
+          this.goToPrev();
+          if (this.autoplay) {
+            this.resetAutoplay();
+          }
+        });
+
+        this.nextButton.addEventListener('click', () => {
+          this.goToNext();
+          if (this.autoplay) {
+            this.resetAutoplay();
+          }
+        });
+      }
+
+      createPagination() {
+        if (!this.paginationContainer) return;
+
+        const totalPages = Math.ceil(this.slides.length / this.slidesPerView);
+        this.paginationContainer.innerHTML = '';
+
+        for (let i = 0; i < totalPages; i++) {
+          const dot = document.createElement('button');
+          dot.classList.add('ai-slider-showcase-dot-{{ ai_gen_id }}');
+          dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+          
+          if (i === 0) {
+            dot.classList.add('active');
+          }
+
+          dot.addEventListener('click', () => {
+            this.goToSlide(i);
+            if (this.autoplay) {
+              this.resetAutoplay();
+            }
+          });
+
+          this.paginationContainer.appendChild(dot);
+        }
+      }
+
+      goToPrev() {
+        const totalPages = Math.ceil(this.slides.length / this.slidesPerView);
+        
+        if (this.currentIndex > 0) {
+          this.currentIndex--;
+        } else if (this.loop) {
+          this.currentIndex = totalPages - 1;
+        }
+        
+        this.updateSlider();
+      }
+
+      goToNext() {
+        const totalPages = Math.ceil(this.slides.length / this.slidesPerView);
+        
+        if (this.currentIndex < totalPages - 1) {
+          this.currentIndex++;
+        } else if (this.loop) {
+          this.currentIndex = 0;
+        }
+        
+        this.updateSlider();
+      }
+
+      goToSlide(index) {
+        this.currentIndex = index;
+        this.updateSlider();
+      }
+
+      updateSlider() {
+        const slideWidth = this.slides[0].offsetWidth;
+        const gap = {{ block.settings.gap_between_items }};
+        const offset = -(this.currentIndex * this.slidesPerView * (slideWidth + gap));
+        
+        this.track.style.transform = `translateX(${offset}px)`;
+
+        if (this.paginationContainer) {
+          const dots = this.paginationContainer.querySelectorAll('.ai-slider-showcase-dot-{{ ai_gen_id }}');
+          dots.forEach((dot, index) => {
+            if (index === this.currentIndex) {
+              dot.classList.add('active');
+            } else {
+              dot.classList.remove('active');
+            }
+          });
+        }
+      }
+
+      startAutoplay() {
+        this.autoplayInterval = setInterval(() => {
+          this.goToNext();
+        }, 5000);
+      }
+
+      resetAutoplay() {
+        if (this.autoplayInterval) {
+          clearInterval(this.autoplayInterval);
+          this.startAutoplay();
+        }
+      }
+
+      disconnectedCallback() {
+        if (this.autoplayInterval) {
+          clearInterval(this.autoplayInterval);
+        }
+      }
+    }
+
+    customElements.define('slider-showcase-{{ ai_gen_id }}', SliderShowcase{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sliding image showcase",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "gap_between_items",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap between items",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Image border radius",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Slider controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "label": "Enable autoplay",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_loop",
+      "label": "Enable loop",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "Show pagination dots",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Arrow style"
+    },
+    {
+      "type": "color",
+      "id": "arrow_bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "arrow_icon_color",
+      "label": "Icon color",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "header",
+      "content": "Slide 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title_1",
+      "label": "Show title",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title_1",
+      "label": "Title",
+      "default": "Slide Title 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subtitle_1",
+      "label": "Show subtitle",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subtitle_1",
+      "label": "Subtitle",
+      "default": "Discover our latest collection"
+    },
+    {
+      "type": "text",
+      "id": "button_text_1",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link_1",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Slide 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title_2",
+      "label": "Show title",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title_2",
+      "label": "Title",
+      "default": "Slide Title 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subtitle_2",
+      "label": "Show subtitle",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subtitle_2",
+      "label": "Subtitle",
+      "default": "Explore new arrivals"
+    },
+    {
+      "type": "text",
+      "id": "button_text_2",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Slide 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_3",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title_3",
+      "label": "Show title",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title_3",
+      "label": "Title",
+      "default": "Slide Title 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subtitle_3",
+      "label": "Show subtitle",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subtitle_3",
+      "label": "Subtitle",
+      "default": "Limited time offers"
+    },
+    {
+      "type": "text",
+      "id": "button_text_3",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link_3",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Slide 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_4",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title_4",
+      "label": "Show title",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title_4",
+      "label": "Title",
+      "default": "Slide Title 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subtitle_4",
+      "label": "Show subtitle",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subtitle_4",
+      "label": "Subtitle",
+      "default": "Trending styles"
+    },
+    {
+      "type": "text",
+      "id": "button_text_4",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link_4",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Slide 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_5",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title_5",
+      "label": "Show title",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title_5",
+      "label": "Title",
+      "default": "Slide Title 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subtitle_5",
+      "label": "Show subtitle",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subtitle_5",
+      "label": "Subtitle",
+      "default": "Best sellers"
+    },
+    {
+      "type": "text",
+      "id": "button_text_5",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link_5",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sliding image showcase"
+    }
+  ]
+}
+{% endschema %}

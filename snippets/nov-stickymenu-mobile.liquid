@@ -1,0 +1,43 @@
+<div id="stickymenu_bottom_mobile" class="d-md-none text-center">
+  <div class="row">
+    <div class="stickymenu-item col d-flex align-items-center justify-content-center">
+      <a href="/">
+        <i class="rbb-icon-home-outline-1"></i>
+        <span>{{ 'sticky_mobile.home.title' | t }}</span>
+      </a>
+    </div>
+    <div class="stickymenu-item col d-flex align-items-center justify-content-center">
+      <a href="/collections/all">
+        <i class="rbb-icon-view-grid-1"></i>
+        <span>{{ 'sticky_mobile.shopping.title' | t }}</span>
+      </a>
+    </div>
+    {% if settings.wishlist_enable %}
+      <div class="stickymenu-item col d-flex align-items-center justify-content-center">
+        <a href="/pages/{{ settings.link_page_wishlist }}">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart" width="26" height="26" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+          </svg>
+          <span>{{ 'sticky_mobile.wishlist.title' | t }}</span>
+          <div class="WishlistCount font-600 position-absolute text-center rounded-circle white bg_black">0</div>
+        </a>
+      </div>
+    {% endif %}
+    <div class="stickymenu-item col d-flex align-items-center justify-content-center">
+      {% if shop.customer_accounts_enabled %}
+        {% if customer %}
+          <a href="{{ shop.secure_url }}/account" class="nov-toggle-page">
+            <i class="rbb-icon-human-user-11"></i>
+            <span>{{ 'sticky_mobile.account.title' | t }}</span>
+          </a>
+        {% else %}
+          <a href="#" class="nov-toggle-page nov_btn_act" data-toggle="header_settings" data-overlay="true">
+            <i class="rbb-icon-human-user-11"></i>
+            <span>{{ 'sticky_mobile.account.title' | t }}</span>
+          </a>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,151 @@
+{%- style -%}
+  .top-bar-wrapper {
+    background-color: #f5f5f5; /* Light grey from your image */
+    border-bottom: 1px solid #e2e2e2;
+    padding: 8px 20px;
+    font-size: 13px;
+    font-family: inherit;
+    color: #333;
+  }
+  .top-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .top-bar__left, .top-bar__right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .top-bar__center {
+    flex-grow: 1;
+    text-align: center;
+    font-weight: 500;
+  }
+  .top-bar-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .top-bar-link:hover { opacity: 0.7; }
+
+  /* Dropdown Logic */
+  .rate-dropdown {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rate-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    z-index: 100;
+    width: 200px;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+  .rate-menu.active { display: block; }
+  .rate-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .rate-item:last-child { border: none; }
+
+  @media (max-width: 768px) {
+    .top-bar__center { display: none; } /* Hide center on mobile to save space */
+  }
+{%- endstyle -%}
+
+<div class="top-bar-wrapper">
+  <div class="top-bar-container">
+    
+    <div class="top-bar__left">
+      <a href="{{ section.settings.location_link }}" class="top-bar-link">
+        <span>📍</span> Store Locations
+      </a>
+      <a href="tel:{{ section.settings.phone_number | replace: ' ', '' }}" class="top-bar-link">
+        <span>📞</span> {{ section.settings.phone_number }}
+      </a>
+    </div>
+
+    <div class="top-bar__center">
+      <span>{{ section.settings.center_text }}</span>
+    </div>
+
+    <div class="top-bar__right">
+       <a href="{{ section.settings.right_link }}" class="top-bar-link">{{ section.settings.right_link_text }}</a>
+      
+      <div class="rate-dropdown" id="rateToggle">
+        <strong>TODAY'S RATE</strong> ▾
+        <div class="rate-menu" id="rateMenu">
+          {% for i in (1..8) %}
+            {% capture label_key %}rate_label_{{ i }}{% endcapture %}
+            {% capture value_key %}rate_value_{{ i }}{% endcapture %}
+            {% if section.settings[value_key] != blank %}
+              <div class="rate-item">
+                <span>{{ section.settings[label_key] }}</span>
+                <span>{{ section.settings[value_key] }}</span>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.getElementById('rateToggle').addEventListener('click', function(e) {
+    document.getElementById('rateMenu').classList.toggle('active');
+    e.stopPropagation();
+  });
+  window.onclick = function() {
+    document.getElementById('rateMenu').classList.remove('active');
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Top Utility Bar",
+  "settings": [
+    { "type": "url", "id": "location_link", "label": "Store Location Link" },
+    { "type": "text", "id": "phone_number", "label": "Phone Number", "default": "+91 854 777 2777" },
+    { "type": "text", "id": "center_text", "label": "Center Text", "default": "0% Making charge on selected items!" },
+    { "type": "text", "id": "right_link_text", "label": "Right Link Text", "default": "FREE SHIPPING" },
+    { "type": "url", "id": "right_link", "label": "Right Link URL" },
+    { "type": "header", "content": "Metal Rates (Leave blank to hide)" },
+    { "type": "text", "id": "rate_label_1", "label": "Rate 1 Name", "default": "22K Gold (1g)" },
+    { "type": "text", "id": "rate_value_1", "label": "Rate 1 Price" },
+    { "type": "text", "id": "rate_label_2", "label": "Rate 2 Name", "default": "24K Gold (1g)" },
+    { "type": "text", "id": "rate_value_2", "label": "Rate 2 Price" },
+    { "type": "text", "id": "rate_label_3", "label": "Rate 3 Name", "default": "Silver (1g)" },
+    { "type": "text", "id": "rate_value_3", "label": "Rate 3 Price" },
+    { "type": "text", "id": "rate_label_4", "label": "Rate 4 Name" },
+    { "type": "text", "id": "rate_value_4", "label": "Rate 4 Price" },
+    { "type": "text", "id": "rate_label_5", "label": "Rate 5 Name" },
+    { "type": "text", "id": "rate_value_5", "label": "Rate 5 Price" },
+    { "type": "text", "id": "rate_label_6", "label": "Rate 6 Name" },
+    { "type": "text", "id": "rate_value_6", "label": "Rate 6 Price" },
+    { "type": "text", "id": "rate_label_7", "label": "Rate 7 Name" },
+    { "type": "text", "id": "rate_value_7", "label": "Rate 7 Price" },
+    { "type": "text", "id": "rate_label_8", "label": "Rate 8 Name" },
+    { "type": "text", "id": "rate_value_8", "label": "Rate 8 Price" }
+  ],
+  "presets": [
+    { "name": "Top Utility Bar" }
+  ]
+}
+{% endschema %}

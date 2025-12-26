@@ -1,0 +1,550 @@
+{%- assign sst = section.settings -%}
+{% if template == "collection.leftsidebar" %}
+  {% assign viewtype = "leftsidebar" %}
+{% elsif template == "collection.rightsidebar" %}
+  {% assign viewtype = 'rightsidebar' %}
+{% elsif template == "collection.topsidebar" %}
+  {% assign viewtype = 'topsidebar' %}
+{% elsif template == "collection.withoutsidebar" %}
+  {% assign viewtype = 'withoutsidebar' %}
+{% elsif template == "collection.canvasleft" %}
+  {% assign viewtype = 'canvasleft' %}
+{% elsif template == "collection.canvastop" %}
+  {% assign viewtype = 'canvastop' %}
+{% elsif template == "collection.canvasbottom" %}
+  {% assign viewtype = 'canvasbottom' %}
+{% elsif template == "collection.full_width" %}
+  {% assign viewtype = 'full_width' %}
+{% else %}
+  {% if collection.handle == 'flash-deals' %}
+    {% assign viewtype = 'flash_deal' %}
+  {% elsif settings.type_sidebar == 'sidebar_left' %}
+    {% assign viewtype = 'leftsidebar' %}
+  {% elsif settings.type_sidebar == 'sidebar_right' %}
+    {% assign viewtype = 'rightsidebar' %}
+  {% elsif settings.type_sidebar == 'topsidebar' %}
+    {% assign viewtype = 'topsidebar' %}
+  {% elsif settings.type_sidebar == 'withoutsidebar' %}
+  {% assign viewtype = 'withoutsidebar' %}
+  {% elsif settings.type_sidebar == "canvasleft" %}
+    {% assign viewtype = 'canvasleft' %}
+  {% elsif settings.type_sidebar == "canvastop" %}
+    {% assign viewtype = 'canvastop' %}
+  {% elsif settings.type_sidebar == "canvasbottom" %}
+  {% assign viewtype = 'canvasbottom' %}
+  {% elsif settings.type_sidebar == 'full_width' %}
+    {% assign viewtype = 'full_width' %}
+  {% else %}
+    {% assign viewtype = 'full_width' %}
+  {% endif %}
+{% endif %}
+{{ 'css-collection_page.css' | asset_url | stylesheet_tag }}
+{% style %}
+  .template-collection .collection__desc-content:before {
+    background: linear-gradient(to top,rgba({{ sst.bg_b | color_to_rgb | remove: 'rgb(' | remove: 'rgba(' | remove: ')' | remove: ', 0.0' }}, 90%),rgba({{ sst.bg_b | color_to_rgb | remove: 'rgb(' | remove: 'rgba(' | remove: ')' | remove: ', 0.0' }}, 10%));
+  }
+  {% if collection.image != blank %}
+    #NovBreadcrumbs {
+      background-image: url('{{ collection.image | image_url: width: 2560 }}');
+    }
+  {% elsif settings.breadcrumb_collection_image != blank %}
+    #NovBreadcrumbs {
+      background-image: url('{{ settings.breadcrumb_collection_image | image_url: width: 2560 }}');
+    }
+  {% endif %}
+  {% if viewtype == 'full_width' %}
+    #NovBreadcrumbs .container {
+      max-width: 100%;
+    }
+    @media (min-width: 992px) {
+      #NovBreadcrumbs .container {
+        padding: 0 30px;
+      }
+    }
+    @media (min-width: 1600px) {
+      #NovBreadcrumbs .container {
+        padding: 0 65px;
+      }
+    }
+  {% endif %}
+{% endstyle %}
+{% render 'nov-breadcrumb', class_br: 'breadcrumb_collection' %}
+{% if sst.show_list_collection %}
+  <div class="container mb-100 mb-lg-50">
+    <div class="block-collection-list" data-section-id="{{ section.id }}" data-section-type="nov-slick">
+      <div class="nov-slick-carousel row spacing-{{ sst.spacing }} arrow_on_light"
+        data-autoplay="false" 
+        data-autoplayTimeout="6000" 
+        data-loop="false"
+        data-dots="false"
+        data-nav="{{ sst.show_nav }}"
+        data-row="1"
+        data-items_xxl="{{ sst.xxl }}"
+        data-items_xl="{{ sst.xl }}"
+        data-items_lg="{{ sst.lg }}"
+        data-items_md="{{ sst.md }}"
+        data-items_sm="{{ sst.sm }}"
+        data-items_xs="{{ sst.xs }}">
+        {% for block in section.blocks %}
+          {%- assign collec = collections[block.settings.collection] -%}
+          <div class="sp-item text-center {%- render 'number-to-col' -%}">
+            <a href="{{ collec.url }}" class="item d-block">
+              {% if block.settings.image != blank %}
+                {% render 'nov-aspect-image', image: block.settings.image, aspect: '11' %}
+              {% else %}
+                {%- capture current -%}{% cycle 1, 2, 3, 4 %}{%- endcapture -%}
+                {{ 'collection-apparel-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+            </a>
+            <a href="{{ collec.url }}" class="mt-30 d-inline-block {{ sst.font_size_title }}">
+              {% if collec.title != blank %}{{ collec.title }}{% else %}Lorem ipsum{% endif %}
+            </a>
+            <div class="count">{{ 'collections.general.products' | t: count: collec.products_count }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+<div id="main-collection-filters" class="collection-{{ viewtype }}" data-id="{{ section.id }}">
+  {% if viewtype != 'full_width' %}
+    <div class="container">
+  {% endif %}
+    {% if sst.banner != blank %}
+      <div class="collection_banner">
+        {% render 'nov-aspect-image', image: sst.banner %}
+      </div>
+    {% endif %}
+    <div class="collection-top">
+      <div class="filter_button collection-heading font-800 f_pr text-uppercase mb-20 nov_btn_act{% if viewtype == 'canvasleft' or viewtype == 'canvastop' or viewtype == 'canvasbottom' %} d-inline-block{% endif %}{% if viewtype == 'withoutsidebar' %} d-none{% endif %}" data-overlay="true" data-toggle="FilterSidebar">
+        <i class="zmdi zmdi-tune"></i>
+        <span class="d-md-inline-block">{{ 'collections.filters.button' | t }}</span>
+        <i class="zmdi zmdi-chevron-down"></i>
+      </div>
+      {% if viewtype == 'canvasleft' or viewtype == 'canvastop' or viewtype == 'canvasbottom' %}
+        {%- paginate collection.products by sst.products_per_page -%} 
+          <span class="pagination__count pagination__count-top mb-20 d-inline-block">{{ 'collections.general.product_count_html' | t: count: collection.products.size, total: collection.products_count }}</span>
+        {%- endpaginate -%}
+      {% endif %}
+      <div class="sidebar-filter{% if viewtype == 'rightsidebar' %} order-0 order-md-2{% endif %} nov_item_act" data-act="FilterSidebar">
+        {% if viewtype == 'canvasleft' or viewtype == 'canvastop' or viewtype == 'canvasbottom' %}
+          <div class="sidebar-filter__btn-close nov_btn_close" data-overlay data-close="FilterSidebar">
+            <i class="zmdi zmdi-chevron-left"></i>
+            <i class="zmdi zmdi-chevron-left"></i>
+          </div>
+        {% endif %}
+        <div class="sidebar-filter__content">
+          {% if sst.category != blank %}
+            {% unless viewtype == 'topsidebar' or viewtype == 'canvastop' or viewtype == 'canvasbottom' %}
+              <div class="collection-heading font-800 font_primary f_df text-uppercase d-none d-lg-flex align-items-center mb-25">
+                <i class="zmdi zmdi-view-headline"></i>{{ 'collections.sidebar.heading_collection' | t }}
+              </div>
+              {%- assign category = sst.category -%}
+              {%- assign catelimit = sst.show_more -%}
+              <div class="collection__category mb-35">
+                {% for link in linklists[category].links %}
+                  <div class="collection__category-item{% if forloop.index > catelimit %} hide{% endif %}">
+                    <a href="{{ link.url }}">{{ link.title }}</a>
+                  </div>
+                {% endfor %}
+                {% if linklists[category].links.size > catelimit %}
+                  <div class="collection__category-item collection__category-seemore">
+                    <a href="#" class="font-600">
+                      <span class="seemore">{{ 'collections.general.see_more' | t }}</span>
+                      <span class="seeless">{{ 'collections.general.see_less' | t }}</span>
+                    </a>
+                  </div>
+                {% endif %}
+              </div>
+            {% endunless %}
+          {% endif %}
+          {% unless viewtype == 'canvastop' or viewtype == 'canvasbottom' %}
+            <div class="collection-heading heading_filter font-800 f_pr text-uppercase d-none d-lg-flex align-items-center pb-25 mb-25">
+              <i class="zmdi zmdi-tune"></i>{{ 'collections.sidebar.heading_filter' | t }}
+            </div>
+          {% endunless %}
+          {% render 'collection-filters', results: collection, viewtype: viewtype %}
+        </div>
+      </div>
+      
+      {% if viewtype == 'canvasleft' or viewtype == 'canvastop' or viewtype == 'canvasbottom' %}
+        <collection-filter-product class="facets canvas__remove pb-30 d-block">
+          <form id="CollectionFiltersForm">
+            <div class="CollecttionFilterWrapper">
+              <div class="active-facets facets-remove-all d-flex flex-wrap align-items-center">
+                <facet-remove class="btn--clear--all">
+                  <a href="{{ collection.url }}" class="active-facets__button btn">
+                    <i class="rbb-icon-delete-outline-2"></i>
+                    <span>{{ 'collections.filters.clear_all' | t }}</span>
+                  </a>
+                </facet-remove>
+                {%- for filter in collection.filters -%}
+                  {%- for value in filter.active_values -%}
+                    <facet-remove class="btn--clear--item{% if forloop.first == true %} first{% endif %}">
+                      <a href="{{ value.url_to_remove }}" class="active-facets__button position-relative d-flex align-items-center">
+                        <span><span class="filter__label">{{ filter.label | escape }}:</span> <strong>{{ value.label | escape }}</strong></span>
+                        <i class="zmdi zmdi-close"></i>
+                      </a>
+                    </facet-remove>
+                  {%- endfor -%}
+                  {% if filter.type == "price_range" %}
+                    {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                      <facet-remove class="btn--clear--item">
+                        <a href="{{ filter.url_to_remove }}" class="active-facets__button reset_price position-relative d-flex align-items-center">
+                          <span>
+                            <span class="filter__label">{{ filter.label | escape }}:</span>
+                            <strong>
+                              <span class="min_price">{%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}{{ 0 | money }}{%- endif -%}</span>-<span class="max_price">{%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}{{ filter.range_max | money }}{%- endif -%}</span>
+                            </strong>
+                          </span>
+                          <i class="zmdi zmdi-close"></i>
+                        </a>
+                      </facet-remove>
+                    {%- endif -%}
+                  {% endif %}
+                {%- endfor -%}
+              </div>
+            </div>
+            {% if collection.current_vendor or collection.current_type %}
+              <input type="hidden" name="q" value="{{ collection.current_vendor }}{{ collection.current_type }}">
+            {% endif %}
+          </form>
+        </collection-filter-product>
+      {% endif %}
+      <div class="collection-filter__content">
+        <div class="d-flex align-items-end justify-content-between pt-10 pb-30">
+          {% if sst.sort_enable %}
+            <div class="position-relative" data-sortby-filter>
+              <div class="nov-accordion__title d-flex align-items-center pointer position-relative">
+                <div class="dropdown-toggle__content position-relative">
+                  {{ 'collections.sorting.title' | t }}&nbsp;
+                  <span class="sort-by__label font-700"></span>&nbsp;
+                  <i class="zmdi zmdi-chevron-down"></i>
+                </div>
+              </div>
+              <div class="nov-accordion__content position-absolute">
+                {%- for option in collection.sort_options -%}
+                  <div data-value="{{ option.value | escape }}" data-sortby-item><span></span>{{ option.name | escape }}</div>
+                {%- endfor -%}
+              </div>
+            </div>
+          {% endif %}
+          <div class="gridlist-toggle">
+            {% if viewtype == 'canvasleft' or viewtype == 'topsidebar' or viewtype =='withoutsidebar' or viewtype == 'flash_deal' %}
+              <a href="#" id="grid-4" title="Grid View 4" data-type="grid-4" class="active d-none d-lg-flex"><i class="zmdi zmdi-view-comfy"></i></a>
+            {% endif %}
+            <a href="#" id="grid-3" title="Grid View 3" data-type="grid-3" class="{% unless viewtype == 'canvasleft' or viewtype == 'topsidebar' or viewtype =='withoutsidebar' %}active{% endunless %}"><i class="rbb-icon-view-grid-2"></i></a>
+            <a href="#" id="grid-2" title="Grid View 2" data-type="grid-2"><i class="rbb-icon-view-grid-1"></i></a>
+            {% if viewtype != 'flash_deal' %}
+              <a href="#" id="list" title="List View" data-type="list"><i class="rbb-icon-view-list-1"></i></a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="collection__product-content collection-template collection--product-{{ viewtype }}" {% if viewtype == 'canvasleft' or viewtype == 'topsidebar' %}data-grid="grid-4"{% else %}data-grid="grid-3"{% endif %}>
+          <div id="CollectionProductContainer">
+            {%- paginate collection.products by sst.products_per_page -%} 
+            {%- if collection.products.size == 0 -%}
+              <div id="product-grid" data-id="{{ section.id }}" class="text-center pt-60">
+                <h2 class="mb-20">{{ 'collections.filters.empty' | t }}</h2>
+                <h4>{{ 'collections.filters.use_fewer_filters_html' | t: link: collection.url }}</h4>
+              </div>
+            {%- else -%}
+              <div id="product-grid" data-id="{{ section.id }}"{% if paginate.next %} data-next-url="{{ paginate.next.url }}"{% endif %} class="product-collection collection__grid-loadmore row grid--view-items spacing-md-15">
+                {%- for product in collection.products -%}
+                  <div class="product--item item col mb-md-15">
+                    {% render 'product-grid-item-style-collection', product: product, section_id: section.id, viewtype: viewtype %}
+                  </div>
+                {%- endfor -%}
+              </div>
+              {% if sst.loadmore == true and sst.type_loadmore == 'scroll' and paginate.pages > 1 %}
+                <div class="paging" style="text-align: center;">
+                  {% render 'pagination-page' paginate: paginate %}
+                </div>
+              {% endif %}
+              {% if sst.loadmore == true %}
+                <div class="collection-loadmore__bottom text-center mt-30">
+                  <div class="pagination__count mb-15">{{ 'collections.general.product_count_html' | t: count: collection.products.size, total: collection.products_count }}</div>
+                  <div class="pagination__bar position-relative mb-30" data-max="{{ collection.products_count }}">
+                    <span class="progress position-absolute" style="width: {{ collection.products.size | times: 100 | divided_by: collection.products_count }}%"></span>
+                  </div>
+                  {% if sst.type_loadmore == 'btn' and paginate.pages > 1 %}
+                    <div class="collection__btn-loadmore btn d-inline-flex align-items-center justify-content-center">
+                      <span>{{ 'collections.loadmore.button' | t }}</span>
+                      <div class="load"></div>
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+              {%- if paginate.pages > 1 and sst.loadmore == false -%}
+                <div class="nov-pagination d-flex align-items-center">{% render 'pagination', paginate: paginate, anchor: '', class: '' %}</div>
+              {%- endif -%}
+            {%- endif -%}
+            {%- endpaginate -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% if viewtype != 'full_width' %}
+    </div>
+  {% endif %}
+  {% if sst.cb %}
+    <div class="collection-bottom pt-100 pb-100 mt-100" style="background-color: {{ sst.bg_b }}">
+      {% if viewtype != 'full_width' %}
+        <div class="container">
+      {% endif %}
+      {% if sst.show_tags %}
+        <div class="facets__tag">
+          <div class="tag__label font-800 color-title text-uppercase d-flex align-items-center mb-25">
+            <i class="zmdi zmdi-label"></i>
+            <span class="facets__label--title">{{ 'collections.filters.filter_tags' | t }}</span>
+          </div>
+          <div class="facets__content">
+            <ul class="product_tags list-unstyled">
+              {% for tag in collection.tags %}
+                <li>{{ tag | link_to_tag: tag }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+      {% if sst.show_desc and collection.description != blank %}
+        <div class="collection__desc mt-60">
+          <div class="collection__title-seo text-uppercase font-800 f_pr color-title">{{ page_title }}</div>
+          <div class="collection__desc-content nov-toggle-contents mt-20 position-relative nov_item_act" data-act="DescContent">{{ collection.description }}</div>
+          <div class="collection__desc-btn text-center font-600 text-uppercase mt-20 nov_btn_act" data-toggle="DescContent">
+            <span class="see_more pointer c_df hover:c_pr">{{ 'collections.general.see_more' | t }}</span>
+            <span class="see_less pointer c_df hover:c_pr">{{ 'collections.general.see_less' | t }}</span>
+          </div>
+        </div>
+      {% endif %}
+      {% if viewtype != 'full_width' %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+  <script src="{{ 'nov-collection-filters-product.js' | asset_url }}" defer></script>
+</div>
+{% schema %}
+  {
+    "name": "Collection pages",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "banner",
+        "label": "Banner"
+      },
+      {
+        "type": "header",
+        "content": "Collection List"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_list_collection",
+        "label": "Show collection list",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "font_size_title",
+        "label": "Font size title",
+        "default": "h4",
+        "options": [
+          { "value": "h1", "label": "H1" },
+          { "value": "h2", "label": "H2" },
+          { "value": "h3", "label": "H3" },
+          { "value": "h4", "label": "H4" },
+          { "value": "h5", "label": "H5" },
+          { "value": "h6", "label": "H6" }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "show_nav",
+        "label": "Show next/prev arrow",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "xxl",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "label": "Desktop",
+        "default": 3,
+        "info": "Breakpoint 1440px"
+      },
+      {
+        "type": "range",
+        "id": "xl",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "label": "Large laptop",
+        "default": 3,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "range",
+        "id": "lg",
+        "min": 1,
+        "max": 8,
+        "step": 1,
+        "label": "Laptop",
+        "default": 3,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "range",
+        "id": "md",
+        "min": 1,
+        "max": 7,
+        "step": 1,
+        "label": "Tablet",
+        "default": 3,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "range",
+        "id": "sm",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Large mobile",
+        "default": 2,
+        "info": "Breakpoint 576px"
+      },
+      {
+        "type": "range",
+        "id": "xs",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Mobile",
+        "default": 2
+      },
+      {
+        "type": "range",
+        "id": "spacing",
+        "min": 0,
+        "max": 70,
+        "step": 5,
+        "unit": "px",
+        "label": "Spacing",
+        "default": 30,
+        "info": "Spacing item"
+      },
+      {
+        "type": "header",
+        "content": "Categories"
+      },
+      {
+        "type": "link_list",
+        "id": "category",
+        "label": "Choose menu"
+      },
+      {
+        "type": "range",
+        "id": "show_more",
+        "min": 1,
+        "max": 20,
+        "label": "Number item menu show",
+        "default": 5
+      },
+      {
+        "type": "header",
+        "content": "Config Collection"
+      },
+      {
+        "type": "range",
+        "id": "products_per_page",
+        "min": 4,
+        "max": 30,
+        "step": 1,
+        "label": "Products per page",
+        "default": 12
+      },
+      {
+        "type": "checkbox",
+        "id": "sort_enable",
+        "label": "Enable sorting",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Load More Product"
+      },
+      {
+        "type": "checkbox",
+        "id": "loadmore",
+        "label": "Enable load more",
+        "default": true
+      },
+      {
+        "type": "paragraph",
+        "content": "The default feature if you don't Enable 'Load More' will be Pagination"
+      },
+      {
+        "type": "radio",
+        "id": "type_loadmore",
+        "label": "Loadmore type",
+        "options": [
+          {
+            "value": "scroll",
+            "label": "Scroll infinity"
+          },
+          {
+            "value": "btn",
+            "label": "Click button"
+          }
+        ],
+        "default": "btn"
+      },
+      {
+        "type": "header",
+        "content": "Block Collection Bottom"
+      },
+      {
+        "type": "checkbox",
+        "id": "cb",
+        "label": "Show block collection bottom",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_tags",
+        "label": "Show tags",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_desc",
+        "label": "Show collection description",
+        "default": true
+      },
+      {
+        "type": "color",
+        "id": "bg_b",
+        "label": "Background",
+        "default": "#f2f2f2"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "list_collection",
+        "name": "List collection",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "collection",
+            "id": "collection",
+            "label": "Collection"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

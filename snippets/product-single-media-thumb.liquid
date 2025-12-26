@@ -1,0 +1,85 @@
+{% liquid
+  assign media_size = product.media.size
+  assign nav = true
+  assign dot = false
+  assign loop = true
+  assign items = 6
+  assign items_lg = '4'
+  assign items_md = '4'
+  assign items_sm = '4'
+  assign items_xs = '4'
+  assign vertical = false
+  assign vertical_lg = false
+  assign vertical_md = false
+  assign vertical_sm = false
+
+  if viewtype == 'grid'
+    assign class = 'col-md-3 col-lg-cus-5'
+  elsif viewtype == 'gridtwo'
+    assign class = 'col-xl-6 col-md-3'
+  else
+    assign class = 'item'
+  endif
+  if viewtype == 'left'
+    assign nav = false
+    assign items_md = '3'
+    assign vertical = true
+    assign vertical_lg = true
+    assign vertical_md = true
+    assign vertical_sm = true
+  endif
+  if viewtype == 'lefttwo' or viewtype == 'right'
+    assign nav = true
+    assign vertical = true
+    assign vertical_lg = false
+    assign vertical_md = false
+    assign vertical_sm = false
+  endif
+  if viewtype == 'scroll'
+    assign nav = false
+    assign dot = false
+    assign items_md = '5'
+    assign vertical = true
+    assign vertical_lg = true
+    assign vertical_md = false
+    assign vertical_sm = false
+  endif
+  if viewtype == 'grid' or viewtype == 'gridtwo'
+    assign thumb_media_type = 'grid'
+  else
+    assign thumb_media_type = 'slider'
+  endif
+  if media_size <= items
+    assign loop = false
+  endif
+%}
+{% if viewtype != 'imggrid' %}
+  <div id="productThumbs" class="mt-10">
+    <div
+    {% if thumb_media_type == 'slider' %}
+      class="thumblist thumb_slick" data-loop="{{ loop }}" data-dots="{{ dot }}" data-nav="{{ nav }}" data-items="{{ items }}" data-items_lg="{{ items_lg }}" data-items_md="{{ items_md }}" data-items_sm="{{ items_sm }}" data-items_xs="{{ items_xs }}" data-vertical="{{ vertical }}" data-vertical_lg="{{ vertical_lg }}" data-vertical_md="{{ vertical_md }}" data-vertical_sm="{{ vertical_sm }}"
+    {% else %}
+      class="thumblist row"
+    {% endif %}
+    >
+      {%- for media in product.media -%}
+        <div class="thumbItem{% if forloop.first %} active{% endif %} {{ class }}" data-media-id="{{ section.id }}-{{ media.id }}" data-position="{% if viewtype == 'scroll' %}{{ forloop.index }}{% else %}{{ forloop.index0 }}{% endif %}">
+          <a href="#" data-image="{{ media.preview_image | image_url: width: 1440 }}" class="product-single__thumbnail position-relative w-100"{% if media.media_type == 'video' or media.media_type =='external_video' %} style="padding-top: {{ 1 | divided_by: product.media.first.preview_image.aspect_ratio | times: 100 | append: '%' }}"{% endif %}>
+            <img class="product-single__thumbnail-image{% if media.media_type == 'video' or media.media_type =='external_video' %} position-absolute w-100 h-100{% endif %}" src="{{ media.preview_image | image_url: width: 150 }}" width="150" height="{{ 700 | divided_by: media.preview_image.aspect_ratio | round }}" alt="{{ media.preview_image.alt }}" style="object-fit: cover; height: auto;">
+            {%- if media.media_type == 'video' or media.media_type =='external_video' -%}
+              <div class="product-single__thumbnail-badge video position-absolute">
+                <i class="zmdi zmdi-play-circle-outline"></i>
+              </div>
+            {%- endif -%}
+            {%- if media.media_type == 'model' -%}
+              <div class="product-single__thumbnail-badge model position-absolute">
+                {% render 'icon-3d-model' %}
+              </div>
+            {%- endif -%}
+          </a>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+{% endif %}
+

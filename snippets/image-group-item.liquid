@@ -1,0 +1,99 @@
+<div class="gallery-image__item overflow_hidden position-relative block-{{ index }}{% if block.settings.video == blank %} {{ section.settings.hover_img }}{% endif %}">
+  {% if block.settings.video != blank %}
+
+    {% if block.settings.image != blank %}
+      {% assign autoplay = false %}
+    {% else %}
+      {% assign autoplay = true %}
+    {% endif %}
+
+    {{ block.settings.video | video_tag: image_size: '1100x', autoplay: autoplay, loop: true, muted: true, data-id: section.id, data-alt: shop.name, style: "object-fit: cover; display: block; max-width: 100%" }}
+
+    {% if block.settings.image != blank %}
+      <div class="bg-video__cover position-absolute w-100 h-100" data-id="{{ section.id }}" loading="lazy"></div>
+      <div class="btn-video__play pointer position-absolute center-center align-items-center justify-content-center color-{{ block.settings.color_btn_play }}" data-id="{{ section.id }}">
+        <span class="icon-svg d-flex align-items-center justify-content-center position-relative">
+          {% render 'icon-caret-right' %}
+        </span>
+        <svg class="svg-text-cricle" width="125" height="125" viewBox="0 0 125 125" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <path id="circlePath{{ section.id }}{{ forloop.index }}" d="M 62.5, 62.5 m -31.25, 0 a 31.25,31.25 0 1,1 62.5,0 a 31.25,31.25 0 1,1 -62.5,0" />
+          </defs>
+          <circle cx="62.5" cy="62.5" r="31.25" fill="none" />
+          <text font-size="6" fill="white">
+            <textPath href="#circlePath{{ section.id }}{{ forloop.index }}" textLength="196.3495">
+              {{ block.settings.icon_play_text }}&nbsp;
+            </textPath>
+          </text>
+        </svg>
+      </div>
+    {% endif %}
+
+  {% else %}
+    <a href="{{ block.settings.link }}" class="image-content">
+    {% if block.settings.image != blank %}
+      {% render 'nov-aspect-image', image: block.settings.image %}
+    {% endif %}
+    {% if block.settings.video_popup != blank %}
+      <div class="icon_play pointer position-absolute center-center d-flex align-items-center justify-content-center color-{{ block.settings.color_btn_play }}" data-toggle="modal" data-target="#ModalVideo" data-src="{% if block.settings.video_popup.type == "youtube"  %}https://www.youtube.com/embed/{{ block.settings.video_popup.id }}?rel=0&showinfo=0&vq=720{% endif %}{% if block.settings.video_popup.type == "vimeo" %}//player.vimeo.com/video/{{ block.settings.video_popup.id }}?byline=0&portrait=0&badge=0{% endif %}">
+        <span class="icon-svg d-flex align-items-center justify-content-center position-relative">
+          {% render 'icon-caret-right' %}
+        </span>
+        <svg class="svg-text-cricle" width="125" height="125" viewBox="0 0 125 125" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <path id="circlePath{{ section.id }}{{ forloop.index }}" d="M 62.5, 62.5 m -31.25, 0 a 31.25,31.25 0 1,1 62.5,0 a 31.25,31.25 0 1,1 -62.5,0" />
+          </defs>
+          <circle cx="62.5" cy="62.5" r="31.25" fill="none" />
+          <text font-size="6" fill="white">
+            <textPath href="#circlePath{{ section.id }}{{ forloop.index }}" textLength="196.3495">
+              {{ block.settings.icon_play_text }}&nbsp;
+            </textPath>
+          </text>
+        </svg>
+      </div>
+    {% endif %}
+    </a>
+  {% endif %}
+  
+  {% if block.settings.title != blank or block.settings.subtitle != blank or block.settings.desc != blank or block.settings.btn != blank or block.settings.icon != blank %}
+    <div class="gallery-caption position-absolute {{ block.settings.text_align }} {{ block.settings.position }}">
+
+      {% if block.settings.icon != blank %}
+        <div class="icon-img mb-20 mb-sm-15 d-inline-block{% if block.settings.icon_shadow %} shadow{% endif %}">
+          {% render 'nov-aspect-image', image: block.settings.icon %}
+        </div>
+      {% endif %}
+
+      {% if block.settings.title != blank %}
+        <div class="title {{ block.settings.title_fw }} {{ block.settings.title_ff }}">{{ block.settings.title }}</div>
+      {% endif %}
+      {% if block.settings.subtitle != blank %}
+        <div class="sub_title{% if block.settings.btn_style %} btn-style{% endif %} {{ block.settings.subtitle_fw }} {{ block.settings.subtitle_ff }}">{{ block.settings.subtitle }}</div>
+      {% endif %}
+      {% if block.settings.desc != blank %}
+        <div class="desc {{ block.settings.desc_fw }} {{ block.settings.desc_ff }}">{{ block.settings.desc }}</div>
+      {% endif %}
+      {% if block.settings.btn != blank %}
+        <a href="{{ block.settings.link }}" class="{% if block.settings.btn_type == 'btn' %}btn{% else %}link position-relative d-inline-flex{% endif %} color-{{ block.settings.color_button }}">
+          <span class="font-500">{{ block.settings.btn }}</span>
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if block.settings.show_btn_bottom %}
+    <a href="{{ block.settings.link }}" class="btn-bottom position-absolute color-{{ block.settings.btn_bottom_color }} {{ block.settings.btn_type_color }}">
+      <span class="btn d-flex align-items-center justify-content-center position-relative r-100 p-0">
+        <i class="zmdi zmdi-long-arrow-right"></i>
+      </span>
+      {% if block.settings.show_pattern_btn_bottom %}
+        {% render 'icon-pattern-button' %}
+      {% endif %}
+    </a>
+  {% endif %}
+
+  {% if block.settings.image == blank and block.settings.video == blank %}
+    {%- capture current -%}{% cycle 1, 2, 3, 4 %}{%- endcapture -%}
+    {{ 'collection-apparel-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+  {% endif %}
+</div>

@@ -1,0 +1,80 @@
+<div class="header-settings nov_item_act" data-act="header_settings" style="--color-header-settings-title: {{ settings.header_canvas_color_title }}">
+  <div class="header-settings-top d-flex align-items-center">
+    {% if settings.header_canvas_image != blank %}
+      <div class="header-settings-img" style="--width: {{ settings.header_canvas_image_width }}px">
+        {% render 'nov-aspect-image', image: settings.header_canvas_image %}
+      </div>
+    {% endif %}
+    <div class="close-icon nov_btn_close" data-overlay data-close="header_settings"></div>
+  </div>
+  <div class="header-settings-account">
+    <div class="header-settings-title">{{ 'layout.header_canvas.customer_account' | t }}</div>
+    {% if shop.customer_accounts_enabled %}
+      {% if customer %}
+        <div class="item">
+          <a class="myaccount" href="{{ shop.secure_url }}/account" rel="nofollow" title="{{ 'layout.customer.account' | t }}">
+            {% if customer.default_address.name != blank %}{{ customer.default_address.name }}{% else %}{{ 'layout.customer.account' | t }}{% endif %}
+          </a>
+        </div>
+        <div class="item">
+          <a class="logout" href="{{ shop.secure_url }}/account/logout" rel="nofollow" title="{{ 'layout.customer.log_out' | t }}">
+            {{ 'layout.customer.log_out' | t }}
+          </a>
+        </div>
+      {% else %}
+        <div class="item">
+          <a class="login" href="{{ shop.secure_url }}/account/login" rel="nofollow" title="{{ 'layout.customer.log_in' | t }}">
+            {{ 'layout.customer.log_in' | t }}
+          </a>
+        </div>
+        {% if shop.customer_accounts_optional %}
+          <div class="item">
+            <a class="register" href="{{ shop.secure_url }}/account/register" rel="nofollow" title="{{ 'layout.customer.create_account' | t }}">
+              {{ 'layout.customer.create_account' | t }}
+            </a>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endif %}
+    <div class="item">
+      <a href="/pages/{{ settings.link_page_wishlist }}" rel="nofollow" title="{{ 'layout.customer.wishlists' | t }}">
+        {{ 'layout.customer.wishlists' | t }}
+      </a>
+    </div>
+    <div class="item">
+      <a class="check-out" href="{{ shop.secure_url }}/checkout" rel="nofollow" title="{{ 'layout.customer.checkout' | t }}">
+        {{ 'layout.customer.checkout' | t }}
+      </a>
+    </div>
+  </div>
+  {% if settings.header_canvas_menu != blank %}
+    <div class="header-settings-menu">
+      {% if linklists[settings.header_canvas_menu].links.size > 0 %}
+        <div class="header-settings-title font-700">{{ linklists[settings.header_canvas_menu].title }}</div>
+        <ul class="list-unstyled">
+          {% for link in linklists[settings.header_canvas_menu].links %}
+            <li class="item-linklist">
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  {% endif %}
+  {% if settings.show_multiple_currencies or settings.show_language and localization.available_languages.size > 1 %}
+    <div class="nov-lang-cur nov_ud_toggle" data-ud_collapse="true">
+      {% if settings.show_multiple_currencies %}
+        <div class="block-currency nov_ud_group">
+          <div class="header-settings-title mb-20">{{ 'layout.header_canvas.currency' | t }}</div>
+          {% render 'nov-block-currency' %}
+        </div>
+      {% endif %}
+      {%- if settings.show_language and localization.available_languages.size > 1 -%}
+        <div class="block-language nov_ud_group">
+          <div class="header-settings-title mt-0 mb-20 border-0">{{ 'layout.header_canvas.language' | t }}</div>
+          {% render 'nov-block-language' id: 'CanvasLanguage' %}
+        </div>
+      {%- endif -%}
+    </div>
+  {% endif %}
+</div>

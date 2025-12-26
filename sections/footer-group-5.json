@@ -1,0 +1,143 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "Footer 5",
+  "type": "footer",
+  "sections": {
+    "nov_newsletter_3bCkhF": {
+      "type": "nov-newsletter",
+      "settings": {
+        "heading": "<p>Your Monthly Emillia Update!</p>",
+        "heading_color": "#1c1c1c",
+        "subheading": "<p>NEWSLETTER</p>",
+        "subheading_color": "#1c1c1c",
+        "animate": true,
+        "container": "container",
+        "color_section": "scheme-d79c004a-c827-414b-b62c-f2ad7422d98c",
+        "class_section": "",
+        "ss_bg_enable": false,
+        "background_color": "#ffffff",
+        "background_corner": 0,
+        "background_img_size": "cover",
+        "enable_background_img_size_custom": false,
+        "background_img_size_custom": "",
+        "background_img_position": "center center",
+        "background_position": "bg-center",
+        "background_size": "full",
+        "height_background_xxl": 100,
+        "height_background_xl": 100,
+        "height_background_lg": 100,
+        "height_background_md": 100,
+        "height_background_sm": 100,
+        "height_background_xs": 100,
+        "distance_top_xl": 120,
+        "distance_top_lg": 100,
+        "distance_top_md": 80,
+        "distance_top_sm": 60,
+        "distance_bottom_xl": 120,
+        "distance_bottom_lg": 100,
+        "distance_bottom_md": 80,
+        "distance_bottom_sm": 60
+      }
+    },
+    "footer": {
+      "type": "nov-footer-5",
+      "blocks": {
+        "block_menu_jH4DhF": {
+          "type": "block_menu",
+          "settings": {
+            "block_title": "My Account",
+            "h_t": false,
+            "menu_handle": "footer",
+            "block_class": "",
+            "grid_xxl": "col-xxl-4",
+            "grid_xl": "col-xl-4",
+            "grid_lg": "col-lg-4",
+            "grid_md": "col-md-4",
+            "grid_sm": "col-sm-4"
+          }
+        },
+        "block_menu_w6HD8W": {
+          "type": "block_menu",
+          "settings": {
+            "block_title": "Our Policies",
+            "h_t": false,
+            "menu_handle": "our-policies",
+            "block_class": "",
+            "grid_xxl": "col-xxl-4",
+            "grid_xl": "col-xl-4",
+            "grid_lg": "col-lg-4",
+            "grid_md": "col-md-4",
+            "grid_sm": "col-sm-4"
+          }
+        },
+        "block_menu_RKNE4H": {
+          "type": "block_menu",
+          "settings": {
+            "block_title": "Customer Care",
+            "h_t": false,
+            "menu_handle": "customer-care-footer",
+            "block_class": "",
+            "grid_xxl": "col-xxl-4",
+            "grid_xl": "col-xl-4",
+            "grid_lg": "col-lg-4",
+            "grid_md": "col-md-4",
+            "grid_sm": "col-sm-4"
+          }
+        }
+      },
+      "block_order": [
+        "block_menu_jH4DhF",
+        "block_menu_w6HD8W",
+        "block_menu_RKNE4H"
+      ],
+      "custom_css": [],
+      "settings": {
+        "animate": true,
+        "container": "container-fluid",
+        "color_section": "scheme-8f7455a1-eb11-4a61-a4c1-857420ff62ef",
+        "background_color": "#f2f2f2",
+        "background_image_size": "auto",
+        "bg_size": "full",
+        "input_color": "#000000",
+        "input_place_color": "#666666",
+        "input_bg": "#d2d2d2",
+        "input_border_color": "#d2d2d2",
+        "submit_color": "",
+        "submit_btn_type": "btn-primary",
+        "logo": "shopify://shop_images/Logo-black.png",
+        "logo_w": 120,
+        "fl_title": "<h3>Thank You For Choosing Us!</h3>",
+        "fl_desc": "<p>We appreciate your support and are dedicated to providing you with the best products and service. Your satisfaction is our top priority, and we continually strive to exceed your expectations. We look forward to serving you again and hope to make your next experience even more enjoyable!</p>",
+        "social_title": "Follow Us:",
+        "contact_title": "Contact Us",
+        "phone": "+(123)-456-7890",
+        "address": "1093 Hood Avenue, CA",
+        "email": "Emillia@example.com",
+        "time": "All Day: 9:00AM - 22:00PM",
+        "show_footer_copyright": true,
+        "color_copyright": "scheme-8f7455a1-eb11-4a61-a4c1-857420ff62ef",
+        "bg_copyright": "rgba(0,0,0,0)",
+        "copyright_border_top_color": "#dcdcdc",
+        "copyright_border_top_opa": 100,
+        "show_language_currency": true,
+        "show_payment": true,
+        "payment": "shopify://shop_images/payment-footer.png",
+        "payment_mw": 225,
+        "copyright": "Copyright © 2025 Nova Creative. All Rights Reserved.",
+        "mobile_acc": true
+      }
+    }
+  },
+  "order": [
+    "nov_newsletter_3bCkhF",
+    "footer"
+  ]
+}

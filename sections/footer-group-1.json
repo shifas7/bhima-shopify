@@ -1,0 +1,149 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "Footer 1",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "nov-footer-1",
+      "blocks": {
+        "block_contact_ynrTGT": {
+          "type": "block_contact",
+          "settings": {
+            "block_title": "",
+            "block_subtitle": "",
+            "image": "shopify:\/\/shop_images\/Logo-black.png",
+            "img_width": 120,
+            "img_spacing": 27,
+            "h_t": false,
+            "address": "1093 Hood Avenue, CA",
+            "phone": "+(123)-456-7890",
+            "email": "Emillia@example.com",
+            "time": "All Day: 9:00AM - 22:00PM",
+            "show_social": true,
+            "block_class": "",
+            "grid_xxl": "col-xxl-cus-5",
+            "grid_xl": "col-xl-cus-5",
+            "grid_lg": "col-lg-4",
+            "grid_md": "col-md-4",
+            "grid_sm": "col-sm-4"
+          }
+        },
+        "block_menu_jH4DhF": {
+          "type": "block_menu",
+          "settings": {
+            "block_title": "My Account",
+            "h_t": false,
+            "menu_handle": "footer",
+            "block_class": "pt-10",
+            "grid_xxl": "col-xxl-cus-5",
+            "grid_xl": "col-xl-cus-5",
+            "grid_lg": "col-lg-4",
+            "grid_md": "col-md-4",
+            "grid_sm": "col-sm-4"
+          }
+        },
+        "block_menu_w6HD8W": {
+          "type": "block_menu",
+          "settings": {
+            "block_title": "Our Policies",
+            "h_t": false,
+            "menu_handle": "our-policies",
+            "block_class": "pt-10",
+            "grid_xxl": "col-xxl-cus-5",
+            "grid_xl": "col-xl-cus-5",
+            "grid_lg": "col-lg-4",
+            "grid_md": "col-md-4",
+            "grid_sm": "col-sm-4"
+          }
+        },
+        "block_menu_RKNE4H": {
+          "type": "block_menu",
+          "settings": {
+            "block_title": "Customer Care",
+            "h_t": false,
+            "menu_handle": "customer-care-footer",
+            "block_class": "pt-10 mt-lg-50",
+            "grid_xxl": "col-xxl-cus-5",
+            "grid_xl": "col-xl-cus-5",
+            "grid_lg": "col-lg-4",
+            "grid_md": "col-md-4",
+            "grid_sm": "col-sm-4"
+          }
+        },
+        "block_newsletter_hAdmGL": {
+          "type": "block_newsletter",
+          "settings": {
+            "block_title": "<p>Subscribe Our Newsletter<\/p>",
+            "desc": "<p>Join our newsletter for exclusive updates, special offers, and the latest news delivered straight to your inbox!<\/p>",
+            "h_t": false,
+            "img_width": 150,
+            "img_spacing": 10,
+            "show_social": true,
+            "show_payment": false,
+            "payment_mw": 170,
+            "input_color": "#666666",
+            "input_bg": "#ffffff",
+            "button_color": "#000000",
+            "button_color_hover": "#666666",
+            "border_color": "#ffffff",
+            "block_class": "pt-10 pt-10 mt-lg-50",
+            "grid_xxl": "col-xxl-cus-5",
+            "grid_xl": "col-xl-cus-5",
+            "grid_lg": "col-lg-8",
+            "grid_md": "col-md-8",
+            "grid_sm": "col-sm-8"
+          }
+        }
+      },
+      "block_order": [
+        "block_contact_ynrTGT",
+        "block_menu_jH4DhF",
+        "block_menu_w6HD8W",
+        "block_menu_RKNE4H",
+        "block_newsletter_hAdmGL"
+      ],
+      "custom_css": [],
+      "settings": {
+        "animate": true,
+        "container": "container-fluid",
+        "color_section": "scheme-8f7455a1-eb11-4a61-a4c1-857420ff62ef",
+        "background_color": "#f5f6fc",
+        "background_image_size": "auto",
+        "bg_size": "full",
+        "input_color": "#1c1c1c",
+        "input_place_color": "#b5b5b5",
+        "input_bg": "#ffffff",
+        "input_border_color": "#ffffff",
+        "submit_color": "",
+        "submit_btn_type": "btn-primary",
+        "show_footer_bottom": true,
+        "footer_bottom_border_top": true,
+        "footer_bottom_border_top_color": "#eaeaea",
+        "footer_bottom_payment_title": "We Accept Payments",
+        "footer_bottom_payment_image": "shopify:\/\/shop_images\/payment-footer.png",
+        "footer_bottom_text_title": "<h3>Thank You For Choosing Us!<\/h3>",
+        "footer_bottom_text_desc": "<p>We appreciate your support and are dedicated to providing you with the best products and service. We look forward to serving you again!<\/p>",
+        "footer_bottom_social_title": "Follow Us",
+        "show_footer_copyright": true,
+        "color_copyright": "scheme-8f7455a1-eb11-4a61-a4c1-857420ff62ef",
+        "bg_copyright": "rgba(0,0,0,0)",
+        "copyright_border_top_color": "#ebebeb",
+        "copyright_border_top_opa": 100,
+        "copyright": "Copyright © 2025 Farseen. All Rights Reserved.",
+        "show_language_currency": true,
+        "mobile_acc": true
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

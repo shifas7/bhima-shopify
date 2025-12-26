@@ -1,0 +1,235 @@
+{%- assign sst = section.settings -%}
+<style>
+  {% if sst.boxInfor == true %}
+    @media (min-width: 768px) {
+      .page-contact-us .formContactUs {
+        margin-right: 80px;
+      }
+      .lang-rtl .page-contact-us .formContactUs {
+        margin-left: 80px;
+        margin-right: initial;
+      }
+    }
+  {% endif %}
+</style>
+{% render 'nov-breadcrumb', class_br: 'breadcrumb_inner' %}
+{% if sst.has_fullwidth == false %}
+  <div class="container">
+{% endif %}
+  {% if page.content.size > 0 %}
+    <div class="rte">
+      {{ page.content }}
+    </div>
+  {% endif %}
+
+  {% if sst.map == true %}
+    <div class="map-section__container mb-100 mb-sm-50">
+      <iframe src="{{ sst.iframe_map }}" width="100%" height="100%" frameborder="0" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+    </div>
+  {% endif %}
+  <div class="boxItem wow">
+    <div class="form_title {{ sst.title_alignment }}">
+      {% if sst.title_form != blank %}
+        <div class="title font-800 text-uppercase">{{ sst.title_form }}</div>
+      {% endif %}
+      {% if sst.sub_form != blank %}
+        <div class="sub_title">{{ sst.sub_form }}</div>
+      {% endif %}
+    </div>
+    <div class="row">
+      {% if sst.form %}
+        <div class="{% if sst.boxInfor %}col-lg-8{% else %}col-12{% endif %} mb-md-80">
+          <div class="formContactUs">
+            <div class="contact-form form-vertical">
+              {% form 'contact', id: 'page_contact' %}
+              
+                {% if form.posted_successfully? %}
+                <p class="note form-success">
+                  {{ 'page.contact.form.post_success' | t }}
+                </p>
+                {% endif %}
+                
+                {{ form.errors | default_errors }}
+                
+                <div class="form-group row spacing-10 mb-10">
+                  <div class="col-md-6 mb-md-10">
+                    <input type="text" id="ContactFormName" name="contact[name]" value="{% if form.fields.name %}{{ form.fields.name }}{% elsif customer %}{{ customer.name }}{% endif %}" class="mb-0 {% if form.errors contains 'name' %}input--error{% endif %}" placeholder="{{ 'page.contact.form.name' | t }}" required>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="email" id="ContactFormEmail" name="contact[email]" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" class="mb-0 {% if form.errors contains 'email' %}input--error{% endif %}" placeholder="{{ 'page.contact.form.email' | t }}" required>
+                  </div>
+                </div>
+                
+                <div class="form-group row mb-10">
+                  <div class="col-md-12">
+                    <input type="tel" id="ContactFormPhone" name="contact[phone]" pattern="[0-9\-]*" value="{% if form.fields.phone %}{{ form.fields.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}" class="mb-0 {% if form.errors contains 'phone' %}input--error{% endif %}" placeholder="{{ 'page.contact.form.phone' | t }}">
+                  </div>
+                </div>
+                
+                <div class="form-group row mb-20">
+                  <div class="col-md-12">
+                    <textarea rows="12" cols="50" id="ContactFormMessage" class="mb-0" name="contact[body]" placeholder="{{ 'page.contact.form.message' | t }}">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+                  </div>
+                </div>
+                
+                <button class="btn btn-large" type="submit">
+                  <span>{{ 'page.contact.form.submit' | t }}</span>
+                </button>
+              {% endform %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      {% if sst.boxInfor == true %}
+        <div class="{% if sst.form == true %}col-lg-4{% else %}col-12{% endif %} mt-sm-50">
+          <div class="boxInfor">
+            {% if sst.address != blank %}
+              <div class="address mb-25"><label>{{ 'page.contact.address' | t }}</label> {{ sst.address }}</div>
+            {% endif %}
+            {% if sst.email != blank %}
+              <div class="email mb-5"><label>{{ 'page.contact.email' | t }}</label> {{ sst.email }}</div>
+            {% endif %}
+            {% if sst.call != blank %}
+              <div class="call mb-20"><label>{{ 'page.contact.call' | t }}</label> {{ sst.call }}</div>
+            {% endif %}
+            {% if sst.time != true %}
+              <div class="time mb-35"><label>{{ 'page.contact.time' | t }}</label> {{ sst.time }}</div>
+            {% endif %}
+            {% if sst.social == true %}
+              {% render 'nov-social' %}
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% if sst.has_fullwidth == false %}
+  </div>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Page Contact",
+    "class": "page-inner page-contact-us",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "has_fullwidth",
+        "label": "Full Width",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Maps"
+      },
+      {
+        "type": "checkbox",
+        "id": "map",
+        "label": "Show Map",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "iframe_map",
+        "label": "Google Maps Iframe",
+        "info": "You’ll need to embed the code on google map",
+        "default": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d23095.519254450588!2d-79.38263233337402!3d43.64941859273796!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x935ab2eb9fd5fb31!2sFirst%20Canadian%20Place!5e0!3m2!1sen!2s!4v1659598435154!5m2!1sen!2s"
+      },
+      {
+        "type": "paragraph",
+        "content": "[Google Maps](https://www.google.com/maps/place/First+Canadian+Place/@43.648611,-79.381667,14z/data=!4m5!3m4!1s0x0:0x935ab2eb9fd5fb31!8m2!3d43.6486111!4d-79.3816667?hl=en)"
+      },
+      {
+        "type": "header",
+        "content": "Form"
+      },
+      {
+        "type": "checkbox",
+        "id": "form",
+        "label": "Show Form",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "title_form",
+        "label": "Title Form",
+        "default": "Get in touch"
+      },
+      {
+        "type": "text",
+        "id": "sub_form",
+        "label": "Sub Title Form",
+        "default": "Please enter the details of your requesst. A member of our support staff will respond as soon as possible."
+      },
+      {
+        "type": "select",
+        "id": "title_alignment",
+        "label": "Heading alignment",
+        "default": "text-left",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "text_button",
+        "label": "Text Button"
+      },
+      {
+        "type": "header",
+        "content": "Info"
+      },
+      {
+        "type": "checkbox",
+        "id": "boxInfor",
+        "label": "Show BoxInfor",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "address",
+        "label": "Address",
+        "default": "123 Suspendis matti, Visaosang Building VST District, NY Accums, North American"
+      },
+      {
+        "type": "text",
+        "id": "email",
+        "label": "Email",
+        "default": "support@domain.com"
+      },
+      {
+        "type": "text",
+        "id": "call",
+        "label": "Call",
+        "default": "(012)-345-67890"
+      },
+      {
+        "type": "text",
+        "id": "time",
+        "label": "Time",
+        "default": "Our store has re-opened for shopping, exchanges every day 11am to 7pm"
+      },
+      {
+        "type": "header",
+        "content": "Social"
+      },
+      {
+        "type": "checkbox",
+        "id": "social",
+        "label": "Show social",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}

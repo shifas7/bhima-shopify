@@ -1,0 +1,36 @@
+<div class="product-single__share-ask-sizeguide d-flex align-items-center mt-25 pb-20">
+  {% if section.settings.show_share %}
+    <div class="product-single__share">
+      <div class="product-single__share-ask-sizeguide-title pointer" data-toggle="modal" data-target="#Shopshare">
+        <i class="zmdi zmdi-share align-middle"></i>
+        <span class="f_pr align-middle">{{ 'products.product.label_share' | t }}</span>
+      </div>
+    </div> 
+  {% endif %}
+  {% if section.settings.show_ask %}
+    <div class="product-single__ask">
+      <div class="product-single__share-ask-sizeguide-title pointer" data-toggle="modal" data-target="#Shopask">
+        <i class="zmdi zmdi-help-outline align-middle"></i>
+        <span class="f_pr align-middle">{{ 'products.product.label_ask_a_question' | t }}</span>
+      </div>
+    </div>
+  {% endif %}
+  {% if section.settings.show_sizeguide %}
+    <div class="product-single__sizeguide">
+      <div class="product-single__share-ask-sizeguide-title pointer nov_btn_act" data-toggle="CanvasSizeGuide" data-overlay="true">
+        <i class="zmdi zmdi-format-line-spacing align-middle"></i>
+        <span class="f_pr align-middle">{{ 'products.product.label_sizeguide' | t }}</span>
+      </div>
+    </div>
+  {% endif %}
+  {% if section.settings.show_faq %}
+    <div class="product-single__faq">
+      <div class="product-single__share-ask-sizeguide-title">
+        <a href="{{ section.settings.faq }}">
+          <i class="zmdi zmdi-comment-text align-middle"></i>
+          <span class="f_pr align-middle">{{ 'products.product.label_faq' | t }}</span>
+        </a>
+      </div>
+    </div>
+  {% endif %}
+</div>

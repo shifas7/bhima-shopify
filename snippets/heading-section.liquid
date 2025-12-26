@@ -1,0 +1,23 @@
+{% if section.settings.heading != blank or section.settings.subheading != blank or section.settings.descheading != blank %}
+  <div class="title_section{% if section.settings.heading_alignment != null %} {{ section.settings.heading_alignment }}{% endif %}{% if class != blank %} {{ class }}{% endif %}{% if sub_position == 'top' %} subtop{% endif %}">
+    {% if section.settings.img_heading != blank %}
+      <div class="img-heading mb-10">
+        <img src="{{ section.settings.img_heading | image_url: width: 250 }}" alt="{{ section.settings.img_heading.alt }}" width="250" height="{{ 250 | divided_by: section.settings.img_heading.aspect_ratio }}" style="height: auto;">
+      </div>
+    {% endif %}
+    {% if section.settings.subheading != blank and sub_position == 'top' %}
+      <div class="sub_title mb-15" style="color: {{ section.settings.subheading_color }}; --color-link: {{ section.settings.subheading_color }}">{{ section.settings.subheading }}</div>
+    {% endif %}
+    {% if section.settings.heading != blank %}
+      <div class="title" style="color: {{ section.settings.heading_color }}">
+      {{ section.settings.heading }}
+      </div>
+    {% endif %}
+    {% if section.settings.subheading != blank and sub_position != 'top' %}
+      <div class="sub_title mt-10" style="color: {{ section.settings.subheading_color }}; --color-link: {{ section.settings.subheading_color }}">{{ section.settings.subheading }}</div>
+    {% endif %}
+    {% if section.settings.descheading != blank %}
+      <div class="desc mt-10" style="color: {{ section.settings.descheading_color }}; --color-link: {{ section.settings.descheading_color }}">{{ section.settings.descheading }}</div>
+    {% endif %}
+  </div>
+{% endif %}

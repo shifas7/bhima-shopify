@@ -1,0 +1,72 @@
+{% if settings.breadcrumbs_enable %}
+  <section id="NovBreadcrumbs" class="{{ class_br }}{% if collection.handle == 'flash-deals' %} collection-deal{% endif %}">
+    <div class="container position-relative">
+      {% if class_br != 'breadcrumb_product' %}
+        <h1 class="headingBreacrumb text-uppercase f_pr font-800 mb-5 position-relative">{{ page_title }}</h1>
+      {% endif %}
+      <ol class="breadcrumb">
+        <li class="list-inline-item">
+          <a href="/" class="item-breacrumb item-home">{{ 'general.breadcrumbs.home' | t }}</a>
+        </li>
+        {% if template contains 'article' %}
+          <li class="list-inline-item"><a href="{{ blog.url }}" class="item-breacrumb">{{ blog.title }}</a></li>
+          <li class="list-inline-item"><span class="item-breacrumb">{{ article.title }}</span></li>
+        {% elsif template contains 'product' %}
+          {% if collection %}
+            {% if collection.handle %}
+              {% capture url %}/collections/{{ collection.handle }}{% endcapture %}
+              <li class="list-inline-item"><a href="{{ url }}" class="item-breacrumb">{{ collection.title }}</a></li>
+            {% endif %}
+          {% endif %}
+          <li class="list-inline-item"><span class="item-breacrumb">{{ product.title }}</span></li>
+        {% elsif template contains 'collection' and collection.handle %}
+          {% if current_tags %}
+            {% capture url %}/collections/{{ collection.handle }}{% endcapture %}
+            <li class="list-inline-item"><a href="{{ url }}" class="item-breacrumb">{{ collection.title }}</a></li>
+            <li class="list-inline-item"><span class="item-breacrumb">{{ current_tags | join: " + " }}</span></li>
+          {% else %}
+            <li class="list-inline-item"><span class="item-breacrumb">{{ collection.title }}</span></li>
+          {% endif %}
+        {% elsif template contains 'blog' %}
+          {% if current_tags %}
+            {{ blog.title | link_to: blog.url }}
+            <li class="list-inline-item"><a href="{{ blog.url }}" class="item-breacrumb">{{ blog.title }}</a></li>
+            <li class="list-inline-item"><span class="item-breacrumb">{{ current_tags | join: " + " }}</span></li>
+          {% else %}
+            <li class="list-inline-item"><span class="item-breacrumb">{{ blog.title }}</span></li>
+          {% endif %}
+        {% elsif template contains 'page' %}
+          <li class="list-inline-item"><span class="item-breacrumb">{{ page.title }}</span></li>
+        {% else %}
+          <li class="list-inline-item">
+            {% if custom_pagetitle != blank %}
+              <span class="item-breacrumb">{{ custom_pagetitle }}</span>
+            {% else %}
+              <span class="item-breacrumb">{{ page_title }}</span>
+            {% endif %}
+          </li>
+        {% endif %}
+      </ol>
+      {% if collection.handle == 'flash-deals' and template.name contains 'collection' %}
+        <div class="breadcrumb-deal d-flex align-items-center">
+          {% if settings.icon_deal != blank %}
+            <img src="{{ settings.icon_deal | image_url: width: 35 }}" class="breadcrumb-deal-i" width="35" height="35" style="height: auto;">
+          {% endif %}
+          {% if settings.countdown_deal_t != blank %}
+            <div class="breadcrumb-deal-t font-800 f_pr c_h">{{ settings.countdown_deal_t }}</div>
+          {% endif %}
+          <div class="countdownfree" data-countdown="{{ settings.countdown_deal }}" data-show-days="{{ settings.show_day }}" data-restart="{{ settings.restart }}"></div>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+{% endif %}
+{% unless request.page_type == 'product' or request.page_type == 'collection'  %}
+  {% style %}
+    {% if settings.breadcrumb_inner_image != blank %}
+      #NovBreadcrumbs.breadcrumb_inner {
+        background-image: url('{{ settings.breadcrumb_inner_image | image_url: width: 2560 }}');
+      }
+    {% endif %}
+  {% endstyle %}
+{% endunless %}

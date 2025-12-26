@@ -1,0 +1,134 @@
+{%- assign sst = section.settings -%}
+{% style %}
+  {% render 'nov-section-style' %}
+{% endstyle %}
+<div class="distance{% if sst.class_section != blank %} {{ sst.class_section }}{% endif %}{% if sst.animate %} wow fadeInUp{% endif %}">
+  <div class="{{ sst.container }}">
+    <div class="map-section__container" style="height: {{ sst.height }}px">
+      <iframe src="{{ sst.iframe_map }}" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Vinova Map",
+    "class": "section-maps",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Maps"
+      },
+      {
+        "type": "text",
+        "id": "iframe_map",
+        "label": "Google Maps Iframe",
+        "info": "You’ll need to embed the code on google map",
+        "default": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d23095.519254450588!2d-79.38263233337402!3d43.64941859273796!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x935ab2eb9fd5fb31!2sFirst%20Canadian%20Place!5e0!3m2!1sen!2s!4v1659598435154!5m2!1sen!2s"
+      },
+      {
+        "type": "range",
+        "id": "height",
+        "min": 300,
+        "max": 700,
+        "step": 10,
+        "label": "Height map",
+        "default": 500
+      },
+      {
+        "type": "header",
+        "content": "Section Style"
+      },
+      {
+        "type": "checkbox",
+        "id": "animate",
+        "label": "Show animated",
+        "default":   true
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Container",
+        "default": "container",
+        "options": [
+          { "value": "container", "label": "Container" },
+          { "value": "container-fluid", "label": "Container fluid"},
+          { "value": "container-full", "label": "Container full width"}
+        ]
+      },
+      {
+        "type": "text",
+        "id": "class_section",
+        "label": "Class"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Top (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_sm",
+        "label": "Mobile",
+        "default": 30
+      },
+      {
+        "type": "header",
+        "content": "Spacing Bottom (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_sm",
+        "label": "Mobile",
+        "default": 30
+      }
+    ],
+    "presets": [
+      {
+        "name": "Vinova Map",
+        "category": "Store information"
+      }
+    ]
+  }
+{% endschema %}

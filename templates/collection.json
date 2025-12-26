@@ -1,0 +1,72 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "collection-template",
+      "settings": {
+        "show_list_collection": false,
+        "font_size_title": "h3",
+        "show_nav": true,
+        "xxl": 5,
+        "xl": 4,
+        "lg": 4,
+        "md": 3,
+        "sm": 2,
+        "xs": 2,
+        "spacing": 30,
+        "category": "collections",
+        "show_more": 9,
+        "products_per_page": 12,
+        "sort_enable": true,
+        "loadmore": true,
+        "type_loadmore": "btn",
+        "cb": false,
+        "show_tags": false,
+        "show_desc": false,
+        "bg_b": "#000000"
+      }
+    },
+    "recent-products": {
+      "type": "nov-recently-viewed",
+      "settings": {
+        "heading": "<h2>RECENTLY VIEWED PRODUCTS</h2>",
+        "heading_color": "#222222",
+        "subheading": "",
+        "subheading_color": "#666666",
+        "heading_alignment": "text-center",
+        "grid_number_xxl": 5,
+        "grid_number": 4,
+        "grid_number_lg": 3,
+        "grid_number_md": 3,
+        "grid_number_sm": 2,
+        "grid_number_xs": 2,
+        "limit": 13,
+        "show_nav": false,
+        "animate": true,
+        "show_border": true,
+        "border_color": "#ededed",
+        "container": "container",
+        "background_color": "",
+        "class": "",
+        "distance_top_xl": 70,
+        "distance_top_md": 30,
+        "distance_top_xs": 30,
+        "distance_bottom_xl": 30,
+        "distance_bottom_md": 30,
+        "distance_bottom_xs": 30
+      }
+    }
+  },
+  "order": [
+    "main",
+    "recent-products"
+  ]
+}

@@ -1,0 +1,115 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "1763189929dd99a310": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_ec09c3f_38Eeef": {
+          "type": "ai_gen_block_ec09c3f",
+          "settings": {
+            "heading": "Our Store Locations",
+            "description": "Visit us at any of our convenient locations",
+            "heading_color": "#1c1c1c",
+            "description_color": "#666666",
+            "card_background": "#ffffff",
+            "card_border_color": "#eaeaea",
+            "store_name_color": "#1c1c1c",
+            "text_color": "#666666",
+            "icon_color": "#df9a7c",
+            "link_color": "#1c1c1c",
+            "link_hover_color": "#df9a7c",
+            "card_border_radius": 8,
+            "store_1_name": "Trivandrum",
+            "store_1_image": "shopify://shop_images/Artboard_1_83484aa8-0bc3-4bf0-b811-e65f163e1ae1.jpg",
+            "store_1_address": "Mahatma Gandhi Rd, near Ayurveda College, Ayurveda College Junction, Vanchiyoor, Thiruvananthapuram, Kerala 695001",
+            "store_1_map_link": "https://maps.app.goo.gl/XWFAD3AjrqsWPTrh8",
+            "store_1_phone": "08547772777",
+            "store_2_name": "Attingal",
+            "store_2_address": "College junction, opposite KSRTC Garage, Attingal, Kerala 695101",
+            "store_2_map_link": "https://maps.app.goo.gl/uhPWdT4r47oAof869",
+            "store_2_phone": "0470 262 6777",
+            "store_3_name": "Pothencode",
+            "store_3_address": "Market Road, Pothencode, Keezhthonnakkal, Kerala 695584",
+            "store_3_map_link": "https://maps.app.goo.gl/xWhKAiQ3FqSY3CfM6",
+            "store_3_phone": "09072624777",
+            "store_4_name": "Kasaragod",
+            "store_4_address": "OLD PRESS CLUB JUNCTION, MG Rd, Kasaragod, Kerala 671121",
+            "store_4_map_link": "https://maps.app.goo.gl/jsJMDPJ2WMVVXvKi8",
+            "store_4_phone": "09495509777",
+            "store_5_name": "Kanhangad",
+            "store_5_address": "WOODLEX TOWER, North Kottachery, Puthiyavalapu, Kanhangad, Kerala 671315",
+            "store_5_map_link": "https://maps.app.goo.gl/cytEHKzfbWBSwqig6",
+            "store_5_phone": "08086084777",
+            "store_6_name": "Theni",
+            "store_6_address": "740, Madurai Main Rd, Suppan Ragavan Colony, NRT Nagar, Theni, Tamil Nadu 625531",
+            "store_6_map_link": "https://maps.app.goo.gl/rfo7tfs8uxHe9rxF9",
+            "store_6_phone": "08592075777",
+            "store_7_name": "Vellore",
+            "store_7_address": "Green Circle, Katpadi Main Rd, Vellore, Tamil Nadu 632004",
+            "store_7_map_link": "https://maps.app.goo.gl/Q7EpbdeEe2UZMMPP9",
+            "store_7_phone": "",
+            "store_8_name": "",
+            "store_8_address": "",
+            "store_8_map_link": "",
+            "store_8_phone": "",
+            "store_9_name": "",
+            "store_9_address": "",
+            "store_9_map_link": "",
+            "store_9_phone": "",
+            "store_10_name": "",
+            "store_10_address": "",
+            "store_10_map_link": "",
+            "store_10_phone": "",
+            "store_11_name": "",
+            "store_11_address": "",
+            "store_11_map_link": "",
+            "store_11_phone": "",
+            "store_12_name": "",
+            "store_12_address": "",
+            "store_12_map_link": "",
+            "store_12_phone": "",
+            "store_13_name": "",
+            "store_13_address": "",
+            "store_13_map_link": "",
+            "store_13_phone": "",
+            "store_14_name": "",
+            "store_14_address": "",
+            "store_14_map_link": "",
+            "store_14_phone": "",
+            "store_15_name": "",
+            "store_15_address": "",
+            "store_15_map_link": "",
+            "store_15_phone": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_ec09c3f_38Eeef"
+      ],
+      "settings": {}
+    },
+    "main": {
+      "type": "nov-page-store-locations",
+      "disabled": true,
+      "settings": {
+        "has_fullwidth": false,
+        "background_color": "",
+        "distance_top": 15,
+        "distance_bottom": 15
+      }
+    }
+  },
+  "order": [
+    "1763189929dd99a310",
+    "main"
+  ]
+}

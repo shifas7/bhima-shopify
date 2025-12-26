@@ -1,0 +1,313 @@
+{% assign sst = section.settings %}
+{% if sst.grid_number_xxl == 5 %}
+  {%- assign xxl = 'col-xxl-cus-5' -%}
+{% else %}
+  {%- assign xxl = 12 | divided_by: sst.grid_number_xxl | prepend: 'col-xxl-' -%}
+{% endif %}
+{% if sst.grid_number == 5 %}
+  {%- assign xl = 'col-xl-cus-5' -%}
+{% else %}
+  {%- assign xl = 12 | divided_by: sst.grid_number | prepend: 'col-xl-' -%}
+{% endif %}
+{% if sst.grid_number_lg == 5 %}
+  {%- assign lg = 'col-lg-cus-5' -%}
+{% else %}
+  {%- assign lg = 12 | divided_by: sst.grid_number_lg | prepend: 'col-lg-' -%}
+{% endif %}
+{% if sst.grid_number_md == 5 %}
+  {%- assign md = 'col-md-cus-5' -%}
+{% else %}
+  {%- assign md = 12 | divided_by: sst.grid_number_md | prepend: 'col-md-' -%}
+{% endif %}
+{% if sst.grid_number_sm == 5 %}
+  {%- assign sm = 'col-sm-cus-5' -%}
+{% else %}
+  {%- assign sm = 12 | divided_by: sst.grid_number_sm | prepend: 'col-sm-' -%}
+{% endif %}
+{% if sst.grid_number_xs == 5 %}
+  {%- assign xs = 'col-xs-cus-5' -%}
+{% else %}
+  {%- assign xs = 12 | divided_by: sst.grid_number_xs | prepend: 'col-' -%}
+{% endif %}
+<div class="distance{% if sst.class != blank %} {{ sst.class }}{% endif %}{% if sst.animate %} wow fadeInUp{% endif %}">
+  <div class="{{ sst.container }}">
+    {% render 'heading-section', sub_position: sst.subheading_position %}
+    <product-recommendations class="row grid--view-items spacing-xs-15" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ sst.limit }}">
+      {% for product in recommendations.products %}
+        <div class="item grid__item {{ xxl }} {{ xl }} {{ lg }} {{ md }} {{ sm }} {{ xs }}">
+          {% render 'product-grid-item-style-1', product: product, section_id: section.id %}
+        </div>  
+      {% endfor %}
+    </product-recommendations>
+    {% if sst.viewmore %}
+    <div class="text-center mt-20">
+      <a href="/collections/all" class="btn btn-large">{{ 'sections.product_recommendations.view_more' | t }}</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% javascript %}
+  class ProductRecommendations extends HTMLElement {
+    constructor() {
+      super();
+    }
+    connectedCallback() {
+      const handleIntersection = (entries, observer) => {
+        if (!entries[0].isIntersecting) return;
+        observer.unobserve(this);
+        fetch(this.dataset.url)
+          .then(response => response.text())
+          .then(text => {
+            const html = document.createElement('div');
+            html.innerHTML = text;
+            const recommendations = html.querySelector('product-recommendations');
+            if (recommendations && recommendations.innerHTML.trim().length) {
+              this.innerHTML = recommendations.innerHTML;
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+      new IntersectionObserver(handleIntersection.bind(this), {rootMargin: '0px 0px 200px 0px'}).observe(this);
+    }
+  }
+  customElements.define('product-recommendations', ProductRecommendations);
+{% endjavascript %}
+
+{% schema %}
+  {
+    "name": "Product Recommendations",
+    "class": "section-product-recommendations",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "heading",
+        "label": "Heading",
+        "default": "<p>Product Recommendations</p>"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading color",
+        "default": "#222222"
+      },
+      {
+        "type": "richtext",
+        "id": "subheading",
+        "label": "Sub heading",
+        "default": "<p>Subtitle from happy customers</p>"
+      },
+      {
+        "type": "color",
+        "id": "subheading_color",
+        "label": "Sub heading color",
+        "default": "#666666"
+      },
+      {
+        "type": "richtext",
+        "id": "descheading",
+        "label": "Description",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+      },
+      {
+        "type": "color",
+        "id": "descheading_color",
+        "label": "Description color",
+        "default": "#666666"
+      },
+      {
+        "type": "select",
+        "id": "subheading_position",
+        "label": "Sub heading position",
+        "default": "bottom",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          },
+          {
+            "value": "bottom",
+            "label": "Bottom"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_alignment",
+        "label": "Heading alignment",
+        "default": "text-left",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type":  "header",
+        "content": "Product Item Per Row"
+      },
+      {
+        "type": "range",
+        "id": "grid_number_xxl",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Products per row extra desktop 1440px ↑",
+        "default": 4
+      },
+      {
+        "type": "range",
+        "id": "grid_number",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Products per row large desktop 1200px ↑",
+        "default": 4
+      },
+      {
+        "type": "range",
+        "id": "grid_number_lg",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Products per row desktop 1199px ↓",
+        "default": 4
+      },
+      {
+        "type": "range",
+        "id": "grid_number_md",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Products per row tablet 991px ↓",
+        "default": 4
+      },
+      {
+        "type": "range",
+        "id": "grid_number_sm",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Products per row mobile 767px ↓",
+        "default": 4
+      },
+      {
+        "type": "range",
+        "id": "grid_number_xs",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Products per row small mobile 575px ↓",
+        "default": 1
+      },
+      {
+        "type": "range",
+        "id": "limit",
+        "min": 2,
+        "max": 10,
+        "step": 1,
+        "label": "Limit",
+        "default": 8,
+        "info": "Select number limit products"
+      },
+      {
+        "type":  "header",
+        "content": "Section Style"
+      },
+      {
+        "type": "checkbox",
+        "id": "viewmore",
+        "label": "Show view more button",
+        "default":   true
+      },
+      {
+        "type": "checkbox",
+        "id": "animate",
+        "label": "Show animated",
+        "default":   true
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Container",
+        "default": "container",
+        "options": [
+          {"value": "container", "label": "Container"},
+          {"value": "container-1200", "label": "Container 1200"},
+          {"value": "container-fluid", "label": "Container fluid"},
+          {"value": "container-full", "label": "Container full width"}
+        ]
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background colors"
+      },
+      {
+        "type": "range",
+        "id": "bg_opacity",
+        "min": 10,
+        "max": 100,
+        "step": 10,
+        "label": "Background opacity",
+        "default": 100
+      },
+      {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Background image"
+      },
+      {
+        "type": "text",
+        "id": "class",
+        "label": "Class"
+      },
+      {
+        "type": "number",
+        "id": "distance_top",
+        "label": "Top spacing section (px)",
+        "default": 30
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom",
+        "label": "Bottom spacing section (px)",
+        "default": 30
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+  {%- assign bg_image = sst.background_image -%}
+  #shopify-section-{{ section.id }} .distance {
+    padding-top: {{ sst.distance_top }}px;
+    padding-bottom: {{ sst.distance_bottom }}px;
+    {% if sst.background_color != blank %}
+      background-color: rgba({{ sst.background_color | color_to_rgb | remove: 'rgb(' | remove: 'rgba(' | remove: ')' | remove: ', 0.0' }}, {{ sst.bg_opacity }}%);
+    {% endif %}
+    {% if bg_image.src != blank %}
+      background-image: url("{{ bg_image | image_url: width: 2560 }}");
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    {% endif %}
+  }
+  @media(max-width: 991px) {
+    #shopify-section-{{ section.id }} .distance {
+      {%- if sst.distance_top > 20 -%}padding-top: {{ sst.distance_top | times: 0.7 | round: 0 | append: 'px' }};{%- endif -%}
+      {%- if sst.distance_bottom > 20 -%}padding-bottom: {{ sst.distance_bottom | times: 0.7 | round: 0 | append: 'px' }};{%- endif -%}
+    }
+  }
+</style>

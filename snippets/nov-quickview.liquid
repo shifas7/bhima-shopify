@@ -1,0 +1,8 @@
+<div class="productQuickView d-none d-md-block">
+	<a class="btnProductQuickview" href="#" data-url="/products/{{ handle }}?view=quick_view" data-product-url="/products/{{ handle }}" data-handle="{{ handle }}" data-pid="{{ id }}">
+		{% render 'icon-eye' %}
+		{% if settings.tooltip_enable %}
+		  <span class="btn-tootip">{{ 'products.product.quickview' | t }}</span>
+		{% endif %}
+	</a>
+</div>

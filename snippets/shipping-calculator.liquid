@@ -1,0 +1,49 @@
+{% if settings.shipping_calculator == true %}
+  <div class="cart_extend-header d-flex align-items-center font-800 text-uppercase c_h">
+    {% render 'icon-shipping' %}
+    {{ 'cart.mini_canvas.shipping_heading' | t }}
+  </div>
+  <div class="cart_extend-content">
+    <div id="shipping-calculator">
+      <div>
+        <label for="address_country" class="cart_extend--select_label">{{ 'cart.mini_canvas.country_region' | t }}</label>
+        <select id="address_country" class="cart_extend--select mb-25" name="address[country]" data-default="{% if shop.customer_accounts_enabled and customer %}{{ customer.default_address.country }}{% elsif settings.shipping_calculator_default_country != blank %}{{ settings.shipping_calculator_default_country }}{% else %}United States{% endif %}">{{ country_option_tags }}</select>
+        <p class="field" id="address_province_container" style="display:none;">
+          <label for="address_province" id="address_province_label" class="cart_extend--select_label"></label>
+          <select id="address_province" class="cart_extend--select mb-25" name="address[province]" data-default="{% if shop.customer_accounts_enabled and customer and customer.default_address.province != '' %}{{ customer.default_address.province }}{% else %}Alabama{% endif %}"></select>
+        </p>  
+        <p class="field">
+          <label for="address_zip" class="cart_extend--select_label">{{ 'cart.mini_canvas.zip_postal_code' | t }}</label>
+          <input type="text" id="address_zip" class="cart_extend--input mb-30" name="address[zip]"{% if shop.customer_accounts_enabled and customer %} value="{{ customer.default_address.zip }}"{% endif %} />
+        </p>
+        <p class="field">
+          <input type="button" class="get-rates btn button w-100" value="{{ 'cart.mini_canvas.calculate_shipping' | t }}" />
+        </p>
+      </div>
+      <div class="cart_extend--btn btn w-100 mt-5 mb-10 d-md-none cancel">{{ 'cart.mini_canvas.cancel' | t }}</div>
+      <div id="wrapper-response"></div>
+    </div>
+  </div>
+{% endif %}
+
+<script id="shipping-calculator-response-template" type="text/template">
+  {% raw %}
+  <p id="shipping-rates-feedback" {{#if success}} class="success" {{else}} class="error" {{/if}}>
+  {{#if success}}
+    {{#if rates}}
+      {{#rates}}
+        {{#if @first}}
+            Rates start at {{{price}}}.
+        {{/if}}
+      {{/rates}}
+    {{else}}
+      We do not ship to this destination.
+    {{/if}}    
+  {{else}}
+    {{ errorFeedback }}
+  {{/if}}
+  </p>
+  {% endraw %}
+</script>
+<script src="{{ 'jquery.handlebars.min.js' | asset_url }}" defer></script>
+<script src="{{ 'countries.js' | asset_url }}" defer></script>

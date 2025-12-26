@@ -1,0 +1,441 @@
+{% doc %}
+  @prompt
+    bar for metal price display scrolling on top of header need to add metal type and rate accordingly, need to be separator A dot bigger than usual and centre alight and need to change font and colour, never stop scroling scroll back to back
+{% enddoc %}
+
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-metal-price-bar-{{ ai_gen_id }} {
+    background-color: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+    padding: {{ block.settings.bar_height }}px 0;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  .ai-metal-price-bar__wrapper-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    animation: ai-metal-price-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite;
+  }
+
+  .ai-metal-price-bar__item-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    margin-right: {{ block.settings.item_spacing }}px;
+    font-size: {{ block.settings.font_size }}px;
+    font-weight: {{ block.settings.font_weight }};
+    font-family: {{ block.settings.custom_font }};
+  }
+
+  .ai-metal-price-bar__icon-{{ ai_gen_id }} {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+
+  .ai-metal-price-bar__metal-{{ ai_gen_id }} {
+    font-weight: {{ block.settings.metal_font_weight }};
+    margin-right: 6px;
+  }
+
+  .ai-metal-price-bar__rate-{{ ai_gen_id }} {
+    color: {{ block.settings.rate_color }};
+    font-weight: {{ block.settings.rate_font_weight }};
+  }
+
+  .ai-metal-price-bar__separator-{{ ai_gen_id }} {
+    margin: 0 {{ block.settings.separator_spacing }}px;
+    color: {{ block.settings.separator_color }};
+    font-size: {{ block.settings.separator_size }}px;
+    font-weight: bold;
+    line-height: 1;
+  }
+
+  @keyframes ai-metal-price-scroll-{{ ai_gen_id }} {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-metal-price-bar__item-{{ ai_gen_id }} {
+      font-size: {{ block.settings.font_size | times: 0.9 }}px;
+    }
+
+    .ai-metal-price-bar__icon-{{ ai_gen_id }} {
+      width: {{ block.settings.icon_size | times: 0.8 }}px;
+      height: {{ block.settings.icon_size | times: 0.8 }}px;
+    }
+
+    .ai-metal-price-bar__separator-{{ ai_gen_id }} {
+      font-size: {{ block.settings.separator_size | times: 0.9 }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-metal-price-bar-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-metal-price-bar__wrapper-{{ ai_gen_id }}">
+    {% liquid
+      assign metal_items = ''
+      
+      if block.settings.metal_1_name != blank and block.settings.metal_1_rate != blank
+        assign metal_items = metal_items | append: '1,'
+      endif
+      
+      if block.settings.metal_2_name != blank and block.settings.metal_2_rate != blank
+        assign metal_items = metal_items | append: '2,'
+      endif
+      
+      if block.settings.metal_3_name != blank and block.settings.metal_3_rate != blank
+        assign metal_items = metal_items | append: '3,'
+      endif
+      
+      if block.settings.metal_4_name != blank and block.settings.metal_4_rate != blank
+        assign metal_items = metal_items | append: '4,'
+      endif
+      
+      if block.settings.metal_5_name != blank and block.settings.metal_5_rate != blank
+        assign metal_items = metal_items | append: '5,'
+      endif
+      
+      if block.settings.metal_6_name != blank and block.settings.metal_6_rate != blank
+        assign metal_items = metal_items | append: '6,'
+      endif
+      
+      assign metal_array = metal_items | split: ','
+    %}
+
+    {% for i in (1..2) %}
+      {% for metal_num in metal_array %}
+        {% if metal_num != blank %}
+          {% liquid
+            assign metal_name_key = 'metal_' | append: metal_num | append: '_name'
+            assign metal_rate_key = 'metal_' | append: metal_num | append: '_rate'
+            assign metal_icon_key = 'metal_' | append: metal_num | append: '_icon'
+            
+            assign metal_name = block.settings[metal_name_key]
+            assign metal_rate = block.settings[metal_rate_key]
+            assign metal_icon = block.settings[metal_icon_key]
+          %}
+
+          <div class="ai-metal-price-bar__item-{{ ai_gen_id }}">
+            {% if metal_icon %}
+              <img 
+                src="{{ metal_icon | image_url: width: 100 }}" 
+                alt="{{ metal_name }}"
+                class="ai-metal-price-bar__icon-{{ ai_gen_id }}"
+                loading="lazy"
+                width="100"
+                height="100"
+              >
+            {% endif %}
+            <span class="ai-metal-price-bar__metal-{{ ai_gen_id }}">{{ metal_name }}:</span>
+            <span class="ai-metal-price-bar__rate-{{ ai_gen_id }}">{{ metal_rate }}</span>
+          </div>
+
+          {% unless forloop.last and i == 2 %}
+            <span class="ai-metal-price-bar__separator-{{ ai_gen_id }}">●</span>
+          {% endunless %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Metal price bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Bar style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "rate_color",
+      "label": "Rate",
+      "default": "#ffd700"
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Bar height",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "text",
+      "id": "custom_font",
+      "label": "Font family",
+      "default": "Arial, sans-serif",
+      "info": "Enter font name (e.g., Arial, Georgia, Times New Roman)"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "options": [
+        {"value": "300", "label": "Light"},
+        {"value": "400", "label": "Regular"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semibold"},
+        {"value": "700", "label": "Bold"}
+      ],
+      "default": "400"
+    },
+    {
+      "type": "select",
+      "id": "metal_font_weight",
+      "label": "Metal name weight",
+      "options": [
+        {"value": "300", "label": "Light"},
+        {"value": "400", "label": "Regular"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semibold"},
+        {"value": "700", "label": "Bold"}
+      ],
+      "default": "600"
+    },
+    {
+      "type": "select",
+      "id": "rate_font_weight",
+      "label": "Rate weight",
+      "options": [
+        {"value": "300", "label": "Light"},
+        {"value": "400", "label": "Regular"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semibold"},
+        {"value": "700", "label": "Bold"}
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "label": "Scroll speed",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Item spacing",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Separator"
+    },
+    {
+      "type": "color",
+      "id": "separator_color",
+      "label": "Separator color",
+      "default": "#ffd700"
+    },
+    {
+      "type": "range",
+      "id": "separator_size",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Separator size",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "separator_spacing",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Separator spacing",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Metal 1"
+    },
+    {
+      "type": "text",
+      "id": "metal_1_name",
+      "label": "Name",
+      "default": "Gold 24K"
+    },
+    {
+      "type": "text",
+      "id": "metal_1_rate",
+      "label": "Rate",
+      "default": "₹6,850/g"
+    },
+    {
+      "type": "image_picker",
+      "id": "metal_1_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "header",
+      "content": "Metal 2"
+    },
+    {
+      "type": "text",
+      "id": "metal_2_name",
+      "label": "Name",
+      "default": "Gold 22K"
+    },
+    {
+      "type": "text",
+      "id": "metal_2_rate",
+      "label": "Rate",
+      "default": "₹6,280/g"
+    },
+    {
+      "type": "image_picker",
+      "id": "metal_2_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "header",
+      "content": "Metal 3"
+    },
+    {
+      "type": "text",
+      "id": "metal_3_name",
+      "label": "Name",
+      "default": "Silver"
+    },
+    {
+      "type": "text",
+      "id": "metal_3_rate",
+      "label": "Rate",
+      "default": "₹82/g"
+    },
+    {
+      "type": "image_picker",
+      "id": "metal_3_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "header",
+      "content": "Metal 4"
+    },
+    {
+      "type": "text",
+      "id": "metal_4_name",
+      "label": "Name"
+    },
+    {
+      "type": "text",
+      "id": "metal_4_rate",
+      "label": "Rate"
+    },
+    {
+      "type": "image_picker",
+      "id": "metal_4_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "header",
+      "content": "Metal 5"
+    },
+    {
+      "type": "text",
+      "id": "metal_5_name",
+      "label": "Name"
+    },
+    {
+      "type": "text",
+      "id": "metal_5_rate",
+      "label": "Rate"
+    },
+    {
+      "type": "image_picker",
+      "id": "metal_5_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "header",
+      "content": "Metal 6"
+    },
+    {
+      "type": "text",
+      "id": "metal_6_name",
+      "label": "Name"
+    },
+    {
+      "type": "text",
+      "id": "metal_6_rate",
+      "label": "Rate"
+    },
+    {
+      "type": "image_picker",
+      "id": "metal_6_icon",
+      "label": "Icon"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Metal price bar"
+    }
+  ]
+}
+{% endschema %}

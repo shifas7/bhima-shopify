@@ -1,0 +1,194 @@
+{% layout none %}
+{%- liquid 
+  assign freeshipping_value         = settings.free_shipping | plus: 0
+  assign freeshipping_value_notice = freeshipping_value | times: 100 | money
+  assign price_without_currency     = cart.total_price | money_without_currency
+  unless "EUR INR ANG ARS BRL BYN BYR CLF CLP COP CRC CZK DKK EUR HRK HUF IDR ISK MZN NOK PLN RON RUB SEK TRY UYU VES VND" contains shop.currency
+    assign price                    = price_without_currency | replace: ',' | plus: 0
+  else
+    assign price                    = price_without_currency | replace: '.' | plus: 0
+  endunless
+  assign spend_value = freeshipping_value | minus: price | times: 100 | money
+  assign w = price | times: 100 | divided_by: freeshipping_value | round
+-%}
+<div class="cart-popup__content-top">
+  <div class="cart-popup-heading d-flex align-items-center mb-20 text-uppercase c_h">
+    <div class="cart__popup-headingtitle font-800">{{ 'cart.general.your_order' | t }}</div>
+    <span class="font-700">{{ 'cart.general.total_cart' | t: total_cart: cart.item_count }}</span>
+  </div>
+  <div class="row">
+    <div class="col-lg-62-7 col-lg-7 cart-popup__content">
+      <div class="cart__popup_content shopify form_jas_agree">
+        <div class="cart_items" id="push_cart_items">
+          {% if cart.item_count > 0 %}
+            {% for item in cart.items %}
+              <div id="{{ item.id }}" class="cart__popup-item box-shadow d-flex align-items-center justify-content-end cart_item{% if forloop.last == false %} mb-10{% endif %}">
+                <div class="cart__popup-remove">
+                  <a href="/cart/change?line={{ forloop.index }}&quantity=0" data-product-id="{{ item.id }}"><i class="rbb-icon-delete-outline-2"></i></a>
+                </div>
+                <div class="cart__popup-thumb">
+                  <img class="cart__image" src="{{ item | image_url: width: 95 }}" width="95" height="{{ 95 | divided_by: item.image.aspect_ratio | round }}" alt="{{ item.title | escape }}" style="height: auto;" />
+                </div>
+                <div class="cart__popup_grow">
+                  <div class="cart__popup-title"><a href="{{ item.url }}" class="font-700 c_h hover:c_df d-inline-block">{{ item.product.title }}</a></div>
+                  <div class="cart__popup-variant font-600 text-uppercase mt-5">
+                    {% unless item.variant.title contains 'Default' %}
+                      {% for option in item.product.options %}
+                        <span>{{ item.variant.options[forloop.index0] }}&nbsp;{% if forloop.last == false %}/{% endif %}</span>
+                      {% endfor %}
+                    {% endunless %}
+                    {%- assign property_size = item.properties | size -%}
+                    {% if property_size > 0 %}
+                      <div class="cart__meta-text">
+                        {% for p in item.properties %}
+                          {% unless p.last == blank %}
+                            {{ p.first }}:
+                            {% if p.last contains '/uploads/' %}
+                              <a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
+                            {% else %}
+                              {{ p.last }}
+                            {% endif %}
+                          {% endunless %}
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="cart__popup-price font-800">
+                  <span class="shopify-Price-amount amount">{{ item.price | money }}</span>
+                </div>
+                <div class="cart__popup-quantity">
+                  <div class="quantity d-flex align-items-center">
+                    <a class="cart__popup-qty cart__popup-qty--minus" href="javascript:void(0);">-</a>
+                    <input class="cart__popup-qty--input on_page" type="number" name="updates[]" id="updates_{{ item.key }}" data-price="{{ item.price }}" data-id="{{ item.id }}" data-line="{{ forloop.index }}" step="1" value="{{ item.quantity }}" min="1" max="{% if item.variant.inventory_management == blank or item.variant.inventory_policy == 'continue' %}9999{% else %}{{ item.variant.inventory_quantity }}{% endif %}" pattern="[0-9]*" />
+                    <a class="cart__popup-qty cart__popup-qty--plus" href="javascript:void(0);">+</a>
+                  </div>
+                </div>
+                <div class="cart__popup-total text-right font-800">
+                  <span class="shopify-Price-amount amount product-subtotal" data-price="{{ item.price }}">{{ item.line_price | money }}</span>
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        {% if settings.freeshipping_enable %}
+          <div class="cart-notice-total font-800 text-uppercase mt-55 d-none">
+            {{ 'cart.general.freeshipping_notice_html' | t: freeshipping_value: freeshipping_value_notice }}
+          </div>
+        {% endif %}
+        {% if settings.freeshipping_enable %}
+          {% if price < freeshipping_value %}
+            <div id="threshold_bar_popup" class="mt-55">
+              <div class="threshold_spend">{{ 'cart.general.spend_html' | t: spend: spend_value }}</div>
+              <div class="threshold_bar">
+                <span class="animate" style="width: {{ w }}%!important">
+                  <span><i class="rbb-icon-delivery-11"></i></span>
+                </span>
+              </div>
+            </div>
+          {% else %}
+            <div id="threshold_bar_popup" class="mt-55">
+              <div class="threshold_spend spend_congrats"><span>{{ 'cart.general.content_threshold' | t }}<i class="rbb-icon-delivery-11"></i></span></div>
+              <div class="threshold_bar threshold_congrats"><span class="animate" style="width: 100% !important;"><span><i class="rbb-icon-delivery-11"></i></span></span></div>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-lg-37-3 col-lg-5 mt-md-30">
+      <div class="cart__popup-total__price d-flex align-items-center justify-content-between font-800">
+        <span class="text-uppercase">{{ 'cart.general.total' | t }}:</span>
+        <span class="cart__popup-stotal">
+          <span class="shopify-Price-amount amount cart__subtotal" id="cart__popup_total">{{ cart.total_price | money }}</span>
+        </span>
+      </div>
+      <div class="cart__popup-action mt-25">
+        <a href="/cart" class="btn-action w-100 mb-10 box-shadow">{{ 'cart.general.view_cart' | t }}</a>
+        <a href="/collections/all" class="btn-action w-100 box-shadow"><span>{{ 'cart.general.continue_shopping' | t }}</span></a>
+        <div class="popup__cart-checkout mt-35">
+          {% if settings.terms_conditions_enable %}
+            <input type="checkbox" name="cartcheckout" id="checkout__input" class="hide">
+            <label for="checkout__input" class="d-flex align-items-center">
+              <span class="custom-checkbox d-inline-flex align-items-center justify-content-center"><i class="zmdi zmdi-check"></i></span>
+              <span class="label__text">{{ settings.terms_conditions }}</span>
+            </label>
+          {% endif %}
+          <a href="/checkout" class="btn-action checkout-button w-100 mt-20"><span>{{ 'cart.general.proceed_to_checkout' | t }}</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% if collections['upsell'].products.size > 0 and settings.upsell_enable %}
+  <div class="cart-popup__content-bottom">
+    <h3 class="cart__popup-related-title">{{ 'cart.general.you_might_also_like' | t }}</h3>
+    <div class="row spacing-10 product-related-slider overflow_hidden" id="upsell_wrap">
+      {% assign product_handle = '' %}
+      {% for item in cart.items %}
+      	{% if product_handle == '' %}
+      		{% assign product_handle = item.product.handle | strip %}
+      	{% else %}
+      		{% assign product_handle = product_handle | append: '|' | append: item.product.handle | strip %}
+      	{% endif %}
+      {% endfor %}
+      
+      {% assign product_handle_array = product_handle | split: "|" %}
+      {% assign i = 0 %}
+      {% for product in collections['upsell'].products %}
+      	{% if i < 9 %}
+          {% unless product_handle_array contains product.handle  %}
+          <div class="sp-item">
+            <div class="popup__cart-product d-flex align-items-center">
+              <div class="thumbnail-container{% if product.images.size > 1 %} has-multiimage{% endif %}">
+                <img class="sp-post-image" src="{{ product | image_url: width: 250 }}" width="250" height="{{ 250 | divided_by: product.images.first.aspect_ratio | round }}" alt="{{ product.title | escape }}" style="height: auto;" />
+                {% for image in product.images %}
+                  {% if forloop.first != true %}
+                    <img class="sp-post-image-second position-absolute" src="{{ image.src | image_url: width: 250 }}" width="250" height="{{ 250 | divided_by: image.aspect_ratio | round }}" alt="{{ product.title | escape }}" style="height: auto;"/>
+                  {% break %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <div class="product__info d-flex align-items-center">
+                <div>
+                  <a class="related_product-title" href="{{ product.url }}" title="{{ product.title }}">{{ product.title | escape | truncate: 40 }}</a>
+                  <div class="product__price">
+                    {% render 'product-price', product: product %}
+                  </div>
+                </div>
+                <form action="{{ routes.cart_url }}/add" method="post" class="form-btn-item-product {% if product.has_only_default_variant %}variants-default{% else %}one-option-color{% endif %}" id="grid-product-form--{{ product.id }}" data-id="product-actions-{{ product.id }}" enctype="multipart/form-data">
+                  <input type="hidden" name="id" value="{{ product.variants[0].id }}" />
+                  <input type="hidden" name="quantity" value="1" />
+                  {% if product.available %}
+                    {% if product.has_only_default_variant %}
+                      <button data-btn-addToCart 
+                        class="btn-addtocart add-to-cart-btn btn-default style-1{% unless settings.cart_status_addtocart == 'goto_page_cart' %} product-form__cart-submit{% endunless %}"
+                        type="submit"
+                        data-form-id="#grid-product-form--{{ product.id }}"
+                        {% if settings.tooltip_enable %}
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="{% if product.selected_or_first_available_variant.inventory_policy == 'continue' and product.selected_or_first_available_variant.inventory_management == 'shopify' %}{{ 'products.product.pre_order' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif %}"
+                        {% endif %}>
+                          {% render 'icon-cart' %}
+                      </button>
+                    {% else %}
+                      <a class="btn-addtocart" href="{{ product.url }}" {% if settings.tooltip_enable %} data-toggle="tooltip" data-placement="top"{% endif %} title="{{ 'products.product.select_options' | t }}" tabindex="0">
+                        {% render 'icon-cart' %}
+                      </a>
+                    {% endif %}
+                  {% else %}
+                    <button class="btn-addtocart disabled" type="submit" value="Submit" data-handle="{{ product.handle }}" {% if settings.tooltip_enable %} data-toggle="tooltip" data-placement="top" {% endif %} title="{{ "products.product.sold_out" | t }}" tabindex="0" disabled >
+                      {% render 'icon-cart' %}
+                    </button>
+                  {% endif %}
+                </form>
+              </div>
+            </div>
+          </div>
+          {% assign i = i | plus: 1 %}
+          {% endunless %}
+      	{% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

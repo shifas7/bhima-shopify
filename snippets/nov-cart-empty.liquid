@@ -1,0 +1,29 @@
+<div class="link_to_collection_cart_empty d-none">
+  <ul class="list-unstyled">
+    {% if settings.collec_1_name != blank %}
+      <li class="mb-10">
+        <a class="btn {{ settings.cart_empty_btn_size }} {{ settings.cart_empty_btn_type }}" href="{{ settings.collec_1 }}"><span>{{ settings.collec_1_name }}</span></a>
+      </li>
+    {% endif %}
+    {% if settings.collec_2_name != blank %}
+      <li class="mb-10">
+        <a class="btn {{ settings.cart_empty_btn_size }} {{ settings.cart_empty_btn_type }}" href="{{ settings.collec_2 }}"><span>{{ settings.collec_2_name }}</span></a>
+      </li>
+    {% endif %}
+    {% if settings.collec_3_name != blank %}
+      <li class="mb-10">
+        <a class="btn {{ settings.cart_empty_btn_size }} {{ settings.cart_empty_btn_type }}" href="{{ settings.collec_3 }}"><span>{{ settings.collec_3_name }}</span></a>
+      </li>
+    {% endif %}
+    {% if settings.collec_4_name != blank %}
+      <li class="mb-10">
+        <a class="btn {{ settings.cart_empty_btn_size }} {{ settings.cart_empty_btn_type }}" href="{{ settings.collec_4 }}"><span>{{ settings.collec_4_name }}</span></a>
+      </li>
+    {% endif %}
+    {% if settings.collec_5_name != blank %}
+      <li>
+        <a class="btn {{ settings.cart_empty_btn_size }} {{ settings.cart_empty_btn_type }}" href="{{ settings.collec_5 }}"><span>{{ settings.collec_5_name }}</span></a>
+      </li>
+    {% endif %}
+  </ul>
+</div>

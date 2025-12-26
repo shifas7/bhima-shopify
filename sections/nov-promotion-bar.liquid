@@ -1,0 +1,527 @@
+ {% assign sst = section.settings %}
+{% style %}
+	#shopify-section-{{ section.id }} .distance {
+	  padding-top: {{ sst.distance_top }}px;
+	  padding-bottom: {{ sst.distance_bottom }}px;
+		{% if sst.background_color != blank %}
+		  background-color: rgba({{ sst.background_color | color_to_rgb | remove: 'rgb(' | remove: 'rgba(' | remove: ')' | remove: ', 0.0' }}, {{ sst.bg_opacity }}%);
+		{% endif %}
+		{% if sst.bd_b %}border-bottom:  1px solid {{ sst.bd_bc }};{% endif %}
+	}
+	{% if sst.show_nav %}
+		#shopify-section-{{ section.id }} .nov-slick-carousel .slick-arrow {
+		  --slider-arrow-color: {{ sst.c_nav }};
+      --slider-arrow-color-act: {{ sst.c_nav_act }};
+		}
+	{% endif %}
+	#shopify-section-{{ section.id }} .text {
+		color: {{ sst.t_c }};
+		font-size: {{ sst.t_s | divided_by: 10.0 | append: 'rem' }};
+		line-height: {{ sst.t_lh }};
+		letter-spacing: {{ sst.t_lt | append: 'px' }};
+		text-transform: {{ sst.t_tt }};
+	}
+  @media(max-width: 991px) {
+    #shopify-section-{{ section.id }} .text {
+      font-size: {{ sst.t_s_md | divided_by: 10.0 | append: 'rem' }};
+    }
+  }
+	#shopify-section-{{ section.id }} .block-scroll__item i {
+		color:  {{ sst.icon_c }};
+	}
+	#shopify-section-{{ section.id }} .item-time {
+		background-color: {{ sst.cd_bg }};
+		color: {{ sst.cd_c }};
+	}
+	#shopify-section-{{ section.id }} .countdownfree .item-time:not(:last-child):after {
+		color: {{ sst.t_c }};
+	}
+	#shopify-section-{{ section.id }} .nov-text-scroll .block-scroll__item .item-content:after {
+		background-color: {{ sst.dot_c }};
+	}
+	{% if sst.type == 'scroll' %}
+		#shopify-section-{{ section.id }} .block-scroll {
+		  animation-duration: {{ sst.time | append:  's' }};
+		}
+	{% endif %}
+	{% if sst.show_close %}
+		#shopify-section-{{ section.id }} .promotion-close {
+			color:  {{ sst.close_c }};
+		}
+	{% endif %}
+  {% if sst.show_social %}
+    #shopify-section-{{ section.id }} .block_social a {
+      --color-link: {{ sst.social_color }};
+      --color-hover: {{ sst.social_color_hover }};
+    }
+  {% endif %}
+  #shopify-section-{{ section.id }} .nov_ud_group .nov_ud_btn {
+    --color-title: {{ sst.multi_color }};
+    --color-hover: {{ sst.multi_color_hover }};
+  }
+  {% if section.blocks.size == 0 %}
+    @media(max-width: 767px) {
+      #shopify-section-{{ section.id }} .distance {
+        display: none;
+      }
+    }
+  {% endif %}
+{% endstyle %}
+<div class="distance act position-relative{% if sst.animate %} wow fadeInUp{% endif %}" data-section-id="{{ section.id }}" data-section-type="nov-slick" promationBar>
+  <div class="{{ sst.container }}">
+    <div class="row align-items-center">
+      <div class="col-md-3 d-none d-md-block">
+        {% if sst.show_social %}
+          {% render 'nov-social' %}
+        {% endif %}
+      </div>
+      <div class="{% unless sst.show_social and sst.show_language_currency %}col-12{% else %}col-md-6{% endunless %}">
+        {% if sst.type == 'scroll' %}
+          <div class="nov-text-scroll overflow_hidden d-flex">
+            <div class="block-scroll d-flex align-items-center">
+              {% for block in section.blocks %}
+                {% assign bst = block.settings %}
+                <div class="block-scroll__item">  
+                  <div class="item-content d-flex align-items-center justify-content-center">
+                    {% if block.type == 'text' %}
+                      {% if bst.icon !=blank %}<i class="{{ bst.icon }}"></i>{% endif %}
+                      <div class="text {{ sst.t_fw }}">{{ bst.title }}</div>
+                    {% endif %}
+
+                    {% if block.type == 'countdown' %}
+                      {% if bst.title != blank %}<div class="text {{ sst.t_fw }}">{{ bst.title }}</div>{% endif %}
+                      <div class="countdownfree d-flex justify-content-center" data-countdown="{{ bst.countdown_timeend }}" data-show-days={{ settings.show_day }} data-restart="{{ settings.restart }}"></div>
+                      {% if bst.link_t != blank %} <a href="{{ bst.link }}" class="text {{ sst.t_fw }}">{{ bst.link_t }}</a>{% endif %}
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="block-scroll d-flex align-items-center">
+              {% for block in section.blocks %}
+                {% assign bst = block.settings %}
+                <div class="block-scroll__item">
+                  <div class="item-content d-flex align-items-center justify-content-center">
+                    {% if block.type == 'text' %}
+                      {% if bst.icon !=blank %}<i class="{{ bst.icon }}"></i>{% endif %}
+                      <div class="text {{ sst.t_fw }}">{{ bst.title }}</div>
+                    {% endif %}
+
+                    {% if block.type == 'countdown' %}
+                      {% if bst.title != blank %}<div class="text {{ sst.t_fw }}">{{ bst.title }}</div>{% endif %}
+                      <div class="countdownfree d-flex justify-content-center" data-countdown="{{ bst.countdown_timeend }}" data-show-days={{ settings.show_day }} data-restart="{{ settings.restart }}"></div>
+                      {% if bst.link_t != blank %} <a href="{{ bst.link }}" class="text {{ sst.t_fw }}">{{ bst.link_t }}</a>{% endif %}
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <div class="nov-slick-carousel justify-content-center spacing-10"
+            data-autoplay="{{ sst.auto }}"
+            data-autoplaytimeout="{{ sst.timeauto }}000"
+            data-speed="700"
+            data-loop="true" 
+            data-dots="false"
+            data-nav="{{ sst.show_nav }}"
+            data-items_xxl="1"
+            data-row="1">
+            {% for block in section.blocks %}
+              {% assign bst = block.settings %}
+              <div class="item sp-item block-scroll__item">
+                <div class="item-content d-flex align-items-center justify-content-center">
+                  {% if block.type == 'text' %}
+                    {% if bst.icon !=blank %}<i class="{{ bst.icon }}"></i>{% endif %}
+                    <div class="text {{ sst.t_fw }} {{ sst.t_ff }}">{{ bst.title }}</div>
+                  {% endif %}
+                  {% if block.type == 'countdown' %}
+                    {% if bst.title != blank %}<div class="text {{ sst.t_fw }}">{{ bst.title }}</div>{% endif %}
+                    <div class="countdownfree d-flex justify-content-center" data-countdown="{{ bst.countdown_timeend }}" data-show-days={{ settings.show_day }} data-restart="{{ settings.restart }}"></div>
+                    {% if bst.link_t != blank %} <a href="{{ bst.link }}" class="text {{ sst.t_fw }}">{{ bst.link_t }}</a>{% endif %}
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-3 d-none d-md-block">
+        {% if sst.show_language_currency %}
+          {% if settings.show_multiple_currencies or settings.show_language and localization.available_languages.size > 1 %}
+            <div class="nov-lang-cur nov_ud_toggle d-none justify-content-end {% if section.blocks.size > 0 %}d-lg-flex{% else %}d-md-flex{% endif %}" data-ud_collapse="true">
+              {% if settings.show_multiple_currencies %}
+                <div class="block-currency nov_ud_group">
+                  {% render 'nov-block-currency' %}
+                </div>
+              {% endif %}
+              {%- if settings.show_language and localization.available_languages.size > 1 -%}
+                <div class="block-language nov_ud_group">
+                  {% render 'nov-block-language' id: 'PromotionLanguage' %}
+                </div>
+              {%- endif -%}
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+    {% if sst.show_close %}
+    	<div class="promotion-close position-absolute hover:c_df pointer">
+    		<i class="zmdi zmdi-close"></i>
+    	</div>
+    {% endif %}
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Promotion Bar",
+    "class": "section-promotion-bar",
+    "settings": [
+      {
+        "type": "radio",
+        "id": "type",
+        "label": "Promotion Type",
+        "default": "slider",
+        "options": [
+          {"value": "slider","label": "Slider"},
+          {"value": "scroll","label": "Marquee"}
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Type Marquee"
+      },
+      {
+        "type": "range",
+        "id": "time",
+        "min": 5,
+        "max": 60,
+        "step": 1,
+        "unit": "s",
+        "label": "Slide run time",
+        "default": 10
+      },
+      {
+        "type": "header",
+        "content": "Type Slider"
+      },
+      {
+        "type": "checkbox",
+        "id": "auto",
+        "label": "Auto play slider"
+      },
+      {
+        "type": "range",
+        "id": "timeauto",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Time auto play (seconds)",
+        "default": 3
+      },
+      {
+        "type":  "checkbox",
+        "id": "show_nav",
+        "label": "Show arrow"
+      },
+      {
+        "type":  "color",
+        "id": "c_nav",
+        "label": "Arrow color",
+        "default": "#666"
+      },
+      {
+        "type":  "color",
+        "id": "c_nav_act",
+        "label": "Arrow color hover",
+        "default": "#222"
+      },
+      {
+        "type": "header",
+        "content": "Style Item"
+      },
+      {
+        "type": "range",
+        "id": "t_s",
+        "min": 10,
+        "max": 30,
+        "step": 1,
+        "unit": "px",
+        "label": "Text size",
+        "default": 13
+      },
+      {
+        "type": "range",
+        "id": "t_s_md",
+        "min": 10,
+        "max": 30,
+        "step": 1,
+        "unit": "px",
+        "label": "Text size tablet",
+        "default": 13,
+        "info": "Breakpoint 991px ↓"
+      },
+      {
+        "type": "color",
+        "id": "t_c",
+        "label": "Text color",
+        "default": "#222222"
+      },
+      {
+        "type": "select",
+        "id": "t_ff",
+        "label": "Font family",
+        "default": "f_df",
+        "options": [
+          {"value": "f_df", "label": "Body font"},
+          {"value": "f_pr", "label": "Heading font"}
+        ]
+      },
+      {
+        "type": "select",
+        "id": "t_fw",
+        "label": "Text font weight",
+        "default": "font-400",
+        "options": [
+          {"value": "font-300","label": "Light"},
+          {"value": "font-400","label": "Regular"},
+          {"value": "font-500","label": "Medium"},
+          {"value": "font-600","label": "SemiBold"},
+          {"value": "font-700","label": "Bold"},
+          {"value": "font-800","label": "ExtraBold"},
+          {"value": "font-900","label": "Black"}
+        ]
+      },
+      {
+        "type": "select",
+        "id": "t_tt",
+        "label": "Text transform",
+        "default": "none",
+        "options": [
+          { "value": "capitalize", "label": "Capitalize" },
+          { "value": "uppercase", "label": "Uppercase" },
+          { "value": "none", "label": "None" }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "t_lh",
+        "label": "Text line height",
+        "default": "1.5"
+      },
+      {
+        "type": "text",
+        "id": "t_lt",
+        "label": "Text letter spacing",
+        "default": "0"
+      },
+      {
+        "type": "color",
+        "id": "cd_c",
+        "label": "Color countdown",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "cd_bg",
+        "label": "Background countdown",
+        "default": "#222222"
+      },
+      {
+        "type": "color",
+        "id": "icon_c",
+        "label": "Color icon",
+        "default": "#222222"
+      },
+      {
+        "type": "color",
+        "id": "dot_c",
+        "label": "Dot color",
+        "default": "#222222"
+      },
+      {
+        "type": "header",
+        "content": "Social"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_social",
+        "label": "Show social",
+        "default": true
+      },
+      {
+        "type": "color",
+        "id": "social_color",
+        "label": "Social color",
+        "default": "#222"
+      },
+      {
+        "type": "color",
+        "id": "social_color_hover",
+        "label": "Social color hover",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Currentcy And Language"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_language_currency",
+        "label": "Show currency and language",
+        "default": true
+      },
+      {
+        "type": "color",
+        "id": "multi_color",
+        "label": "Color",
+        "default": "#222"
+      },
+      {
+        "type": "color",
+        "id": "multi_color_hover",
+        "label": "Color hover",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Style"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_close",
+        "label": "Show button close"
+      },
+      {
+        "type": "color",
+        "id": "close_c",
+        "label": "Button close color"
+      },
+      {
+        "type": "paragraph",
+        "content": "======================="
+      },
+      {
+        "type": "checkbox",
+        "id": "bd_b",
+        "label": "Show border bottom"
+      },
+      {
+        "type": "color",
+        "id": "bd_bc",
+        "label": "Border bottom color"
+      },
+      {
+        "type": "paragraph",
+        "content": "======================="
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Container",
+        "default": "container",
+        "options": [
+          {"value": "container", "label": "Container"},
+          {"value": "container-fluid", "label": "Container fluid"},
+          {"value": "container-full", "label": "Container full width"}
+        ]
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background colors"
+      },
+      {
+        "type": "range",
+        "id": "bg_opacity",
+        "min": 10,
+        "max": 100,
+        "step": 10,
+        "label": "Background opacity",
+        "default": 100
+      },
+      {
+        "type": "number",
+        "id": "distance_top",
+        "label": "Top spacing section (px)",
+        "default": 5
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom",
+        "label": "Bottom spacing section (px)",
+        "default": 5
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text",
+        "name": "Text",
+        "settings": [
+          {
+            "type": "text",
+            "id": "icon",
+            "label": "Icon",
+            "default": "zmdi zmdi-flash",
+            "info": "Get the icon here: https:\/\/zavoloklom.github.io\/material-design-iconic-font\/icons.html"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "title",
+            "label": "Item text",
+            "default": "New Offers on the COVID-19. This Weekend only to Get 50% Flate"
+          }
+        ]
+      },
+      {
+        "type": "countdown",
+        "name": "Item countdown",
+        "settings": [
+        	{
+        	  "type": "text",
+        	  "id": "icon",
+        	  "label": "Icon",
+        	  "default": "zmdi zmdi-flash",
+        	  "info": "Get the icon here: https:\/\/zavoloklom.github.io\/material-design-iconic-font\/icons.html"
+        	},
+          {
+            "type": "inline_richtext",
+            "id": "title",
+            "label": "Title",
+            "default": "Lorem ipsum dolor"
+          },
+          {
+            "type": "text",
+            "id": "countdown_timeend",
+            "label": "Time end product",
+            "placeholder": "YYYY\/MM\/DD"
+          },
+          {
+            "type": "paragraph",
+            "content": "Format: 'Year\/Month\/Day'"
+          },
+          {
+            "type": "paragraph",
+            "content": "Example: '2022\/01\/30'"
+          },
+          {
+            "type": "text",
+            "id": "link_t",
+            "label": "Text link"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Promotion Bar"
+      }
+    ]
+  }
+{% endschema %}
+

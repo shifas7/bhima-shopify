@@ -1,0 +1,9 @@
+{% if paginate.next %}    
+  <div class="scroll__infitiny hide">
+    <a class="btn" data-href="{{ paginate.next.url }}" tabindex style="padding: 0 50px;">Show More</a>
+  </div>
+{% else %}
+  <div class="scroll__infitiny hide">
+    <a class="btn disabled" href="" style="padding: 0 50px;">No More Product</a>
+  </div>
+{% endif %}

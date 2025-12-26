@@ -1,0 +1,29 @@
+#shopify-section-{{ section.id }} .distance {
+  --di-pt-sm: {{ section.settings.distance_top_sm }}px;
+  --di-pb-sm: {{ section.settings.distance_bottom_sm }}px;
+  --di-pt-md: {{ section.settings.distance_top_md }}px;
+  --di-pb-md: {{ section.settings.distance_bottom_md }}px;
+  --di-pt-lg: {{ section.settings.distance_top_lg }}px;
+  --di-pb-lg: {{ section.settings.distance_bottom_lg }}px;
+  --di-pt-xl: {{ section.settings.distance_top_xl }}px;
+  --di-pb-xl: {{ section.settings.distance_bottom_xl }}px;
+  --bg-height-xs: {{ section.settings.height_background_xs }}%;
+  --bg-height-sm: {{ section.settings.height_background_sm }}%;
+  --bg-height-md: {{ section.settings.height_background_md }}%;
+  --bg-height-lg: {{ section.settings.height_background_lg }}%;
+  --bg-height-xl: {{ section.settings.height_background_xl }}%;
+  --bg-height-xxl: {{ section.settings.height_background_xxl }}%;
+  --ss-bg-color: {{ section.settings.background_color }};
+  --ss-bg-corner: {{ section.settings.background_corner }}px;
+  --ss-bg-image-position: {{ section.settings.background_img_position }};
+  {% if section.settings.enable_background_img_size_custom %}
+    --ss-bg-image-size: {{ section.settings.background_img_size_custom }};
+  {% else %}
+    --ss-bg-image-size: {{ section.settings.background_img_size }};
+  {% endif %}
+}
+{% if section.settings.background_image != blank %}
+  #shopify-section-{{ section.id }} .distance:before {
+    background-image: url('{{ section.settings.background_image | image_url: width: 2560 }}');
+  }
+{% endif %}

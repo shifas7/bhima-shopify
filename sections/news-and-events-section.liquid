@@ -1,0 +1,141 @@
+{% comment %}
+  ==================================================
+  SECTION: News and Events Grid with Font Customization
+  ==================================================
+{% endcomment %}
+
+{{ 'section-news-and-events.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }} {
+    --section-heading-size: {{ section.settings.section_heading_size }}px;
+    --card-heading-size: {{ section.settings.card_heading_size }}px;
+    --card-date-size: {{ section.settings.card_date_size }}px;
+    --modal-heading-size: {{ section.settings.modal_heading_size }}px;
+    --modal-content-size: {{ section.settings.modal_content_size }}px;
+    --grid-border-radius: {{ section.settings.card_corner_radius }}px;
+  }
+{%- endstyle -%}
+
+<div class="news-and-events-wrapper section-{{ section.id }}">
+  <div class="page-width news-section-container">
+    
+    {% if section.settings.heading != blank %}
+      <h2 class="section-heading">{{ section.settings.heading | escape }}</h2>
+    {% endif %}
+
+    <div class="news-grid">
+      {% for block in section.blocks %}
+        <div class="news-item" {{ block.shopify_attributes }}>
+          <div class="news-card" data-modal-index="{{ forloop.index }}" tabindex="0" role="button">
+            {% if block.settings.image != blank %}
+              <div class="news-card__image-container">
+                {{ block.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', class: 'news-card__image' }}
+              </div>
+            {% endif %}
+            <div class="news-card__content">
+              <span class="news-card__date">{{ block.settings.date | escape }}</span>
+              <h3 class="news-card__heading">{{ block.settings.heading | escape }}</h3>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% for block in section.blocks %}
+  <div class="news-modal section-{{ section.id }}" id="modal-{{ section.id }}-{{ forloop.index }}" aria-hidden="true" role="dialog" tabindex="-1">
+    <div class="news-modal__overlay"></div>
+    <div class="news-modal__container" role="document">
+      <button class="news-modal__close-button" type="button" aria-label="Close" data-action="close-modal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+
+      <div class="news-modal__body">
+        {% if block.settings.image != blank %}
+          <div class="news-modal__image-container">
+            {{ block.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'news-modal__image' }}
+          </div>
+        {% endif %}
+        <div class="news-modal__text-content">
+          <span class="news-modal__date">{{ block.settings.date | escape }}</span>
+          <h2 class="news-modal__heading">{{ block.settings.heading | escape }}</h2>
+          <div class="news-modal__content">{{ block.settings.content }}</div>
+        </div>
+        <div class="news-modal__nav">
+          <button class="nav-button prev-button" type="button" data-index="{{ forloop.index }}" data-nav="prev" {% if forloop.first %}disabled{% endif %}>
+            <svg viewBox="0 0 100 100" class="icon-nav"><path d="M60 20 L30 50 L60 80" fill="none" stroke="currentColor" stroke-width="8"></path></svg> PREVIOUS
+          </button>
+          <button class="nav-button next-button" type="button" data-index="{{ forloop.index }}" data-nav="next" {% if forloop.last %}disabled{% endif %}>
+            NEXT <svg viewBox="0 0 100 100" class="icon-nav"><path d="M40 20 L70 50 L40 80" fill="none" stroke="currentColor" stroke-width="8"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+{% schema %}
+{
+  "name": "News & Events Grid",
+  "settings": [
+    { "type": "text", "id": "heading", "default": "Latest News & Events", "label": "Main Heading" },
+    { "type": "range", "id": "card_corner_radius", "min": 0, "max": 50, "step": 1, "unit": "px", "label": "Card Corner Radius", "default": 16 },
+    { "type": "header", "content": "Font Sizes" },
+    { "type": "range", "id": "section_heading_size", "min": 14, "max": 60, "step": 1, "unit": "px", "label": "Section Heading Size", "default": 24 },
+    { "type": "range", "id": "card_heading_size", "min": 12, "max": 40, "step": 1, "unit": "px", "label": "Card Heading Size", "default": 16 },
+    { "type": "range", "id": "card_date_size", "min": 10, "max": 24, "step": 1, "unit": "px", "label": "Date Font Size", "default": 11 },
+    { "type": "range", "id": "modal_heading_size", "min": 16, "max": 60, "step": 1, "unit": "px", "label": "Modal Heading Size", "default": 22 },
+    { "type": "range", "id": "modal_content_size", "min": 12, "max": 30, "step": 1, "unit": "px", "label": "Modal Text Size", "default": 15 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "News Item",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "date", "default": "12/05/2025", "label": "Date" },
+        { "type": "text", "id": "heading", "default": "Headline", "label": "Heading" },
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Content goes here...</p>" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "News & Events Grid" }]
+}
+{% endschema %}
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const sectionId = "{{ section.id }}";
+  const openModal = (index) => {
+    const modal = document.getElementById(`modal-${sectionId}-${index}`);
+    if (modal) {
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+  };
+  const closeAll = () => {
+    document.querySelectorAll('.news-modal').forEach(m => m.setAttribute('aria-hidden', 'true'));
+    document.body.style.overflow = '';
+  };
+
+  document.querySelectorAll('.news-card').forEach(card => {
+    card.onclick = () => openModal(card.dataset.modalIndex);
+  });
+
+  document.querySelectorAll('.nav-button').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const idx = parseInt(btn.dataset.index);
+      const target = btn.dataset.nav === 'next' ? idx + 1 : idx - 1;
+      closeAll();
+      setTimeout(() => openModal(target), 50);
+    };
+  });
+
+  document.querySelectorAll('[data-action="close-modal"], .news-modal__overlay').forEach(el => {
+    el.onclick = closeAll;
+  });
+});
+</script>

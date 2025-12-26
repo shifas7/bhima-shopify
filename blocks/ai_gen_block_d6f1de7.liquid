@@ -1,0 +1,552 @@
+{% doc %}
+  @prompt
+    Create a Store Locations Grid Section where I can add, edit, and delete stores easily.
+    
+    Requirements:
+    
+    Display stores in a 3-column grid on desktop and single column on mobile.
+    
+    Each store block must include:
+    
+    Store Image (uploadable)
+    
+    Store Name
+    
+    Full Address
+    
+    Clickable “View on Google Maps” button that opens the store address location in Google Maps in a new tab.
+    
+    All fields should be editable inside Shopify theme editor, and I should be able to add unlimited store blocks.
+    
+    The button should automatically create the Google Maps link based on the address.
+    
+    Styling should be clean, minimal, and responsive.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-store-locations-{{ ai_gen_id }} {
+    padding: 60px 0;
+  }
+
+  .ai-store-locations-container-{{ ai_gen_id }} {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .ai-store-locations-heading-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  .ai-store-locations-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: 500;
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 15px;
+  }
+
+  .ai-store-locations-description-{{ ai_gen_id }} {
+    font-size: 16px;
+    color: {{ block.settings.text_color }};
+    margin: 0;
+  }
+
+  .ai-store-locations-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+
+  .ai-store-card-{{ ai_gen_id }} {
+    background: {{ block.settings.card_background }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .ai-store-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .ai-store-image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: 66.67%;
+    overflow: hidden;
+    background-color: #f5f5f5;
+  }
+
+  .ai-store-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-store-image-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+  }
+
+  .ai-store-image-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-store-content-{{ ai_gen_id }} {
+    padding: 25px;
+  }
+
+  .ai-store-name-{{ ai_gen_id }} {
+    font-size: 20px;
+    font-weight: 500;
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 12px;
+  }
+
+  .ai-store-address-{{ ai_gen_id }} {
+    font-size: 14px;
+    line-height: 1.6;
+    color: {{ block.settings.text_color }};
+    margin: 0 0 20px;
+    white-space: pre-line;
+  }
+
+  .ai-store-map-button-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: {{ block.settings.button_background }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .ai-store-map-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_background_hover }};
+    color: {{ block.settings.button_text_color }};
+    transform: translateX(3px);
+  }
+
+  .ai-store-map-icon-{{ ai_gen_id }} {
+    width: 16px;
+    height: 16px;
+  }
+
+  @media screen and (max-width: 991px) {
+    .ai-store-locations-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .ai-store-locations-{{ ai_gen_id }} {
+      padding: 40px 0;
+    }
+
+    .ai-store-locations-heading-{{ ai_gen_id }} {
+      margin-bottom: 30px;
+    }
+
+    .ai-store-locations-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.75 }}px;
+    }
+
+    .ai-store-locations-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .ai-store-content-{{ ai_gen_id }} {
+      padding: 20px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-store-locations-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-store-locations-container-{{ ai_gen_id }}">
+    {% if block.settings.section_heading != blank or block.settings.section_description != blank %}
+      <div class="ai-store-locations-heading-{{ ai_gen_id }}">
+        {% if block.settings.section_heading != blank %}
+          <h2 class="ai-store-locations-title-{{ ai_gen_id }}">{{ block.settings.section_heading }}</h2>
+        {% endif %}
+        {% if block.settings.section_description != blank %}
+          <div class="ai-store-locations-description-{{ ai_gen_id }}">{{ block.settings.section_description }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="ai-store-locations-grid-{{ ai_gen_id }}">
+      {% for i in (1..9) %}
+        {% liquid
+          assign store_name_key = 'store_' | append: i | append: '_name'
+          assign store_address_key = 'store_' | append: i | append: '_address'
+          assign store_image_key = 'store_' | append: i | append: '_image'
+          
+          assign store_name = block.settings[store_name_key]
+          assign store_address = block.settings[store_address_key]
+          assign store_image = block.settings[store_image_key]
+        %}
+
+        {% if store_name != blank or store_address != blank or store_image %}
+          {% assign maps_url = 'https://www.google.com/maps/search/?api=1&query=' | append: store_address | url_encode %}
+
+          <div class="ai-store-card-{{ ai_gen_id }}">
+            <div class="ai-store-image-wrapper-{{ ai_gen_id }}">
+              {% if store_image %}
+                <img
+                  src="{{ store_image | image_url: width: 600 }}"
+                  alt="{{ store_name | escape }}"
+                  class="ai-store-image-{{ ai_gen_id }}"
+                  loading="lazy"
+                  width="600"
+                  height="400"
+                >
+              {% else %}
+                <div class="ai-store-image-placeholder-{{ ai_gen_id }}">
+                  {{ 'image' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="ai-store-content-{{ ai_gen_id }}">
+              {% if store_name != blank %}
+                <h3 class="ai-store-name-{{ ai_gen_id }}">{{ store_name }}</h3>
+              {% endif %}
+
+              {% if store_address != blank %}
+                <p class="ai-store-address-{{ ai_gen_id }}">{{ store_address }}</p>
+              {% endif %}
+
+              {% if store_address != blank %}
+                <a
+                  href="{{ maps_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="ai-store-map-button-{{ ai_gen_id }}"
+                >
+                  <svg class="ai-store-map-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  {{ block.settings.button_text }}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Store locations grid",
+  "tag": null,
+  "class": "store-locations-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section heading"
+    },
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Heading",
+      "default": "Our Store Locations"
+    },
+    {
+      "type": "textarea",
+      "id": "section_description",
+      "label": "Description",
+      "default": "Visit us at any of our convenient locations"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Card border radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "View on Google Maps"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Background",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "button_background_hover",
+      "label": "Background hover",
+      "default": "#df9a7c"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Store 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "store_1_name",
+      "label": "Name",
+      "default": "Downtown Store"
+    },
+    {
+      "type": "textarea",
+      "id": "store_1_address",
+      "label": "Address",
+      "default": "123 Main Street, New York, NY 10001"
+    },
+    {
+      "type": "header",
+      "content": "Store 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "store_2_name",
+      "label": "Name",
+      "default": "Uptown Store"
+    },
+    {
+      "type": "textarea",
+      "id": "store_2_address",
+      "label": "Address",
+      "default": "456 Park Avenue, New York, NY 10022"
+    },
+    {
+      "type": "header",
+      "content": "Store 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "store_3_name",
+      "label": "Name",
+      "default": "Brooklyn Store"
+    },
+    {
+      "type": "textarea",
+      "id": "store_3_address",
+      "label": "Address",
+      "default": "789 Bedford Avenue, Brooklyn, NY 11211"
+    },
+    {
+      "type": "header",
+      "content": "Store 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "store_4_name",
+      "label": "Name"
+    },
+    {
+      "type": "textarea",
+      "id": "store_4_address",
+      "label": "Address"
+    },
+    {
+      "type": "header",
+      "content": "Store 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "store_5_name",
+      "label": "Name"
+    },
+    {
+      "type": "textarea",
+      "id": "store_5_address",
+      "label": "Address"
+    },
+    {
+      "type": "header",
+      "content": "Store 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_6_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "store_6_name",
+      "label": "Name"
+    },
+    {
+      "type": "textarea",
+      "id": "store_6_address",
+      "label": "Address"
+    },
+    {
+      "type": "header",
+      "content": "Store 7"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_7_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "store_7_name",
+      "label": "Name"
+    },
+    {
+      "type": "textarea",
+      "id": "store_7_address",
+      "label": "Address"
+    },
+    {
+      "type": "header",
+      "content": "Store 8"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_8_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "store_8_name",
+      "label": "Name"
+    },
+    {
+      "type": "textarea",
+      "id": "store_8_address",
+      "label": "Address"
+    },
+    {
+      "type": "header",
+      "content": "Store 9"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_9_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "store_9_name",
+      "label": "Name"
+    },
+    {
+      "type": "textarea",
+      "id": "store_9_address",
+      "label": "Address"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store locations grid"
+    }
+  ]
+}
+{% endschema %}

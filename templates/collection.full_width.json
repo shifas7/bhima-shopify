@@ -1,0 +1,194 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "collection-template",
+      "settings": {
+        "show_list_collection": false,
+        "font_size_title": "h3",
+        "show_nav": true,
+        "xxl": 4,
+        "xl": 4,
+        "lg": 4,
+        "md": 3,
+        "sm": 2,
+        "xs": 2,
+        "spacing": 30,
+        "category": "category",
+        "show_more": 5,
+        "products_per_page": 12,
+        "sort_enable": true,
+        "loadmore": true,
+        "type_loadmore": "btn",
+        "cb": true,
+        "show_tags": true,
+        "show_desc": true,
+        "bg_b": "#f2f2f2"
+      }
+    },
+    "166020887020e948ae": {
+      "type": "nov-policy",
+      "blocks": {
+        "166020887041ee3f6a-0": {
+          "type": "item_policy",
+          "settings": {
+            "policy_icon": "shopify:\/\/shop_images\/icon-free-delivery.png",
+            "title_policy": "Free Delivery",
+            "desc_policy": "Free Shipping for orders over $130.",
+            "mw": 330,
+            "link_label": "",
+            "link": "",
+            "bg_icon": "#f5f5f5",
+            "border_icon": "",
+            "class": "mb-sm-20"
+          }
+        },
+        "166020887041ee3f6a-2": {
+          "type": "item_policy",
+          "settings": {
+            "policy_icon": "shopify:\/\/shop_images\/icon-refund.png",
+            "title_policy": "30 Days Free Returns",
+            "desc_policy": "Within 30 days for an exchange.",
+            "mw": 330,
+            "link_label": "",
+            "link": "",
+            "bg_icon": "#f5f5f5",
+            "border_icon": "",
+            "class": "mb-sm-20"
+          }
+        },
+        "166020887041ee3f6a-1": {
+          "type": "item_policy",
+          "settings": {
+            "policy_icon": "shopify:\/\/shop_images\/icon-credit-card.png",
+            "title_policy": "Payment Secured",
+            "desc_policy": "Safe and encrypted transactions guaranteed.",
+            "mw": 330,
+            "link_label": "",
+            "link": "",
+            "bg_icon": "#f5f5f5",
+            "border_icon": "",
+            "class": ""
+          }
+        }
+      },
+      "block_order": [
+        "166020887041ee3f6a-0",
+        "166020887041ee3f6a-2",
+        "166020887041ee3f6a-1"
+      ],
+      "settings": {
+        "heading": "",
+        "heading_color": "#222222",
+        "subheading": "",
+        "subheading_color": "#666666",
+        "descheading": "",
+        "descheading_color": "#666666",
+        "subheading_position": "bottom",
+        "heading_alignment": "text-center",
+        "style": "style2",
+        "width_icon": 40,
+        "height_icon": 40,
+        "show_bg_icon": false,
+        "bg_icon_w": 85,
+        "show_border_icon": false,
+        "bg_icon_shadow": false,
+        "shadow_color": "",
+        "shadow_opacity": 40,
+        "icon_animate": false,
+        "text_fz": 16,
+        "text_ff": "f_pr",
+        "t_fw": "font-500",
+        "t_letter_spacing": "",
+        "desc_fz": 14,
+        "desc_ff": "f_df",
+        "desc_fw": "font-400",
+        "show_bgitem": false,
+        "bg_itemcolor": "",
+        "bd_radius": 0,
+        "box_shadow": false,
+        "show_border_item": false,
+        "c_border_item": "",
+        "pt": 0,
+        "pb": 0,
+        "xxl": 3,
+        "xl": 3,
+        "lg": 3,
+        "md": 3,
+        "sm": 1,
+        "xs": 1,
+        "spacing": 30,
+        "animate": true,
+        "container": "container",
+        "color_section": "",
+        "class_section": "",
+        "ss_bg_enable": false,
+        "background_color": "",
+        "background_corner": 0,
+        "background_img_size": "cover",
+        "enable_background_img_size_custom": false,
+        "background_img_size_custom": "",
+        "background_img_position": "center center",
+        "background_position": "bg-center",
+        "background_size": "full",
+        "height_background_xxl": 100,
+        "height_background_xl": 100,
+        "height_background_lg": 100,
+        "height_background_md": 100,
+        "height_background_sm": 100,
+        "height_background_xs": 100,
+        "distance_top_xl": 70,
+        "distance_top_lg": 30,
+        "distance_top_md": 50,
+        "distance_top_sm": 30,
+        "distance_bottom_xl": 70,
+        "distance_bottom_lg": 30,
+        "distance_bottom_md": 50,
+        "distance_bottom_sm": 30
+      }
+    },
+    "recent-products": {
+      "type": "nov-recently-viewed",
+      "settings": {
+        "heading": "<h2>RECENTLY VIEWED PRODUCTS<\/h2>",
+        "heading_color": "#222222",
+        "subheading": "",
+        "subheading_color": "#666666",
+        "heading_alignment": "text-center",
+        "grid_number_xxl": 5,
+        "grid_number": 4,
+        "grid_number_lg": 3,
+        "grid_number_md": 3,
+        "grid_number_sm": 2,
+        "grid_number_xs": 2,
+        "limit": 13,
+        "show_nav": false,
+        "animate": true,
+        "show_border": true,
+        "border_color": "#ededed",
+        "container": "container",
+        "background_color": "",
+        "class": "",
+        "distance_top_xl": 70,
+        "distance_top_md": 30,
+        "distance_top_xs": 30,
+        "distance_bottom_xl": 30,
+        "distance_bottom_md": 30,
+        "distance_bottom_xs": 30
+      }
+    }
+  },
+  "order": [
+    "main",
+    "166020887020e948ae",
+    "recent-products"
+  ]
+}

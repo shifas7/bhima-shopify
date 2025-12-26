@@ -1,0 +1,336 @@
+{% comment %}
+  Management Profile Section - Centered Layout
+  - Header: Centered
+  - Blocks: Centered Container
+  - Block Layout: Circle Image (Left), Theme Typography (Right)
+{% endcomment %}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    padding-left: {{ section.settings.padding_left }}px;
+    padding-right: {{ section.settings.padding_right }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* Image size variables */
+  .profile-{{ section.id }} .image-circle {
+    width: {{ section.settings.image_size_mobile }}px;
+    height: {{ section.settings.image_size_mobile }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .profile-{{ section.id }} .image-circle {
+      width: {{ section.settings.image_size }}px;
+      height: {{ section.settings.image_size }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding profile-{{ section.id }}">
+  <div class="page-width" style="max-width: {{ section.settings.container_width }}px; margin: 0 auto;">
+    
+    {%- if section.settings.heading != blank -%}
+      <div class="management-header center title-wrapper--no-top-margin">
+        <h2 class="title {{ section.settings.heading_size }}" style="margin-bottom: 1rem;">{{ section.settings.heading | escape }}</h2>
+        {%- if section.settings.description != blank -%}
+          <div class="rte" style="max-width: 800px; margin: 0 auto 4rem auto;">
+            {{ section.settings.description }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="management-list" style="display: flex; flex-direction: column; align-items: center;">
+      {%- for block in section.blocks -%}
+        <div class="management-item" {{ block.shopify_attributes }}>
+          
+          <div class="management-image">
+            {%- if block.settings.image != blank -%}
+              <div class="image-circle">
+                {{ block.settings.image | image_url: width: 800 | image_tag: 
+                  loading: 'lazy',
+                  widths: '200, 300, 400, 600, 800',
+                  class: 'profile-img'
+                }}
+              </div>
+            {%- else -%}
+              <div class="image-circle placeholder-bg">
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              </div>
+            {%- endif -%}
+          </div>
+          
+          <div class="management-content">
+            <h3 class="{{ section.settings.name_size }} member-name">{{ block.settings.name | escape }}</h3>
+            <p class="member-designation color-foreground-secondary">{{ block.settings.designation | escape }}</p>
+            
+            {%- if block.settings.bio != blank -%}
+              <div class="member-bio rte">
+                {{ block.settings.bio }}
+              </div>
+            {%- endif -%}
+          </div>
+
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Base Styles */
+  .management-header.center {
+    text-align: center;
+  }
+
+  .management-item {
+    display: flex;
+    flex-direction: column; /* Mobile first */
+    align-items: center;
+    gap: 2.5rem;
+    margin-bottom: 6rem;
+    text-align: center;
+    width: 100%;
+    max-width: 900px; /* Limits width to keep it feeling centered */
+  }
+
+  .management-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .image-circle {
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  }
+
+  .profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .member-name {
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+  }
+
+  .member-designation {
+    font-weight: 500;
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    opacity: 0.8;
+  }
+
+  .placeholder-bg {
+    background: rgba(var(--color-foreground), 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Desktop Adjustments */
+  @media screen and (min-width: 750px) {
+    .management-item {
+      flex-direction: row; /* Image Left, Text Right */
+      text-align: left;
+      align-items: flex-start;
+      gap: 5rem;
+    }
+    
+    .management-content {
+      flex: 1;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Management Profile",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Overall Layout"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 800,
+      "max": 1400,
+      "step": 50,
+      "unit": "px",
+      "label": "Section Content Width",
+      "default": 1100
+    },
+    {
+      "type": "header",
+      "content": "Centered Header"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main Heading",
+      "default": "Management Profile"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1",
+      "label": "Heading Size"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Main Description (Centered)"
+    },
+    {
+      "type": "header",
+      "content": "Circle Image Settings"
+    },
+    {
+      "type": "range",
+      "id": "image_size",
+      "min": 150,
+      "max": 450,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Circle Size",
+      "default": 280
+    },
+    {
+      "type": "range",
+      "id": "image_size_mobile",
+      "min": 100,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile Circle Size",
+      "default": 200
+    },
+    {
+      "type": "header",
+      "content": "Text Styles"
+    },
+    {
+      "type": "select",
+      "id": "name_size",
+      "options": [
+        { "value": "h4", "label": "Small" },
+        { "value": "h3", "label": "Medium" },
+        { "value": "h2", "label": "Large" }
+      ],
+      "default": "h2",
+      "label": "Name Font Size"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Left Padding (Global)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Right Padding (Global)",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "profile",
+      "name": "Team Member",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Profile Photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Full Name",
+          "default": "Suhas M.S."
+        },
+        {
+          "type": "text",
+          "id": "designation",
+          "label": "Designation",
+          "default": "Managing Director"
+        },
+        {
+          "type": "richtext",
+          "id": "bio",
+          "label": "Biography",
+          "default": "<p>A dynamic leader shaping the future of a century-old legacy.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Management Profile",
+      "blocks": [
+        { "type": "profile" },
+        { "type": "profile" },
+        { "type": "profile" }
+      ]
+    }
+  ]
+}
+{% endschema %}

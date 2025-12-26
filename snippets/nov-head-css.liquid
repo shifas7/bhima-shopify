@@ -1,0 +1,30 @@
+{{ 'css-boostrap.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'css-swiper-bundle.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'css-mm_menu.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'css-fancybox.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'css-magnific-popup.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'css-animated.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'css-slick.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'css-novstyle.css' | asset_url | stylesheet_tag }}
+{% render 'nov-product-color-custom' %}
+
+{%- case request.page_type -%}
+	{%- when 'blog', 'article', 'product', 'collection', 'cart', 'index' -%}{%- else -%}{{ 'css-page_inner.css' | asset_url | stylesheet_tag }}
+{%- endcase -%}
+<style>
+  shopify-accelerated-checkout, shopify-accelerated-checkout-cart {
+    --shopify-accelerated-checkout-button-block-size: 50px;
+    --shopify-accelerated-checkout-button-border-radius: var(--rounded-button);
+    --shopify-accelerated-checkout-button-box-shadow: none;
+  }
+  
+  @media screen and (min-width: 700px) {
+    shopify-accelerated-checkout, shopify-accelerated-checkout-cart {
+      --shopify-accelerated-checkout-button-block-size: 50px;
+    }
+    
+    .quick-buy-drawer shopify-accelerated-checkout, .quick-buy-drawer shopify-accelerated-checkout-cart {
+      --shopify-accelerated-checkout-button-block-size: 50px;
+    }
+  }
+</style>

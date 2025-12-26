@@ -1,0 +1,71 @@
+<div class="block_accordion {{ class }}">
+  <div class="nov-accordion">
+    {% if section.settings.show_description %}
+    <div class="product-single__tabs">
+      <div class="nov-accordion__title act">{{ 'products.product.tabdes' | t }}</div>
+      <div class="nov-accordion__content" style="display: block;">
+        <div class="block">
+          <div class="product-description" id="proTabs1">{{ product.description }}</div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% for block in section.blocks %}
+    {% if block.type == 'block_text' %}
+      <div class="block_custom product-single__tabs">
+        <div class="nov-accordion__title">{{ block.settings.custom_title }}</div>
+        <div class="nov-accordion__content">
+          <div class="block">
+            <div class="product-description">{{ block.settings.custom_content }}</div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    {% if block.type == 'block_img' %}
+      <div class="block_custom product-single__tabs">
+        <div class="nov-accordion__title">{{ block.settings.custom_title }}</div>
+        <div class="nov-accordion__content">
+          <div class="block">
+            <img src="{{ block.settings.custom_content | image_url: width: 1440 }}" width="{{ block.settings.custom_content.width }}" height="{{ block.settings.custom_content.height }}" alt="img" style="height: auto">
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    {% if block.type == 'block_video' %}
+      <div class="block_custom product-single__tabs">
+        <div class="nov-accordion__title" aria-expanded="false">{{ block.settings.custom_title }}</div>
+        <div class="nov-accordion__content">
+          <div class="block">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe class="embed-responsive-item" src="{%- if block.settings.video_url.type == 'youtube' -%}https://www.youtube.com/embed/{{ block.settings.video_url.id }}{%- else -%}https://player.vimeo.com/video/{{ block.settings.video_url.id }}{%- endif -%}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    {% if block.type == 'block_customtab' %}
+      <div class="block_custom product-single__tabs">
+        <div class="nov-accordion__title" aria-expanded="false">{{ block.settings.custom_title }}</div>
+        <div class="nov-accordion__content">
+          <div class="block">
+            <ul class="product-single__customtab list-unstyled">
+              {% for i in (1..10) %}
+                {%- assign t_id = 't' | append: i -%}
+                {%- assign c_id = 'c' | append: i -%}
+                {% if block.settings[t_id] != blank or block.settings[c_id] != blank %}
+                  <li>
+                    <div class="row align-items-center p-4 pt-10 pb-10">
+                      <div class="title col-4">{{ block.settings[t_id] }}</div>
+                      <div class="content col-8">{{ block.settings[c_id] }}</div>
+                    </div>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,485 @@
+{%- liquid 
+  assign sst = section.settings
+
+  if section.settings.ss_bg_enable
+    assign bg = " bg"
+  endif
+  if section.settings.class_section != blank
+    assign class_section = section.settings.class_section | prepend: ' '
+  endif
+  assign class = 'distance' | append: bg | append: ' ' | append: section.settings.background_position | append: class_section
+  if section.settings.background_size == 'full'
+    assign bg_class_full = class | prepend: ' '
+  else
+    assign bg_class_contain = class | prepend: ' '
+  endif
+-%}
+
+{% style %}
+  {% render 'nov-section-style' %}
+
+  #shopify-section-{{ section.id }} .nov-ba-wrap {
+    border-radius: {{ sst.corner }}px;
+  }
+  #shopify-section-{{ section.id }} .nov-ba-text,
+  #shopify-section-{{ section.id }} .nov-ba-text2 {
+    color: {{ sst.text_color }};
+  }
+  #shopify-section-{{ section.id }} .link {
+    --color-link: {{ sst.text_color }};
+  }
+{% endstyle %}
+<div class="container-outer{{ bg_class_full }}{% if sst.animate %} wow fadeInUp{% endif %}">
+  <div class="{{ sst.container }}">
+    <div class="container-inner{{ bg_class_contain }}">
+      {% render 'heading-section', sub_position: sst.subheading_position %}
+      <div id="{{ section.id }}" class="content-img-compare">
+        <div class="nov-before-after init position-relative">
+          <div class="nov-ba-wrap overflow_hidden position-relative" data-filter="0">
+            <div class="after item" style="background-image: url('{{ sst.image_after | image_url: width: 1920 }}')"></div>
+            <div class="before item" style="background-image: url('{{ sst.image_before | image_url: width: 1920 }}')"></div>
+            {% render 'nov-aspect-image', image: sst.image_before %}
+            <div class="handle position-absolute h-100">
+              <div class="handle-btn">
+                <svg width="14" height="22" viewBox="0 0 14 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="7" y1="1" x2="7" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="1" y1="4" x2="1" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="13" y1="4" x2="13" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          {% if sst.image_text_before != blank or sst.link_b_label != blank %}
+            <div class="nov-before-header position-absolute">
+              {% if sst.image_text_before != blank %}
+                <div class="nov-ba-text font-600 f_pr">{{ sst.image_text_before }}</div>
+              {% endif %}
+              {% if sst.image_text_before2 != blank %}
+                <div class="nov-ba-text2 font-600 f_pr mt-10">{{ sst.image_text_before2 }}</div>
+              {% endif %}
+              {% if sst.link_b_label != blank %}
+                <a href="{{ sst.link_b }}" class="nov-ba-link link font-500 mt-10 mt-sm-5 d-inline-flex align-items-center">
+                  {{ sst.link_b_label }}
+                  <i class="zmdi zmdi-long-arrow-right"></i>
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
+          {% if sst.image_text_after != blank or sst.link_a_label != blank %}
+            <div class="nov-after-header position-absolute">
+              {% if sst.image_text_after != blank %}
+                <div class="nov-ba-text font-600 f_pr">{{ sst.image_text_after }}</div>
+              {% endif %}
+              {% if sst.image_text_after2 != blank %}
+                <div class="nov-ba-text2 font-600 f_pr mt-10">{{ sst.image_text_after2 }}</div>
+              {% endif %}
+              {% if sst.link_a_label != blank %}
+                <a href="{{ sst.link_a }}" class="nov-ba-link link font-500 mt-10 mt-sm-5 d-inline-flex align-items-center">
+                  {{ sst.link_a_label }}
+                  <i class="zmdi zmdi-long-arrow-right"></i>
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div><!-- End container -->
+</div>
+{% schema %}
+  {
+    "name": "Image Compare",
+    "class": "section-image-compare",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "heading",
+        "label": "Heading",
+        "default": "<p>Vinova Image Compare</p>"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading color",
+        "default": "#222222"
+      },
+      {
+        "type": "richtext",
+        "id": "subheading",
+        "label": "Sub heading",
+        "default": "<p>Subtitle from happy customers</p>"
+      },
+      {
+        "type": "color",
+        "id": "subheading_color",
+        "label": "Sub heading color",
+        "default": "#666666"
+      },
+      {
+        "type": "richtext",
+        "id": "descheading",
+        "label": "Description",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+      },
+      {
+        "type": "color",
+        "id": "descheading_color",
+        "label": "Description color",
+        "default": "#666666"
+      },
+      {
+        "type": "select",
+        "id": "subheading_position",
+        "label": "Sub heading position",
+        "default": "bottom",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          },
+          {
+            "value": "bottom",
+            "label": "Bottom"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_before",
+        "label": "Image before",
+        "info": "1920 x 850 recommend"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_after",
+        "label": "Image after",
+        "info": "1920 x 850 recommend"
+      },
+      {
+        "type": "header",
+        "content": "Text On Before Image"
+      },
+      {
+        "type": "text",
+        "id": "image_text_before",
+        "label": "Text"
+      },
+      {
+        "type": "text",
+        "id": "image_text_before2",
+        "label": "Text 2"
+      },
+      {
+        "type": "text",
+        "id": "link_b_label",
+        "label": "Link label"
+      },
+      {
+        "type": "url",
+        "id": "link_b",
+        "label": "Link"
+      },
+      {
+        "type": "header",
+        "content": "Text On After Image"
+      },
+      {
+        "type": "text",
+        "id": "image_text_after",
+        "label": "Text after"
+      },
+      {
+        "type": "text",
+        "id": "image_text_after2",
+        "label": "Text 2"
+      },
+      {
+        "type": "text",
+        "id": "link_a_label",
+        "label": "Link label"
+      },
+      {
+        "type": "url",
+        "id": "link_a",
+        "label": "Link"
+      },
+      {
+        "type": "header",
+        "content": "Text Color"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#666"
+      },
+      {
+        "type": "header",
+        "content": "Corner Radius"
+      },
+      {
+        "type": "range",
+        "id": "corner",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "label": "Corner radius",
+        "default": 0
+      },
+      {
+        "type": "header",
+        "content": "Section Style"
+      },
+      {
+        "type": "checkbox",
+        "id": "animate",
+        "label": "Show animated",
+        "default":   true
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Container",
+        "default": "container",
+        "options": [
+          { "value": "container", "label": "Container" },
+          { "value": "container-fluid", "label": "Container fluid" },
+          { "value": "container-full", "label": "Container full width" }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "class_section",
+        "label": "Class"
+      },
+      {
+        "type":  "header",
+        "content": "Section Background"
+      },
+      {
+        "type": "checkbox",
+        "id": "ss_bg_enable",
+        "label": "Enable"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background colors",
+        "default": "#ffffff"
+      },
+      {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Background image"
+      },
+      {
+        "type": "range",
+        "id": "background_corner",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "label": "Corner background",
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "background_img_size",
+        "label": "Background image size",
+        "default": "cover",
+        "options": [
+          { "value": "auto", "label": "Auto" },
+          { "value": "cover", "label": "Cover" },
+          { "value": "contain", "label": "Contain" }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_background_img_size_custom",
+        "label": "Enable background image size custom"
+      },
+      {
+        "type": "text",
+        "id": "background_img_size_custom",
+        "label": "Background image size custom",
+        "info": "Replace base background size, unit % or px"
+      },
+      {
+        "type": "select",
+        "id": "background_img_position",
+        "label": "Background image position",
+        "default": "center center",
+        "options": [
+          { "value": "top left", "label": "Top left" },
+          { "value": "top center", "label": "Top center" },
+          { "value": "top right", "label": "Top right" },
+          { "value": "center left", "label": "Center left" },
+          { "value": "center center", "label": "Center middle" },
+          { "value": "center right", "label": "Center right" },
+          { "value": "bottom left", "label": "Bottom left" },
+          { "value": "bottom center", "label": "Bottom center" },
+          { "value": "bottom right", "label": "Bottom right" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "background_position",
+        "label": "Background position",
+        "default": "bg-center",
+        "options": [
+          { "value": "bg-top", "label": "Top" },
+          { "value": "bg-center", "label": "Center" },
+          { "value": "bg-bottom", "label": "Bottom" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "background_size",
+        "label": "Background size",
+        "default": "full",
+        "options": [
+          { "value": "full", "label": "Full" },
+          { "value": "contain", "label": "Contain"}
+        ]
+      },
+      {
+        "type": "range",
+        "id": "height_background_xxl",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 1441px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_xl",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 1200px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_lg",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 992px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_md",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 768px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_sm",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 576px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_xs",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 575px ↓"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Top (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_sm",
+        "label": "Mobile",
+        "default": 30
+      },
+      {
+        "type": "header",
+        "content": "Spacing Bottom (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_sm",
+        "label": "Mobile",
+        "default": 30
+      }
+    ],
+    "presets": [
+      {
+        "name": "Vinova Image Compare"
+      }
+    ]
+  }
+{% endschema %}

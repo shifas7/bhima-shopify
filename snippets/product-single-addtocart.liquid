@@ -1,0 +1,46 @@
+<div class="product-single__quantity mt-35"> 
+  {% if section.settings.show_quantity_selector == true %}
+    <span class="product-single__control-label">{{ 'products.product.quantity' | t }}</span>
+  {% endif %}
+  <div class="product-form__item product-form__item--quantity d-flex align-items-center mb-10">
+    {% if section.settings.show_quantity_selector == true %}
+      <div class="quick_view_qty">
+        <a href="#" class="quick_view-qty quick_view-qty-minus">-</a>
+        <input type="number" id="Quantity" name="quantity" value="1" min="1" max="{{ current_variant.inventory_quantity }}" step="1" class="quantity-selector product-form__input">
+        <a href="#" class="quick_view-qty quick_view-qty-plus">+</a>
+      </div>
+      {% else %}
+        <input type="hidden" id="Quantity" name="quantity" value="1" min="1" max="{{ current_variant.inventory_quantity }}" step="1">
+    {% endif %}
+    <div class="product-form__item product-form__item--submit{% unless current_variant.available %} soldout{% endunless %}"{% unless current_variant.available %}data-toggle="modal" data-target="#Form_newletter"{% endunless %}>
+      <button data-handle="{{ product.handle }}" type="submit" name="add" id="AddToCart" class="btnAddToCart btn{% unless settings.cart_status_addtocart == 'goto_page_cart' %} product-form__cart-submit{% endunless %}">
+        {% if current_variant.available %}
+          {% if current_variant.inventory_policy == 'continue' and current_variant.inventory_management == 'shopify' %}
+            <span id="AddToCartText">{{ 'products.product.pre_order' | t }}</span>
+          {% else %}
+            <span id="AddToCartText">{{ 'products.product.add_to_bag' | t }}</span>
+          {% endif %}
+        {% else %}
+          <span id="AddToCartText" class="position-relative">{{ 'products.product.notify_me' | t }}</span>
+        {% endif %}
+        <span class="load"></span>
+      </button>
+    </div>
+    {% if settings.wishlist_enable %}
+      <div class="product-single__wishlist productWishList">
+        <a class="wishlist btnProductWishlist d-flex align-items-center" data-icon-wishlist href="#" data-product-handle="{{ product.handle }}" data-id="{{ product.id | json }}">
+          <i class="rbb-icon-wishlist-8"></i>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+  {% if settings.payment_button_enable %}
+    <div class="product_option_sub">
+      <div class="product-form__item product-form__item--checkout"{% if current_variant.available == false %} disabled{% endif %}>
+        {% form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+        {{ form | payment_button }}
+        {%- endform %}
+      </div>
+    </div>
+  {% endif %}
+</div>

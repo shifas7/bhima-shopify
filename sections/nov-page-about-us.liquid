@@ -1,0 +1,268 @@
+{% style %}
+  {% for block in section.blocks %}
+    {%- assign bst = block.settings -%}
+    #shopify-section-{{ section.id }} .block-{{ forloop.index }}.nov-image {
+      margin-bottom: {{ bst.distance_bottom }}px;
+      border-radius: {{ bst.corner_radius }}px;
+    }
+    #shopify-section-{{ section.id }} .block-{{ forloop.index }}.nov-text {
+      {%- assign bst = block.settings -%}
+      color: {{ bst.t_c }};
+      font-size: {{ bst.t_s | divided_by: 10.0 }}rem;
+      line-height: {{ bst.t_lh }};
+      letter-spacing: {{ bst.t_lt }}px;
+      text-transform: {{ bst.t_tt }};
+      max-width: {{ bst.t_m }}px;
+      margin-bottom: {{ bst.distance_bottom }}px;
+    }
+  {% endfor %}
+{% endstyle %}
+
+{% render 'nov-breadcrumb', class_br: 'breadcrumb_inner' %}
+<div class="container">
+  {% if page.content.size > 0 %}
+    <div class="rte">{{ page.content }}</div>
+  {% endif %}
+  <div class="PageAboutUs">
+    {% for block in section.blocks %}
+      {%- assign bst = block.settings -%}
+      {% if block.type == 'image' %}
+        <div class="nov-image block-{{ forloop.index }} overflow_hidden">{% render 'nov-aspect-image', image: bst.img %}</div>
+      {% endif %}
+      {% if block.type == 'text' %}
+        <div class="nov-text {{ bst.t_fw }} {{ bst.ff }} block-{{ forloop.index }}">{{ bst.text }}</div>
+      {% endif %}
+      {% if block.type == 'quote' %}
+        <div class="block_quote d-flex flex-wrap align-items-center {{ bst.class }}" style="background-color: {{ bst.background_color }};">
+          {% if bst.image_quote != blank %}
+            <div class="cos-3 col-sm-3 cos-img">
+              {% render 'nov-aspect-image', image: bst.image_quote %}
+            </div>
+          {% endif %}
+          <div class="{% if bst.image_quote != blank %}cos-9 col-sm-9 {% endif %}cos-content">
+            <div class="d-flex">
+              {% if bst.icon_quotes != blank %}
+              <div class="icon-quote">
+                <img src="{{ bst.icon_quotes | image_url: width: 40, height: 32 }}" class="lazyload img-fluid" alt="{{ bst.icon_quotes.alt }}" width="40" height="32" style="height: auto;">
+              </div>
+              {% endif %}
+              <div class="item_content">
+                <span style="color: {{ bst.color_content }};font-size: {{ bst.fz_content }};line-height: {{ bst.lh_content }};">{{ bst.text_content }}</span>
+                {% if bst.author != blank %}
+                  <div class="item_author" style="color: {{ bst.color_author }};font-size: {{ bst.fz_author }};">{{ bst.author }}</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Vinova Page About Us",
+    "class": "page-inner page-about-us",
+    "blocks": [
+      {
+        "type": "image",
+        "name": "About Image",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "img",
+            "label": "Item image"
+          },
+          {
+            "type": "range",
+            "id": "corner_radius",
+            "min": 0,
+            "max": 50,
+            "step": 1,
+            "label": "Corner radius",
+            "default": 0,
+            "unit": "px"
+          },
+          {
+            "type": "number",
+            "id": "distance_bottom",
+            "label": "Bottom spacing (px)",
+            "default": 5
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "name": "Text",
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Vinova Text</p>"
+          },
+          {
+            "type": "color",
+            "id": "tb_c",
+            "label": "Text bold color"
+          },
+          {
+            "type": "range",
+            "id": "t_s",
+            "min": 11,
+            "max": 50,
+            "step": 1,
+            "label": "Text size",
+            "default": 13,
+            "unit": "px"
+          },
+          {
+            "type": "range",
+            "id": "t_s_md",
+            "min": 11,
+            "max": 50,
+            "step": 1,
+            "label": "Text size tablet",
+            "default": 13,
+            "info": "Breakpoint 991px ↓",
+            "unit": "px"
+          },
+          {
+            "type": "color",
+            "id": "t_c",
+            "label": "Text color",
+            "default": "#222222"
+          },
+          {
+            "type": "radio",
+            "id": "ff",
+            "label": "Font family",
+            "default": "f_df",
+            "options": [
+              {"value": "f_df","label": "Body font"},
+              {"value": "f_pr","label": "Heading font"}
+            ]
+          },
+          {
+            "type": "select",
+            "id": "t_fw",
+            "label": "Text font weight",
+            "default": "font-400",
+            "options": [
+              {"value": "font-300","label": "Light"},
+              {"value": "font-400","label": "Regular"},
+              {"value": "font-500","label": "Medium"},
+              {"value": "font-600","label": "SemiBold"},
+              {"value": "font-700","label": "Bold"},
+              {"value": "font-800","label": "ExtraBold"},
+              {"value": "font-900","label": "Black"}
+            ]
+          },
+          {
+            "type": "select",
+            "id": "t_tt",
+            "label": "Text transform",
+            "default": "none",
+            "options": [
+              { "value": "capitalize", "label": "Capitalize" },
+              { "value": "uppercase", "label": "Uppercase" },
+              { "value": "none", "label": "None" }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "t_lh",
+            "label": "Text line height",
+            "default": "1.5"
+          },
+          {
+            "type": "text",
+            "id": "t_lt",
+            "label": "Text letter spacing",
+            "default": "0"
+          },
+          {
+            "type": "number",
+            "id": "t_m",
+            "label": "Text max with (px)",
+            "default": 1320
+          },
+          {
+            "type": "number",
+            "id": "distance_bottom",
+            "label": "Bottom spacing (px)",
+            "default": 5
+          }
+        ]
+      },
+      {
+        "type": "quote",
+        "name": "About Quote",
+        "settings": [
+          {
+            "type": "color",
+            "id": "background_color",
+            "label": "Background colors",
+            "default": "#f1f1f1"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_quote",
+            "label": "Image Quote"
+          },
+          {
+            "type": "image_picker",
+            "id": "icon_quotes",
+            "label": "Icon Quote"
+          },
+          {
+            "type": "richtext",
+            "id": "text_content",
+            "label": "Content"
+          },
+          {
+            "type": "color",
+            "id": "color_content",
+            "label": "Color Content",
+            "default": "#232630"
+          },
+          {
+            "type": "text",
+            "id": "fz_content",
+            "label": "Font size",
+            "default": "2rem"
+          },
+          {
+            "type": "text",
+            "id": "lh_content",
+            "label": "Line Height Content",
+            "default": "40px"
+          },
+          {
+            "type": "text",
+            "id": "author",
+            "label": "Author",
+            "default": "Kwang Shang. - CEO Vinovathemes"
+          },
+          {
+            "type": "color",
+            "id": "color_author",
+            "label": "Color Author",
+            "default": "#232630"
+          },
+          {
+            "type": "text",
+            "id": "fz_author",
+            "label": "Font Author",
+            "default": "13px"
+          },
+          {
+            "type": "text",
+            "id": "class",
+            "label": "Class"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

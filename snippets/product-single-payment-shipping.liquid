@@ -1,0 +1,30 @@
+{% if section.settings.show_payments %}
+  <div class="product-single__payment mt-45 mb-45">
+    <div class="product-single__control-label mb-10">{{ section.settings.title_payments }}</div>
+    {% if section.settings.payments != blank %}
+      <div class="payments overflow-hidden">
+        <img class="lazyload" data-src="{{ section.settings.payments | image_url: width: 700 }}" width="700" height="{{ 700 | divided_by: section.settings.payments.aspect_ratio | round }}" style="height: auto" alt="Payments" />
+      </div>
+    {% else %}
+      <div class="payments overflow-hidden d-flex justify-content-center flex-wrap">
+        {%- for type in shop.enabled_payment_types -%}
+          <div class="payment__item">{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</div>
+        {%- endfor -%}
+      </div>
+    {% endif %}
+  </div>
+{% endif %}
+<div class="product-single__shiping">
+  {% if section.settings.time != blank %}
+    <div class="shiping_time d-flex align-items-center" style="color: {{ section.settings.color_time }};font-size: {{ section.settings.size_time }};">
+      <i class="rbb-icon-delivery-1"></i>
+      <span>{{ section.settings.time }}</span>
+    </div>
+  {% endif %}
+  {% if section.settings.truck != blank %}
+    <div class="shiping_truck d-flex align-items-center" style="color: {{ section.settings.color_truck }};font-size: {{ section.settings.size_truck }};">
+      <i class="rbb-icon-delivery-11"></i>
+      <span>{{ section.settings.truck }}</span>
+    </div>
+  {% endif %}
+</div>

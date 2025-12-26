@@ -1,0 +1,157 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "nov-page-testimonial",
+      "blocks": {
+        "8b2e5deb-5f2d-4980-acbb-f95b13f6ec37": {
+          "type": "text",
+          "settings": {
+            "item_1": true,
+            "text_content_1": "This Theme was easy to install and configure. When I got stuck, I reached out to support and Alex provided super easy screenshots showing where to go to configure areas I wanted to modify. Fast and friendly support and a beautiful theme to work with. It was money well spent (and way cheaper than comparable themes bought through shopify).",
+            "img_author_1": "shopify:\/\/shop_images\/tes-1.jpg",
+            "info_name_1": "Customer",
+            "info_trade_1": "From Envato",
+            "item_2": true,
+            "text_content_2": "Thanks and again sorry what i early said.\nI want to add one more thing please if possible than make video about this theme feature like how to add product search and much more it really help people to know more about theme.",
+            "img_author_2": "shopify:\/\/shop_images\/tes-2.jpg",
+            "info_name_2": "Customer",
+            "info_trade_2": "From Envato",
+            "item_3": true,
+            "text_content_3": "Our experience with the theme developer was great! Alex was very helpful in guiding us with the theme and accommodating to our requests. Very responsive (within a couple of business days) and straightforward with responses. Thanks again for the great theme and excellent customer service.",
+            "img_author_3": "shopify:\/\/shop_images\/tes-3.jpg",
+            "info_name_3": "Customer",
+            "info_trade_3": "From Envato",
+            "item_4": true,
+            "text_content_4": "Nova-Creative not only has exquisite designs, their customer support is outstanding too! They helped me tweak my template to get it exactly the way I imagined it in my head. You will not regret doing business with them. The entire experience is just incredible! Thanks again!!",
+            "img_author_4": "shopify:\/\/shop_images\/tes-4.jpg",
+            "info_name_4": "Customer",
+            "info_trade_4": "From Envato",
+            "item_5": false,
+            "text_content_5": "",
+            "info_name_5": "Customer",
+            "info_trade_5": "From Envato",
+            "class": ""
+          }
+        },
+        "7b0784fd-5f4d-4504-993a-eb85286bd13b": {
+          "type": "text",
+          "settings": {
+            "item_1": true,
+            "text_content_1": "Amazing Design. Very thoughtful and easy to navigate. I am also particularly satisfied with the support system. It is very efficient. Enabling Customers upload screenshots for some issues would be a great Plus too!",
+            "img_author_1": "shopify:\/\/shop_images\/tes-5.jpg",
+            "info_name_1": "Customer",
+            "info_trade_1": "Customer",
+            "item_2": true,
+            "text_content_2": "Not only a great Shopify theme, Alex fixed our issue wihtin 24h.\nThank you very much for help.",
+            "img_author_2": "shopify:\/\/shop_images\/tes-6.jpg",
+            "info_name_2": "Customer",
+            "info_trade_2": "From Envato",
+            "item_3": true,
+            "text_content_3": "3 Months before i purchased sale hub E-commerce shopify theme. it is very easy customized themes, and support team is also nice response. Thank you sale hub team",
+            "img_author_3": "shopify:\/\/shop_images\/tes-7.jpg",
+            "info_name_3": "Customer",
+            "info_trade_3": "From Envato",
+            "item_4": true,
+            "text_content_4": "I had a problem with a feature of the website and the support team fixed it right away. The theme is awesome!!",
+            "img_author_4": "shopify:\/\/shop_images\/tes-8.jpg",
+            "info_name_4": "Customer",
+            "info_trade_4": "From Envato",
+            "item_5": true,
+            "text_content_5": "This theme has an incredible amount of features to begin with, and the support team was even more impressive. I reached out regarding minor changes, and the team was fast and extremely helpful in solving my problems. I highly recommend this theme and any other themes from this team!",
+            "img_author_5": "shopify:\/\/shop_images\/tes-9.jpg",
+            "info_name_5": "Customer",
+            "info_trade_5": "From Envato",
+            "class": ""
+          }
+        },
+        "6a72ee12-fbd8-41ea-922f-d1d4ed494104": {
+          "type": "text",
+          "settings": {
+            "item_1": true,
+            "text_content_1": "I’m very satisfied with this theme, especially its design freedom for users choices: so many possibilities at any step you can imagine for your business. But beyond such qualities (that anyone can see just looking theme page\/demo), I must to mention my satisfaction with the support team: very professional. They clarified many doubts, solved little problems in my configuration and made easier and safer all the process. Thank you!",
+            "img_author_1": "shopify:\/\/shop_images\/tes-10.jpg",
+            "info_name_1": "Customer",
+            "info_trade_1": "Customer",
+            "item_2": true,
+            "text_content_2": "Great support Alex!\nShopify is a solid platform but once a theme is applied, the templates, assets, and liquid files can be changed and functions shuffled.\n<br>\nAlex and Nova-Creative are quick to respond and very efficient. Thanks again Alex.",
+            "img_author_2": "shopify:\/\/shop_images\/tes-11.jpg",
+            "info_name_2": "Customer",
+            "info_trade_2": "From Envato",
+            "item_3": true,
+            "text_content_3": "Alex Nguyen who is the tech support for the theme settings. We have written 53 emails until now. He is helpful and effective, responsible. Theme is simple and just have basic function, but they can be customized and easy to learn. In all, good and professional.",
+            "img_author_3": "shopify:\/\/shop_images\/tes-12.jpg",
+            "info_name_3": "Customer",
+            "info_trade_3": "From Envato",
+            "item_4": true,
+            "text_content_4": "Customer service is really fast, and this developer makes great quality themes! I would recommend this theme for all Shopify platforms.",
+            "img_author_4": "shopify:\/\/shop_images\/tes-13.jpg",
+            "info_name_4": "Customer",
+            "info_trade_4": "From Envato",
+            "item_5": false,
+            "text_content_5": "",
+            "info_name_5": "Customer",
+            "info_trade_5": "From Envato",
+            "class": ""
+          }
+        },
+        "00689a01-44de-4ef9-a12a-ac2cefd2f113": {
+          "type": "text",
+          "settings": {
+            "item_1": true,
+            "text_content_1": "<p class=\"mb-0\">Now i am really happy with My purchase.<\/p>\n<br>\nFirst of all sorry what i early say about theme.This theme is really good with excellent support.the team members are very helping and very fast to solve whatever issue i face.",
+            "img_author_1": "shopify:\/\/shop_images\/tes-14.jpg",
+            "info_name_1": "Customer",
+            "info_trade_1": "Customer",
+            "item_2": true,
+            "text_content_2": "<p class=\"mb-0\">Truly elegant theme built with customer in mind, excellent design that facilitates navigation across the many categories of skin and hair care.<\/p>\n<br>\n<p class=\"mb-0\">\nFancy looking with elegant animations and subtle touches here and there.\n<\/p>\n<br>\n<p class=\"mb-0\">and the support is A class. I contacted them many many times and they always deliver, and they actually made some customizations for me for free !<\/p>\n<br>\nI think this theme is essential if you're in the beauty industry with large collections and many categories.",
+            "img_author_2": "shopify:\/\/shop_images\/tes-15.jpg",
+            "info_name_2": "Customer",
+            "info_trade_2": "From Envato",
+            "item_3": true,
+            "text_content_3": "Customer service is really fast, and this developer makes great quality themes! I would recommend this theme for all Shopify platforms.",
+            "img_author_3": "shopify:\/\/shop_images\/tes-16.jpg",
+            "info_name_3": "Customer",
+            "info_trade_3": "From Envato",
+            "item_4": true,
+            "text_content_4": "Great theme, support and help reply very quickly, thank you, cost-effective theme and service, thank you sincerely",
+            "img_author_4": "shopify:\/\/shop_images\/tes-17.jpg",
+            "info_name_4": "Customer",
+            "info_trade_4": "From Envato",
+            "item_5": false,
+            "text_content_5": "",
+            "info_name_5": "Customer",
+            "info_trade_5": "From Envato",
+            "class": ""
+          }
+        }
+      },
+      "block_order": [
+        "8b2e5deb-5f2d-4980-acbb-f95b13f6ec37",
+        "7b0784fd-5f4d-4504-993a-eb85286bd13b",
+        "6a72ee12-fbd8-41ea-922f-d1d4ed494104",
+        "00689a01-44de-4ef9-a12a-ac2cefd2f113"
+      ],
+      "settings": {
+        "color_quote": "background-1",
+        "background_quote": "#f1f1f1",
+        "image_quote": "shopify:\/\/shop_images\/page_inner_avatar.png",
+        "icon_quotes": "shopify:\/\/shop_images\/page_about_icon_quote.png",
+        "text_content": "<p>what's happy customers say<\/p>",
+        "author": "See Why Thousands of Customer Love Us!",
+        "class": ""
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

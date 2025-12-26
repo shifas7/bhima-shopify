@@ -1,0 +1,55 @@
+{% layout none %}
+<form action="/cart" method="post" novalidate class="form-cart__extent">
+  <div class="cart_extend--label position-absolute d-none d-md-block">
+    {% if settings.cart_note %}
+      <div class="extend--label__item" data-label="note" data-title="{{ 'cart.mini_canvas.note_tooltip' | t }}" data-toggle="tooltip" data-placement="left" title="{{ 'cart.mini_canvas.note_tooltip' | t }}">
+        {% render 'icon-note' %}
+        <i class="zmdi zmdi-close"></i>
+      </div>
+    {% endif %}
+    {% if settings.shipping_calculator %}
+      <div class="extend--label__item" data-label="estimate-shipping" data-title="{{ 'cart.mini_canvas.estimate_shipping_tooltip' | t }}" data-toggle="tooltip" data-placement="left" title="{{ 'cart.mini_canvas.estimate_shipping_tooltip' | t }}">
+        {% render 'icon-shipping' %}
+        <i class="zmdi zmdi-close"></i>
+      </div>
+    {% endif %}
+    {% if settings.discount_code %}
+      <div class="extend--label__item" data-label="discount" data-title="{{ 'cart.mini_canvas.discount_tooltip' | t }}" data-toggle="tooltip" data-placement="left" title="{{ 'cart.mini_canvas.discount_tooltip' | t }}">
+        {% render 'icon-discount' %}
+        <i class="zmdi zmdi-close"></i>
+      </div>
+    {% endif %}
+  </div>
+  {% if settings.cart_note %}
+    <div class="cart_extend" data-content="note">
+      <div class="cart_extend-header d-flex align-items-center font-800 text-uppercase c_h">
+        {% render 'icon-note' %}
+        {{ 'cart.mini_canvas.not_heading' | t }}
+      </div>
+      <div class="cart_extend-content">
+        <textarea class="cart_extend--textarea" name="note" placeholder="{{ 'cart.mini_canvas.write_notes' | t }}">{{ cart.note }}</textarea>
+        <div class="cart_extend--btn btn w-100 mt-10">{{ 'cart.mini_canvas.button_save' | t }}</div>
+        <div class="cart_extend--btn btn w-100 mt-5 d-md-none cancel">{{ 'cart.mini_canvas.cancel' | t }}</div>
+      </div>
+    </div>
+  {% endif %}
+  {% if settings.shipping_calculator %}
+    <div class="cart_extend" data-content="estimate-shipping">
+      {% render 'shipping-calculator' %}
+    </div>
+  {% endif %}
+  {% if settings.discount_code %}
+    <div class="cart_extend" data-content="discount">
+      <div class="cart_extend-header d-flex align-items-center font-800 text-uppercase c_h">
+        {% render 'icon-discount' %}
+        {{ 'cart.mini_canvas.discount_heading' | t }}
+      </div>
+      <div class="cart_extend-content">
+        <div class="cart__discount-desc mb-20">{{ 'cart.mini_canvas.discount_desc_html' | t }}</div>
+        <input type="text" name="discount" class="cart_extend--input">
+        <div class="cart_extend--btn btn_save--discount btn w-100 mt-10">{{ 'cart.mini_canvas.button_save' | t }}</div>
+        <div class="cart_extend--btn btn w-100 mt-5 d-md-none cancel">{{ 'cart.mini_canvas.cancel' | t }}</div>
+      </div>
+    </div>
+  {% endif %}
+</form>

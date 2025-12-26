@@ -1,0 +1,187 @@
+{%- assign sst = section.settings -%}
+{% style %}
+  #shopify-section-{{ section.id }} .distance {
+    padding-top: {{ sst.distance_top_xs }}px;
+    padding-bottom: {{ sst.distance_bottom_xs }}px;
+    {% if sst.background_color != blank %}
+      background: {{ sst.background_color }};
+    {% endif %}
+  }
+  @media(min-width: 768px) {
+    #shopify-section-{{ section.id }} .distance {
+      padding-top: {{ sst.distance_top_md }}px;
+      padding-bottom: {{ sst.distance_bottom_md }}px;
+    }
+  }
+  @media(min-width: 1200px) {
+    #shopify-section-{{ section.id }} .distance {
+      padding-top: {{ sst.distance_top_xl }}px;
+      padding-bottom: {{ sst.distance_bottom_xl }}px;
+    }
+  }
+{% endstyle %}
+<div class="distance color-{{ sst.color_section }}{% if sst.class != blank %} {{ sst.class }}{% endif %}" data-section-id="{{ section.id }}" data-section-type="nov-slick">
+  <div class="{{ sst.container }}">
+    {%- liquid 
+      assign current_product = product
+      if collection == null or collection.handle == 'all'
+        assign found_collection = false
+        for item in product.collections
+          if found_collection == false and item.handle != 'all' and item.all_products_count > 1
+            assign found_collection = true
+            assign collection = item
+          endif
+        endfor
+      endif
+    -%}
+    {% if collection and collection.products_count > 1 %}
+      <div class="ProductRelated">
+        {% render 'heading-section' %}
+        <div class="nov-slick-carousel grid--view-items row spacing-30 slick-shadow" data-autoplay="false" data-nav="false" data-dots="true" data-loop="true"data-items_xxl="4"  data-items="4" data-items_lg="4" data-items_md="3" data-items_sm="2" data-items_xs="1">
+          {% for product in collection.products limit: 12 %}
+            {% unless product.handle == current_product.handle %}
+              <div class="item sp-item col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                {% render 'product-grid-item-style-1', product: product, section_id: section.id %}
+              </div>
+            {% endunless %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Product related",
+    "class": "product-template-related",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "heading",
+        "label": "Heading",
+        "default": "<p>Vinova Product Related</p>"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading color",
+        "default": "#222222"
+      },
+      {
+        "type": "richtext",
+        "id": "subheading",
+        "label": "Sub heading",
+        "default": "<p>Subtitle from happy customers</p>"
+      },
+      {
+        "type": "color",
+        "id": "subheading_color",
+        "label": "Sub heading color",
+        "default": "#666666"
+      },
+      {
+        "type": "select",
+        "id": "heading_alignment",
+        "label": "Heading alignment",
+        "default": "text-left",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Container",
+        "default": "container",
+        "options": [
+          { "value": "container", "label": "Container" },
+          { "value": "container-fluid", "label": "Container fluid" },
+          { "value": "container-full", "label": "Container full width" }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_section",
+        "label": "Color",
+        "default": "background-1"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background colors"
+      },
+      {
+        "type": "text",
+        "id": "class",
+        "label": "Class"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Top (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_xs",
+        "label": "Mobile",
+        "default": 30
+      },
+      {
+        "type": "header",
+        "content": "Spacing Bottom (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_xs",
+        "label": "Mobile",
+        "default": 30
+      }
+    ],
+    "presets": [
+      {
+        "name": "Product related"
+      }
+    ],
+    "enabled_on": {
+      "templates": ["product"]
+    }
+  }
+{% endschema %}

@@ -1,0 +1,522 @@
+{%- liquid 
+  assign sst = section.settings
+
+  if section.settings.ss_bg_enable
+    assign bg = " bg"
+  endif
+  if section.settings.class_section != blank
+    assign class_section = section.settings.class_section | prepend: ' '
+  endif
+  assign class = 'distance' | append: bg | append: ' ' | append: section.settings.background_position | append: class_section
+  if section.settings.background_size == 'full'
+    assign bg_class_full = class | prepend: ' '
+  else
+    assign bg_class_contain = class | prepend: ' '
+  endif
+
+  assign collection = collections[sst.collection]
+  assign product_limit = sst.limit
+-%}
+{% style %}
+  {% render 'nov-section-style' %}
+
+  {% if sst.show_pagination_progress %}
+    #shopify-section-{{ section.id }} .swiper-scrollbar {
+      background: {{ sst.pagination_progress_bg }} !important;
+    }
+    #shopify-section-{{ section.id }} .swiper-scrollbar-drag {
+      background: {{ sst.progress_bg }} !important;
+    }
+  {% endif %}
+{% endstyle %}
+<div class="color-{{ sst.color_section }}{{ bg_class_full }}{% if sst.animate %} wow fadeInUp{% endif %}" data-section-id="{{ section.id }}" data-section-type="nov-swiper">
+  <div class="{{ sst.container }}">
+    <div class="container-inner{{ bg_class_contain }}">
+      {% if sst.show_nav %}
+        <div class="d-flex align-items-center mb-40 position-relative">
+          {% render 'heading-section', sub_position: sst.subheading_position, class: 'mb-0' %}
+          <div class="slider-nav d-flex align-items-center">
+            <div class="nav-arrow nav-prev pointer"></div>
+            <div class="nav-arrow nav-next pointer"></div>
+          </div>
+        </div>
+      {% else %}
+        {% render 'heading-section', sub_position: sst.subheading_position %}
+      {% endif %}
+      <div class="list--view-items nov-swiper-carousel swiper"
+        data-autoplay="false" 
+        data-autoplayTimeout="6000"
+        data-loop="false"
+        data-row="{{ sst.row_number }}"
+        data-row_mobile="{{ sst.row_number }}"
+        data-items_xxl="3"
+        data-items_xl="2"
+        data-items_lg="2"
+        data-items_md="2"
+        data-items_sm="1"
+        data-items_xs="1"
+        data-spacing="{{ sst.spacing }}">
+        <div class="swiper-wrapper">
+          {% for product in collection.products limit: product_limit %}
+            <div class="swiper-slide item">
+              {% render 'product-list-item-style-1', product: product, section_id: section.id %}
+            </div>
+          {% else %}
+          <div class="row">
+            {%- for i in (1..4) -%}
+              {%- capture current -%}{% cycle 1, 2, 3, 4 %}{%- endcapture -%}
+              <div class="col-6 sp-item mb-30 d-flex align-items-center">
+                <div class="w-35" style="margin-right: 20px">{{ 'product-apparel-' | append: current | placeholder_svg_tag : 'placeholder-svg' }}</div>
+                <div>
+                  <div class="title h4 mt-15">Lorem ipsum dolor</div>
+                  <div class="price mt-10 font-700">19$</div>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+          {% endfor %}
+        </div>
+        {% if sst.show_pagination_progress %}
+          <div class="d-flex align-items-center mt-60">
+            {% if sst.show_pagination_progress %}
+              <div class="swiper-scrollbar position-static"></div>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+      {% if sst.viewall %}
+        <div class="text-center mt-40">
+          <a href="{{ collection.url }}" class="btn {{ sst.btn_type }} {{ sst.btn_size }}">
+            <span>{{ 'sections.button.view_all' | t }}</span>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Vinova Products List",
+    "class": "section-product-list",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "heading",
+        "label": "Heading",
+        "default": "<p>Vinova Product List</p>"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading color",
+        "default": "#222222"
+      },
+      {
+        "type": "richtext",
+        "id": "subheading",
+        "label": "Sub heading",
+        "default": "<p>Subtitle from happy customers</p>"
+      },
+      {
+        "type": "color",
+        "id": "subheading_color",
+        "label": "Sub heading color",
+        "default": "#666666"
+      },
+      {
+        "type": "richtext",
+        "id": "descheading",
+        "label": "Description",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+      },
+      {
+        "type": "color",
+        "id": "descheading_color",
+        "label": "Description color",
+        "default": "#666666"
+      },
+      {
+        "type": "select",
+        "id": "subheading_position",
+        "label": "Sub heading position",
+        "default": "bottom",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          },
+          {
+            "value": "bottom",
+            "label": "Bottom"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_alignment",
+        "label": "Heading alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type":  "header",
+        "content": "Block Product"
+      },
+      {
+        "type": "collection",
+        "id": "collection",
+        "label": "Collection"
+      },
+      {
+        "type": "range",
+        "id": "limit",
+        "min": 4,
+        "max": 30,
+        "step": 1,
+        "label": "Limit",
+        "default": 30,
+        "info": "Select number limit products"
+      },
+      {
+        "type": "checkbox",
+        "id": "viewall",
+        "label": "Show view all"
+      },
+      {
+        "type":  "header",
+        "content": "Slider Options"
+      },
+      {
+        "type": "range",
+        "id": "row_number",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Number row",
+        "default": 1
+      },
+      {
+        "type": "range",
+        "id": "spacing",
+        "min": 0,
+        "max": 70,
+        "step": 5,
+        "unit": "px",
+        "label": "Spacing",
+        "default": 30,
+        "info": "Spacing item"
+      },
+      {
+        "type": "header",
+        "content": "Pagination Progress"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_pagination_progress",
+        "label": "Show pagination progress",
+        "default": false
+      },
+      {
+        "type": "color",
+        "id": "pagination_progress_bg",
+        "label": "Background pagination progress",
+        "default": "#eaeaee"
+      },
+      {
+        "type": "color",
+        "id": "progress_bg",
+        "label": "Background progress",
+        "default": "#000"
+      },
+      {
+        "type":  "header",
+        "content": "Section Style"
+      },
+      {
+        "type": "checkbox",
+        "id": "animate",
+        "label": "Show animated",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "btn_type",
+        "label": "Button type",
+        "default": "btn-primary",
+        "options": [
+          { "value": "btn-primary", "label": "Primary" },
+          { "value": "btn-secondary", "label": "Secondary" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "btn_size",
+        "label": "Button size",
+        "default": "btn-normal",
+        "options": [
+          { "value": "btn-normal", "label": "Normal" },
+          { "value": "btn-medium", "label": "Medium" },
+          { "value": "btn-large", "label": "Large" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Container",
+        "default": "container",
+        "options": [
+          { "value": "container", "label": "Container" },
+          { "value": "container-fluid", "label": "Container fluid" },
+          { "value": "container-full", "label": "Container full width" }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_section",
+        "label": "Color section",
+        "default": "background-1"
+      },
+      {
+        "type": "text",
+        "id": "class_section",
+        "label": "Class"
+      },
+      {
+        "type":  "header",
+        "content": "Section Background"
+      },
+      {
+        "type": "checkbox",
+        "id": "ss_bg_enable",
+        "label": "Enable"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background colors",
+        "default": "#ffffff"
+      },
+      {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Background image"
+      },
+      {
+        "type": "range",
+        "id": "background_corner",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "label": "Corner background",
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "background_img_size",
+        "label": "Background image size",
+        "default": "cover",
+        "options": [
+          { "value": "auto", "label": "Auto" },
+          { "value": "cover", "label": "Cover" },
+          { "value": "contain", "label": "Contain" }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_background_img_size_custom",
+        "label": "Enable background image size custom"
+      },
+      {
+        "type": "text",
+        "id": "background_img_size_custom",
+        "label": "Background image size custom",
+        "info": "Replace base background size, unit % or px"
+      },
+      {
+        "type": "select",
+        "id": "background_img_position",
+        "label": "Background image position",
+        "default": "center center",
+        "options": [
+          { "value": "top left", "label": "Top left" },
+          { "value": "top center", "label": "Top center" },
+          { "value": "top right", "label": "Top right" },
+          { "value": "center left", "label": "Center left" },
+          { "value": "center center", "label": "Center middle" },
+          { "value": "center right", "label": "Center right" },
+          { "value": "bottom left", "label": "Bottom left" },
+          { "value": "bottom center", "label": "Bottom center" },
+          { "value": "bottom right", "label": "Bottom right" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "background_position",
+        "label": "Background position",
+        "default": "bg-center",
+        "options": [
+          { "value": "bg-top", "label": "Top" },
+          { "value": "bg-center", "label": "Center" },
+          { "value": "bg-bottom", "label": "Bottom" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "background_size",
+        "label": "Background size",
+        "default": "full",
+        "options": [
+          { "value": "full", "label": "Full" },
+          { "value": "contain", "label": "Contain"}
+        ]
+      },
+      {
+        "type": "range",
+        "id": "height_background_xxl",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 1441px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_xl",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 1200px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_lg",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 992px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_md",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 768px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_sm",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 576px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_xs",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 575px ↓"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Top (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_sm",
+        "label": "Mobile",
+        "default": 30
+      },
+      {
+        "type": "header",
+        "content": "Spacing Bottom (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_sm",
+        "label": "Mobile",
+        "default": 30
+      }
+    ],
+    "presets": [
+      {
+        "name": "Vinova Products List"
+      }
+    ]
+  }
+{% endschema %}

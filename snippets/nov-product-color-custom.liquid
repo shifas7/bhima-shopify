@@ -1,0 +1,19 @@
+<style>
+	{%- for i in (1..20) -%}
+		{%- assign img_color_id = 'img_color' | append: i -%}
+		{%- assign color_id = 'color' | append: i -%}
+	  	{%- if settings[img_color_id] != blank -%}
+	  	.variant-color-{{ settings[color_id] | downcase | handle }} {
+	  		background-image: url("{{ settings[img_color_id] | image_url: width: 70 }}") !important
+	  	}
+	  	.variant-color-{{ settings[color_id] | downcase | handle }}:has( img) {
+	  		background: transparent !important
+	  	}
+	  	.variant-color .variant-color-{{ settings[color_id] | downcase | handle }} {
+	  		box-shadow: 0 0 0 1px #d0d0d0 inset
+	  	}
+	  	.item-swatch .variant-color-{{ settings[color_id] | downcase | handle }}, .facet-color .variant-color-{{ settings[color_id] | downcase | handle }} {border: 1px solid #d1d1d1 !important
+	  	}
+	  	{%- endif %}
+	{%- endfor -%}
+</style>

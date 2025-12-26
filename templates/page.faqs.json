@@ -1,0 +1,127 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "nov-page-faqs",
+      "blocks": {
+        "15fb5f34-b88d-452a-a459-a155fbf3c50c": {
+          "type": "faq",
+          "settings": {
+            "item_title": "What is Bhima Jewellery?",
+            "color_title": "#232630",
+            "fz_title": "16px",
+            "item_content": "Bhima Jewellery is a trusted and heritage-rich jewellery brand with a legacy of over 101 years. We are known for our purity, craftsmanship, and timeless gold jewellery designs that celebrate tradition and elegance.",
+            "color_content": "#232630",
+            "fz_content": "14px",
+            "class": ""
+          }
+        },
+        "f36d99f0-20e0-4ec9-b2ea-3eea65ac3e82": {
+          "type": "faq",
+          "settings": {
+            "item_title": "Is Bhima Jewellery made of real gold?",
+            "color_title": "#232630",
+            "fz_title": "16px",
+            "item_content": "Yes. All Bhima Jewellery products are crafted from genuine, certified gold. Each product clearly specifies its gold purity, such as 24k, 22K or 18K.",
+            "color_content": "#232630",
+            "fz_content": "14px",
+            "class": ""
+          }
+        },
+        "06e092c0-ae35-475a-9b51-1d58129c82a3": {
+          "type": "faq",
+          "settings": {
+            "item_title": "Do you provide gold purity and authenticity certification?",
+            "color_title": "#232630",
+            "fz_title": "16px",
+            "item_content": "Absolutely. Every Bhima Jewellery product is BIS hallmarked and comes with proper authenticity certification, ensuring complete transparency and trust.",
+            "color_content": "#232630",
+            "fz_content": "14px",
+            "class": ""
+          }
+        },
+        "74d8dd51-2e35-49c0-88df-e1c45645f17c": {
+          "type": "faq",
+          "settings": {
+            "item_title": "What types of jewellery does Bhima offer?",
+            "color_title": "#232630",
+            "fz_title": "16px",
+            "item_content": "Bhima Jewellery offers a wide range of gold jewellery, including rings, necklaces, bangles, earrings, chains, bridal collections, and daily-wear designs.",
+            "color_content": "#232630",
+            "fz_content": "14px",
+            "class": ""
+          }
+        },
+        "4ee00231-8e56-4c78-abb2-d73e40f1a7ec": {
+          "type": "faq",
+          "settings": {
+            "item_title": "How can I purchase Bhima Jewellery?",
+            "color_title": "#232630",
+            "fz_title": "16px",
+            "item_content": "You can purchase Bhima Jewellery by visiting our showrooms or through our official online platforms, where available. Product availability may vary by location.",
+            "color_content": "#232630",
+            "fz_content": "14px",
+            "class": ""
+          }
+        },
+        "38baf562-ad54-4fa9-a8f4-e79f4ae6078b": {
+          "type": "faq",
+          "settings": {
+            "item_title": "What payment methods are accepted?",
+            "color_title": "#232630",
+            "fz_title": "16px",
+            "item_content": "We accept cash, debit cards, credit cards, UPI, net banking, and other approved digital payment methods, both online and in-store.",
+            "color_content": "#232630",
+            "fz_content": "14px",
+            "class": ""
+          }
+        }
+      },
+      "block_order": [
+        "15fb5f34-b88d-452a-a459-a155fbf3c50c",
+        "f36d99f0-20e0-4ec9-b2ea-3eea65ac3e82",
+        "06e092c0-ae35-475a-9b51-1d58129c82a3",
+        "74d8dd51-2e35-49c0-88df-e1c45645f17c",
+        "4ee00231-8e56-4c78-abb2-d73e40f1a7ec",
+        "38baf562-ad54-4fa9-a8f4-e79f4ae6078b"
+      ],
+      "settings": {
+        "xl": 5,
+        "lg": 4,
+        "md": 3,
+        "sm": 2,
+        "xs": 2,
+        "text1": "Delivery Policy",
+        "link1": "#",
+        "text2": "Return & Refund",
+        "link2": "#",
+        "text3": "Privacy Policy",
+        "link3": "#",
+        "text4": "How To Order",
+        "link4": "#",
+        "text5": "Payment & Taxes",
+        "link5": "#",
+        "color_link": "#222222",
+        "bg_item": "#f0f0f0",
+        "bg_item_h": "#e2e2e2",
+        "title": "",
+        "text_content": "",
+        "eb_contact": true,
+        "title_answer": "We're Here to Help!",
+        "sub_answer": "Can't find the answer you are looking for?",
+        "text_button": "Contact us now"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

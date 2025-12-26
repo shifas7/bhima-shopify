@@ -1,0 +1,253 @@
+{% layout none %}
+<div class="product-template__container" id="ProductSection-templateQV" data-section-id="templateQV" data-wishlist-product>
+  {%- assign current_variant = product.selected_or_first_available_variant -%}
+
+  <div class="product-single row">
+    <div class="col-md-6">
+      <div class="product-single__photos">
+        {% render 'product-single-media-featured' %}
+      </div>
+    </div>
+    <div class="product-single__info col-md-6 mt-sm-40">
+      <div class="product-single__info-content">
+        <h1 itemprop="name" class="product-single__title mb-15">{{ product.title }}</h1>
+        {% if settings.qv_rating %}
+          <div class="mb-20">
+            <div class="AirReviews-Widget AirReviews-Widget--Stars" data-review-avg="{{ product.metafields.air_reviews_product.review_avg }}" data-review-count="{{ product.metafields.air_reviews_product.review_count }}"></div>
+          </div>
+        {% endif %}
+        <div class="product-single__meta">
+          <div id="ProductPrice-templateQV" class="product-single__price d-flex align-items-center">
+            {% if current_variant.compare_at_price > current_variant.price %}
+              <s id="ComparePrice-templateQV">{{ current_variant.compare_at_price | money }}</s>
+              <span class="product-price__price product-price__sale product-price__sale--single">
+                <span id="ProductPrice-templateQV" itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}" class="money">
+                  {{ current_variant.price | money }}
+                </span>
+              </span>
+              <span class="product-price__badge">-{{ current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price | round: 4 }}%</span>
+            {% else %}
+              <span class="product-price__price">
+                <span id="ProductPrice-templateQV" itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}" class="money">
+                  {{ current_variant.price | money }}
+                </span>
+              </span>
+            {% endif %}
+          </div>
+          {% if settings.qv_available %}
+            {% render 'product-single-available' %}
+          {% endif %}
+
+          <div class="product-single__info-item mb-25">
+            {% if settings.qv_tags %}
+              <p itemprop="tags" class="product-single__tags d-flex align-items-center">
+                <span class="label product-single__control-label">{{ 'products.product.lable_tags' | t }}:</span>
+                <span class="list-tags">
+                  {% for tag in product.tags %}
+                    {% if tag != 'upsell' %}
+                      {% capture url %}/collections/all/{{ tag | handle }}{% endcapture %}
+                      {% if forloop.last == true %}
+                        {{ tag | link_to: url }}
+                      {% else %}
+                        {{ tag | link_to: url }},
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                </span>
+              </p>
+            {% endif %}
+            {% if settings.qv_sku %}
+              <p itemprop="sku" class="product-single__sku d-flex align-items-center">
+                <span class="label product-single__control-label">{{ 'products.product.lable_sku' | t }}:</span>
+                <span id="variantSku" class="label-sku font-700 text-uppercase">{{ current_variant.sku }}</span>
+              </p>
+            {% endif %}
+            {% if settings.qv_categories %}
+              <p itemprop="cat" class="product-single__cat d-flex align-items-baseline">
+                <span class="label product-single__control-label">{{ 'products.product.lable_category' | t }}:</span>
+                <span class="label-cate">
+                  {% for collection in product.collections %}
+                    {% unless collection.title == 'home page' %}
+                      {% if forloop.last == true %}
+                        <a href="{{ collection.url }}" title="{{ collection.title }}">{{ collection.title }}</a>
+                      {% else %}
+                        <a href="{{ collection.url }}" title="{{ collection.title }}">{{ collection.title }},</a>
+                      {% endif %}
+                    {% endunless %}
+                  {% endfor %}
+                </span>
+              </p>
+            {% endif %}
+            {% if settings.qv_vendor %}
+              <p itemprop="brand" class="product-single__vendor"><span class="label product-single__control-label">{{ 'products.product.lable_vendor' | t }}:</span>{{ product.vendor }}</p>
+            {% endif %}
+          </div>
+          <form action="/cart/add" method="post" enctype="multipart/form-data" id="product-form-templateQV">
+            {%- liquid
+              assign variants_available = product.variants | map: 'available'
+              assign variants_option_1 = product.variants | map: 'option1'
+              assign variants_option_2 = product.variants | map: 'option2'
+              assign variants_option_3 = product.variants | map: 'option3'
+            -%}
+
+            <input id="variant_id" type="hidden" name="id" value="{{current_variant.id}}" />
+            {%- unless product.has_only_default_variant -%}
+              {%- if settings.qv_swatch_enable -%}
+                <product-variant-swatch class="mb-20 d-block" data-product-id="templateQV" data-product-url="{{ product.url }}">
+                  {%- for option in product.options_with_values -%}
+                    {%- liquid
+                      assign option_name = option.name | downcase
+                      assign option_color_swatch = settings.option_color_swatch | downcase
+                      assign option_color = false
+                      assign option_index = forloop.index0
+                      if option_color_swatch contains option_name
+                        assign option_color = true
+                      endif
+                    -%}
+                    <fieldset class="product-variant-form-input{% if option_color == true %} variant-color{% endif %}{% if forloop.last == false %} mb-25{% endif %}" data-option-index="{{forloop.index0}}">
+                      <div class="product-single__control-label mb-15">
+                        {{ option.name }}: <span class="variant_current">{{ current_variant.options[option_index] }}</span>
+                      </div>
+                      <div class="block-content d-flex flex-wrap">
+                        {%- for value in option.values -%}
+                          {%- liquid
+                            assign option_disabled = true
+
+                            for option1_name in variants_option_1
+                              case option.position
+                                when 1
+                                  if variants_option_1[forloop.index0] == value and variants_available[forloop.index0]
+                                    assign option_disabled = false
+                                  endif
+                                when 2
+                                  if option1_name == product.selected_or_first_available_variant.option1 and variants_option_2[forloop.index0] == value and variants_available[forloop.index0]
+                                    assign option_disabled = false
+                                  endif
+                                when 3
+                                  if option1_name == product.selected_or_first_available_variant.option1 and variants_option_2[forloop.index0] == product.selected_or_first_available_variant.option2 and variants_option_3[forloop.index0] == value and variants_available[forloop.index0]
+                                    assign option_disabled = false
+                                  endif
+                              endcase
+                            endfor
+
+                            assign variant_available = false
+                              for variant in product.variants
+                                if variant.options[option_index] == value and variant.available
+                                  assign variant_available = true
+                                endif
+                            endfor
+                          -%}
+                          <div class="product-single__variant-item mb-10">
+                            <input type="radio" id="templateQV-{{ option.name }}-{{ forloop.index0 }}"
+                              name="{{ option.name }}"
+                              value="{{ value | escape }}"
+                              form="product-form-templateQV"
+                              {% if option.selected_value == value %}checked{% endif %}
+                              {% if option_disabled %}class="disabled"{% endif %}
+                            >
+                            <label class="variant-color-{{ value | downcase | handle }}{% if settings.color_swatch_style =='variant' %} img{% else %} color{% endif %}{% if variant_available == false %} soldout{% endif %}" for="templateQV-{{ option.name }}-{{ forloop.index0 }}"{% if option_color and settings.color_swatch_style !='variant' %} style="background-color: {% if value.swatch.color.rgb != blank %}rgb({{ value.swatch.color.rgb }}){% else %}{{ value }}{% endif %}"{% endif %}>
+                            {% if option_color and settings.color_swatch_style == 'variant' %}
+                              {%- assign is_first_image = true -%}
+                              {% for variant in product.variants %}
+                                {% if variant.title contains value and is_first_image %}
+                                  <img src="{{ variant.image.src | image_url: width: 52 }}" width="52" height="{{ 52 | divided_by: variant.image.aspect_ratio | round }}" style="height: auto">
+                                  {%- assign is_first_image = false -%}
+                                {% endif %}
+                              {% endfor %}
+                            {% endif %}
+                              {{ value }}
+                            </label>
+                          </div>
+                        {%- endfor -%}
+                      </div>
+                    </fieldset>
+                  {%- endfor -%}
+                  <script type="application/json" data-variants-json>
+                    {{ product.variants | json }}
+                  </script> 
+                </product-variant-swatch>
+              {%- else -%}
+                <product-variant-dropdown class="mb-20 d-block" data-product-id="templateQV" data-product-url="{{ product.url }}">
+                  {%- for option in product.options_with_values -%}
+                    {% assign option_name = option.name | downcase %}
+                    <div class="product-form__input product-form__input--dropdown mb-15">
+                      <label class="product-single__control-label mb-10" for="Option-templateQV-{{ forloop.index0 }}">
+                        {{ option.name }}&nbsp;:
+                      </label>
+                      <select id="Option-templateQV-{{ forloop.index0 }}" class="select__select variant-{{ option_name }}" name="options[{{ option.name | escape }}]" form="product-form-templateQV">
+                        {%- for value in option.values -%}
+                          <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
+                            {{ value }}
+                          </option>
+                        {%- endfor -%}
+                      </select>
+                    </div>
+                  {%- endfor -%}
+                  <script type="application/json">{{ product.variants | json }}</script>
+                </product-variant-dropdown>
+              {%- endif -%}
+            {%- endunless -%}
+            <select id="productSelect" class="hide">
+              {% for variant in product.variants %}
+                {% if variant.available %}
+                  <option value="{{ variant.id }}" data-sku="{{ variant.sku }}" data-inventory_policy="{{ variant.inventory_policy }}" data-inventory_management="{{ variant.inventory_management }}"{% if variant == current_variant %} selected="selected"{% endif %}>{{ variant.title }}</option>
+                {% else %}
+                  <option value="{{ variant.id }}" data-sku="{{ variant.sku }}" data-inventory_policy="{{ variant.inventory_policy }}" data-inventory_management="{{ variant.inventory_management }}" disabled="disabled">{{ variant.title }} - {{ 'products.product.sold_out' | t }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+
+            <div class="product-single__quantity mt-35 mb-45"> 
+              {% if settings.qv_quantity == true %}
+                <span class="product-single__control-label">{{ 'products.product.quantity' | t }}</span>
+              {% endif %}
+              <div class="product-form__item product-form__item--quantity d-flex align-items-center mb-10">
+                {% if settings.qv_quantity == true %}
+                  <div class="quick_view_qty">
+                    <a href="#" class="quick_view-qty quick_view-qty-minus">-</a>
+                    <input type="number" id="Quantity" name="quantity" value="1" min="1" max="{{ current_variant.inventory_quantity }}" step="1" class="quantity-selector product-form__input" pattern="[0-9]*">
+                    <a href="#" class="quick_view-qty quick_view-qty-plus">+</a>
+                  </div>
+                  {% else %}
+                    <input type="hidden" id="Quantity" name="quantity" value="1" min="1" max="{{ current_variant.inventory_quantity }}" step="1"pattern="[0-9]*">
+                {% endif %}
+                <div class="product-form__item product-form__item--submit{% unless current_variant.available %} soldout{% endunless %}"{% unless current_variant.available %}data-toggle="modal" data-target="#Form_newletter"{% endunless %}>
+                  <button data-handle="{{ product.handle }}" type="submit" name="add" id="AddToCart" class="btnAddToCart btn{% unless settings.cart_status_addtocart == 'goto_page_cart' %} product-form__cart-submit{% endunless %}">
+                    {% if current_variant.available %}
+                      {% if current_variant.inventory_policy == 'continue' and current_variant.inventory_management == 'shopify' %}
+                        <span id="AddToCartText">{{ 'products.product.pre_order' | t }}</span>
+                      {% else %}
+                        <span id="AddToCartText">{{ 'products.product.add_to_bag' | t }}</span>
+                      {% endif %}
+                    {% else %}
+                        <span id="AddToCartText" class="position-relative">{{ 'products.product.notify_me' | t }}</span>
+                    {% endif %}
+                    <span class="load"></span>
+                  </button>
+                </div>
+              </div>
+              {% if settings.payment_button_enable %}
+                <div class="product_option_sub">
+                  <div class="product-form__item product-form__item--checkout"{% if current_variant.available == false %} disabled{% endif %}>
+                    {% form 'product', product, novalidate: 'novalidate', data-product-form: '' %}
+                    {{ form | payment_button }}
+                    {% endform %}
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  if ($('.AirReviews-Widget').length > 0) {
+    window.avadaAirReviewRerender();
+  }
+  jQuery('product-variant-swatch :radio').change(function() {
+    var optionValue = jQuery(this).val();
+    jQuery(this).parents('fieldset').find('.variant_current').text(optionValue);
+  });
+</script>

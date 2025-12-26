@@ -1,0 +1,326 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "nov-product-template",
+      "blocks": {
+        "03cca96b-c43d-43d4-8322-c16e4b7e8266": {
+          "type": "block_text",
+          "settings": {
+            "custom_title": "Delivery policy",
+            "custom_content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vulputate, lectus ac pretium maximus, magna neque fermentum arcu, ut pulvinar arcu erat vel massa. Pellentesque ac arcu blandit, vestibulum tortor eget, dictum magna. Curabitur sit amet metus nulla. Pellentesque et augue et urna volutpat vestibulum vitae eget ligula. Maecenas mi augue, faucibus scelerisque facilisis in, dignissim vitae justo. Sed venenatis lectus et leo malesuada iaculis. Nunc lacinia arcu id elementum rhoncus. Duis tempor, enim vel vulputate interdum, magna sapien lacinia enim, nec lobortis quam enim eu erat. Aenean faucibus ex vitae nibh accumsan ullamcorper. Sed a orci augue. Maecenas porttitor venenatis semper.<\/p>"
+          }
+        },
+        "a3d01db6-4304-4e3d-b6f3-f75fc7a51212": {
+          "type": "block_text",
+          "settings": {
+            "custom_title": "Shipping & Return",
+            "custom_content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus libero quis mauris vestibulum dapibus.<\/p><p>Maecenas ullamcorper erat mi, vel consequat enim suscipit at. Pellentesque a elit at elit<\/p>"
+          }
+        },
+        "03b6d121-b452-4ee2-beed-a6128ccc6fd5": {
+          "type": "block_customtab",
+          "settings": {
+            "custom_title": "Custom tab",
+            "t1": "Lorem ipsum dolor sit amet",
+            "c1": "<p>Maecenas ullamcorper erat mi, vel consequat enim suscipit at.<\/p>",
+            "t2": "Quisque in felis ut tellus",
+            "c2": "<p>Pellentesque a elit at elit auctor tempus sed vitae mi<\/p>",
+            "t3": "Morbi blandit auctor",
+            "c3": "<p>Vestibulum sollicitudin tortor dui, quis aliquet sapien convallis sed.<\/p>",
+            "t4": "Sed sit amet risus quis velit lacinia gravida.",
+            "c4": "<p>Aenean interdum elementum arcu. Vivamus purus lorem, semper quis libero et.<\/p>",
+            "t5": "Morbi dictum orci neque.",
+            "c5": "<p>Curabitur vehicula tellus sit amet neque placerat, vel sagittis.<\/p>",
+            "t6": "",
+            "c6": "",
+            "t7": "",
+            "c7": "",
+            "t8": "",
+            "c8": "",
+            "t9": "",
+            "c9": "",
+            "t10": "",
+            "c10": ""
+          }
+        }
+      },
+      "block_order": [
+        "03cca96b-c43d-43d4-8322-c16e4b7e8266",
+        "a3d01db6-4304-4e3d-b6f3-f75fc7a51212",
+        "03b6d121-b452-4ee2-beed-a6128ccc6fd5"
+      ],
+      "settings": {
+        "show_border_thumb": true,
+        "c_border": "#ececec",
+        "corner_radius": 5,
+        "show_stick_product": false,
+        "show_quantity_selector": true,
+        "product_swatch_enable": true,
+        "img_swatch": false,
+        "show_share": true,
+        "show_ask": true,
+        "show_sizeguide": false,
+        "show_faq": true,
+        "faq": "shopify:\/\/pages\/frequently-asked-questions",
+        "show_vendor": false,
+        "show_sku": true,
+        "show_categories": true,
+        "show_tags": true,
+        "show_available": true,
+        "show_des": true,
+        "enable_zoom": true,
+        "show_progress_deals": true,
+        "show_countdown": true,
+        "show_related": true,
+        "related_limit": 10,
+        "show_description": true,
+        "show_payments": true,
+        "title_payments": "The Benefits of Choosing Us",
+        "payments": "shopify:\/\/shop_images\/policy-detailpage.png",
+        "payments_width": 475,
+        "time": "Orders ship within 5 to 10 business days.",
+        "size_time": "14px",
+        "color_time": "#535353",
+        "truck": "Hoorey ! This item ships free to the US",
+        "size_truck": "14px",
+        "color_truck": "#535353",
+        "background_color": ""
+      }
+    },
+    "13c52cf8-9f43-42cd-98aa-3998e98b4ab4": {
+      "type": "nov-line",
+      "settings": {
+        "height": 1,
+        "color": "#e7e8eb",
+        "style": "solid",
+        "opacity": 100,
+        "animate": false,
+        "container": "container-full",
+        "background_color": "#ffffff",
+        "class": ""
+      }
+    },
+    "58158aa0-4e5c-4e46-accf-37b2fea0a3a7": {
+      "type": "nov-policy",
+      "blocks": {
+        "template--20979657310483__58158aa0-4e5c-4e46-accf-37b2fea0a3a7-item_policy-1": {
+          "type": "item_policy",
+          "settings": {
+            "policy_icon": "shopify:\/\/shop_images\/icon-free-delivery.png",
+            "title_policy": "Free Delivery",
+            "desc_policy": "Free Shipping for orders over $130.",
+            "mw": 330,
+            "link_label": "",
+            "link": "",
+            "bg_icon": "#f5f5f5",
+            "border_icon": "",
+            "class": "mb-sm-20"
+          }
+        },
+        "template--20979657310483__58158aa0-4e5c-4e46-accf-37b2fea0a3a7-item_policy-3": {
+          "type": "item_policy",
+          "settings": {
+            "policy_icon": "shopify:\/\/shop_images\/icon-refund.png",
+            "title_policy": "30 Days Free Returns",
+            "desc_policy": "Within 30 days for an exchange.",
+            "mw": 330,
+            "link_label": "",
+            "link": "",
+            "bg_icon": "#f5f5f5",
+            "border_icon": "",
+            "class": "mb-sm-20"
+          }
+        },
+        "template--20979657310483__58158aa0-4e5c-4e46-accf-37b2fea0a3a7-item_policy-2": {
+          "type": "item_policy",
+          "settings": {
+            "policy_icon": "shopify:\/\/shop_images\/icon-credit-card.png",
+            "title_policy": "Payment Secured",
+            "desc_policy": "Safe and encrypted transactions guaranteed.",
+            "mw": 330,
+            "link_label": "",
+            "link": "",
+            "bg_icon": "#f5f5f5",
+            "border_icon": "",
+            "class": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--20979657310483__58158aa0-4e5c-4e46-accf-37b2fea0a3a7-item_policy-1",
+        "template--20979657310483__58158aa0-4e5c-4e46-accf-37b2fea0a3a7-item_policy-3",
+        "template--20979657310483__58158aa0-4e5c-4e46-accf-37b2fea0a3a7-item_policy-2"
+      ],
+      "settings": {
+        "heading": "",
+        "heading_color": "#222222",
+        "subheading": "",
+        "subheading_color": "#666666",
+        "descheading": "",
+        "descheading_color": "#666666",
+        "subheading_position": "bottom",
+        "heading_alignment": "text-center",
+        "style": "style2",
+        "width_icon": 40,
+        "height_icon": 40,
+        "show_bg_icon": false,
+        "bg_icon_w": 85,
+        "show_border_icon": false,
+        "bg_icon_shadow": false,
+        "shadow_color": "",
+        "shadow_opacity": 40,
+        "icon_animate": true,
+        "text_fz": 16,
+        "text_ff": "f_pr",
+        "t_fw": "font-500",
+        "t_letter_spacing": "",
+        "desc_fz": 14,
+        "desc_ff": "f_df",
+        "desc_fw": "font-400",
+        "show_bgitem": false,
+        "bg_itemcolor": "",
+        "bd_radius": 0,
+        "box_shadow": false,
+        "show_border_item": false,
+        "c_border_item": "",
+        "pt": 0,
+        "pb": 0,
+        "xxl": 3,
+        "xl": 3,
+        "lg": 3,
+        "md": 3,
+        "sm": 1,
+        "xs": 1,
+        "spacing": 30,
+        "animate": true,
+        "container": "container",
+        "color_section": "",
+        "class_section": "",
+        "ss_bg_enable": false,
+        "background_color": "",
+        "background_corner": 0,
+        "background_img_size": "cover",
+        "enable_background_img_size_custom": false,
+        "background_img_size_custom": "",
+        "background_img_position": "center center",
+        "background_position": "bg-center",
+        "background_size": "full",
+        "height_background_xxl": 100,
+        "height_background_xl": 100,
+        "height_background_lg": 100,
+        "height_background_md": 100,
+        "height_background_sm": 100,
+        "height_background_xs": 100,
+        "distance_top_xl": 70,
+        "distance_top_lg": 30,
+        "distance_top_md": 50,
+        "distance_top_sm": 30,
+        "distance_bottom_xl": 40,
+        "distance_bottom_lg": 30,
+        "distance_bottom_md": 30,
+        "distance_bottom_sm": 30
+      }
+    },
+    "1729670159413b233c": {
+      "type": "apps",
+      "settings": {}
+    },
+    "2046dd06-c8ff-4d5c-9e09-e8c21ef98855": {
+      "type": "nov-product-template-related",
+      "settings": {
+        "heading": "<h2>PRODUCT RELATED<\/h2>",
+        "heading_color": "#222222",
+        "subheading": "",
+        "subheading_color": "#666666",
+        "heading_alignment": "text-center",
+        "container": "container",
+        "color_section": "",
+        "background_color": "",
+        "class": "",
+        "distance_top_xl": 90,
+        "distance_top_md": 70,
+        "distance_top_xs": 50,
+        "distance_bottom_xl": 70,
+        "distance_bottom_md": 60,
+        "distance_bottom_xs": 40
+      }
+    },
+    "166243121355988ca2": {
+      "type": "nov-product-recommendations",
+      "disabled": true,
+      "settings": {
+        "heading": "<h2>You Might Also Like<\/h2>",
+        "heading_color": "#222222",
+        "subheading": "",
+        "subheading_color": "#666666",
+        "descheading": "",
+        "descheading_color": "#666666",
+        "subheading_position": "bottom",
+        "heading_alignment": "text-center",
+        "grid_number_xxl": 4,
+        "grid_number": 4,
+        "grid_number_lg": 4,
+        "grid_number_md": 3,
+        "grid_number_sm": 2,
+        "grid_number_xs": 2,
+        "limit": 8,
+        "viewmore": true,
+        "animate": true,
+        "container": "container",
+        "background_color": "",
+        "bg_opacity": 100,
+        "class": "",
+        "distance_top": 40,
+        "distance_bottom": 90
+      }
+    },
+    "recent-products": {
+      "type": "nov-recently-viewed",
+      "settings": {
+        "heading": "<h2>RECENTLY VIEWED PRODUCTS<\/h2>",
+        "heading_color": "#222222",
+        "subheading": "",
+        "subheading_color": "#666666",
+        "heading_alignment": "text-center",
+        "grid_number_xxl": 4,
+        "grid_number": 4,
+        "grid_number_lg": 4,
+        "grid_number_md": 3,
+        "grid_number_sm": 2,
+        "grid_number_xs": 2,
+        "limit": 10,
+        "show_nav": false,
+        "animate": true,
+        "show_border": false,
+        "border_color": "#ededed",
+        "container": "container",
+        "background_color": "",
+        "class": "",
+        "distance_top_xl": 0,
+        "distance_top_md": 0,
+        "distance_top_xs": 0,
+        "distance_bottom_xl": 30,
+        "distance_bottom_md": 30,
+        "distance_bottom_xs": 30
+      }
+    }
+  },
+  "order": [
+    "main",
+    "13c52cf8-9f43-42cd-98aa-3998e98b4ab4",
+    "58158aa0-4e5c-4e46-accf-37b2fea0a3a7",
+    "1729670159413b233c",
+    "2046dd06-c8ff-4d5c-9e09-e8c21ef98855",
+    "166243121355988ca2",
+    "recent-products"
+  ]
+}

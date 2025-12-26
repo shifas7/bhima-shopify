@@ -1,0 +1,283 @@
+<ul class="site-nav">
+  {% for link in linklists[mainmenu].links %}
+    {% assign is_mega = false %}
+    {% assign is_icon = false %}
+    {%- assign three_level_nav = false -%}
+    {%- assign child_list_handle = link.title | handleize -%}
+
+    {% if linklists[child_list_handle].links != blank %}
+      {% for childlink in linklists[child_list_handle].links %}
+        {% assign grand_child_list_handle = childlink.title | handleize %}
+        {% if linklists[grand_child_list_handle].links != blank %}
+          {%- assign three_level_nav = true -%}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+  {% comment %}======================== MEGAMENU =============================={% endcomment %}
+    {% if section.settings.novmenu_enable %}
+      {% for block in section.blocks %}
+        {% assign menu_item = link.title %}
+        {% if block.settings.title == menu_item %}
+          <li class="nav--lv1 parent--lv1 site-nav--Megamenu{{ class_hidden }} site-nav--fw{% if link.active %} site-nav--active{% endif %}{% if forloop.last %} last{% endif %} nov_overlay_blur">
+            <a class="site-nav__link--main" href="{{ link.url }}" title="{{ link.title }}">
+              {% if block.settings.icon_menu != blank %}
+              <div class="site-nav--icon">
+                <img class="img-fluid" src="{{ block.settings.icon_menu | image_url: width: 50 }}" width="50" height="{{ 50 | divided_by: block.settings.icon_menu.aspect_ratio | round }}" alt="image" style="height: auto" />
+              </div>
+              {% endif %}
+              <div class="site-nav--title">
+              {{ link.title }}
+              {% if block.settings.desc != blank %}
+                <div class="site-nav--desc">{{ block.settings.desc }}</div>
+              {% endif %}
+              </div>
+              <span class="site-nav--direc d-none"><i class="zmdi zmdi-chevron-down"></i></span>
+            </a>
+            <div class="nav-dropdown--lv1 megaMenu color-{{ color }}" style="{% if block.settings.img_bg != blank %}background-image: url({{ block.settings.img_bg | image_url: width: 1024 }});background-repeat: no-repeat;background-size: cover;{% endif %}">
+              <div class="site-nav__mega--content row">
+                {% if block.settings.collection_enable %}
+                  <div class="{{ block.settings.collection_xl }} {{ block.settings.collection_lg }} site--nav-collection mb-md-30">
+                    {% for i in (1..5) %}
+                      {%- assign name_collec_id = 'name_collec_' | append: i -%}
+                      {%- assign link_id = 'link' | append: i -%}
+                      {% if block.settings[name_collec_id] != blank %}
+                        <div class="nav--collec-item">
+                          <a href="{{ block.settings[link_id] }}">
+                            <span>{{ block.settings[name_collec_id] }}</span>
+                            <i class="zmdi zmdi-chevron-right"></i>
+                          </a>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+                {% if block.settings.novmenu_menu_enable %}
+                  <div class="{{ block.settings.novmenu_xl }} {{ block.settings.novmenu_lg }}">
+                    <div class="row">
+                      {% for novLink1 in linklists[child_list_handle].links %}
+                      {% assign link_handle = novLink1.title | handleize %}
+                      <div class="{{ block.settings.submenu_xl }} {{ block.settings.submenu_lg }} mb-md-20">
+                        <ul class="site-nav--MenuLinks">
+                          <li{% if three_level_nav %} class="site-nav__link--title{% if block.settings.show_title == false %} hidden{% endif %}"{% endif %}>
+                            <a href="{{ novLink1.url }}">{{ novLink1.title }}</a>
+                          </li>
+                          {% for novLink2 in linklists[link_handle].links %}
+                            <li>
+                              <a href="{{ novLink2.url }}" class="site-nav__link">{{ novLink2.title }}</a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% endif %}
+
+                {% for i in (1..3) %}
+                  {%- assign novmenu_banner_enable_id = 'novmenu_banner_enable' | append: i -%}
+                  {%- assign banner_xl_id = 'banner_xl_' | append: i -%}
+                  {%- assign banner_lg_id = 'banner_lg_' | append: i -%}
+                  {%- assign class_bn_id = 'class_bn' | append: i -%}
+                  {%- assign novmenu_banner_link_id = 'novmenu_banner_link' | append: i -%}
+                  {%- assign novmenu_banner_id = 'novmenu_banner' | append: i -%}
+                  {%- assign image_size_id = 'image_size' | append: i -%}
+
+                  {% if block.settings[novmenu_banner_enable_id] %}
+                    <div class="{{ block.settings[banner_xl_id] }} {{ block.settings[banner_lg_id] }}{% if block.settings[class_bn_id] != blank %} {{ block.settings[class_bn_id] }}{% endif %}">
+                      <div class="novMenuBanner" style="border-radius: {{ block.settings.banner_br }}px; overflow: hidden;">
+                        {% if block.settings[novmenu_banner_link_id] != blank %}<a href="{{ block.settings[novmenu_banner_link_id] }}">{% endif %}
+                          {% if block.settings[novmenu_banner_id] != blank %}
+                            <img class="img-fluid lazyload w-100" alt="{{ block.settings[novmenu_banner_id].alt | default: shop.name }}" data-src="{{ block.settings[novmenu_banner_id] | image_url: width: block.settings[image_size_id] }}" width="{{ block.settings[image_size_id] }}" height="{{ block.settings[image_size_id] | divided_by: block.settings.icon_menu.aspect_ratio | round }}" style="height: auto;" />
+                          {% else %}
+                            <img class="img-fluid lazyload w-100" alt="{{ shop.name }}" data-src="https://via.placeholder.com/{{ block.settings[image_size_id] }}" width="{{ block.settings[image_size_id].width }}" height="{{ block.settings[image_size_id] | divided_by: block.settings.icon_menu.aspect_ratio | round }}" style="height: auto;" />
+                          {% endif %}
+                        {% if block.settings[novmenu_banner_link_id] != blank %}</a>{% endif %}
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+
+                {% if block.settings.product_enable %}
+                  <div class="{{ block.settings.product_xl }} {{ block.settings.product_lg }} nav--product mt-sm-30">
+                    <div class="site-nav--title__product">
+                      <span>{{ block.settings.title_product }}</span>
+                    </div>
+                    <div class="megamenu-product-slider grid--view-items row" data-autoplay= "{{ block.settings.autoplay }}">
+                      {% for product in block.settings.product_list %}
+                        <div class="item col">
+                          <div class="item-product mb-0{% if settings.show_border_product %} h_bd{% endif %}{% if settings.show_background_product %} bg{% endif %}">
+                            <div class="thumbnail-container">
+                              <a href="{{ product.url | within: collection }}">
+                                {% assign img_url = product.featured_image %}
+                                <div class="respone_image" style="padding-top:{{ 1 | divided_by: img_url.aspect_ratio | times: 100}}%;">
+                                  <img class="product__thumbnail lazyload"
+                                    src="{{ img_url | image_url: width: 180 }}"
+                                    data-srcset="{{ img_url | image_url: width: 380 }} 380w,{{ img_url | image_url: width: 580 }} 580w,{{ img_url |image_url: width: 768 }} 768w,{{ img_url | image_url: width: 900 }} 900w" data-sizes="auto" alt="{{ img_url.alt }}"  width="{{ img_url.width }}" height="{{ img_url.height }}" loading="lazy">
+                                </div>
+                              </a>
+                            </div>
+                            <div class="product__info">
+                              <div class="product__title {{ settings.title_product_line }}">
+                                <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+                              </div>
+                              <div class="product__price price-st">
+                                {% render 'product-price', product: product %}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% endif %}
+                
+              </div>
+            </div>
+          </li>
+          {% assign is_mega = true %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% comment %}======================== ENDMEGAMENU =============================={% endcomment %}
+
+  {% comment %}======================== ICONMENU =============================={% endcomment %}
+    {% if section.settings.show_icons %}
+      {% for block in section.blocks %}
+        {% assign menu_item = link.title %}
+        {% if block.settings.name_item == menu_item %}
+          {% if linklists[child_list_handle].links != blank %}
+            <li class="nav--lv1 parent--lv1 site-nav--Default{{ class_hidden }}{% if active %} site-nav--active{% endif %}{% if forloop.last %} last{% endif %}">
+              <a href="{{ link.url }}" class="site-nav__link--main d-flex align-items-center" title="{{ link.title }}">
+                {% if block.settings.icon_menu != blank %}
+                  <div class="site-nav--icon">
+                    <img class="img-fluid" src="{{ block.settings.icon_menu | image_url: width: 50 }}" width="50" height="{{ 50 | divided_by: block.settings.icon_menu.aspect_ratio | round }}" alt="image" style="height: auto" alt="{{ block.settings.icon_menu.alt }}" />
+                  </div>
+                {% endif %}
+                <div class="site-nav--title">
+                {{ link.title }}
+                {% if desc != blank %}
+                  <div class="site-nav--desc">{{ block.settings.desc }}</div>
+                {% endif %}
+                </div>
+                <span class="site-nav--direc d-none"><i class="zmdi zmdi-chevron-down"></i></span>
+              </a>
+              <div class="nav-dropdown--lv1 MenuDefault color-{{ color }}">
+                {% if three_level_nav %}
+                  {% if linklists[child_list_handle].links != blank %}
+                    <ul>
+                      {% for childlink in linklists[child_list_handle].links %}
+                        {% assign grand_child_list_handle = childlink.title | handle %}
+                        <li class="nav--lv2 parent--lv2">
+                          <a href="{{ childlink.url }}" class="site-nav__link--second site-nav__link">
+                            <span>{{ childlink.title | escape }}</span>
+                            {% if linklists[grand_child_list_handle].links != blank %}
+                            <span class="site-nav--direc d-none"><i class="zmdi zmdi-chevron-down"></i></span>
+                            {% endif %}
+                          </a>
+                          {% if linklists[grand_child_list_handle].links != blank %}
+                          <div class="nav-dropdown--lv2">
+                            <ul>
+                              {% for grandchildlink in linklists[grand_child_list_handle].links %}
+                                <li>
+                                  <a href="{{ grandchildlink.url }}" class="site-nav__link">{{ grandchildlink.title | escape }}</a>
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          </div>
+                          {% endif %}
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                {% else %}
+                  <ul>
+                    {% for childlink in linklists[child_list_handle].links %}
+                      <li {% if childlink.active %}class="site-nav--active"{% endif %}>
+                        <a href="{{ childlink.url }}" class="site-nav__link">{{ childlink.title | escape }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            </li>
+          {% else %}
+            <li class="nav--lv1{% if active %} site-nav--active{% endif %}{{ class_hidden }}{% if forloop.last %} last{% endif %}">
+              <a href="{{ link.url }}" class="site-nav__link--main d-flex align-items-center" title="{{ link.title }}">
+                {% if block.settings.icon_menu != blank %}
+                  <div class="site-nav--icon">
+                    <img class="img-fluid" src="{{ block.settings.icon_menu | image_url: width: 50 }}" width="50" height="{{ 50 | divided_by: block.settings.icon_menu.aspect_ratio | round }}" alt="image" style="height: auto" alt=""/>
+                  </div>
+                {% endif %}
+                <div class="site-nav--title">
+                  {{ link.title }}
+                  {% if desc != blank %}
+                    <div class="site-nav--desc">{{ block.settings.desc }}</div>
+                  {% endif %}
+                </div>
+              </a>
+            </li>
+          {% endif %}
+          {% assign is_icon = true %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% comment %}======================== ENDICONMENU =============================={% endcomment %}
+    {% if is_mega == false and is_icon == false %}
+      {% if linklists[child_list_handle].links != blank %}
+        <li class="nav--lv1 parent--lv1 site-nav--Default{% if link.active %} site-nav--active{% endif %}">
+          <a href="{{ link.url }}" class="site-nav__link--main" title="{{ link.title }}">
+            <span class="site-nav--title">{{ link.title }}</span>
+            <span class="site-nav--direc d-none"><i class="zmdi zmdi-chevron-down"></i></span>
+          </a>
+          <div class="nav-dropdown--lv1 MenuDefault color-{{ color }}">
+            {% if three_level_nav %}
+              {% if linklists[child_list_handle].links != blank %}
+                <ul>
+                  {% for childlink in linklists[child_list_handle].links %}
+                    {% assign grand_child_list_handle = childlink.title | handle %}
+                    <li class="nav--lv2 parent--lv2">
+                      <a href="{{ childlink.url }}" class="site-nav__link--second site-nav__link">
+                        <span>{{ childlink.title | escape }}</span>
+                        {% if linklists[grand_child_list_handle].links != blank %}
+                        <span class="site-nav--direc d-none"><i class="zmdi zmdi-chevron-down"></i></span>
+                        {% endif %}
+                      </a>
+                      {% if linklists[grand_child_list_handle].links != blank %}
+                      <div class="nav-dropdown--lv2">
+                        <ul>
+                          {% for grandchildlink in linklists[grand_child_list_handle].links %}
+                            <li>
+                              <a href="{{ grandchildlink.url }}" class="site-nav__link">{{ grandchildlink.title | escape }}</a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                      {% endif %}
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% else %}
+              <ul>
+                {% for childlink in linklists[child_list_handle].links %}
+                  <li {% if childlink.active %}class="site-nav--active"{% endif %}>
+                    <a href="{{ childlink.url }}" class="site-nav__link">{{ childlink.title | escape }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </li>
+      {% else %}
+        <li class="nav--lv1{% if link.active %} site-nav--active{% endif %}">
+          <a href="{{ link.url }}" class="site-nav__link--main" title="{{ link.title }}">
+            <span class="site-nav--title">{{ link.title }}</span>
+          </a>
+        </li>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</ul>

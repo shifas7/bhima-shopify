@@ -1,0 +1,83 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "blog-template",
+      "blocks": {
+        "65000c55-35bf-4941-ba47-66032dbdd092": {
+          "type": "block_categories",
+          "settings": {
+            "sidebar_categories_title": "CATEGORIES",
+            "sidebar_categories_class": "",
+            "sidebar_categories_menu": ""
+          }
+        },
+        "8863b6b9-0dee-4688-8dba-2184cb63a3d1": {
+          "type": "block_search",
+          "settings": {
+            "block_class": ""
+          }
+        },
+        "ac3cbe97-01c3-4d2f-b5ed-35ba32766556": {
+          "type": "block_recentpost",
+          "settings": {
+            "block_title": "RECENT POST",
+            "block_class": "",
+            "number_show": 3,
+            "show_date": true,
+            "show_comment": false,
+            "show_author": false
+          }
+        },
+        "282dd3ba-0005-45fd-b5dd-2375fa259b0e": {
+          "type": "block_blogtags",
+          "disabled": true,
+          "settings": {
+            "block_title": "BLOG TAGS",
+            "btn_type": "btn-secondary",
+            "tag_color": "scheme-7dbefc98-3883-4d4e-937c-abd51fb30fa2",
+            "block_class": "",
+            "number_show": 12
+          }
+        },
+        "392605da-2171-4a62-8458-589427c73966": {
+          "type": "block_banner",
+          "disabled": true,
+          "settings": {
+            "banner_title": "BLOG BANNER",
+            "banner_class": "",
+            "radius": 10,
+            "banner_link": "#"
+          }
+        }
+      },
+      "block_order": [
+        "65000c55-35bf-4941-ba47-66032dbdd092",
+        "8863b6b9-0dee-4688-8dba-2184cb63a3d1",
+        "ac3cbe97-01c3-4d2f-b5ed-35ba32766556",
+        "282dd3ba-0005-45fd-b5dd-2375fa259b0e",
+        "392605da-2171-4a62-8458-589427c73966"
+      ],
+      "settings": {
+        "layout": "list",
+        "blog_show_author": false,
+        "blog_show_date": false,
+        "blog_show_comment": true,
+        "page_show_list": 4,
+        "page_show_column": 4,
+        "page_show_grid": 3
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,169 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "Footer 2",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "nov-footer-2",
+      "blocks": {
+        "block_menu_Tbq9eK": {
+          "type": "block_menu",
+          "settings": {
+            "block_title": "Collections",
+            "h_t": false,
+            "menu_handle": "footer",
+            "block_class": "mt-lg-50",
+            "grid_xxl": "col-xxl-3",
+            "grid_xl": "col-xl-3",
+            "grid_lg": "col-lg-6",
+            "grid_md": "col-md-6",
+            "grid_sm": "col-sm-6"
+          }
+        },
+        "block_menu_eJELdD": {
+          "type": "block_menu",
+          "settings": {
+            "block_title": "Quick Links",
+            "h_t": false,
+            "menu_handle": "usefull-links",
+            "block_class": "mt-lg-50",
+            "grid_xxl": "col-xxl-3",
+            "grid_xl": "col-xl-3",
+            "grid_lg": "col-lg-6",
+            "grid_md": "col-md-6",
+            "grid_sm": "col-sm-6"
+          }
+        },
+        "block_menu_NFWzY4": {
+          "type": "block_menu",
+          "settings": {
+            "block_title": "Management Profiles",
+            "h_t": false,
+            "menu_handle": "management-team",
+            "block_class": "mt-lg-50",
+            "grid_xxl": "col-xxl-3",
+            "grid_xl": "col-xl-3",
+            "grid_lg": "col-lg-6",
+            "grid_md": "col-md-6",
+            "grid_sm": "col-sm-6"
+          }
+        },
+        "block_menu_RKQk3a": {
+          "type": "block_menu",
+          "settings": {
+            "block_title": "Informations",
+            "h_t": false,
+            "menu_handle": "footer-informations",
+            "block_class": "mt-lg-50",
+            "grid_xxl": "col-xxl-3",
+            "grid_xl": "col-xl-3",
+            "grid_lg": "col-lg-6",
+            "grid_md": "col-md-6",
+            "grid_sm": "col-sm-6"
+          }
+        },
+        "block_contact_nYpweH": {
+          "type": "block_contact",
+          "settings": {
+            "block_title": "Contact Us",
+            "block_subtitle": "",
+            "img_width": 160,
+            "img_spacing": 23,
+            "h_t": false,
+            "address": "Mahatma Gandhi Rd, near Ayurveda College, Ayurveda College Junction, Vanchiyoor, Thiruvananthapuram, Kerala 695001",
+            "phone": "7356641888, 9207729021",
+            "email": "care@bhimajewellery.com",
+            "time": "All Day: 10:00AM - 08:30PM",
+            "show_social": false,
+            "block_class": "",
+            "grid_xxl": "col-xxl-3",
+            "grid_xl": "col-xl-3",
+            "grid_lg": "col-lg-6",
+            "grid_md": "col-md-6",
+            "grid_sm": "col-sm-6"
+          }
+        },
+        "block_newsletter_4myCxq": {
+          "type": "block_newsletter",
+          "settings": {
+            "block_title": "<p>Subscribe Our Newsletter</p>",
+            "desc": "<p>Join our newsletter for exclusive updates, special offers, and the latest news delivered straight to your inbox!</p>",
+            "h_t": false,
+            "img_width": 150,
+            "img_spacing": 10,
+            "block_class": "mt-lg-50",
+            "grid_xxl": "col-xxl-3",
+            "grid_xl": "col-xl-3",
+            "grid_lg": "col-lg-6",
+            "grid_md": "col-md-6",
+            "grid_sm": "col-sm-6"
+          }
+        },
+        "block_html_Ycf7xa": {
+          "type": "block_html",
+          "settings": {
+            "block_title": "",
+            "h_t": false,
+            "img_width": 120,
+            "img_spacing": 12,
+            "show_payment": false,
+            "payment_mw": 200,
+            "html_content": "Jewelry is the perfect way to express who you are without saying a word. Each piece tells a story, reflecting your style. Adorn yourself with what resonates, and let your accessories speak.",
+            "max_width_content": 350,
+            "show_social": true,
+            "block_class": "",
+            "grid_xxl": "col-xxl-3",
+            "grid_xl": "col-xl-3",
+            "grid_lg": "col-lg-6",
+            "grid_md": "col-md-6",
+            "grid_sm": "col-sm-6"
+          }
+        }
+      },
+      "block_order": [
+        "block_menu_Tbq9eK",
+        "block_menu_eJELdD",
+        "block_menu_NFWzY4",
+        "block_menu_RKQk3a",
+        "block_contact_nYpweH",
+        "block_newsletter_4myCxq",
+        "block_html_Ycf7xa"
+      ],
+      "custom_css": [],
+      "settings": {
+        "animate": true,
+        "container": "container-fluid",
+        "color_section": "scheme-82a33867-d1f5-4ba2-bbac-c11b4346b404",
+        "background_color": "#282828",
+        "background_image_size": "auto",
+        "bg_size": "full",
+        "input_color": "#b5b5b5",
+        "input_place_color": "#666666",
+        "input_bg": "#353535",
+        "input_border_color": "#353535",
+        "submit_color": "scheme-82a33867-d1f5-4ba2-bbac-c11b4346b404",
+        "submit_btn_type": "btn-primary",
+        "show_footer_copyright": true,
+        "color_copyright": "scheme-82a33867-d1f5-4ba2-bbac-c11b4346b404",
+        "bg_copyright": "rgba(0,0,0,0)",
+        "copyright_border_top_color": "#878787",
+        "copyright_border_top_opa": 100,
+        "copyright": "Copyright © 2025 Bhima Jewellery. All Rights Reserved.",
+        "show_payment": true,
+        "payment_mw": 215,
+        "mobile_acc": true
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

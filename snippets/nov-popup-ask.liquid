@@ -1,0 +1,35 @@
+<div id="Shopask" class="modal fade">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header close-icon mt-sm-40" data-dismiss="modal"></div>
+      <div class="modal-body">
+        <div class="Shopask-title font-800 text-uppercase text-center c_h mb-5">{{ 'products.product.label_ask_a_question' | t }}</div>
+        <div class="text-center mb-30">{{ 'page.faqs.form.subtitle_popup_form' | t }}</div>
+        {% form 'contact', id: 'product-single__contact' %}
+          <input type="hidden" name="contact[product]" value="{{ product.title }}">
+          <input type="hidden" name="contact[product url]" value="{{ shop.url | append: product.url }}">
+          
+          {{ form.errors | default_errors }}
+          
+          <div class="form-group mb-10">
+            <input type="text" name="contact[name]" value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}" class="mb-0 {% if form.errors contains 'name' %}input--error{% endif %}" placeholder="{{ 'page.contact.form.name' | t }}" required>
+          </div>
+          <div class="form-group mb-10">
+            <input type="email" name="contact[email]" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" class="mb-0 {% if form.errors contains 'email' %}input--error{% endif %}" placeholder="{{ 'page.contact.form.email' | t }}" required>
+          </div>
+          <div class="form-group mb-10">
+            <input type="tel" name="contact[phone]" pattern="[0-9\-]*" value="{% if form[phone] %}{{ form[phone] }}{% elsif customer %}{{ customer.phone }}{% endif %}" class="mb-0 {% if form.errors contains 'phone' %}input--error{% endif %}" placeholder="{{ 'page.contact.form.phone' | t }}">
+          </div>
+          
+          <div class="form-group mb-20">
+            <textarea rows="12" cols="50" class="mb-0" name="contact[body]" placeholder="{{ 'page.contact.form.message' | t }}">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+          </div>
+          
+          <button class="btn btn_submit text-center w-100" type="submit">
+            <span>{{ 'page.contact.form.submit' | t }}</span>
+          </button>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>

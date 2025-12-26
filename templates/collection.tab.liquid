@@ -1,0 +1,12 @@
+{% layout none %}
+<div class="products-grid">
+  <div class="grid-item">
+    <div class="swiper-wrapper">
+      {% for product in collection.products %}
+        <div class="swiper-slide item">
+          {% render 'product-grid-item-style-1', product: product, section_id: collection.title | handle | append: forloop.index %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

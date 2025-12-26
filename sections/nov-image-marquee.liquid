@@ -1,0 +1,566 @@
+{%- liquid
+  assign sst = section.settings
+
+  if section.settings.ss_bg_enable
+    assign bg = " bg"
+  endif
+  if section.settings.class_section != blank
+    assign class_section = section.settings.class_section | prepend: ' '
+  endif
+  assign class = 'distance' | append: bg | append: ' ' | append: section.settings.background_position | append: class_section
+  if section.settings.background_size == 'full'
+    assign bg_class_full = class | prepend: ' '
+  else
+    assign bg_class_contain = class | prepend: ' '
+  endif
+-%}
+{% style %}
+  {% render 'nov-section-style' %}
+  #shopify-section-{{ section.id }} .block-marquee {
+    animation-duration: {{ sst.time }}s;
+    --spacing: {{ sst.spacing }}px;
+  }
+  #shopify-section-{{ section.id }} .image-item {
+    border-radius: {{ sst.corner }}px;
+  }
+{% endstyle %}
+
+<div class="color-{{ sst.color_section }}{{ bg_class_full }}" >
+  <div class="{{ sst.container }}">
+    <div class="container-inner{{ bg_class_contain }}">
+      <div class="row">
+        <div class="col-lg-4">
+          {% render 'heading-section', sub_position: sst.subheading_position %}
+          {% if sst.btn_label != blank %}
+            <a href="{{ sst.btn_link }}" class="btn {{ sst.btn_type }} {{ sst.btn_size }}">
+              {{ sst.btn_label }}
+            </a>
+          {% endif %}
+        </div>
+        <div class="col-lg-8 mt-md-40">
+          <div class="nov-marquee">
+            <div class="row spacing-{{ sst.spacing }} spacing-sm-10">
+              {% for block in section.blocks %}
+                <div class="col {% if forloop.index == 2 %}marqueeUp{% else %}marqueeDown{% endif %}{% if sst.animate %} wow fadeInUp{% endif %}" data-wow-delay="{{ forloop.index | times: 0.1 }}s">
+                  {% assign bst = block.settings %}
+                  <div class="block-marquee pb-{{ sst.spacing }} pb-sm-10">
+                    {% for i in (1..4) %}
+                      {%- liquid 
+                        assign image_id = 'image' | append: i
+                        assign link_id = 'link' | append: i
+                      -%}
+                      {% if bst[image_id] != blank %}
+                        <div class="image-item overflow_hidden nov-sh-image-2">
+                          <a href="{{ bst[link_id] }}">
+                            {% render 'nov-aspect-image', image: bst[image_id] %}
+                          </a>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                  <div class="block-marquee pb-{{ sst.spacing }} pb-sm-10">
+                    {% for i in (1..4) %}
+                      {%- liquid 
+                        assign image_id = 'image' | append: i
+                        assign link_id = 'link' | append: i
+                      -%}
+                      {% if bst[image_id] != blank %}
+                        <div class="image-item overflow_hidden nov-sh-image-2">
+                          <a href="{{ bst[link_id] }}">
+                            {% render 'nov-aspect-image', image: bst[image_id] %}
+                          </a>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Vinova Image Marquee",
+    "class": "section-image-marquee",
+    "max_blocks": 3,
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "heading",
+        "label": "Heading",
+        "default": "<p>Vinova Image Marquee</p>"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading color",
+        "default": "#222222"
+      },
+      {
+        "type": "richtext",
+        "id": "subheading",
+        "label": "Sub heading",
+        "default": "<p>Subtitle from happy customers</p>"
+      },
+      {
+        "type": "color",
+        "id": "subheading_color",
+        "label": "Sub heading color",
+        "default": "#666666"
+      },
+      {
+        "type": "richtext",
+        "id": "descheading",
+        "label": "Description",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+      },
+      {
+        "type": "color",
+        "id": "descheading_color",
+        "label": "Description color",
+        "default": "#666666"
+      },
+      {
+        "type": "image_picker",
+        "id": "img_heading",
+        "label": "Image heading"
+      },
+      {
+        "type": "select",
+        "id": "subheading_position",
+        "label": "Sub heading position",
+        "default": "bottom",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          },
+          {
+            "value": "bottom",
+            "label": "Bottom"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_alignment",
+        "label": "Heading alignment",
+        "default": "text-left",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "btn_label",
+        "label": "Button label"
+      },
+      {
+        "type": "url",
+        "id": "btn_link",
+        "label": "Button link"
+      },
+      {
+        "type": "select",
+        "id": "btn_size",
+        "label": "Button size",
+        "default": "btn-normal",
+        "options": [
+          { "value": "btn-normal", "label": "Normal" },
+          { "value": "btn-medium", "label": "Medium" },
+          { "value": "btn-large", "label": "Large" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "btn_type",
+        "label": "Button type",
+        "default": "btn-primary",
+        "options": [
+          { "value": "btn-primary", "label": "Primary" },
+          { "value": "btn-secondary", "label": "Secondary" }
+        ]
+      },
+      {
+        "type":  "header",
+        "content": "Marquee Time"
+      },
+      {
+        "type": "range",
+        "id": "time",
+        "min": 5,
+        "max": 100,
+        "step": 5,
+        "unit": "s",
+        "label": "Marquee run time",
+        "default": 60
+      },
+      {
+        "type": "range",
+        "id": "spacing",
+        "min": 0,
+        "max": 60,
+        "step": 5,
+        "unit": "px",
+        "label": "Spacing",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "corner",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "label": "Image corner radius",
+        "default": 5
+      },
+      {
+        "type":  "header",
+        "content": "Section Style"
+      },
+      {
+        "type": "checkbox",
+        "id": "animate",
+        "label": "Show animated",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Container",
+        "default": "container",
+        "options": [
+          { "value": "container", "label": "Container"},
+          { "value": "container-fluid", "label": "Container fluid"},
+          { "value": "container-full", "label": "Container full width"}
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_section",
+        "label": "Color section",
+        "default": "background-1"
+      },
+      {
+        "type": "text",
+        "id": "class_section",
+        "label": "Class"
+      },
+      {
+        "type":  "header",
+        "content": "Section Background"
+      },
+      {
+        "type": "checkbox",
+        "id": "ss_bg_enable",
+        "label": "Enable"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background colors",
+        "default": "#ffffff"
+      },
+      {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Background image"
+      },
+      {
+        "type": "range",
+        "id": "background_corner",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "label": "Corner background",
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "background_img_size",
+        "label": "Background image size",
+        "default": "cover",
+        "options": [
+          { "value": "auto", "label": "Auto" },
+          { "value": "cover", "label": "Cover" },
+          { "value": "contain", "label": "Contain" }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_background_img_size_custom",
+        "label": "Enable background image size custom"
+      },
+      {
+        "type": "text",
+        "id": "background_img_size_custom",
+        "label": "Background image size custom",
+        "info": "Replace base background size, unit % or px"
+      },
+      {
+        "type": "select",
+        "id": "background_img_position",
+        "label": "Background image position",
+        "default": "center center",
+        "options": [
+          { "value": "top left", "label": "Top left" },
+          { "value": "top center", "label": "Top center" },
+          { "value": "top right", "label": "Top right" },
+          { "value": "center left", "label": "Center left" },
+          { "value": "center center", "label": "Center middle" },
+          { "value": "center right", "label": "Center right" },
+          { "value": "bottom left", "label": "Bottom left" },
+          { "value": "bottom center", "label": "Bottom center" },
+          { "value": "bottom right", "label": "Bottom right" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "background_position",
+        "label": "Background position",
+        "default": "bg-center",
+        "options": [
+          { "value": "bg-top", "label": "Top" },
+          { "value": "bg-center", "label": "Center" },
+          { "value": "bg-bottom", "label": "Bottom" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "background_size",
+        "label": "Background size",
+        "default": "full",
+        "options": [
+          { "value": "full", "label": "Full" },
+          { "value": "contain", "label": "Contain"}
+        ]
+      },
+      {
+        "type": "range",
+        "id": "height_background_xxl",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 1441px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_xl",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 1200px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_lg",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 992px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_md",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 768px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_sm",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 576px ↑"
+      },
+      {
+        "type": "range",
+        "id": "height_background_xs",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Height background",
+        "default": 100,
+        "unit": "%",
+        "info": "Breakpoint 575px ↓"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Top (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_top_sm",
+        "label": "Mobile",
+        "default": 30
+      },
+      {
+        "type": "header",
+        "content": "Spacing Bottom (px)"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_xl",
+        "label": "Large laptop",
+        "default": 30,
+        "info": "Breakpoint 1200px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_lg",
+        "label": "Laptop",
+        "default": 30,
+        "info": "Breakpoint 992px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_md",
+        "label": "Tablet",
+        "default": 30,
+        "info": "Breakpoint 768px"
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom_sm",
+        "label": "Mobile",
+        "default": 30
+      }
+    ],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Image item",
+        "settings": [
+          {
+            "type": "header",
+            "content": "===== Item 1 ====="
+          },
+          {
+            "type": "image_picker",
+            "id": "image1",
+            "label": "Image"
+          },
+          {
+            "type": "url",
+            "id": "link1",
+            "label": "Link"
+          },
+          {
+            "type": "header",
+            "content": "===== Item 2 ====="
+          },
+          {
+            "type": "image_picker",
+            "id": "image2",
+            "label": "Image"
+          },
+          {
+            "type": "url",
+            "id": "link2",
+            "label": "Link"
+          },
+          {
+            "type": "header",
+            "content": "===== Item 3 ====="
+          },
+          {
+            "type": "image_picker",
+            "id": "image3",
+            "label": "Image"
+          },
+          {
+            "type": "url",
+            "id": "link3",
+            "label": "Link"
+          },
+          {
+            "type": "header",
+            "content": "===== Item 4 ====="
+          },
+          {
+            "type": "image_picker",
+            "id": "image4",
+            "label": "Image"
+          },
+          {
+            "type": "url",
+            "id": "link4",
+            "label": "Link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Vinova Image Marquee",
+        "blocks": [
+          {
+            "type": "image"
+          },
+          {
+            "type": "image"
+          },
+          {
+            "type": "image"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,119 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "nov-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "blocks_feg7ay": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_99d627b_qLycfd": {
+          "type": "ai_gen_block_99d627b",
+          "settings": {
+            "main_heading": "Terms & Conditions",
+            "heading_size": 40,
+            "heading_weight": "600",
+            "heading_color": "#1c1c1c",
+            "main_description": "By accessing the Celant website, you confirm that you are legally entitled to do so and to make use of the information available on this site.\nTrademarksAll trademarks, names, logos, and service marks displayed on this website are the registered and unregistered trademarks of Celant. Nothing on the website should be interpreted as granting any license or right to use any trademark without the prior written permission of Celant.",
+            "description_size": 16,
+            "description_color": "#666666",
+            "accordion_spacing": 10,
+            "item_padding": 14,
+            "border_width": 0,
+            "border_radius": 4,
+            "border_color": "#eaeaea",
+            "item_background": "#ffffff",
+            "header_background": "#f9f9f9",
+            "header_background_hover": "#f0f0f0",
+            "item_title_size": 16,
+            "item_title_weight": "500",
+            "item_title_color": "#1c1c1c",
+            "icon_color": "#666666",
+            "content_size": 14,
+            "content_color": "#666666",
+            "policy_heading_1": "External Links",
+            "policy_content_1": "<p>External links may be provided for your convenience, but Celant does not control or endorse the content found on external websites. Use of or reliance on any such links is at your own risk.</p>",
+            "policy_heading_2": "Warranties",
+            "policy_content_2": "<p>Bhima makes no warranties, representations, or guarantees (express, implied, or statutory) regarding the functionality, content, or availability of the website.<br/><br/></p>",
+            "policy_heading_3": "Pricing",
+            "policy_content_3": "<p>Our pricing is calculated based on current market rates of precious metals and gemstones to ensure the best  possible value. Prices may vary due to fluctuations in material costs and are subject to change without prior notice. You will be charged the price listed on the website at the time of purchase.<br/><br/></p>",
+            "policy_heading_4": "Disclaimer of Liability",
+            "policy_content_4": "<p>Bhima disclaims all liability for any loss, damage, injury, or expense (direct or indirect) that may arise from the use of this website, including reliance on information contained herein. We shall not be held liable for any delays, inaccuracies, or failures in transmission of information or for any disruptions or interruptions in website functionality. We are not liable for any failed transactions due to payment authorizations being declined by the customer’s bank or card issuer.</p>",
+            "policy_heading_5": "Conflict of Terms",
+            "policy_content_5": "<p>In the event of any conflict between these <br/>Terms & Conditions and any other policies or disclaimers, the specific terms related to the applicable section of the website will <br/>prevail.</p>",
+            "policy_heading_6": "Severability",
+            "policy_content_6": "<p>If any provision in these Terms & Conditions is found to be unenforceable in any jurisdiction, it will be treated as void only in that jurisdiction and will not affect the remaining provisions.<br/><br/></p>",
+            "policy_heading_7": "Cancellation & Returns",
+            "policy_content_7": "<p>You can cancel your order at no cost before receiving the Dispatch Confirmation Email. Individual items in a multi-item order can be canceled without affecting the entire order.<br/><br/></p><ol><li>For prepaid orders, refunds will be credited to the original payment source (Credit Card/Debit Card/Net Banking).For Cash on Delivery orders, refunds will be processed to your bank account.If returned under our 30-Day Money Back Policy (not applicable on solitaires above INR 3 lakh, customized products, or coins), refunds will be credited to your Celant Cash account or your bank account, as preferred.<br/></li><li>Orders made using special discount codes (e.g. FLAT05, LOVE10, DIWALI15) must be returned in full to qualify for a refund. For more information, please visit our Returns Policy page at <a href=\"https://www.bhimajewellery.com/pages/terms-and-conditions\" target=\"_blank\" title=\"https://www.bhimajewellery.com/pages/terms-and-conditions\">https://www.bhimajewellery.com/pages/terms-and-conditions</a>.<br/></li></ol>",
+            "policy_heading_8": "Applicable Laws",
+            "policy_content_8": "<p>The use of this website shall be governed by the laws of the State of Karnataka, India. All legal matters shall be subject to the jurisdiction of the courts of Kerala</p><p>As per Government of India guidelines, a Permanent Account Number (PAN) is required for all purchases above INR 2 lakh.</p>",
+            "policy_heading_9": "Contests & Giveaways",
+            "policy_content_9": "<p>Winners of contests and giveaways will be selected at Celant’s discretion. Gifts and prizes are non-returnable and non-exchangeable. Any additional facilities provided to winners are also subject to Celant’s discretion. Terms and conditions of contests are subject to change without prior  notice. For queries or disputes, please contact us at <a href=\"mailto:care@bhimajewellery.com\" title=\"mailto:care@bhimajewellery.com\">care@bhimajewellery.com</a>.<br/><br/></p>",
+            "policy_heading_10": "Offers",
+            "policy_content_10": "<ul><li>Offers on diamond prices are valid only on selected diamond-studded products.</li><li>Offers on making charges are applicable only to selected plain gold, gemstone, and plain platinum products.</li><li>The applicability of any additional vouchers or promotional discounts is at the sole discretion of Bhima jewellery.<br/><br/></li></ul>",
+            "policy_heading_11": "",
+            "policy_content_11": "",
+            "policy_heading_12": "",
+            "policy_content_12": "",
+            "policy_heading_13": "",
+            "policy_content_13": "",
+            "policy_heading_14": "",
+            "policy_content_14": "",
+            "policy_heading_15": "",
+            "policy_content_15": "",
+            "policy_heading_16": "",
+            "policy_content_16": "",
+            "policy_heading_17": "",
+            "policy_content_17": "",
+            "policy_heading_18": "",
+            "policy_content_18": "",
+            "policy_heading_19": "",
+            "policy_content_19": "",
+            "policy_heading_20": "",
+            "policy_content_20": "",
+            "policy_heading_21": "",
+            "policy_content_21": "",
+            "policy_heading_22": "",
+            "policy_content_22": "",
+            "policy_heading_23": "",
+            "policy_content_23": "",
+            "policy_heading_24": "",
+            "policy_content_24": "",
+            "policy_heading_25": "",
+            "policy_content_25": "",
+            "policy_heading_26": "",
+            "policy_content_26": "",
+            "policy_heading_27": "",
+            "policy_content_27": "",
+            "policy_heading_28": "",
+            "policy_content_28": "",
+            "policy_heading_29": "",
+            "policy_content_29": "",
+            "policy_heading_30": "",
+            "policy_content_30": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_99d627b_qLycfd"
+      ],
+      "name": "Terms and conditions",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "blocks_feg7ay"
+  ]
+}

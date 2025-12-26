@@ -1,0 +1,185 @@
+<script>
+    Shopify.productOptionsMap = {};
+    Shopify.quickViewOptionsMap = {};
+    Shopify.updateOptionsInSelector = function(selectorIndex, wrapperSlt) {
+        Shopify.optionsMap = wrapperSlt === '.product' ? Shopify.productOptionsMap : Shopify.quickViewOptionsMap;
+        switch (selectorIndex) {
+            case 0:
+                var key = 'root';
+                var selector = $(wrapperSlt + ' .single-option-selector:eq(0)');
+                break;
+            case 1:
+                var key = $(wrapperSlt + ' .single-option-selector:eq(0)').val();
+                var selector = $(wrapperSlt + ' .single-option-selector:eq(1)');
+                break;
+            case 2:
+                var key = $(wrapperSlt + ' .single-option-selector:eq(0)').val();
+                key += ' / ' + $(wrapperSlt + ' .single-option-selector:eq(1)').val();
+                var selector = $(wrapperSlt + ' .single-option-selector:eq(2)');
+        }
+
+        var initialValue = selector.val();
+        selector.empty();
+
+        var availableOptions = Shopify.optionsMap[key];
+
+        if (availableOptions && availableOptions.length) {
+            for (var i = 0; i < availableOptions.length; i++) {
+                var option = availableOptions[i].replace('-sold-out','');
+                var newOption = $('<option></option>').val(option).html(option);
+
+                selector.append(newOption);
+            }
+
+            $(wrapperSlt + ' .swatch[data-option-index="' + selectorIndex + '"] .swatch-element').each(function() {
+                if ($.inArray($(this).attr('data-value'), availableOptions) !== -1) {
+                    $(this).addClass('available').removeClass('soldout').find(':radio').prop('disabled',false).prop('checked',true);
+                }
+                else {
+                    if ($.inArray($(this).attr('data-value') + '-sold-out', availableOptions) !== -1) {
+                        $(this).addClass('available').addClass('soldout').find(':radio').prop('disabled',false).prop('checked',true);
+                    } else {
+                        $(this).removeClass('available').addClass('soldout').find(':radio').prop('disabled',true).prop('checked',false);
+                    }
+                    
+                }
+            });
+
+            if ($.inArray(initialValue, availableOptions) !== -1) {
+                selector.val(initialValue);
+            }
+
+            selector.trigger('change');
+        };
+    };
+
+    Shopify.linkOptionSelectors = function(product, wrapperSlt, check) {
+        Shopify.optionsMap = wrapperSlt === '.product' ? Shopify.productOptionsMap : Shopify.quickViewOptionsMap;
+        var arr_1= [],
+            arr_2= [],
+            arr_3= [];
+
+        Shopify.optionsMap['root'] == [];
+        for (var i = 0; i < product.variants.length; i++) {
+            var variant = product.variants[i];
+            if (variant) {
+                var key1 = variant.option1;
+                var key2 = variant.option1 + ' / ' + variant.option2;
+                Shopify.optionsMap[key1] = [];
+                Shopify.optionsMap[key2] = [];
+            }
+        }
+        for (var i = 0; i < product.variants.length; i++) {
+            var variant = product.variants[i];
+            if (variant) {
+                if (window.use_color_swatch) {
+                    if (variant.available) {
+                        Shopify.optionsMap['root'] = Shopify.optionsMap['root'] || [];
+
+                        arr_1.push(variant.option1);
+                        arr_1 = $.unique(arr_1);
+
+                        Shopify.optionsMap['root'].push(variant.option1);
+
+                        Shopify.optionsMap['root'] = Shopify.uniq(Shopify.optionsMap['root']);
+
+                        if (product.options.length > 1) {
+                        var key = variant.option1;
+                            Shopify.optionsMap[key] = Shopify.optionsMap[key] || [];
+                            Shopify.optionsMap[key].push(variant.option2);
+                            if ($.inArray(variant.option2, arr_2) === -1) {
+                                arr_2.push(variant.option2);
+                                arr_2 = $.unique(arr_2);
+                            }
+                            Shopify.optionsMap[key] = Shopify.uniq(Shopify.optionsMap[key]);
+                        }
+                        if (product.options.length === 3) {
+                            var key = variant.option1 + ' / ' + variant.option2;
+                            Shopify.optionsMap[key] = Shopify.optionsMap[key] || [];
+                            Shopify.optionsMap[key].push(variant.option3);
+
+                            if ($.inArray(variant.option3, arr_3) === -1) {
+                                arr_3.push(variant.option3);
+                                arr_3 = $.unique(arr_3);
+                            }
+                            
+                            Shopify.optionsMap[key] = Shopify.uniq(Shopify.optionsMap[key]);
+                        }
+                    } else {
+                        Shopify.optionsMap['root'] = Shopify.optionsMap['root'] || [];
+                        if ($.inArray(variant.option1, arr_1) === -1) {
+                            Shopify.optionsMap['root'].push(variant.option1 + '-sold-out');
+                        }
+                        
+                        Shopify.optionsMap['root'] = Shopify.uniq(Shopify.optionsMap['root']);
+                        if (product.options.length > 1) {
+                            var key = variant.option1;
+                            Shopify.optionsMap[key] = Shopify.optionsMap[key] || [];
+                                Shopify.optionsMap[key].push(variant.option2 + '-sold-out');
+                            
+                            Shopify.optionsMap[key] = Shopify.uniq(Shopify.optionsMap[key]);
+                        }
+                        if (product.options.length === 3) {
+                            var key = variant.option1 + ' / ' + variant.option2;
+                            Shopify.optionsMap[key] = Shopify.optionsMap[key] || [];
+                            Shopify.optionsMap[key].push(variant.option3 + '-sold-out');
+                            Shopify.optionsMap[key] = Shopify.uniq(Shopify.optionsMap[key]);
+                        }
+                    }
+                } else {
+                    if (check) {
+                        if (variant.available) {
+                            Shopify.optionsMap['root'] = Shopify.optionsMap['root'] || [];
+                            Shopify.optionsMap['root'].push(variant.option1);
+                            Shopify.optionsMap['root'] = Shopify.uniq(Shopify.optionsMap['root']);
+
+                            if (product.options.length > 1) {
+                            var key = variant.option1;
+                                Shopify.optionsMap[key] = Shopify.optionsMap[key] || [];
+                                Shopify.optionsMap[key].push(variant.option2);
+                                Shopify.optionsMap[key] = Shopify.uniq(Shopify.optionsMap[key]);
+                            }
+                            if (product.options.length === 3) {
+                                var key = variant.option1 + ' / ' + variant.option2;
+                                Shopify.optionsMap[key] = Shopify.optionsMap[key] || [];
+                                Shopify.optionsMap[key].push(variant.option3);
+                                Shopify.optionsMap[key] = Shopify.uniq(Shopify.optionsMap[key]);
+                            }
+                        }
+                    } else {
+                        Shopify.optionsMap['root'] = Shopify.optionsMap['root'] || [];
+
+                        Shopify.optionsMap['root'].push(variant.option1);
+                        Shopify.optionsMap['root'] = Shopify.uniq(Shopify.optionsMap['root']);
+                        if (product.options.length > 1) {
+                        var key = variant.option1;
+                            Shopify.optionsMap[key] = Shopify.optionsMap[key] || [];
+                            Shopify.optionsMap[key].push(variant.option2);
+                            Shopify.optionsMap[key] = Shopify.uniq(Shopify.optionsMap[key]);
+                        }
+                        if (product.options.length === 3) {
+                            var key = variant.option1 + ' / ' + variant.option2;
+                            Shopify.optionsMap[key] = Shopify.optionsMap[key] || [];
+                            Shopify.optionsMap[key].push(variant.option3);
+                            Shopify.optionsMap[key] = Shopify.uniq(Shopify.optionsMap[key]);
+                        }
+                    }
+                }
+            }
+        };
+
+        Shopify.updateOptionsInSelector(0, wrapperSlt);
+
+        if (product.options.length > 1) Shopify.updateOptionsInSelector(1, wrapperSlt);
+        if (product.options.length === 3) Shopify.updateOptionsInSelector(2, wrapperSlt);
+        $(wrapperSlt + " .single-option-selector:eq(0)").change(function() {
+            Shopify.updateOptionsInSelector(1, wrapperSlt);
+            if (product.options.length === 3) Shopify.updateOptionsInSelector(2, wrapperSlt);
+            return true;
+        });
+        $(wrapperSlt + " .single-option-selector:eq(1)").change(function() {
+            if (product.options.length === 3) Shopify.updateOptionsInSelector(2, wrapperSlt);
+            return true;
+        });
+    };
+</script>

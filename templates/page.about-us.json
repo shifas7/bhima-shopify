@@ -1,0 +1,221 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "nov-page-about-us",
+      "blocks": {
+        "36565fd9-4086-4fa5-8c15-db85e063a1b1": {
+          "type": "image",
+          "settings": {
+            "img": "shopify://shop_images/Artboard_1_83484aa8-0bc3-4bf0-b811-e65f163e1ae1.jpg",
+            "corner_radius": 20,
+            "distance_bottom": 50
+          }
+        },
+        "19efe45f-ad63-4c96-96a2-845f284fb3d7": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>A Legacy of Purity. A Century of Trust. A Tradition of Excellence.</strong></p><p>For over <strong>101 years</strong>, <strong>Bhima Jewellery</strong> has stood as one of India’s most trusted names in gold, diamonds, and fine jewellery. Established in 1925 by the visionary <strong>Bhima Bhattar</strong>, the brand pioneered a new era of jewellery retailing built on purity, transparency, and customer-first values — foundations that continue to define Bhima even today.</p><p>What began as a humble promise of honesty and craftsmanship has evolved into a nationally respected jewellery house with showrooms across India. Generations of families have placed their trust in Bhima, making it a part of their most cherished celebrations — from weddings and festivals to personal milestones.</p><p>With the innovative ideas and caring attitude our Chairman have moved ahead with the legacy to open up new ventures in locations untamed by the industry with the standards, purity and customer service as the main focus. Bhima Group opened up their master showroom at Trivandrum under the tag name BHIMA JEWELLERY in the year 1990 at heart of Trivandrum city. With the corporate office at Trivandrum the management team has given a new look to the venture through an advanced customer service and modern outlook of marketing has been introduced in the market.</p><p>BHIMA under the guidance of Dr. B Govindan has been an organization which showcases the true sculpture of service whether it is towards employees or customers. For employees all the basic needs have been fulfilled namely transportation and food, also included is the lodging facility for all the employees who are in need of the facilities to avoid any inconvenience to the employees. For customers Bhima is providing 100 % hallmarked pure gold to all the customers at affordable prices to make sure the value for money is there for the customers. BHIMA provides 100% GIA & IGI certified Diamond Jewellery to the customers which mark the quality which satisfies the customers for the value of their money.</p><p>As BHIMA has considered all its employees as one big family it has been kept under strict rule that all the statutory needs of the employees are taken care of namely EPF, ESIC, Insurance with includes both medical as well as personal accidents and as a part of management initiative a welfare board has been initiated at branch level to make sure that all the basic and urgent needs of the employees have been taken care of. As per our Chairman, our employees and their experience is the strength and the backbone of our business, hence it’s the managements role to safeguard our people (our employees).</p>",
+            "tb_c": "",
+            "t_s": 16,
+            "t_s_md": 16,
+            "t_c": "#000000",
+            "ff": "f_df",
+            "t_fw": "font-400",
+            "t_tt": "none",
+            "t_lh": "1.5",
+            "t_lt": "0",
+            "t_m": 9999,
+            "distance_bottom": 30
+          }
+        },
+        "3b132045-2d40-4e4a-beac-9bcf8cda2932": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>THE BEGINNING <br/></strong>To provide quality gems, jewellery and lifestyle products that people cherish.</p>",
+            "tb_c": "",
+            "t_s": 16,
+            "t_s_md": 16,
+            "t_c": "#000000",
+            "ff": "f_df",
+            "t_fw": "font-400",
+            "t_tt": "none",
+            "t_lh": "1.5",
+            "t_lt": "0",
+            "t_m": 9999,
+            "distance_bottom": 30
+          }
+        },
+        "c6d47373-79c7-499c-a4cf-f289f55c09d7": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>OURVISION</strong><br/>At Bhima, our vision is to be:</p><p>The world’s finest jeweller, who the best understands, satisfies and exceeds products, service and aspirational needs of our customers, earning and retaining their loyalty and of their future generations. The most valuable jeweller in  the world in the eyes of our employees, our suppliers, our shareholder and our community.</p>",
+            "tb_c": "",
+            "t_s": 16,
+            "t_s_md": 16,
+            "t_c": "#000000",
+            "ff": "f_df",
+            "t_fw": "font-400",
+            "t_tt": "none",
+            "t_lh": "1.5",
+            "t_lt": "0",
+            "t_m": 9999,
+            "distance_bottom": 5
+          }
+        },
+        "0e2d07ef-c64c-4922-a3af-a8c60a55a04a": {
+          "type": "quote",
+          "disabled": true,
+          "settings": {
+            "background_color": "#f1f1f1",
+            "text_content": "<p>Best purchase I’ve made this winter! The color and knitting are exquisite and it's so comfy! Went from NYC to Miami without ever taking it off. Super cute!!</p>",
+            "color_content": "#232630",
+            "fz_content": "2rem",
+            "lh_content": "40px",
+            "author": "Kwang Shang. - CEO Vinovathemes",
+            "color_author": "#232630",
+            "fz_author": "13px",
+            "class": "mt-90"
+          }
+        }
+      },
+      "block_order": [
+        "36565fd9-4086-4fa5-8c15-db85e063a1b1",
+        "19efe45f-ad63-4c96-96a2-845f284fb3d7",
+        "3b132045-2d40-4e4a-beac-9bcf8cda2932",
+        "c6d47373-79c7-499c-a4cf-f289f55c09d7",
+        "0e2d07ef-c64c-4922-a3af-a8c60a55a04a"
+      ],
+      "settings": {}
+    },
+    "nov_video_text_gDyynW": {
+      "type": "nov-video-text",
+      "blocks": {
+        "text_rQ3WhB": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Lorem ipsum</p>",
+            "tb_c": "",
+            "t_s": 20,
+            "t_s_lg": 13,
+            "t_s_md": 13,
+            "t_c": "#222222",
+            "c_link_h": "#000000",
+            "ff": "f_df",
+            "t_fw": "font-700",
+            "t_tt": "none",
+            "t_lh": "1.5",
+            "t_lt": "0",
+            "t_m": 1320,
+            "distance_bottom_xl": 30,
+            "distance_bottom_lg": 30,
+            "distance_bottom_md": 30,
+            "distance_bottom_xs": 30
+          }
+        },
+        "text_NH63En": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Maecenas eu nibh pulvinar, mattis lorem eget, convallis turpis. Maecenas sollicitudin lectus augue, vel vehicula nulla condimentum sit amet. Nam id tellus convallis, sollicitudin est a, rhoncus quam. Ut a sem aliquam, aliquet tortor non, cursus enim. Cras at aliquet risus.</p>",
+            "tb_c": "",
+            "t_s": 16,
+            "t_s_lg": 13,
+            "t_s_md": 13,
+            "t_c": "#222222",
+            "c_link_h": "#000000",
+            "ff": "f_df",
+            "t_fw": "font-400",
+            "t_tt": "none",
+            "t_lh": "1.5",
+            "t_lt": "0",
+            "t_m": 1320,
+            "distance_bottom_xl": 30,
+            "distance_bottom_lg": 30,
+            "distance_bottom_md": 30,
+            "distance_bottom_xs": 30
+          }
+        },
+        "btn_9RVJfn": {
+          "type": "btn",
+          "settings": {
+            "btn": "Shop now",
+            "btn_link": "",
+            "btn_size": "btn-normal",
+            "color_button": "",
+            "distance_bottom_xl": 30,
+            "distance_bottom_lg": 30,
+            "distance_bottom_md": 30,
+            "distance_bottom_xs": 30
+          }
+        }
+      },
+      "block_order": [
+        "text_rQ3WhB",
+        "text_NH63En",
+        "btn_9RVJfn"
+      ],
+      "disabled": true,
+      "name": "Vinova Video With Text",
+      "settings": {
+        "heading": "<h1><strong>STORY OF BHIMA, THE SAGA STARTED IN 1920’S</strong></h1>",
+        "heading_color": "#222222",
+        "subheading": "",
+        "subheading_color": "#666666",
+        "descheading": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>",
+        "descheading_color": "#666666",
+        "subheading_position": "bottom",
+        "heading_alignment": "text-left",
+        "corner_radius": 0,
+        "btn_play_color": "",
+        "position": "left",
+        "autoplay": false,
+        "muted": true,
+        "controls": false,
+        "enable_mh": false,
+        "mh_xxl": 600,
+        "mh_xl": 400,
+        "mh_md": 400,
+        "mh": 400,
+        "bg_text": "",
+        "container": "container",
+        "color_section": "",
+        "class_section": "",
+        "ss_bg_enable": false,
+        "background_color": "#ffffff",
+        "background_corner": 0,
+        "background_img_size": "cover",
+        "enable_background_img_size_custom": false,
+        "background_img_size_custom": "",
+        "background_img_position": "center center",
+        "background_position": "bg-center",
+        "background_size": "full",
+        "height_background_xxl": 100,
+        "height_background_xl": 100,
+        "height_background_lg": 100,
+        "height_background_md": 100,
+        "height_background_sm": 100,
+        "height_background_xs": 100,
+        "distance_top_xl": 30,
+        "distance_top_lg": 30,
+        "distance_top_md": 30,
+        "distance_top_sm": 30,
+        "distance_bottom_xl": 30,
+        "distance_bottom_lg": 30,
+        "distance_bottom_md": 30,
+        "distance_bottom_sm": 30
+      }
+    }
+  },
+  "order": [
+    "main",
+    "nov_video_text_gDyynW"
+  ]
+}

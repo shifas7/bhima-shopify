@@ -1,0 +1,143 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "Footer 3",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "nov-footer-3",
+      "blocks": {
+        "block_contact_xpNe9r": {
+          "type": "block_contact",
+          "settings": {
+            "block_title": "Contact us",
+            "block_subtitle": "",
+            "img_width": 150,
+            "img_spacing": 10,
+            "h_t": false,
+            "address": "PO Box 1622 Bamboo Street West",
+            "phone": "+(123)-456-7890",
+            "email": "Emillia@example.com",
+            "time": "All Day: 9:00AM - 22:00PM",
+            "show_social": true,
+            "block_class": "",
+            "grid_xxl": "col-xxl-cus-5",
+            "grid_xl": "col-xl-cus-5",
+            "grid_lg": "col-lg-4",
+            "grid_md": "col-md-4",
+            "grid_sm": "col-sm-6"
+          }
+        },
+        "block_menu_jH4DhF": {
+          "type": "block_menu",
+          "settings": {
+            "block_title": "My Account",
+            "h_t": false,
+            "menu_handle": "footer",
+            "block_class": "",
+            "grid_xxl": "col-xxl-cus-5",
+            "grid_xl": "col-xl-cus-5",
+            "grid_lg": "col-lg-4",
+            "grid_md": "col-md-4",
+            "grid_sm": "col-sm-6"
+          }
+        },
+        "block_menu_V8bkfd": {
+          "type": "block_menu",
+          "settings": {
+            "block_title": "Our Policies",
+            "h_t": false,
+            "menu_handle": "our-policies",
+            "block_class": "mt-sm-50",
+            "grid_xxl": "col-xxl-cus-5",
+            "grid_xl": "col-xl-cus-5",
+            "grid_lg": "col-lg-4",
+            "grid_md": "col-md-4",
+            "grid_sm": "col-sm-3"
+          }
+        },
+        "block_menu_w6HD8W": {
+          "type": "block_menu",
+          "settings": {
+            "block_title": "Customer Care",
+            "h_t": false,
+            "menu_handle": "customer-care-footer",
+            "block_class": "mt-lg-50",
+            "grid_xxl": "col-xxl-cus-5",
+            "grid_xl": "col-xl-cus-5",
+            "grid_lg": "col-lg-4",
+            "grid_md": "col-md-4",
+            "grid_sm": "col-sm-3"
+          }
+        },
+        "block_html_Y64nih": {
+          "type": "block_html",
+          "settings": {
+            "block_title": "Thank You For Choosing Us!",
+            "h_t": false,
+            "img_width": 150,
+            "img_spacing": 10,
+            "show_payment": false,
+            "payment_mw": 200,
+            "html_content": "We appreciate your support and are dedicated to providing you with the best products and service. We look forward to serving you again!",
+            "max_width_content": 999,
+            "show_social": false,
+            "block_class": "mt-lg-50",
+            "grid_xxl": "col-xxl-cus-5",
+            "grid_xl": "col-xl-cus-5",
+            "grid_lg": "col-lg-4",
+            "grid_md": "col-md-4",
+            "grid_sm": "col-sm-6"
+          }
+        }
+      },
+      "block_order": [
+        "block_contact_xpNe9r",
+        "block_menu_jH4DhF",
+        "block_menu_V8bkfd",
+        "block_menu_w6HD8W",
+        "block_html_Y64nih"
+      ],
+      "custom_css": [],
+      "settings": {
+        "animate": true,
+        "container": "container-fluid",
+        "color_section": "scheme-8f7455a1-eb11-4a61-a4c1-857420ff62ef",
+        "background_color": "#f4f4f8",
+        "background_image_size": "auto",
+        "bg_size": "full",
+        "input_color": "#666666",
+        "input_place_color": "#666666",
+        "input_bg": "#ffffff",
+        "input_border_color": "#ffffff",
+        "submit_color": "",
+        "submit_btn_type": "btn-primary",
+        "show_footer_copyright": true,
+        "color_copyright": "scheme-8f7455a1-eb11-4a61-a4c1-857420ff62ef",
+        "bg_copyright": "rgba(0,0,0,0)",
+        "copyright_border_top_color": "#ebebeb",
+        "copyright_border_top_opa": 100,
+        "show_payment": true,
+        "payment_title": "We Accept Payments",
+        "payment": "shopify:\/\/shop_images\/payment-footer.png",
+        "payment_mw": 215,
+        "copy_image": "shopify:\/\/shop_images\/Logo-black.png",
+        "copy_image_mw": 121,
+        "copyright": "Copyright © 2025 Nova Creative. All Rights Reserved.",
+        "show_copy_social": true,
+        "copy_social_title": "Follow Us",
+        "mobile_acc": true
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

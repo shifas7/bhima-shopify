@@ -1,0 +1,32 @@
+{%- liquid 
+  if section.settings.xxl == 5
+    assign xxl = 'col-xxl-cus-5'
+  else
+    assign xxl = 12 | divided_by: section.settings.xxl | prepend: 'col-xxl-'
+  endif
+  if section.settings.xl == 5
+    assign xl = 'col-xl-cus-5'
+  else
+    assign xl = 12 | divided_by: section.settings.xl | prepend: 'col-xl-'
+  endif
+  if section.settings.lg == 5
+    assign lg = 'col-lg-cus-5'
+  else
+    assign lg = 12 | divided_by: section.settings.lg | prepend: 'col-lg-'
+  endif
+  if section.settings.md == 5
+    assign md = 'col-md-cus-5'
+  else
+    assign md = 12 | divided_by: section.settings.md | prepend: 'col-md-'
+  endif
+  if section.settings.sm == 5
+    assign sm = 'col-sm-cus-5'
+  else
+    assign sm = 12 | divided_by: section.settings.sm | prepend: 'col-sm-'
+  endif
+  if section.settings.xs == 5
+    assign xs = 'col-xs-cus-5'
+  else
+    assign xs = 12 | divided_by: section.settings.xs | prepend: 'col-'
+  endif
+%}{% if xxl != blank %}{{ xxl }}{% endif %}{% if xl != blank %} {{ xl }}{% endif %}{% if lg != blank %} {{ lg }}{% endif %}{% if md != blank %} {{ md }}{% endif %}{% if sm != blank %} {{ sm }}{% endif %}{% if xs != blank %} {{ xs }}{% endif %}

@@ -1,0 +1,74 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "nov-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "management_profile_ehMnNW": {
+      "type": "management-profile",
+      "blocks": {
+        "profile_ykdVLx": {
+          "type": "profile",
+          "settings": {
+            "image": "shopify://shop_images/Artboard_1_1f041b80-9e22-4135-8c86-2aad87fe681c.jpg",
+            "name": "Suhas MS",
+            "designation": "Managing Director, Bhima jewellery",
+            "bio": "<p>Suhas M.S. represents the modern face of Bhima Jewellery — a leader who blends strategic vision with operational excellence. As Managing Director, he has played a pivotal role in strengthening Bhima’s presence across India, driving digital transformation, enhancing customer experience, and expanding the brand’s design and retail capabilities.</p><p>Under his leadership, Bhima has embraced a future-ready approach with improved store formats, advanced technology, innovative marketing, and strong customer engagement programs. His passion for quality, transparency, and ethical business practices reflects the values on which Bhima was built.</p><p><strong>A results-driven leader, Suhas is instrumental in carrying Bhima’s 101-year heritage into a new era of growth, relevance, and global appeal.</strong></p>"
+          }
+        },
+        "profile_UNCmji": {
+          "type": "profile",
+          "settings": {
+            "image": "shopify://shop_images/Artboard_2_bae087e9-dc5c-4ade-a9a2-b9a71dd099f9.jpg",
+            "name": "Gayatri Suhas",
+            "designation": "Director,Bhima Jewellery",
+            "bio": "<p>Gayatri Suhas brings creativity, refinement, and a deep understanding of customer preferences to Bhima’s leadership team. As Director, she oversees key areas including product design, brand identity, and customer experience.</p><p>She has been central in introducing new-age collections, enhancing in-store<br/>presentation, and elevating Bhima’s visual and brand language. Her keen design sensibility and modern outlook have helped Bhima appeal to younger audiences while preserving its heritage.</p><p>A strong advocate for authenticity and craftsmanship, Gayatri continues to enrich the brand with fresh ideas, trend insights, and a customer-first mindset.</p><p><strong>Her leadership ensures Bhima remains a timeless yet contemporary jewellery<br/>destination.</strong></p>"
+          }
+        },
+        "profile_eXwAar": {
+          "type": "profile",
+          "settings": {
+            "image": "shopify://shop_images/Artboard_3_da1fccf3-02f0-4824-9db8-3e283ec276a8.jpg",
+            "name": "Navya Suhas",
+            "designation": "Director,Bhima Jewellery",
+            "bio": "<p>As Director, Navya Suhas represents the youthful energy and modern thinking that drive Bhima’s evolving brand identity. With a strong focus on lifestyle trends, digital engagement, and customer delight, she plays a key role in shaping<br/>Bhima’s communication, experience, and community-connect strategies.</p><p>Her initiatives have strengthened Bhima’s appeal among young shoppers, brides-to-be, and modern families. Navya also plays an active role in developing curated collections, social media storytelling, and experiential retail formats.</p><p><strong>With her forward-thinking approach, Navya ensures Bhima Jewellery remains relevant, inspiring, and emotionally connected to the new-generation customer</strong></p>"
+          }
+        }
+      },
+      "block_order": [
+        "profile_ykdVLx",
+        "profile_UNCmji",
+        "profile_eXwAar"
+      ],
+      "name": "Management Profile",
+      "settings": {
+        "color_scheme": "",
+        "container_width": 1000,
+        "heading": "Management Profile",
+        "heading_size": "h1",
+        "description": "<p><strong>Guiding Bhima Jewellery Into a New Era of Growth & Innovation</strong></p>",
+        "image_size": 250,
+        "image_size_mobile": 180,
+        "name_size": "h4",
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_left": 30,
+        "padding_right": 30
+      }
+    }
+  },
+  "order": [
+    "main",
+    "management_profile_ehMnNW"
+  ]
+}

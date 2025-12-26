@@ -1,0 +1,832 @@
+{% doc %}
+  @prompt
+    Create a Store Locations Grid Section where I can easily add, edit, and delete stores, like adding a item . there may be 15 stores.
+    
+    Requirements:
+    Heading and Short description
+    
+    Display stores in a 3-column grid on desktop and a single column on mobile.
+    
+    Each store block must include:
+    
+    1. Store Image (uploadable)
+    2. Store Name
+    3 . Full Address (Clickable that opens the store address location in Google Maps in a new tab.)
+    4. Phone Number
+    
+    
+    All fields should be editable within the Shopify theme editor, and I should be able to add an unlimited number of store blocks. and need to add the Google map link
+    
+    Styling should be clean, minimal, and responsive.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-store-locations-{{ ai_gen_id }} {
+    padding: 60px 0;
+  }
+
+  .ai-store-locations-container-{{ ai_gen_id }} {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  .ai-store-locations-header-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  .ai-store-locations-heading-{{ ai_gen_id }} {
+    font-size: 40px;
+    font-weight: 500;
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 15px;
+    line-height: 1.3;
+  }
+
+  .ai-store-locations-description-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: {{ block.settings.description_color }};
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .ai-store-locations-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+
+  .ai-store-card-{{ ai_gen_id }} {
+    background: {{ block.settings.card_background }};
+    border: 1px solid {{ block.settings.card_border_color }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .ai-store-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-store-image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: 66.67%;
+    overflow: hidden;
+    background-color: #f5f5f5;
+  }
+
+  .ai-store-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-store-image-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+  }
+
+  .ai-store-image-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-store-content-{{ ai_gen_id }} {
+    padding: 25px;
+  }
+
+  .ai-store-name-{{ ai_gen_id }} {
+    font-size: 20px;
+    font-weight: 500;
+    color: {{ block.settings.store_name_color }};
+    margin: 0 0 15px;
+    line-height: 1.4;
+  }
+
+  .ai-store-info-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ai-store-info-item-{{ ai_gen_id }} {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .ai-store-info-icon-{{ ai_gen_id }} {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: {{ block.settings.icon_color }};
+    margin-top: 2px;
+  }
+
+  .ai-store-info-text-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .ai-store-address-link-{{ ai_gen_id }} {
+    color: {{ block.settings.link_color }};
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .ai-store-address-link-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.link_hover_color }};
+    text-decoration: underline;
+  }
+
+  .ai-store-phone-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+  }
+
+  @media screen and (max-width: 991px) {
+    .ai-store-locations-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+    }
+
+    .ai-store-locations-heading-{{ ai_gen_id }} {
+      font-size: 32px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .ai-store-locations-{{ ai_gen_id }} {
+      padding: 40px 0;
+    }
+
+    .ai-store-locations-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .ai-store-locations-heading-{{ ai_gen_id }} {
+      font-size: 28px;
+    }
+
+    .ai-store-locations-header-{{ ai_gen_id }} {
+      margin-bottom: 35px;
+    }
+
+    .ai-store-content-{{ ai_gen_id }} {
+      padding: 20px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-store-locations-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-store-locations-container-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank or block.settings.description != blank %}
+      <div class="ai-store-locations-header-{{ ai_gen_id }}">
+        {% if block.settings.heading != blank %}
+          <h2 class="ai-store-locations-heading-{{ ai_gen_id }}">
+            {{ block.settings.heading }}
+          </h2>
+        {% endif %}
+        {% if block.settings.description != blank %}
+          <div class="ai-store-locations-description-{{ ai_gen_id }}">
+            {{ block.settings.description }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="ai-store-locations-grid-{{ ai_gen_id }}">
+      {% for i in (1..15) %}
+        {% liquid
+          assign store_name_key = 'store_' | append: i | append: '_name'
+          assign store_image_key = 'store_' | append: i | append: '_image'
+          assign store_address_key = 'store_' | append: i | append: '_address'
+          assign store_map_link_key = 'store_' | append: i | append: '_map_link'
+          assign store_phone_key = 'store_' | append: i | append: '_phone'
+
+          assign store_name = block.settings[store_name_key]
+          assign store_image = block.settings[store_image_key]
+          assign store_address = block.settings[store_address_key]
+          assign store_map_link = block.settings[store_map_link_key]
+          assign store_phone = block.settings[store_phone_key]
+        %}
+
+        {% if store_name != blank or store_address != blank or store_phone != blank %}
+          <div class="ai-store-card-{{ ai_gen_id }}">
+            <div class="ai-store-image-wrapper-{{ ai_gen_id }}">
+              {% if store_image %}
+                <img
+                  src="{{ store_image | image_url: width: 600 }}"
+                  alt="{{ store_name | escape }}"
+                  class="ai-store-image-{{ ai_gen_id }}"
+                  loading="lazy"
+                  width="600"
+                  height="400"
+                >
+              {% else %}
+                <div class="ai-store-image-placeholder-{{ ai_gen_id }}">
+                  {{ 'image' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="ai-store-content-{{ ai_gen_id }}">
+              {% if store_name != blank %}
+                <h3 class="ai-store-name-{{ ai_gen_id }}">{{ store_name }}</h3>
+              {% endif %}
+
+              <div class="ai-store-info-{{ ai_gen_id }}">
+                {% if store_address != blank %}
+                  <div class="ai-store-info-item-{{ ai_gen_id }}">
+                    <svg class="ai-store-info-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <div class="ai-store-info-text-{{ ai_gen_id }}">
+                      {% if store_map_link != blank %}
+                        <a
+                          href="{{ store_map_link }}"
+                          class="ai-store-address-link-{{ ai_gen_id }}"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {{ store_address }}
+                        </a>
+                      {% else %}
+                        {{ store_address }}
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endif %}
+
+                {% if store_phone != blank %}
+                  <div class="ai-store-info-item-{{ ai_gen_id }}">
+                    <svg class="ai-store-info-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    <div class="ai-store-info-text-{{ ai_gen_id }}">
+                      <span class="ai-store-phone-{{ ai_gen_id }}">{{ store_phone }}</span>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Store locations grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Store Locations"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Visit us at any of our convenient locations"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border",
+      "default": "#eaeaea"
+    },
+    {
+      "type": "color",
+      "id": "store_name_color",
+      "label": "Store name",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icons",
+      "default": "#df9a7c"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_color",
+      "label": "Link hover",
+      "default": "#df9a7c"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Card border radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Store 1"
+    },
+    {
+      "type": "text",
+      "id": "store_1_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_1_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_1_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_1_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 2"
+    },
+    {
+      "type": "text",
+      "id": "store_2_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_2_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_2_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_2_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 3"
+    },
+    {
+      "type": "text",
+      "id": "store_3_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_3_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_3_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_3_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 4"
+    },
+    {
+      "type": "text",
+      "id": "store_4_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_4_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_4_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_4_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 5"
+    },
+    {
+      "type": "text",
+      "id": "store_5_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_5_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_5_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_5_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 6"
+    },
+    {
+      "type": "text",
+      "id": "store_6_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_6_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_6_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_6_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_6_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 7"
+    },
+    {
+      "type": "text",
+      "id": "store_7_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_7_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_7_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_7_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_7_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 8"
+    },
+    {
+      "type": "text",
+      "id": "store_8_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_8_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_8_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_8_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_8_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 9"
+    },
+    {
+      "type": "text",
+      "id": "store_9_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_9_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_9_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_9_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_9_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 10"
+    },
+    {
+      "type": "text",
+      "id": "store_10_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_10_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_10_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_10_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_10_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 11"
+    },
+    {
+      "type": "text",
+      "id": "store_11_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_11_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_11_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_11_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_11_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 12"
+    },
+    {
+      "type": "text",
+      "id": "store_12_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_12_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_12_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_12_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_12_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 13"
+    },
+    {
+      "type": "text",
+      "id": "store_13_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_13_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_13_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_13_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_13_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 14"
+    },
+    {
+      "type": "text",
+      "id": "store_14_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_14_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_14_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_14_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_14_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Store 15"
+    },
+    {
+      "type": "text",
+      "id": "store_15_name",
+      "label": "Name"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_15_image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "store_15_address",
+      "label": "Address"
+    },
+    {
+      "type": "url",
+      "id": "store_15_map_link",
+      "label": "Google Maps link"
+    },
+    {
+      "type": "text",
+      "id": "store_15_phone",
+      "label": "Phone"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store locations grid"
+    }
+  ]
+}
+{% endschema %}

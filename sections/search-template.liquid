@@ -1,0 +1,80 @@
+{%- assign limit = 12 -%}
+{% paginate search.results by limit %}
+  <div class="page-search">
+    {% if settings.breadcrumbs_enable %}
+      <section id="NovBreadcrumbs">
+        <div class="container">
+          {% if search.results_count == 0 or search.performed == false %}
+            <h1 class="headingPage d-flex {{ settings.title_alignment }}">{{ 'general.search.no_results_title' | t }}</h1>
+          {% else %}
+            <h1 class="headingPage d-flex {{ settings.title_alignment }}">{{ 'general.search.results_with_count' | t: terms: search.terms, count: search.results_count }}</h1>
+          {% endif %}
+        </div>
+      </section>
+    {% endif %}
+    <div class="container">
+      {% if search.performed and search.results_count == 0 %}
+        <h3 class="text-center mb-100 font-500">{{ 'general.search.no_results_html' | t: terms: search.terms }}</h3>
+      {% endif %}
+      {% if search.results_count == 0 or search.performed == false %}
+        <div class="text-center">
+          <img class="lazyload" data-src="{{ 'search-none-count.png' | asset_img_url: '430x' }}" width="430" height="434" alt="" style="height: auto" />
+        </div>
+      {% endif %}
+      {% if search.performed and search.results_count != 0 %}
+        <div class="grid--view-items row mt-80 mt-sm-40 spacing-sm-10">
+          {% for item in search.results %}
+            {% if item.object_type == 'product' %}
+              <div class="col-lg-3 col-md-4 col-6">
+                {% render 'product-card-grid', product: item %}
+              </div>
+            {% elsif item.object_type == 'article' %}
+              <div class="col-lg-3 col-md-4 col-6 blog--list-view mb-30">
+                <div class="article--listing">
+                  <div class="article__thumnail">
+                    <img class="img-fluid article__list-image lazyload" data-src="{{ item.image.src | image_url: width: 370, height: 260, crop: 'center' }}" alt="{{ item.title }}" width="370" height="260" style="height: auto;" />
+                  </div>
+                  <div class="article__info mt-20">
+                    <div class="article_cs mb-10">
+                      <span class="article__date">
+                        {{ item.published_at | date: "%d" }} {{ item.published_at | date: "%b" }} {{ item.published_at | date: "%Y" }}&nbsp;&nbsp;
+                      </span>
+                      <span class="article__countcomment">
+                        {{ 'blogs.comments.comments_with_count' | t: count: item.comments_count }}&nbsp;&nbsp;
+                      </span>
+                      <span class="article__author">{{ item.author }}</span>
+                    </div>
+                    <div class="article__title mb-10">
+                      <a href="{{ item.url }}" class="h4 font-600 c_h hover:c_df">{{ item.title | strip_html | truncate: 60 }}</a>
+                    </div>
+                    <div class="article__excerpt mt-15">
+                      {% if item.excerpt.size > 0 %}
+                        {{ item.excerpt | truncate: 150 }}
+                      {% else %}
+                        {{ item.content | strip_html | truncate: 150 }}
+                      {% endif %}
+                    </div>
+                    <a href="{{ item.url }}" class="article__readmore mt-20 d-inline-block font-700 c_h hover:c_df">{{ 'blogs.article.view_more' | t }}</a>
+                  </div>
+                </div>
+              </div>
+            {% else %}
+              {% if item.image %}
+                <div class="list-view-item__image-column col-md-4 col-6">
+                  <div class="list-view-item__image-wrapper mb-sm-25">
+                    <img class="list-view-item__image" src="{{ item.image.src | image_url: width:600, height: 600, crop: 'center' }}" alt="{{ item.image.alt | escape }}" width="600" height="600" style="height: auto;">
+                  </div>
+                </div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% if paginate.pages > 1 %}
+          <div class="nov-pagination d-flex align-items-center">
+            {% render 'pagination', paginate: paginate %}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+{% endpaginate %}

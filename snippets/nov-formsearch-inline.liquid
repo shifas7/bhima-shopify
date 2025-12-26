@@ -1,0 +1,36 @@
+<form action="/search" method="get" class="search-header-inline{% if settings.show_border_product %} product-has-border{% endif %}" role="search" data-color="color-{{ settings.color_search }}">
+	<div class="search-header__content position-relative">
+		<div class="icon"><i class="rbb-icon-search-10"></i></div>
+		<input type="hidden" name="type" value="product">
+		<input class="search-header__input"
+		type="search"
+		name="q"
+		placeholder="{{ 'general.search.title' | t }}"
+		aria-label="{{ 'general.search.title' | t }}">
+		<button class="search-header__submit d-flex align-items-center justify-content-center{% if section.settings.search_btn_color %} color-{{ section.settings.search_btn_color }} {{ section.settings.search_btn_color_type }}{% endif %}" type="submit" title="{{ 'general.search.submit' | t }}">
+			<span class="search-header__submit-icon"><i class="rbb-icon-search-10"></i></span>
+			<span class="search-header__submit-text d-inline-flex">
+				{{ 'general.search.submit' | t }}
+			</span>
+		</button>
+		<div class="btn-search__clear-text hide position-absolute pointer"><i class="zmdi zmdi-close-circle"></i></div>
+	</div>
+	<div class="search_overlay"></div>
+	{% if settings.show_key_trend %}
+	  <div class="search_trend pt-sm-15 pb-sm-15 hidden color-{{ settings.color_search }}">
+	    <div class="search_trend-content">
+	      <div class="search_trend-title f_pr font-700">{{ 'general.search.search_trend' | t }}</div>
+	      <div class="list-item d-flex mt-10">
+	      	{% for i in (1..6) %}
+	      		{% assign key_trend_id = 'key_trend_' | append: i %}
+	      		{% if settings[key_trend_id] != blank %}
+	      			<a href="/search?type=product&q={{ settings[key_trend_id] | replace: ' ','%20' }}" class="btn {{ settings.search_btn_style }}">
+		      			<span>{{ settings[key_trend_id] }}</span>
+		      		</a>
+	      		{% endif %}
+	      	{% endfor %}
+	      </div>
+	    </div>
+	  </div>
+	{% endif %}
+</form>

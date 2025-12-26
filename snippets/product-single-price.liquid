@@ -1,0 +1,45 @@
+{%- liquid
+  assign discount_metafield = product.metafields.pricing.discount
+  assign discount_enabled = false
+  assign discount_amount = 0
+  if discount_metafield != blank
+    if discount_metafield.value != blank
+      assign discount_data = discount_metafield.value
+    else
+      assign discount_data = discount_metafield
+    endif
+    if discount_data.enabled == true or discount_data.enabled == "true"
+      assign discount_enabled = true
+      assign discount_amount = discount_data.discount_amount | default: 0
+    endif
+  endif
+  if discount_enabled and discount_amount != blank and discount_amount != 0
+    assign current_price_rupees = current_variant.price | divided_by: 100.0
+    assign price_before_discount = current_price_rupees | plus: discount_amount
+    assign price_before_discount_cents = price_before_discount | times: 100
+  endif
+-%}
+<div id="ProductPrice-{{ section.id }}" class="product-single__price price-st d-flex flex-wrap align-items-center {{ mb }}">
+  {% if discount_enabled and discount_amount != blank and discount_amount != 0 %}
+    <span class="product-price__price product-price__sale product-price__sale--single">
+      <span itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
+        {{ current_variant.price | money }}
+      </span>
+    </span>
+    <s class="ml-10">{{ price_before_discount_cents | money }}</s>
+  {% elsif current_variant.compare_at_price > current_variant.price %}
+    <span class="product-price__price product-price__sale product-price__sale--single">
+      <span itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
+        {{ current_variant.price | money }}
+      </span>
+    </span>
+    <s>{{ current_variant.compare_at_price | money }}</s>
+    <span class="product-price__badge">-{{ current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price | round: 4 }}%</span>
+  {% else %}
+    <span class="product-price__price">
+      <span itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
+        {{ current_variant.price | money }}
+      </span>
+    </span>
+  {% endif %}
+</div>

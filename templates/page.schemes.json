@@ -1,0 +1,77 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "nov-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "app_and_plans_promo_ER4mDq": {
+      "type": "app-and-plans-promo",
+      "blocks": {
+        "plan_HrpNtQ": {
+          "type": "plan",
+          "settings": {
+            "plan_logo": "shopify://shop_images/Untitled-4-02.jpg",
+            "title": "No MC Scheme",
+            "price": "₹500 - ₹2,00,000",
+            "features": "<ul><li>The duration of the plan is <strong>11 months</strong>.</li><li>Members can join this plan by opting for <strong>monthly installment starting from Rs.500</strong>.</li><li>Members are eligible to invest in <strong>multiple investment plans simultaneously</strong>.</li><li>Monthly advances towards Jewellery purchases must be <strong>equal and paid consecutively for 11 months</strong>. Advance payments <strong>cannot be extended beyond the 11th month</strong>, are <strong>non-transferable</strong>, and can only be <strong>adjusted against Jewellery purchases</strong>.</li><li>Members <strong>cannot transfer their installments</strong> in an investment plan to another individual’s name or another investment plan.</li><li>To avail scheme benefits, members must <strong>pay one installment per month</strong>. <strong>Advance payments are not accepted</strong> and <strong>no interest</strong> will be eligible for advance payments.</li><li>In case of <strong>address changes or lost passbooks</strong>, members must immediately inform the Jewellery shop and apply for a <strong>duplicate passbook with updated KYC details</strong>.</li><li>Monthly advances <strong>exceeding Rs.18,000</strong> must be paid through <strong>DD / Debit card / Credit card / NEFT / RTGS etc.</strong>, and <strong>not in cash</strong>.</li><li>Members <strong>cannot use multiple Jewellery plan accounts</strong> to purchase a <strong>single Jewellery</strong>, if the <strong>monthly advance exceeds Rs.2,00,000 in cash</strong>.</li><li>Members must <strong>surrender their passbook and one ID proof</strong> at the time of Jewellery purchase.</li><li>At the time of joining, members must <strong>appoint a nominee</strong>.</li><li>Members must <strong>bear GST and other Government levies</strong> at the time of purchase/delivery for all sales transactions.</li><li>The scheme must be <strong>closed within 3 months from the date of the scheme closure</strong>; otherwise scheme benefits cannot be availed.</li><li><strong>Withdrawal from the scheme before completion is not possible</strong>. Defaulting members will be <strong>forfeited of scheme benefits</strong>.</li><li><strong>Possession of gold ornaments is possible only after 30 days</strong> from scheme completion.</li><li><strong>Bhima Jewellery management reserves all rights and final decisions</strong> regarding this scheme.</li><li>This scheme falls under the <strong>jurisdiction of respective Bhima Jewellery showrooms</strong> in different regions.</li><li>The scheme adheres to the <strong>rules and regulations prescribed by the Government from time to time</strong>.</li><li><strong>Gold ornaments as per this scheme can be owned only from the respective Bhima Jewellery showrooms</strong> at which the customer enrolled for the scheme.</li></ul>",
+            "button_text": "Get Started",
+            "whatsapp_number": "9207729021"
+          }
+        },
+        "plan_xP38GX": {
+          "type": "plan",
+          "settings": {
+            "plan_logo": "shopify://shop_images/Untitled-4-02.jpg",
+            "title": "Bonus Scheme",
+            "price": "₹500 - ₹2,00,000",
+            "features": "<ul><li>The duration of the plan is <strong>11 months</strong>.</li><li>Members can join this plan by opting for <strong>monthly installment starting from Rs.500</strong>.</li><li>Members are eligible to invest in <strong>multiple investment plans simultaneously</strong>.</li><li>Monthly advances towards Jewellery purchases must be <strong>equal and paid consecutively for 11 months</strong>. Advance payments <strong>cannot be extended beyond the 11th month</strong>, are <strong>non-transferable</strong>, and can only be <strong>adjusted against Jewellery purchases</strong>.</li><li>Members <strong>cannot transfer their installments</strong> in an investment plan to another individual’s name or another investment plan.</li><li>To avail scheme benefits, members must <strong>pay one installment per month</strong>. <strong>Advance payments are not accepted</strong> and <strong>no interest</strong> will be eligible for advance payments.</li><li>In case of <strong>address changes or lost passbooks</strong>, members must immediately inform the Jewellery shop and apply for a <strong>duplicate passbook with updated KYC details</strong>.</li><li>Monthly advances <strong>exceeding Rs.18,000</strong> must be paid through <strong>DD / Debit card / Credit card / NEFT / RTGS etc.</strong>, and <strong>not in cash</strong>.</li><li>Members <strong>cannot use multiple Jewellery plan accounts</strong> to purchase a <strong>single Jewellery</strong>, if the <strong>monthly advance exceeds Rs.2,00,000 in cash</strong>.</li><li>Members must <strong>surrender their passbook and one ID proof</strong> at the time of Jewellery purchase.</li><li>At the time of joining, members must <strong>appoint a nominee</strong>.</li><li>Members must <strong>bear GST and other Government levies</strong> at the time of purchase/delivery for all sales transactions.</li><li>The scheme must be <strong>closed within 3 months from the date of the scheme closure</strong>; otherwise scheme benefits cannot be availed.</li><li><strong>Withdrawal from the scheme before completion is not possible</strong>. Defaulting members will be <strong>forfeited of scheme benefits</strong>.</li><li><strong>Possession of gold ornaments is possible only after 30 days</strong> from scheme completion.</li><li><strong>Bhima Jewellery management reserves all rights and final decisions</strong> regarding this scheme.</li><li>This scheme falls under the <strong>jurisdiction of respective Bhima Jewellery showrooms</strong> in different regions.</li><li>The scheme adheres to the <strong>rules and regulations prescribed by the Government from time to time</strong>.</li><li><strong>Gold ornaments as per this scheme can be owned only from the respective Bhima Jewellery showrooms</strong> at which the customer enrolled for the scheme.</li></ul>",
+            "button_text": "Get Started",
+            "whatsapp_number": "9207729021"
+          }
+        },
+        "plan_hKDtrb": {
+          "type": "plan",
+          "settings": {
+            "plan_logo": "shopify://shop_images/Untitled-4-01.jpg",
+            "title": "Weight Deposit Scheme",
+            "price": "₹500 - ₹2,00,000",
+            "features": "<h6><strong>Making Charges Benefits Before Tenure Completion</strong></h6><p><strong>Based on Period of Scheme Completion</strong></p><ul><li><strong>Less than 180 days (6th Month)</strong><br/>No benefit on making charges<br/>No benefit on gold weight<br/></li><li><strong>181 days to 210 days (7th Month)</strong><br/>No making charges up to <strong>11%</strong><br/>For items above 11%, <strong>normal discount</strong> applies<br/></li><li><strong>211 days to 240 days (8th Month)</strong><br/>No making charges up to <strong>13%</strong><br/>For items above 13%, <strong>normal discount</strong> applies<br/></li><li><strong>241 days to 270 days (9th Month)</strong><br/>No making charges up to <strong>15%</strong><br/>For items above 15%, <strong>normal discount</strong> applies<br/></li><li><strong>271 days to 300 days (10th Month)</strong><br/>No making charges up to <strong>16%</strong><br/>For items above 16%, <strong>normal discount</strong> applies<br/></li><li><strong>301 days to 360 days (11th Month)</strong><br/>No making charges up to <strong>18%</strong><br/>For items above 18% MC, <strong>MC benefit = (Gross MC – 18%)<br/></strong><br/><em>(The above making charge benefits are applicable only if members pay all instalments regularly without default.)<br/><br/></em><br/><strong>Making Charges Benefits in Case of Default</strong><br/></li><li>A default occurs if the monthly instalment is not paid on or before the due date<br/>(grace period of <strong>10 days</strong> allowed).<br/><br/><br/><strong>After 1 Month Default<br/></strong></li><li>MC benefits are reduced compared to regular payments.</li><li><h6>Maximum no making charge benefit ranges from <strong>10% to 16%</strong>, depending on the scheme month.<br/><br/><strong>After 2 Months Default<br/></strong></h6></li><li>MC benefits are further reduced.<br/></li><li><strong>Default exceeding 2 months:</strong><br/>All making charge benefits will be <strong>cancelled</strong>.<br/><br/></li></ul>",
+            "button_text": "Get Started",
+            "whatsapp_number": "9207729021"
+          }
+        }
+      },
+      "block_order": [
+        "plan_HrpNtQ",
+        "plan_xP38GX",
+        "plan_hKDtrb"
+      ],
+      "name": "App & Plans Promo",
+      "settings": {
+        "bg_color": "#ffffff",
+        "app_heading": "Our Mobile App",
+        "app_description": "<h5>Save monthly and enjoy making charge benefits on your jewellery purchase.</h5>",
+        "app_store_img": "shopify://shop_images/Apps-02.png",
+        "app_store_link": "https://apps.apple.com/in/app/bhima-pure/id6740321796",
+        "play_store_img": "shopify://shop_images/Apps-01.png",
+        "play_store_link": "https://play.google.com/store/apps/details?id=com.acme.jewelloApp.bhimaTrivandrum",
+        "plans_heading": "",
+        "plans_subheading": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "app_and_plans_promo_ER4mDq"
+  ]
+}

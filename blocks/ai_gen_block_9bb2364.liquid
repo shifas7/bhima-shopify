@@ -1,0 +1,153 @@
+{% doc %}
+  @prompt
+    i need to add a custom google form code, ineed to adjust top bottom padding
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-google-form-container-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+  }
+
+  .ai-google-form-wrapper-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .ai-google-form-iframe-{{ ai_gen_id }} {
+    width: 100%;
+    border: none;
+    min-height: {{ block.settings.form_height }}px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-google-form-container-{{ ai_gen_id }} {
+      padding-top: {{ block.settings.padding_top_mobile }}px;
+      padding-bottom: {{ block.settings.padding_bottom_mobile }}px;
+    }
+  }
+{% endstyle %}
+
+<google-form-embed-{{ ai_gen_id }}
+  class="ai-google-form-container-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-google-form-wrapper-{{ ai_gen_id }}">
+    {% if block.settings.google_form_embed != blank %}
+      {{ block.settings.google_form_embed }}
+    {% else %}
+      <div style="padding: 40px; text-align: center; background-color: #f4f4f4; border-radius: 8px;">
+        <p style="color: #666; margin: 0;">Next, paste your Google Form embed code in the block settings</p>
+      </div>
+    {% endif %}
+  </div>
+</google-form-embed-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class GoogleFormEmbed{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.adjustIframeHeight();
+      }
+
+      adjustIframeHeight() {
+        const iframe = this.querySelector('iframe');
+        if (iframe) {
+          iframe.classList.add('ai-google-form-iframe-{{ ai_gen_id }}');
+        }
+      }
+    }
+
+    customElements.define('google-form-embed-{{ ai_gen_id }}', GoogleFormEmbed{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Google form embed",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Google Form"
+    },
+    {
+      "type": "html",
+      "id": "google_form_embed",
+      "label": "Google Form embed code",
+      "info": "Paste the complete iframe embed code from Google Forms"
+    },
+    {
+      "type": "range",
+      "id": "form_height",
+      "min": 400,
+      "max": 2000,
+      "step": 50,
+      "unit": "px",
+      "label": "Form height",
+      "default": 800
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Mobile spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "Google form embed"
+    }
+  ]
+}
+{% endschema %}

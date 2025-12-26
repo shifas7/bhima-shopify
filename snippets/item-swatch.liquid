@@ -1,0 +1,35 @@
+{% if settings.use_color_swatch and option_color_swatch contains downcased_option %}
+  <ul class="item-swatch list-unstyled">
+    {% if option_color_swatch contains downcased_option %}
+      {% assign colorlist = '' %}
+      {% assign color = '' %}
+      {% assign option_count = 0 %}
+      {% for variant in product.variants %}
+        {% capture color %}{{ variant.options[index] }}{% endcapture %}
+        {% unless colorlist contains color %}
+          {% assign text = color | handleize %}
+            <li{% if settings.tooltip_enable %} data-toggle="tooltip"{% endif %} title="{{color}}">
+              <label{% if product.options_with_values.size == 1 %} data-with-one-option="{{variant.id}}" data-quantity="{% if variant.available %}1{% else %}0{% endif %}" data-inventory_policy="{{ variant.inventory_policy }}" data-inventory_management="{{ variant.inventory_management }}" data-price="{{ variant.price }}" data-compare_at_price="{{ variant.compare_at_price }}"{% endif %} class="variant-color-{{ text | downcase | handle }}{% if option_count == 0 %} active{% endif %}{% if product.options_with_values.size == 1 and variant.unavailable %} soldout{% endif %}{% if settings.color_swatch_style =='variant' %} img{% else %} color{% endif %}" data-value="{{ text }}" data-title="{{ color }}" data-id-product="{{variant.id}}"{% if variant.image != blank %} data-img="{{ variant.image.src | image_url: width: 600 }}"{% endif %}{%- if settings.color_swatch_style != 'variant'-%}style="{%- if text == 'white' -%}border: 1px solid #d1d1d1; --color: #8b8b8b;{%- endif -%}background-color: {{ color | split: ' ' | last | handle }};{%- unless text == 'white' -%}--color: {{ color | split: ' ' | last | handle }}{%- endunless -%}"{%- endif -%}>
+                {% if settings.color_swatch_style =='variant' and variant.image != blank %}
+                  <img class="lazyload" data-src="{{ variant.image.src | image_url: width: 48 }}" width="48" height="{{ 48 | divided_by: variant.image.aspect_ratio }}" style="height: auto;">
+                {% endif %}
+              </label>
+              {% assign option_count = option_count | plus : 1 %}
+            </li>
+          {% capture temp_list %}
+          {{ colorlist | append: color | append: '' }}
+          {% endcapture %}
+
+          {% assign colorlist = temp_list %}
+        {% endunless %}
+      {% endfor %}
+    {% endif %}
+    {% if option_color_swatch contains downcased_option %}
+      {% if option_count > 3 %}
+        <li class="item-swatch-more">
+          <span href="#" class="show_more pointer"><span>+</span> {{ option_count | minus : 3 }}</span>
+        </li>
+      {% endif %}
+    {% endif %}
+  </ul>
+{% endif %}

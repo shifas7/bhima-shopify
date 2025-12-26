@@ -1,0 +1,105 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "17642250933e4bd81b": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_f58d705_h96pcR": {
+          "type": "ai_gen_block_f58d705",
+          "settings": {
+            "heading": "Shop by Collection",
+            "heading_size": 40,
+            "heading_weight": "700",
+            "heading_color": "#1c1c1c",
+            "show_description": true,
+            "description": "<p>Explore our curated collections of premium jewelry pieces</p>",
+            "description_size": 16,
+            "description_color": "#666666",
+            "description_spacing": 10,
+            "header_spacing": 50,
+            "collection_1": "bangle",
+            "collection_2": "bracelet",
+            "collection_3": "earrings",
+            "collection_4": "necklaces",
+            "collection_5": "nose-pin",
+            "collection_6": "rings",
+            "collection_7": "",
+            "collection_8": "",
+            "collection_9": "",
+            "collection_10": "",
+            "show_collection_description": false,
+            "title_size": 18,
+            "title_weight": "600",
+            "title_color": "#1c1c1c",
+            "title_hover_color": "#df9a7c",
+            "collection_desc_size": 14,
+            "collection_desc_color": "#666666",
+            "item_background": "#ffffff",
+            "item_border_radius": 8,
+            "content_padding": 20,
+            "show_button": true,
+            "button_text": "Shop Now",
+            "button_font_size": 14,
+            "button_font_weight": "500",
+            "button_text_transform": "capitalize",
+            "button_border_radius": 50,
+            "button_border_width": 1,
+            "button_background": "#1c1c1c",
+            "button_text_color": "#ffffff",
+            "button_border_color": "#1c1c1c",
+            "button_background_hover": "#df9a7c",
+            "button_text_color_hover": "#ffffff",
+            "button_border_color_hover": "#df9a7c",
+            "item_gap": 24,
+            "padding_top": 60,
+            "padding_bottom": 60
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_f58d705_h96pcR"
+      ],
+      "settings": {}
+    },
+    "main": {
+      "type": "list-collections-template",
+      "blocks": {
+        "6f170e10-3222-4971-8ef6-70bf43eaae67": {
+          "type": "collection",
+          "settings": {
+            "collection": "aquarium"
+          }
+        },
+        "4fd91f58-7bca-4bcc-8b47-71bbccbf12c3": {
+          "type": "collection",
+          "settings": {
+            "collection": "bird-shop"
+          }
+        }
+      },
+      "block_order": [
+        "6f170e10-3222-4971-8ef6-70bf43eaae67",
+        "4fd91f58-7bca-4bcc-8b47-71bbccbf12c3"
+      ],
+      "disabled": true,
+      "settings": {
+        "display_type": "all",
+        "sort": "alphabetical",
+        "grid": "2"
+      }
+    }
+  },
+  "order": [
+    "17642250933e4bd81b",
+    "main"
+  ]
+}

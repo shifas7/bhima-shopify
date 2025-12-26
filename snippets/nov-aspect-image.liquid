@@ -1,0 +1,44 @@
+{%- liquid 
+  case aspect
+  when null, 0, blank, 'auto'
+    assign aspect_ratio = false
+  else
+    assign aspect_ratio = true
+  endcase
+  if aspect_ratio == true
+    if aspect == '11'
+      assign padding_top = 100
+    elsif aspect == '34'
+      assign padding_top = 133.33333333333334
+    elsif aspect == '43'
+      assign padding_top = 75
+    else
+      assign padding_top = aspect
+    endif
+  else
+    assign padding_top = 1 | divided_by: image.aspect_ratio | times: 100
+  endif
+-%}
+<div class="respone_image{% if class != blank %} {{ class }}{% endif %}" style="padding-top: {{ padding_top | append: '%' }}">
+  {% if aspect == '11' %}
+    <img class="lazyload"
+    src="{{ image | image_url: width: 1 }}"
+    data-src="{{ image | image_url: width: 180 }}"
+    data-srcset="{{ image | image_url: width: 380, height: 380, crop: 'center' }} 380w,{{ image | image_url: width: 580, height: 580, crop: 'center' }} 580w,{{ image | image_url: width: 768, height: 768, crop: 'center' }} 768w,{{ image | image_url: width: 900, height: 900, crop: 'center' }} 900w,{{ image | image_url: width: 1080, height: 1080, crop: 'center' }} 1080w,{{ image | image_url: width: 1296, height: 1296, crop: 'center' }} 1296w,{{ image | image_url: width: 1512, height: 1512, crop: 'center' }} 1512w,{{ image | image_url: width: 1728, height: 1728, crop: 'center' }} 1728w, {{ image | image_url: width: 2048, height: 2048, crop: 'center' }} 2048w" data-sizes="auto" alt="{{ image.alt }}" width="{{ image.width }}" height="{{ image.height }}" loading="lazy">
+  {% elsif aspect == '34' %}
+    <img class="lazyload"
+    src="{{ image | image_url: width: 1 }}"
+    data-src="{{ image | image_url: width: 180 }}"
+    data-srcset="{{ image | image_url: width: 380, height: 506, crop: 'center' }} 380w,{{ image | image_url: width: 580, height: 773, crop: 'center' }} 580w,{{ image | image_url: width: 768, height: 1024, crop: 'center' }} 768w,{{ image | image_url: width: 900, height: 1120, crop: 'center' }} 900w,{{ image | image_url: width: 1080, height: 1440, crop: 'center' }} 1080w,{{ image | image_url: width: 1296, height: 1728, crop: 'center' }} 1296w,{{ image | image_url: width: 1512, height: 2016, crop: 'center' }} 1512w,{{ image | image_url: width: 1728, height: 2304, crop: 'center' }} 1728w, {{ image | image_url: width: 2048, height: 2730, crop: 'center' }} 2048w" data-sizes="auto" alt="{{ image.alt }}" width="{{ image.width }}" height="{{ image.height }}" loading="lazy">
+  {% elsif aspect == '43' %}
+    <img class="lazyload"
+    src="{{ image | image_url: width: 1 }}"
+    data-src="{{ image | image_url: width: 180 }}"
+    data-srcset="{{ image | image_url: width: 380, height: 285, crop: 'center' }} 380w,{{ image | image_url: width: 580, height: 435, crop: 'center' }} 580w,{{ image | image_url: width: 768, height: 576, crop: 'center' }} 768w,{{ image | image_url: width: 900, height: 675, crop: 'center' }} 900w,{{ image | image_url: width: 1080, height: 810, crop: 'center' }} 1080w,{{ image | image_url: width: 1296, height: 972, crop: 'center' }} 1296w,{{ image | image_url: width: 1512, height: 1134, crop: 'center' }} 1512w,{{ image | image_url: width: 1728, height: 1296, crop: 'center' }} 1728w, {{ image | image_url: width: 2048, height: 1536, crop: 'center' }} 2048w" data-sizes="auto" alt="{{ image.alt }}" width="{{ image.width }}" height="{{ image.height }}" loading="lazy">
+  {% else %}
+    <img class="lazyload"
+    src="{{ image | image_url: width: 1 }}"
+    data-src="{{ image | image_url: width: 180 }}"
+    data-srcset="{{ image | image_url: width: 380 }} 380w,{{ image | image_url:width: 580 }} 580w,{{ image | image_url: width: 768 }} 768w,{{ image | image_url: width: 900 }} 900w,{{ image | image_url: width: 1080 }} 1080w,{{ image | image_url: width: 1296 }} 1296w,{{ image | image_url: width: 1512 }} 1512w,{{ image | image_url: width: 1728 }} 1728w, {{ image | image_url: width: 2048 }} 2048w" data-sizes="auto" alt="{{ image.alt }}" width="{{ image.width }}" height="{{ image.height }}" loading="lazy">
+  {% endif %}
+</div>

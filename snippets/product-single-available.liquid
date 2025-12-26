@@ -1,0 +1,21 @@
+{% unless product.available %}
+  <div class="available_product d-flex align-items-center">
+    <div class="available_name product-single__control-label">
+      {{ "products.product.available" | t }}
+    </div>
+    <span class="product__available sold-out">
+      <span>{{ "products.product.sold_out" | t }}</span>
+      <i class="zmdi zmdi-block"></i>
+    </span>
+  </div>
+{% else %}
+  <div class="available_product d-flex align-items-center">
+    <div class="available_name product-single__control-label">
+      {{ "products.product.available" | t }}
+    </div>
+    <span class="product__available in-stock">
+      <span>{{ "products.product.in_stock" | t }}</span>
+      {% render 'icon-check' %}
+    </span>
+  </div>
+{% endunless %}

@@ -1,0 +1,285 @@
+{% comment %}
+  This is used to create CSS custom variables with Liquid references
+  The file variables.scss is referring these CSS custom variables as Sass variables
+  to use throughout the stylesheet
+{% endcomment %}
+{%- liquid
+  assign body_font_light = settings.type_base_family | font_modify: 'weight', '300'
+  assign body_font_medium = settings.type_base_family | font_modify: 'weight', '500'
+  assign body_font_semibold = settings.type_base_family | font_modify: 'weight', '600'
+  assign body_font_bold = settings.type_base_family | font_modify: 'weight', '700'
+  assign body_font_extrabold = settings.type_base_family | font_modify: 'weight', '800'
+  assign body_font_black = settings.type_base_family | font_modify: 'weight', '900'
+  assign body_font_italic = settings.type_base_family | font_modify: 'style', 'italic'
+  assign body_font_light_italic = body_font_light | font_modify: 'style', 'italic'
+  assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
+  assign heading_font_light = settings.type_header_family | font_modify: 'weight', '300'
+  assign heading_font_medium = settings.type_header_family | font_modify: 'weight', '500'
+  assign heading_font_semibold = settings.type_header_family | font_modify: 'weight', '600'
+  assign heading_font_bold = settings.type_header_family | font_modify: 'weight', '700'
+  assign heading_font_extrabold = settings.type_header_family | font_modify: 'weight', '800'
+  assign heading_font_black = settings.type_header_family | font_modify: 'weight', '900'
+  assign heading_font_italic = settings.type_header_family | font_modify: 'style', 'italic'
+  assign heading_font_light_italic = heading_font_light | font_modify: 'style', 'italic'
+  assign heading_font_bold_italic = heading_font_bold | font_modify: 'style', 'italic'
+  assign heading_font_extrabold_italic = heading_font_extrabold | font_modify: 'style', 'italic'
+%}
+{% style %}
+    {%- if settings.type_google == false -%}
+        {{ body_font_light | font_face: font_display: 'swap' }}
+        {{ settings.type_base_family | font_face: font_display: 'swap' }}
+        {{ body_font_medium | font_face: font_display: 'swap' }}
+        {{ body_font_semibold | font_face: font_display: 'swap' }}
+        {{ body_font_bold | font_face: font_display: 'swap' }}
+        {{ body_font_extrabold | font_face: font_display: 'swap' }}
+        {{ body_font_black | font_face: font_display: 'swap' }}
+        {{ body_font_light_italic | font_face: font_display: 'swap' }}
+        {{ body_font_italic | font_face: font_display: 'swap' }}
+        {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+        {%- if settings.type_base_family != settings.type_header_family -%}
+            {{ heading_font_light | font_face: font_display: 'swap' }}
+            {{ settings.type_header_family | font_face: font_display: 'swap' }}
+            {{ heading_font_medium | font_face: font_display: 'swap' }}
+            {{ heading_font_semibold | font_face: font_display: 'swap' }}
+            {{ heading_font_bold | font_face: font_display: 'swap' }}
+            {{ heading_font_extrabold | font_face: font_display: 'swap' }}
+            {{ heading_font_black | font_face: font_display: 'swap' }} 
+            {{ heading_font_light_italic | font_face: font_display: 'swap' }}
+            {{ heading_font_italic | font_face: font_display: 'swap' }}
+            {{ heading_font_bold_italic | font_face: font_display: 'swap' }}
+            {{ heading_font_extrabold_italic | font_face: font_display: 'swap' }}
+        {%- endif -%}
+    {% endif %}
+    {%- if settings.background_homepage != blank or settings.background_img_homepage != blank -%}
+        .template-index {
+            {% if settings.background_homepage != blank %}
+                background-color: {{ settings.background_homepage }};
+            {% endif %}
+            {% if settings.background_img_homepage != blank %}
+                background-image: url({{ settings.background_img_homepage | image_url: width: 2560 }});
+                background-repeat: {{ settings.background_repeat_homepage }};
+                background-size: {{ settings.background_size_homepage }};
+            {% endif %}
+        }
+    {%- endif -%}
+
+    {% for scheme in settings.color_schemes -%}
+        {% assign scheme_classes = scheme_classes | append: ', .color-' | append: scheme.id %}
+        {% if forloop.index == 1 -%}
+            :root,
+        {%- endif %}
+        .color-{{ scheme.id }} {
+            {% if scheme.settings.background_gradient != empty %}
+                --color-background: {{ scheme.settings.background_gradient }};
+            {% else %}
+                --color-background: {{ scheme.settings.background }};
+                --color-background-rgb:{{ scheme.settings.background.red }},{{ scheme.settings.background.green }},{{ scheme.settings.background.blue }};
+            {% endif %}
+
+            --color-title: {{ scheme.settings.title }};
+            --color-title-rgb: {{ scheme.settings.title.red }},{{ scheme.settings.title.green }},{{ scheme.settings.title.blue }};
+            --color-sub-title: {{ scheme.settings.sub_title }};
+            --color-text: {{ scheme.settings.text }};
+            --color-text-rgb: {{ scheme.settings.text.red }},{{ scheme.settings.text.green }},{{ scheme.settings.text.blue }};
+
+            --color-button: {{ scheme.settings.primary_button }};
+            --color-button-text: {{ scheme.settings.on_primary_button }};
+            --color-button-text-rgb: {{ scheme.settings.on_primary_button.red }},{{ scheme.settings.on_primary_button.green }},{{ scheme.settings.on_primary_button.blue }};
+            --color-button-border: {{ scheme.settings.primary_button_border }};
+
+            --color-button-hover: {{ scheme.settings.primary_button_hover }};
+            --color-button-text-hover: {{ scheme.settings.on_primary_button_hover }};
+            --color-button-text-hover-rgb: {{ scheme.settings.on_primary_button_hover.red }},{{ scheme.settings.on_primary_button_hover.green }},{{ scheme.settings.on_primary_button_hover.blue }};
+            --color-button-border-hover: {{ scheme.settings.primary_button_border_hover }};
+
+            --color-secondary-button: {{ scheme.settings.secondary_button }};
+            --color-secondary-button-text: {{ scheme.settings.on_secondary_button }};
+            --color-secondary-button-border: {{ scheme.settings.secondary_button_border }};
+
+            --color-secondary-button-hover: {{ scheme.settings.secondary_button_hover }};
+            --color-secondary-button-text-hover: {{ scheme.settings.on_secondary_button_hover }};
+            --color-secondary-button-border-hover: {{ scheme.settings.secondary_button_border_hover }};
+
+            --color-link: {{ scheme.settings.links }};
+            --color-link-rgb: {{ scheme.settings.links.red }},{{ scheme.settings.links.green }},{{ scheme.settings.links.blue }};
+            --color-hover: {{ scheme.settings.links_hover }};
+            --color-hover-rgb: {{ scheme.settings.links_hover.red }},{{ scheme.settings.links_hover.green }},{{ scheme.settings.links_hover.blue }};
+
+            --color-icons: {{ scheme.settings.icons }};
+            --color-icons-rgb: {{ scheme.settings.icons.red }},{{ scheme.settings.icons.green }},{{ scheme.settings.icons.blue }};
+
+            --color-border: {{ scheme.settings.border }};
+            --color-border-rgb: {{ scheme.settings.border.red }},{{ scheme.settings.border.green }},{{ scheme.settings.border.blue }};
+
+            --color-shadow: {{ scheme.settings.shadow }};
+            --color-shadow-rgb: {{ scheme.settings.shadow.red }},{{ scheme.settings.shadow.green }},{{ scheme.settings.shadow.blue }};
+            --payment-terms-background-color: rgb({{ scheme.settings.background.rgb }});
+        }
+    {% endfor %}
+    
+    :root {
+        {%- if settings.type_google == true -%}
+            --font-family-primary: {{ settings.type_header_family_google }};
+            --font-family-default: {{ settings.type_base_family_google }};
+        {%- else -%}
+            --font-family-primary: {{ settings.type_header_family.family }}, {{ settings.type_header_family.fallback_families }};
+            --font-family-default: {{ settings.type_base_family.family }}, {{ settings.type_base_family.fallback_families }};
+        {%- endif -%}
+
+        --container: {{ settings.container }}px;
+        --container-fluid: {{ settings.container_fluid }}px;
+
+        --heading-font-size-h1: {{ settings.heading_font_size_h1 | divided_by: 10.0 | append: 'rem' }};
+        --heading-font-size-h2: {{ settings.heading_font_size_h2 | divided_by: 10.0 | append: 'rem' }};
+        --heading-font-size-h3: {{ settings.heading_font_size_h3 | divided_by: 10.0 | append: 'rem' }};
+        --heading-font-size-h4: {{ settings.heading_font_size_h4 | divided_by: 10.0 | append: 'rem' }};
+        --heading-font-size-h5: {{ settings.heading_font_size_h5 | divided_by: 10.0 | append: 'rem' }};
+        --heading-font-size-h6: {{ settings.heading_font_size_h6 | divided_by: 10.0 | append: 'rem' }};
+        --heading-font-weight: {{ settings.heading_font_weight }};
+        --heading-font-style: {{ settings.heading_font_style }};
+        --heading-line-height: {{ settings.heading_line_height }};
+
+        --body-font-size: {{ settings.body_font_size | divided_by: 10.0 | append: 'rem' }};
+        --body-font-weight: {{ settings.body_font_weight }};
+        --body-font-style: {{ settings.body_font_style }};
+        --body-font-line-height: {{ settings.body_line_height }};
+
+
+        --section-heading-font-size: {{ settings.section_heading_font_size }}px;
+        --section-heading-font-weight: {{ settings.section_heading_font_weight }};
+        --section-subheading-font-size: {{ settings.section_subheading_font_size }}px;
+        --section-subheading-font-weight: {{ settings.section_subheading_font_weight }};
+        --section-descheading-font-size: {{ settings.section_descheading_font_size }}px;
+        --section-descheading-font-weight: {{ settings.section_descheading_font_weight }};
+        --section-heading-spacing: {{ settings.section_heading_spacing }}px;
+        {% if settings.section_heading_font_family == 'default' %}
+            --section-heading-font-family: var(--font-family-default);
+        {% else %}
+            --section-heading-font-family: var(--font-family-primary);
+        {% endif %}
+        {% if settings.section_subheading_font_family == 'default' %}
+            --section-subheading-font-family: var(--font-family-default);
+        {% else %}
+            --section-subheading-font-family: var(--font-family-primary);
+        {% endif %}
+
+        --button-thickness: {{ settings.btn_thickness }}px;
+        --button-corner: {{ settings.btn_corner }}px;
+        --button-normal-width: {{ settings.btn_normal_width }}px;
+        --button-normal-height: {{ settings.btn_normal_height }}px;
+        --button-medium-width: {{ settings.btn_medium_width }}px;
+        --button-medium-height: {{ settings.btn_medium_height }}px;
+        --button-large-width: {{ settings.btn_large_width }}px;
+        --button-large-height: {{ settings.btn_large_height }}px;
+        --button-font-size:  {{ settings.btn_font_size | divided_by: 10.0 | append: 'rem' }};
+        --button-font-weight: {{ settings.btn_font_weight }};
+        --button-text-transform: {{ settings.btn_text_transform }};
+        {% if settings.btn_font_family == 'default' %}
+            --button-font-family: var(--font-family-default);
+        {% else %}
+            --button-font-family: var(--font-family-primary);
+        {% endif %}
+
+        --font-icon: "Material-Design-Iconic-Font";
+        --font-icons: "rbb-font";
+       
+        --product-corner-radius: {{ settings.corner_product }}px;
+        --product-corner-radius-image: {{ settings.corner_product_image }}px;
+        --product-color-border: {{ settings.product_border }};
+        --product-color-background: {{ settings.product_background }};
+        --product-color-type: {{ settings.color_product_type }};
+        --product-color-title: {{ settings.product_title }};
+        --product-color-title-hover: {{ settings.product_title_hover }};
+        --product-color-price: {{ settings.product_price }};
+        --product-color-reduced-price: {{ settings.product_reduced_price }};
+        --product-color-button: {{ settings.product_button }};
+        --product-color-button-text: {{ settings.on_product_button }};
+        --product-color-button-border: {{ settings.product_button_border }};
+        --product-color-button-hover: {{ settings.product_button_hover }};
+        --product-color-button-text-hover: {{ settings.on_product_button_hover }};
+        --product-color-button-border-hover: {{ settings.product_button_border_hover }};
+        --product-color-badge-new: {{ settings.product_badge_new }};
+        --product-color-badge-new-text: {{ settings.on_product_badge_new }};
+        --product-color-badge-sale: {{ settings.product_badge_sale }};
+        --product-color-badge-sale-text: {{ settings.on_product_badge_sale }};
+        
+        --breadcrumb-product-bg: {{ settings.breadcrumb_product_bg }};
+        --breadcrumb-product-text-color: {{ settings.breadcrumb_product_text_color }};
+        --breadcrumb-product-top: {{ settings.breadcrumb_product_top }}px;
+        --breadcrumb-product-bottom: {{ settings.breadcrumb_product_bottom }}px;
+        --breadcrumb-product-margin-bottom: {{ settings.breadcrumb_product_margin_bottom }}px;
+        --breadcrumb-product-border-color: {{ settings.breadcrumb_product_border_color }};
+
+        --breadcrumb-collection-bg: {{ settings.breadcrumb_collection_bg }};
+        --breadcrumb-collection-heading-color: {{ settings.breadcrumb_collection_heading_color }};
+        --breadcrumb-collection-text-color: {{ settings.breadcrumb_collection_text_color }};
+        --breadcrumb-collection-top: {{ settings.breadcrumb_collection_top }}px;
+        --breadcrumb-collection-bottom: {{ settings.breadcrumb_collection_bottom }}px;
+        --breadcrumb-collection-bottom-lg: {{ settings.breadcrumb_collection_bottom_lg }}px;
+        --breadcrumb-collection-bottom-md: {{ settings.breadcrumb_collection_bottom_md }}px;
+        --breadcrumb-collection-bottom-sm: {{ settings.breadcrumb_collection_bottom_sm }}px;
+        --breadcrumb-collection-bottom-xs: {{ settings.breadcrumb_collection_bottom_xs }}px;
+        --breadcrumb-collection-margin-bottom: {{ settings.breadcrumb_collection_margin_bottom }}px;
+        --breadcrumb-collection-margin-bottom-lg: {{ settings.breadcrumb_collection_margin_bottom_lg }}px;
+        --breadcrumb-collection-margin-bottom-md: {{ settings.breadcrumb_collection_margin_bottom_md }}px;
+        --breadcrumb-collection-margin-bottom-sm: {{ settings.breadcrumb_collection_margin_bottom_sm }}px;
+        --breadcrumb-collection-margin-bottom-xs: {{ settings.breadcrumb_collection_margin_bottom_xs }}px;
+        --breadcrumb-collection-border-color: {{ settings.breadcrumb_collection_border_color }};
+
+        --breadcrumb-inner-bg: {{ settings.breadcrumb_inner_bg }};
+        --breadcrumb-inner-heading-color: {{ settings.breadcrumb_inner_heading_color }};
+        --breadcrumb-inner-text-color: {{ settings.breadcrumb_inner_text_color }};
+        --breadcrumb-inner-top: {{ settings.breadcrumb_inner_top }}px;
+        --breadcrumb-inner-bottom: {{ settings.breadcrumb_inner_bottom }}px;
+        --breadcrumb-inner-margin-bottom: {{ settings.breadcrumb_inner_margin_bottom }}px;
+        --breadcrumb-inner-border-color: {{ settings.breadcrumb_inner_border_color }};
+
+        --bg-overlay: {{ settings.background_overlay }};
+        --bg-overlay-opacity: {{ settings.background_overlay_opacity }}%;
+        --bg-overlay-blur: {{ settings.background_overlay_blur }}px;
+        
+        --bg-loadpage: {{ settings.bg_loadpage }};
+
+        --transition-drawer: all 0.45s cubic-bezier(0.29, 0.63, 0.44, 1);
+
+        --slider-dot-size: {{ settings.slider_dot_size }}px;
+        --slider-dot-width-act: {{ settings.slider_dot_width_act }}px;
+        --slider-dot-corner: {{ settings.slider_dot_corner }}px;
+        --slider-dot-color: {{ settings.slider_dot_color_on_light }};
+        --slider-dot-color-act: {{ settings.slider_dot_color_on_light_act }};
+
+        --slider-arrow-size: {{ settings.slider_arrow_size }}px;
+        --slider-arrow-corner: {{ settings.slider_arrow_corner }}px;
+        --slider-arrow-color: {{ settings.slider_arrow_color_on_light }};
+        --slider-arrow-bg: {{ settings.slider_arrow_bg_on_light }};
+        --slider-arrow-border: {{ settings.slider_arrow_bd_on_light }};
+        --slider-arrow-color-act: {{ settings.slider_arrow_color_on_light_act }};
+        --slider-arrow-bg-act: {{ settings.slider_arrow_bg_on_light_act }};
+        --slider-arrow-border-act: {{ settings.slider_arrow_bd_on_light_act }};
+
+        {% if settings.slider_arrow_boxshadow %}
+            --slider-arrow-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        {% endif %}
+    }
+    .btn-secondary {
+        --color-button: var(--color-secondary-button);
+        --color-button-text: var(--color-secondary-button-text);
+        --color-button-border: var(--color-secondary-button-border);
+        --color-button-hover: var(--color-secondary-button-hover);
+        --color-button-text-hover: var(--color-secondary-button-text-hover);
+        --color-button-border-hover: var(--color-secondary-button-border-hover);
+    }
+    
+    .dots_on_dark {
+        --slider-dot-color: {{ settings.slider_dot_color_on_dark }};
+        --slider-dot-color-act: {{ settings.slider_dot_color_on_dark_act }};
+    }
+    .arrow_on_dark {
+        --slider-arrow-color: {{ settings.slider_arrow_color_on_dark }};
+        --slider-arrow-bg: {{ settings.slider_arrow_bg_on_dark }};
+        --slider-arrow-border: {{ settings.slider_arrow_bd_on_dark }};
+        --slider-arrow-color-act: {{ settings.slider_arrow_color_on_dark_act }};
+        --slider-arrow-bg-act: {{ settings.slider_arrow_bg_on_dark_act }};
+        --slider-arrow-border-act: {{ settings.slider_arrow_bd_on_dark_act }};
+    }
+{% endstyle %}

@@ -1,0 +1,77 @@
+{% liquid 
+  assign dot = false
+  assign nav = true
+  assign items = '1'
+  assign items_lg = '1'
+  assign items_md = '1'
+  assign items_sm = '1'
+  assign items_xs = '1'
+
+  if viewtype == 'sliderimg'
+    assign dot = true
+    assign nav = true
+    assign items = '2'
+    assign items_lg = '2'
+  endif
+
+  if viewtype == 'sliderimgtwo'
+    assign dot = true
+    assign nav = true
+    assign items = '3'
+    assign items_lg = '2'
+  endif
+%}
+
+{% if viewtype == 'imggrid' %}
+  {% assign class = 'col-lg-6 mb-10 mb-md-0' %}
+{% elsif viewtype == 'scroll' %}
+  {% assign class = 'd-block mb-10 mb-md-0' %}
+{% endif %}
+<div id="proFeaturedImageZoom" class="proFeaturedImage
+  {% if viewtype == 'imggrid' %} row spacing-10{% endif %}
+  {% unless viewtype == 'imggrid' or viewtype == 'scroll' %} FeaturedImage_slick{% endunless %}"
+  {% unless viewtype == 'imggrid' or viewtype == 'scroll' %}
+  data-draggable="false"
+  data-dots="{{ dot }}"
+  data-nav="{{ nav }}"
+  data-items="{{ items }}"
+  data-items_lg="{{ items_lg }}"
+  data-items_md="{{ items_md }}"
+  data-items_sm="{{ items_sm }}"
+  data-items_xs="{{ items_xs }}"
+  {% endunless %}
+>
+
+  {%- for media in product.media -%}
+    {% case media.media_type %}
+      {% when 'image' %}
+        <a href="#" class="item item_img{% if forloop.first %} act{% endif %} {{ class }}" data-media-id="{{ section.id }}-{{ media.id }}" data-position="{% if viewtype == 'scroll' %}{{ forloop.index }}{% else %}{{ forloop.index0 }}{% endif %}" data-pswp-src="{{ media | image_url: width: 1024 }}" data-pswp-width="{{ media.width }}" data-pswp-height="{{ media.height }}">
+          <div class="item-content">
+            <div class="respone_image{% if section.settings.enable_zoom and viewtype != 'left' %} image-zoom{% endif %}" style="padding-top:{{ 1 | divided_by: media.aspect_ratio | times: 100}}%;" data-zoom="{{ media | image_url: width: 1120 }}">
+              <img class="lazyload"
+                src="{{ media | image_url: width: 1 }}"
+                data-src="{{ media | image_url: width: 180 }}"
+                data-srcset="{{ media | image_url: width: 380 }} 380w,{{ media | image_url: width: 580 }} 580w,{{ media | image_url: width: 768 }} 768w,{{ media | image_url: width: 900 }} 900w,{{ media | image_url: width: 1080 }} 1080w,{{ media | image_url: width: 1296 }} 1296w,{{ media | image_url: width: 1512 }} 1512w,{{ media | image_url: width: 1728 }} 1728w, {{ media | image_url: width: 2048 }} 2048w" data-sizes="auto"  loading="lazy" width="{{ media.width }}" height="{{ media.height }}" alt="{{ media.alt }}"/>
+            </div>
+          </div>
+        </a>
+      {% when 'external_video' %}
+        <div class="item{% if forloop.first %} act{% endif %} {{ class }} embed-responsive embed-responsive-16by9" data-media-id="{{ section.id }}-{{ media.id }}" data-position="{{ forloop.index0 }}">
+          <div class="item-content">{{ media | external_video_tag }}</div>
+        </div>
+      {% when 'video' %}
+        <div class="item{% if forloop.first %} act{% endif %} {{ class }}" data-media-id="{{ section.id }}-{{ media.id }}" data-position="{{ forloop.index0 }}">
+          <div class="item-content position-relative">{{ media | video_tag: controls: true, image_size: "1024x", autoplay: true, loop: true, class: "w-100" }}</div>
+        </div>
+      {% when 'model' %}
+        <div class="item{% if forloop.first %} act{% endif %} {{ class }}" data-media-id="{{ section.id }}-{{ media.id }}" data-position="{{ forloop.index0 }}">
+          <div class="item-content"><product-model>{%- liquid echo media | media_tag: image_size: "2048x", toggleable: true -%}</product-model></div>
+        </div>
+      {% else %}
+        <div class="item{% if forloop.first %} act{% endif %} {{ class }}" data-media-id="{{ section.id }}-{{ media.id }}" data-position="{{ forloop.index0 }}">
+          <div class="item-content">{{ media | media_tag }}</div>
+        </div>
+    {% endcase %}
+  {%- endfor -%}
+
+</div>

@@ -1,0 +1,53 @@
+<div class="info_content product-single__sticky">       
+  <div class="d-md-flex align-items-center justify-content-between mb-10">
+    <h1 itemprop="name" class="product-single__title text-capitalize">{{ product.title }}</h1>
+    {% if collection.previous_product or collection.next_product %}
+    <div class="product-single__direction d-flex align-items-center">
+      {% if collection.previous_product %}
+      <div class="btn-direction"{% if settings.tooltip_enable %} data-toggle="tooltip" data-placement="top" title="{{ 'products.general.previous_product' | t }}"{% endif %}>
+        {{ '<i class="rbb-icon-direction-36"></i>' | link_to: collection.previous_product.url, collection.previous_product.title }}
+      </div>
+      {% endif %}
+      <a href="{{ collection.url }}" class="btn-collection d-block"{% if settings.tooltip_enable %} data-toggle="tooltip" data-placement="top" title="{{ 'products.general.back_to_collection' | t }}"{% endif %}><i class="rbb-icon-view-grid-1"></i></a>
+      <div class="btn-direction"{% if settings.tooltip_enable %} data-toggle="tooltip" data-placement="top" title="{{ 'products.general.next_product' | t }}"{% endif %}>
+        {% if collection.next_product %}
+          {{ '<i class="rbb-icon-direction-39"></i>' | link_to: collection.next_product.url, collection.next_product.title }}
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if settings.show_rating %}
+    <div class="product-single__top-review mb-20 d-flex align-items-center">
+      <div class="AirReviews-Widget AirReviews-Widget--Stars"></div>
+      <a href="#AirReviews-BlockWrapper" class="btn-review__all text-uppercase font-700 c_h">{{ 'products.product.review_all_btn' | t }}</a>
+    </div>
+  {% endif %}
+
+  {% render 'product-single-price', current_variant: product.selected_or_first_available_variant %}
+
+  {% if section.settings.show_des %}
+    <div class="product-single__shortdes" itemprop="description">{{ product.description | strip_html | truncatewords: 35}}</div> 
+  {% endif %}
+
+  {% render 'product-single-deal' %}
+
+  {% if section.settings.show_available %}
+    {% render 'product-single-available' %}
+  {% endif %}
+
+  {% render 'product-single-info' %}
+
+  <form action="/cart/add" method="post" enctype="multipart/form-data" id="product-form-{{ section.id }}">
+    {% render 'product-single-variant', current_variant: product.selected_or_first_available_variant %}
+    {% render 'product-single-addtocart', current_variant: product.selected_or_first_available_variant %}
+  </form>
+
+  {% render 'product-single-share-ask' %}
+  {% if viewtype == 'accordiontwo' %}
+    {% render 'product-single-accordion', class: 'mt-45' %}
+  {% endif %}
+
+  {% render 'product-single-payment-shipping' %}
+</div>

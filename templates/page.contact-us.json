@@ -1,0 +1,35 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "nov-page-contact",
+      "settings": {
+        "has_fullwidth": false,
+        "map": true,
+        "iframe_map": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2107.625504277698!2d76.95220823012924!3d8.52392478139609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b05bb1024047977%3A0x71c4665aeec774b!2sBHIMA%20CORPORATE%20OFFICE!5e1!3m2!1sen!2sin!4v1763204977870!5m2!1sen!2sin\" width=\"1450\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade",
+        "form": true,
+        "title_form": "Get in touch",
+        "sub_form": "Please enter the details of your requesst. A member of our support staff will respond as soon as possible.",
+        "title_alignment": "text-left",
+        "text_button": "",
+        "boxInfor": true,
+        "address": "Mahatma Gandhi Rd, near Ayurveda College, Ayurveda College Junction, Vanchiyoor, Thiruvananthapuram, Kerala 695001",
+        "email": "care@bhimajewellery.com",
+        "call": "+91 85477 72777",
+        "time": "Our office has re-opened for visiting, exchanges every day 10am to 8.30pm",
+        "social": true
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
