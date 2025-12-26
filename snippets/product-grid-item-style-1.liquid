@@ -1,6 +1,26 @@
 {%- liquid
+  assign discount_metafield = product.metafields.pricing.discount
+  assign discount_enabled = false
+  assign discount_amount = 0
+  if discount_metafield != blank
+    if discount_metafield.value != blank
+      assign discount_data = discount_metafield.value
+    else
+      assign discount_data = discount_metafield
+    endif
+    if discount_data.enabled == true or discount_data.enabled == "true"
+      assign discount_enabled = true
+      assign discount_amount = discount_data.discount_amount | default: 0
+    endif
+  endif
+  
   assign on_sale = false
-  if product.compare_at_price_min > product.price_min
+  if discount_enabled and discount_amount != blank and discount_amount != 0
+    assign on_sale = true
+    assign current_price_rupees = product.variants[0].price | divided_by: 100.0
+    assign price_before_discount = current_price_rupees | plus: discount_amount
+    assign price_before_discount_cents = price_before_discount | times: 100
+  elsif product.compare_at_price_min > product.price_min
     assign on_sale = true
   endif
   assign option_color_swatch = settings.option_color_swatch | downcase
@@ -127,7 +147,11 @@
         {% if on_sale %}
           <div class="price-sale d-inline-flex flex-wrap align-items-center">
             <span class="special-price" data-price-grid>{{ product.variants[0].price | money }}</span>
-            <span class="old-price" data-compare-price-grid>{{ product.variants[0].compare_at_price | money }}</span>
+            {% if discount_enabled and discount_amount != blank and discount_amount != 0 %}
+              <s class="old-price" data-compare-price-grid>{{ price_before_discount_cents | money }}</s>
+            {% else %}
+              <span class="old-price" data-compare-price-grid>{{ product.variants[0].compare_at_price | money }}</span>
+            {% endif %}
           </div>
         {% else %}
           <div class="price-regular">
