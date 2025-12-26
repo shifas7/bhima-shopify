@@ -90,16 +90,18 @@
       <div class="rate-dropdown" id="rateToggle">
         <strong>TODAY'S RATE</strong> ▾
         <div class="rate-menu" id="rateMenu">
+          <!-- Static fallback rates (shown while loading or if API fails) -->
           {% for i in (1..8) %}
             {% capture label_key %}rate_label_{{ i }}{% endcapture %}
             {% capture value_key %}rate_value_{{ i }}{% endcapture %}
             {% if section.settings[value_key] != blank %}
-              <div class="rate-item">
+              <div class="rate-item static-rate-item" data-rate-index="{{ i }}">
                 <span>{{ section.settings[label_key] }}</span>
                 <span>{{ section.settings[value_key] }}</span>
               </div>
             {% endif %}
           {% endfor %}
+          <!-- Dynamic rates will be inserted here by JavaScript -->
         </div>
       </div>
     </div>
@@ -108,13 +110,68 @@
 </div>
 
 <script>
-  document.getElementById('rateToggle').addEventListener('click', function(e) {
-    document.getElementById('rateMenu').classList.toggle('active');
-    e.stopPropagation();
-  });
-  window.onclick = function() {
-    document.getElementById('rateMenu').classList.remove('active');
-  }
+  (function() {
+    const rateToggle = document.getElementById('rateToggle');
+    const rateMenu = document.getElementById('rateMenu');
+    const apiUrl = '{{ section.settings.api_url | default: "https://bhima-price-calculator-9njho.ondigitalocean.app/api/metal-prices/formatted" }}';
+    let ratesLoaded = false;
+
+    // Load metal prices from API
+    async function loadMetalPrices() {
+      if (ratesLoaded) return;
+      
+      try {
+        const response = await fetch(apiUrl);
+        const result = await response.json();
+        
+        if (result.success && result.data && result.data.formatted) {
+          // Hide static rates
+          const staticRates = rateMenu.querySelectorAll('.static-rate-item');
+          staticRates.forEach(rate => rate.style.display = 'none');
+          
+          // Clear existing dynamic rates
+          const existingDynamic = rateMenu.querySelectorAll('.dynamic-rate-item');
+          existingDynamic.forEach(rate => rate.remove());
+          
+          // Add dynamic rates
+          result.data.formatted.forEach(rate => {
+            const rateItem = document.createElement('div');
+            rateItem.className = 'rate-item dynamic-rate-item';
+            rateItem.innerHTML = `
+              <span>${rate.label}</span>
+              <span>${rate.price}</span>
+            `;
+            rateMenu.appendChild(rateItem);
+          });
+          
+          ratesLoaded = true;
+        }
+      } catch (error) {
+        console.warn('Failed to load metal prices from API, using static rates:', error);
+        // Keep static rates visible if API fails
+      }
+    }
+
+    // Toggle dropdown
+    if (rateToggle) {
+      rateToggle.addEventListener('click', function(e) {
+        rateMenu.classList.toggle('active');
+        e.stopPropagation();
+        // Load prices when dropdown opens (refresh every time)
+        loadMetalPrices();
+      });
+    }
+
+    // Close dropdown when clicking outside
+    window.onclick = function(e) {
+      if (rateMenu && !rateToggle.contains(e.target) && !rateMenu.contains(e.target)) {
+        rateMenu.classList.remove('active');
+      }
+    }
+
+    // Load prices on page load
+    loadMetalPrices();
+  })();
 </script>
 
 {% schema %}
@@ -126,7 +183,9 @@
     { "type": "text", "id": "center_text", "label": "Center Text", "default": "0% Making charge on selected items!" },
     { "type": "text", "id": "right_link_text", "label": "Right Link Text", "default": "FREE SHIPPING" },
     { "type": "url", "id": "right_link", "label": "Right Link URL" },
-    { "type": "header", "content": "Metal Rates (Leave blank to hide)" },
+    { "type": "header", "content": "Metal Prices API" },
+    { "type": "text", "id": "api_url", "label": "Metal Prices API URL", "info": "Default: https://bhima-price-calculator-9njho.ondigitalocean.app/api/metal-prices/formatted", "default": "https://bhima-price-calculator-9njho.ondigitalocean.app/api/metal-prices/formatted" },
+    { "type": "header", "content": "Metal Rates (Fallback if API fails)" },
     { "type": "text", "id": "rate_label_1", "label": "Rate 1 Name", "default": "22K Gold (1g)" },
     { "type": "text", "id": "rate_value_1", "label": "Rate 1 Price" },
     { "type": "text", "id": "rate_label_2", "label": "Rate 2 Name", "default": "24K Gold (1g)" },

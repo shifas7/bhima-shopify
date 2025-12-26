@@ -274,7 +274,8 @@
             </svg>
           </button>
 
-          <div class="ai-utility-bar-dropdown-menu-{{ ai_gen_id }}">
+          <div class="ai-utility-bar-dropdown-menu-{{ ai_gen_id }}" id="metal-rates-menu-{{ ai_gen_id }}">
+            <!-- Static fallback rates (shown while loading or if API fails) -->
             {% for i in (1..8) %}
               {% assign rate_label_key = 'rate_' | append: i | append: '_label' %}
               {% assign rate_price_key = 'rate_' | append: i | append: '_price' %}
@@ -282,12 +283,13 @@
               {% assign rate_price = block.settings[rate_price_key] %}
               
               {% if rate_price != blank %}
-                <div class="ai-utility-bar-dropdown-item-{{ ai_gen_id }}">
+                <div class="ai-utility-bar-dropdown-item-{{ ai_gen_id }} static-rate-item" data-rate-index="{{ i }}">
                   <span class="ai-utility-bar-rate-label-{{ ai_gen_id }}">{{ rate_label }}</span>
                   <span class="ai-utility-bar-rate-price-{{ ai_gen_id }}">{{ rate_price }}</span>
                 </div>
               {% endif %}
             {% endfor %}
+            <!-- Dynamic rates will be inserted here by JavaScript -->
           </div>
         </div>
       {% endif %}
@@ -300,13 +302,52 @@
     class UtilityBar{{ ai_gen_id }} extends HTMLElement {
       constructor() {
         super();
+        this.apiUrl = '{{ block.settings.api_url | default: "https://bhima-price-calculator-9njho.ondigitalocean.app/api/metal-prices/formatted" }}';
+        this.ratesMenu = null;
+        this.ratesLoaded = false;
       }
 
       connectedCallback() {
         this.dropdown = this.querySelector('[data-dropdown]');
         if (this.dropdown) {
           this.toggle = this.dropdown.querySelector('.ai-utility-bar-dropdown-toggle-{{ ai_gen_id }}');
+          this.ratesMenu = this.querySelector('#metal-rates-menu-{{ ai_gen_id }}');
           this.setupEventListeners();
+          this.loadMetalPrices();
+        }
+      }
+
+      async loadMetalPrices() {
+        if (this.ratesLoaded) return;
+        
+        try {
+          const response = await fetch(this.apiUrl);
+          const result = await response.json();
+          
+          if (result.success && result.data && result.data.formatted) {
+            // Hide static rates
+            const staticRates = this.ratesMenu.querySelectorAll('.static-rate-item');
+            staticRates.forEach(rate => rate.style.display = 'none');
+            
+            // Clear and populate with dynamic rates
+            const existingDynamic = this.ratesMenu.querySelectorAll('.dynamic-rate-item');
+            existingDynamic.forEach(rate => rate.remove());
+            
+            result.data.formatted.forEach(rate => {
+              const rateItem = document.createElement('div');
+              rateItem.className = 'ai-utility-bar-dropdown-item-{{ ai_gen_id }} dynamic-rate-item';
+              rateItem.innerHTML = `
+                <span class="ai-utility-bar-rate-label-{{ ai_gen_id }}">${rate.label}</span>
+                <span class="ai-utility-bar-rate-price-{{ ai_gen_id }}">${rate.price}</span>
+              `;
+              this.ratesMenu.appendChild(rateItem);
+            });
+            
+            this.ratesLoaded = true;
+          }
+        } catch (error) {
+          console.warn('Failed to load metal prices from API, using static rates:', error);
+          // Keep static rates visible if API fails
         }
       }
 
@@ -341,6 +382,8 @@
       openDropdown() {
         this.dropdown.classList.add('active');
         this.toggle.setAttribute('aria-expanded', 'true');
+        // Reload prices when dropdown opens (refresh every time)
+        this.loadMetalPrices();
       }
 
       closeDropdown() {
@@ -489,6 +532,13 @@
     {
       "type": "header",
       "content": "Today's rate dropdown"
+    },
+    {
+      "type": "text",
+      "id": "api_url",
+      "label": "Metal Prices API URL",
+      "info": "Default: https://bhima-price-calculator-9njho.ondigitalocean.app/api/metal-prices/formatted",
+      "default": "https://bhima-price-calculator-9njho.ondigitalocean.app/api/metal-prices/formatted"
     },
     {
       "type": "text",
