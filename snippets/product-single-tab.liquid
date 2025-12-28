@@ -148,6 +148,7 @@
                 </div>
                 
                 {% assign stones_metafield = product.metafields.jewelry_config.stones %}
+                {% assign stone_cost_total = 0 %}
                 {% if stones_metafield != blank %}
                   {% assign stones_array = stones_metafield.value %}
                   {% if stones_array == blank or stones_array == null %}
@@ -158,11 +159,12 @@
                     {% for stone in stones_array %}
                       {% if stone.stoneType != blank or stone.stoneWeight != blank or stone.stoneCost != blank %}
                         {% assign show_stone_section = true %}
-                        {% break %}
+                        {% if stone.stoneCost != blank and stone.stoneCost != 0 %}
+                          {% assign stone_cost_total = stone_cost_total | plus: stone.stoneCost %}
+                        {% endif %}
                       {% endif %}
                     {% endfor %}
                   {% endif %}
-                  
                   {% if show_stone_section %}
                     <div class="price-section mb-30">
                       <h3 class="section-heading">Stone Details</h3>
@@ -232,21 +234,11 @@
                       </div>
                     </li>
                     {% endif %}
-                    {% assign stone_cost = product.metafields.jewelry_config.stone_cost %}
-                    {% if stone_cost != blank and stone_cost != 0 %}
+                    {% if stone_cost_total != blank and stone_cost_total != 0 %}
                     <li>
                       <div class="row align-items-center p-4 pt-10 pb-10">
                         <div class="title col-6 font-600">Stone Charge</div>
-                        <div class="content col-6 text-right">₹{{ stone_cost | round: 2 }}</div>
-                      </div>
-                    </li>
-                    {% endif %}
-                    {% assign tax_amount = product.metafields.jewelry_config.tax_amount %}
-                    {% if tax_amount != blank and tax_amount != 0 %}
-                    <li>
-                      <div class="row align-items-center p-4 pt-10 pb-10">
-                        <div class="title col-6 font-600">Tax</div>
-                        <div class="content col-6 text-right">₹{{ tax_amount | round: 2 }}</div>
+                        <div class="content col-6 text-right">₹{{ stone_cost_total | round: 2 }}</div>
                       </div>
                     </li>
                     {% endif %}
@@ -267,16 +259,6 @@
                       {% endif %}
                     {% endif %}
                     {% if discount_enabled and discount_amount != blank and discount_amount != 0 %}
-                    <li class="price-before-discount-row">
-                      <div class="row align-items-center p-4 pt-10 pb-10">
-                        <div class="title col-6 font-600">Price Before Discount</div>
-                        <div class="content col-6 text-right">
-                          {% assign current_price_rupees = product.price | divided_by: 100.0 %}
-                          {% assign price_before_discount = current_price_rupees | plus: discount_amount %}
-                          <span class="strikethrough-price">₹{{ price_before_discount | round: 2 }}</span>
-                        </div>
-                      </div>
-                    </li>
                     <li class="discount-row">
                       <div class="row align-items-center p-4 pt-10 pb-10">
                         <div class="title col-6 font-600">
@@ -289,10 +271,28 @@
                       </div>
                     </li>
                     {% endif %}
+                    {% assign tax_amount = product.metafields.jewelry_config.tax_amount %}
+                    {% if tax_amount != blank and tax_amount != 0 %}
+                    <li>
+                      <div class="row align-items-center p-4 pt-10 pb-10">
+                        <div class="title col-6 font-600">Tax</div>
+                        <div class="content col-6 text-right">₹{{ tax_amount | round: 2 }}</div>
+                      </div>
+                    </li>
+                    {% endif %}
+                    {% if discount_enabled and discount_amount != blank and discount_amount != 0 %}
+                      {% assign current_price_rupees = product.price | divided_by: 100.0 %}
+                      {% assign price_before_discount = current_price_rupees | plus: discount_amount %}
+                    {% endif %}
                     <li class="total-row{% if discount_enabled and discount_amount != blank and discount_amount != 0 %} has-discount{% endif %}">
                       <div class="row align-items-center total-row-wrapper">
                         <div class="title col-6">Total To Pay</div>
-                        <div class="content col-6 text-right">₹{{ product.price | money_without_currency }}</div>
+                        <div class="content col-6 text-right">
+                          {% if discount_enabled and discount_amount != blank and discount_amount != 0 %}
+                            <span class="strikethrough-price">₹{{ price_before_discount | round: 2 }}</span>
+                          {% endif %}
+                          <span>₹{{ product.price | money_without_currency }}</span>
+                        </div>
                       </div>
                     </li>
                   </ul>
@@ -491,6 +491,18 @@
   font-size: 22px !important;
   font-weight: 700 !important;
   letter-spacing: 0.5px;
+}
+
+.jewelry-price-breakdown .total-row .content .strikethrough-price {
+  text-decoration: line-through;
+  color: #999;
+  font-weight: 400;
+  font-size: 18px;
+  margin-right: 12px;
+}
+
+.jewelry-price-breakdown .total-row.has-discount .content .strikethrough-price {
+  color: #999;
 }
 
 /* Table Styling */
