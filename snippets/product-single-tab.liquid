@@ -184,12 +184,15 @@
                               <td>{{ stone.stoneType | default: '-' }}</td>
                               <td>
                                 {% if stone.stoneWeight != blank and stone.stoneWeight != 0 %}
+                                  {% assign stone_count = stone.stoneCount | default: 1 %}
+                                  {% if stone_count == blank or stone_count == 0 %}{% assign stone_count = 1 %}{% endif %}
+                                  {% assign total_stone_weight = stone.stoneWeight | times: stone_count %}
                                   {% assign stone_type_to_check = stone.actualStoneType | default: stone.stoneType %}
                                   {% assign stone_type_lower = stone_type_to_check | downcase %}
                                   {% if stone_type_lower contains 'diamond' %}
-                                    {{ stone.stoneWeight }}ct
+                                    {{ total_stone_weight }}ct
                                   {% else %}
-                                    {{ stone.stoneWeight }}gms
+                                    {{ total_stone_weight }}gms
                                   {% endif %}
                                 {% else %}
                                   -
