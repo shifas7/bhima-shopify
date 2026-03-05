@@ -1,0 +1,499 @@
+{% schema %}
+{
+  "name": "Lookbook Collections",
+  "settings": [
+        {
+            "type": "checkbox",
+            "id": "enable_autoplay",
+            "label": "Enable Auto-Slide",
+            "default": true
+        },
+        {
+            "type": "range",
+            "id": "autoplay_interval",
+            "min": 3,
+            "max": 10,
+            "step": 1,
+            "unit": "s",
+            "label": "Auto-Slide Interval",
+            "default": 5
+        }
+    ],
+    "blocks": [
+    {
+      "type": "collection_plate",
+      "name": "Collection Plate",
+      "settings": [
+        {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+        },
+        {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Wedding set"
+        },
+        {
+            "type": "text",
+            "id": "subtitle",
+            "label": "Subtitle",
+            "default": "All category wedding style"
+        },
+        {
+            "type": "color",
+            "id": "text_color",
+            "label": "Text Color",
+            "default": "#000000"
+        },
+        {
+            "type": "url",
+            "id": "link",
+            "label": "Link",
+            "info": "To link to a grid section, use '#anchor-id' (e.g., '#diamond')."
+        },
+        {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button Text",
+            "default": "Explore Collections"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lookbook Collections",
+      "blocks": [
+        {
+          "type": "collection_plate"
+        },
+        {
+          "type": "collection_plate"
+        },
+        {
+          "type": "collection_plate"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<div id="lookbook-collections" class="lb-collections-section">
+    {% if section.settings.section_heading != blank %}
+        <h2 class="lb-section-title">{{ section.settings.section_heading }}</h2>
+    {% endif %}
+
+    <div class="lb-gallery-container">
+        {% for block in section.blocks %}
+            <div class="lb-gallery-item {% if forloop.first %}active{% endif %}" 
+                 data-index="{{ forloop.index0 }}"
+                 {{ block.shopify_attributes }}>
+                 
+                <img src="{{ block.settings.image | image_url: width: 1200 }}" 
+                     width="{{ block.settings.image.width }}"
+                     height="{{ block.settings.image.height }}"
+                     alt="{{ block.settings.title }}" 
+                     class="lb-item-bg">
+                
+                <div class="lb-glass-panel" style="color: {{ block.settings.text_color }};">
+                    <!-- Duplicate blurred image for background -->
+                     <img src="{{ block.settings.image | image_url: width: 600 }}" 
+                          width="{{ block.settings.image.width }}"
+                          height="{{ block.settings.image.height }}"
+                          alt="" 
+                          class="lb-blur-bg">
+
+                    <div class="lb-glass-content">
+                        <h3 class="lb-glass-title" style="color: {{ block.settings.text_color }};">{{ block.settings.title }}</h3>
+                        <p class="lb-glass-subtitle" style="color: {{ block.settings.text_color }};">{{ block.settings.subtitle }}</p>
+                        
+                        <a href="{{ block.settings.link }}" class="lb-glass-btn">
+                            {{ block.settings.button_text }}
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Overlay for inactive state (optional, adds slight dim) -->
+                <div class="lb-inactive-overlay"></div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination Indicator -->
+    <div class="lb-pagination">
+        <span class="lb-arrow">&lt;</span>
+        <div class="lb-dots">
+            {% for block in section.blocks %}
+                <span class="lb-dot {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index0 }}"></span>
+                {% if forloop.index == 2 and section.blocks.size > 2 %}
+                 <!-- Styled representative line like the mock if needed, but simple dots are safer for variable counts -->
+                 <span class="lb-pagination-line"></span>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <span class="lb-arrow">&gt;</span>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.querySelector('.lb-gallery-container');
+        const items = document.querySelectorAll('.lb-gallery-item');
+        const dots = document.querySelectorAll('.lb-dot');
+        
+        // Settings from Schema
+        const enableAutoplay = {{ section.settings.enable_autoplay | json }};
+        const intervalTime = {{ section.settings.autoplay_interval | default: 5 }} * 1000;
+        
+        let activeIndex = 0;
+        let autoplayTimer = null;
+
+        // Function to set active
+        function setActive(index) {
+            // Wrap around logic
+            if (index >= items.length) index = 0;
+            if (index < 0) index = items.length - 1;
+
+            items.forEach(item => item.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            if(items[index]) items[index].classList.add('active');
+            if(dots[index]) dots[index].classList.add('active');
+            
+            activeIndex = index;
+
+            // Mobile Auto-Scroll
+             if (window.innerWidth < 768 && container) {
+                const itemWidth = items[0].offsetWidth; // Assume uniform width
+                const gap = 16; 
+                container.scrollTo({ 
+                    left: index * (itemWidth + gap), 
+                    behavior: 'smooth' 
+                });
+             }
+        }
+
+        function nextSlide() {
+            setActive(activeIndex + 1);
+        }
+
+        function startAutoplay() {
+            if (!enableAutoplay) return;
+            stopAutoplay(); 
+            autoplayTimer = setInterval(nextSlide, intervalTime);
+        }
+
+        function stopAutoplay() {
+            if (autoplayTimer) {
+                clearInterval(autoplayTimer);
+                autoplayTimer = null;
+            }
+        }
+
+        items.forEach((item, index) => {
+            // Desktop Hover
+            item.addEventListener('mouseenter', () => {
+                if (window.innerWidth >= 768) {
+                    setActive(index);
+                }
+                stopAutoplay();
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                startAutoplay();
+            });
+
+            // Click / Tap
+            item.addEventListener('click', () => {
+                 setActive(index);
+                 stopAutoplay();
+                 // Restart after a brief delay if needed, or rely on mouseleave (desktop)
+                 // For mobile, we might want to restart specifically
+                 if(window.innerWidth < 768) {
+                     setTimeout(startAutoplay, 5000); // Resume after 5s on mobile interaction
+                 }
+            });
+        });
+        
+        // Initialize
+        startAutoplay();
+        
+        // Page Visibility
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                stopAutoplay();
+            } else {
+                startAutoplay();
+            }
+        });
+    });
+</script>
+
+<style>
+    .lb-collections-section {
+        padding: 40px 20px;
+        background-color: #fff;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .lb-section-title {
+        margin-bottom: 24px;
+        font-family: 'Inter', sans-serif;
+        font-size: 24px;
+        font-weight: 600;
+        color: #000;
+    }
+
+    .lb-gallery-container {
+        display: flex;
+        gap: 20px;
+        height: 400px; /* Reduced Height */
+        width: 100%;
+        overflow: hidden;
+        border-radius: 20px; 
+    }
+
+    .lb-gallery-item {
+        position: relative;
+        flex: 1; 
+        border-radius: 20px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: flex 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        min-width: 60px;
+        background: #f4f4f4; /* Fallback for split view */
+    }
+
+    .lb-gallery-item.active {
+        flex: 4; /* Expanded state */
+    }
+
+    .lb-item-bg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: width 0.6s ease, transform 0.6s ease;
+    }
+    
+    .lb-gallery-item.active .lb-item-bg {
+        width: 60%; /* Occupy left 60% only - Sharp Image */
+    }
+
+    .lb-gallery-item:hover .lb-item-bg {
+        /* No transform on active to avoid layout shift issues, but fine on inactive */
+    }
+
+    /* Glass Panel - Only visible on Active */
+    .lb-glass-panel {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 40%; /* Occupy right 40% */
+        background: #fff; /* Fallback */
+        border-radius: 0; 
+        border-left: 1px solid rgba(255, 255, 255, 0.4);
+        opacity: 0;
+        visibility: hidden;
+        overflow: hidden; /* Crop blurred image */
+        transform: translateX(20px); 
+        transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s; 
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        z-index: 2;
+    }
+
+    .lb-gallery-item.active .lb-glass-panel {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+    }
+
+    /* Duplicate Blurred Background */
+    .lb-blur-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: blur(40px) brightness(1.2); /* Strong blur + lightness */
+        transform: scale(1.2); /* Scale to hide blur edges */
+        z-index: 1;
+    }
+
+    .lb-glass-content {
+        position: relative;
+        z-index: 2; /* On top of blur */
+        padding: 40px 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .lb-glass-title {
+        font-size: 32px;
+        line-height: 1.2;
+        margin: 0;
+        font-weight: 500;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .lb-glass-subtitle {
+        font-size: 16px;
+        opacity: 0.9;
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .lb-glass-btn {
+        display: inline-block;
+        margin-top: 10px;
+        background: #fff; /* Design seems to usually be white pill */
+        color: #000;
+        padding: 10px 24px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        text-align: center;
+        width: fit-content;
+        transition: transform 0.2s;
+    }
+    
+    .lb-glass-btn:hover {
+        transform: scale(1.05);
+    }
+
+    /* Pagination */
+    .lb-pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 30px;
+        gap: 10px;
+        color: #888;
+        font-family: monospace;
+    }
+    
+    .lb-dots {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .lb-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: 1px solid #888;
+        background: transparent;
+        transition: background 0.3s, width 0.3s;
+    }
+    
+    .lb-dot.active {
+        background: #888; 
+    }
+    
+    .lb-pagination-line {
+        width: 60px;
+        height: 1px;
+        background: #bbb;
+        margin: 0 4px;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 767px) {
+        .lb-gallery-container {
+            flex-direction: row;
+            height: 280px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 16px;
+            padding-bottom: 20px; 
+        }
+
+        .lb-gallery-item {
+            flex: 0 0 90%;
+            min-width: 90%;
+            border-radius: 16px;
+            scroll-snap-align: center;
+            background: #f4f4f4;
+            position: relative; /* Ensure context */
+        }
+
+        .lb-gallery-item.active {
+            flex: 0 0 90%; 
+        }
+        
+        /* Image: Left 60% */
+        .lb-item-bg, 
+        .lb-gallery-item.active .lb-item-bg {
+            width: 60% !important;
+            left: 0 !important;
+            top: 0;
+            height: 100%;
+            display: block;
+            z-index: 1; /* Explicitly below panel */
+            object-fit: cover;
+        }
+
+        /* Glass Panel: Right 40% */
+        .lb-glass-panel {
+            bottom: 0;
+            top: 0;
+            right: 0;
+            left: auto;
+            width: 40%;
+            height: 100%;
+            transform: none !important;
+            opacity: 1; 
+            visibility: visible;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.5); /* Semi-transparent fallback */
+            border-radius: 0;
+            border-left: 1px solid rgba(255, 255, 255, 0.4);
+            border-top: none;
+            overflow: hidden;
+            z-index: 2; /* On top of image */
+        }
+
+        .lb-glass-content {
+            padding: 0;
+            gap: 6px;
+            justify-content: center;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .lb-glass-title {
+            font-size: 18px;
+        }
+        
+        .lb-glass-subtitle {
+            font-size: 11px;
+        }
+
+        .lb-glass-btn {
+            padding: 6px 14px;
+            font-size: 11px;
+            margin-top: 6px;
+        }
+        
+        /* Ensure blur bg works and is visible */
+        .lb-blur-bg {
+            display: block;
+            z-index: 1;
+        }
+    }
+</style>

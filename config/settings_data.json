@@ -205,7 +205,7 @@
     "color_social": "scheme-7dbefc98-3883-4d4e-937c-abd51fb30fa2",
     "email": "<p><strong>Email:</strong> care@bhimajewllery.com</p>",
     "hotline": "<p><strong>Call Us:</strong> +91 92077 29021</p>",
-    "favicon": "shopify://shop_images/favicon-nov.png",
+    "favicon": "shopify://shop_images/Boy.jpg",
     "link_page_wishlist": "wishlist",
     "show_popup_wishlist": true,
     "enable_loadpage": false,
@@ -578,6 +578,11 @@
     "blocks": {
       "9717370649079274736": {
         "type": "shopify://apps/otp-login-notify/blocks/app-embed-block/c26b7b17-273d-4800-af62-8ec88ba18251",
+        "disabled": false,
+        "settings": {}
+      },
+      "4824701725375534060": {
+        "type": "shopify://apps/blockify-checkout/blocks/block-checkout/a02f68fe-3bdb-4615-b9c5-7d181a329397",
         "disabled": false,
         "settings": {}
       }

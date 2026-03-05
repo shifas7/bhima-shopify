@@ -1,0 +1,533 @@
+{% schema %}
+{
+  "name": "Social Video Bulge",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading Text",
+      "default": "Follow us on Instagram"
+    },
+    {
+      "type": "range",
+      "id": "bulge_intensity",
+      "min": 0.5,
+      "max": 2.0,
+      "step": 0.1,
+      "label": "Bulge Intensity (Fisheye Level)",
+      "default": 1.0
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Social Icon Size",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Left Padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Right Padding",
+      "default": 0
+    },
+    {
+      "type": "richtext",
+      "id": "social_text",
+      "label": "Text above Icons",
+      "default": "<p>Follow our journey</p>"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook Link"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram Link"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok Link"
+    },
+    {
+      "type": "url",
+      "id": "youtube_url",
+      "label": "YouTube Link"
+    },
+    {
+      "type": "url",
+      "id": "twitter_url",
+      "label": "X (Twitter) Link"
+    },
+    {
+      "type": "url",
+      "id": "pinterest_url",
+      "label": "Pinterest Link"
+    },
+    {
+      "type": "url",
+      "id": "snapchat_url",
+      "label": "Snapchat Link"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "plate",
+      "name": "Video Plate",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "image_picker",
+          "id": "poster",
+          "label": "Fallback Image (Poster)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt Text",
+          "default": "Social video"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social Video Bulge",
+      "blocks": [
+        {"type": "plate"},
+        {"type": "plate"},
+        {"type": "plate"},
+        {"type": "plate"},
+        {"type": "plate"}
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<div class="social-bulge-section" style="
+  background-color: {{ section.settings.bg_color }}; 
+  color: {{ section.settings.text_color }};
+  padding-top: {{ section.settings.padding_top }}px;
+  padding-bottom: {{ section.settings.padding_bottom }}px;
+  padding-left: {{ section.settings.padding_left }}px;
+  padding-right: {{ section.settings.padding_right }}px;
+">
+  {% if section.settings.heading_text != blank %}
+    <h2 class="social-bulge-heading">{{ section.settings.heading_text }}</h2>
+  {% endif %}
+
+  <div class="bulge-carousel-wrapper" id="Wrapper-{{ section.id }}">
+    <div class="bulge-track" id="Track-{{ section.id }}">
+      {% for block in section.blocks %}
+        <div class="bulge-plate" {{ block.shopify_attributes }}>
+          <a href="{{ block.settings.link | default: '#' }}" class="plate-inner" aria-label="{{ block.settings.alt_text }}">
+            {% if block.settings.video != blank %}
+              {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, image_size: '400x', class: 'plate-video' }}
+            {% else %}
+               {% if block.settings.poster != blank %}
+                  {{ block.settings.poster | image_url: width: 400 | image_tag: class: 'plate-video', loading: 'lazy' }}
+               {% else %}
+                  {{ 'image' | placeholder_svg_tag: 'plate-video placeholder-svg' }}
+               {% endif %}
+            {% endif %}
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if section.settings.social_text != blank %}
+    <div class="social-text">
+      {{ section.settings.social_text }}
+    </div>
+  {% endif %}
+
+  <div class="social-icons" style="--icon-size: {{ section.settings.icon_size }}px;">
+    {% if section.settings.facebook_url != blank %}
+    <a href="{{ section.settings.facebook_url }}" target="_blank" aria-label="Facebook">
+      <svg viewBox="0 0 24 24" fill="none" class="social-icon" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+    </a>
+    {% endif %}
+    {% if section.settings.instagram_url != blank %}
+    <a href="{{ section.settings.instagram_url }}" target="_blank" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" class="social-icon" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+    </a>
+    {% endif %}
+    {% if section.settings.tiktok_url != blank %}
+    <a href="{{ section.settings.tiktok_url }}" target="_blank" aria-label="TikTok">
+      <svg viewBox="0 0 24 24" fill="none" class="social-icon" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
+    </a>
+    {% endif %}
+    {% if section.settings.youtube_url != blank %}
+    <a href="{{ section.settings.youtube_url }}" target="_blank" aria-label="YouTube">
+      <svg viewBox="0 0 24 24" fill="none" class="social-icon" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+    </a>
+    {% endif %}
+    {% if section.settings.twitter_url != blank %}
+    <a href="{{ section.settings.twitter_url }}" target="_blank" aria-label="X (Twitter)">
+      <svg viewBox="0 0 24 24" fill="none" class="social-icon" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.667L8.667 4z"></path><path d="M4 20l6.768-6.768m2.46-2.46L20 4"></path></svg>
+    </a>
+    {% endif %}
+    {% if section.settings.pinterest_url != blank %}
+    <a href="{{ section.settings.pinterest_url }}" target="_blank" aria-label="Pinterest">
+      <svg viewBox="0 0 24 24" fill="none" class="social-icon" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14.5c5-4.5 9.5-1 9.5 4 0 3-2.5 5.5-5.5 5.5a6 6 0 0 1-4-2.5 13 13 0 0 1-2-10C7.5 5.5 10 3 13 3c4 0 7 3.5 7 8 0 3.5-2.5 7-7 7-1.5 0-3-.5-4-1.5"></path><line x1="8" y1="14.5" x2="4" y2="4"></line></svg>
+    </a>
+    {% endif %}
+    {% if section.settings.snapchat_url != blank %}
+    <a href="{{ section.settings.snapchat_url }}" target="_blank" aria-label="Snapchat">
+      <svg viewBox="0 0 24 24" fill="none" class="social-icon" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 10a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-.5-.5h-3z"></path><path d="M18.5 10a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-.5a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h3z"></path><circle cx="12" cy="7" r="5"></circle></svg>
+    </a>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .social-bulge-section {
+    padding: 60px 0;
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+    font-family: var(--font-body-family, sans-serif);
+  }
+  .social-bulge-heading {
+    margin-bottom: 40px;
+    font-size: 2rem;
+    font-weight: 500;
+  }
+  
+  /* 
+     3D Context Setup 
+     Perspective needs to be on a container high up.
+  */
+  .bulge-carousel-wrapper {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    perspective: 1500px; /* View distance */
+    overflow: hidden; 
+    display: flex;
+    /* Do not center via flex; we calculate center via JS transform */
+    justify-content: flex-start; 
+    align-items: center;
+    cursor: grab;
+    touch-action: none; /* Full JS control */
+  }
+  .bulge-carousel-wrapper:active {
+    cursor: grabbing;
+  }
+  
+  .bulge-track {
+    display: flex;
+    align-items: center;
+    transform-style: preserve-3d; /* Important! */
+    height: 100%;
+  }
+  
+  .bulge-plate {
+    flex: 0 0 auto;
+    width: 250px;
+    height: 444px; /* 9:16 aspect ratio roughly of 250px */
+    margin: 0 10px; /* Reduced margin */
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    /* Improve performance */
+    will-change: transform;
+  }
+  
+  .plate-inner {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    transition: transform 0.3s ease;
+  }
+  .bulge-plate:hover .plate-inner {
+    transform: scale(1.05); /* Hover Effect */
+  }
+  
+  .plate-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none; 
+  }
+  .placeholder-svg {
+    background: #f0f0f0;
+  }
+  
+  .social-text {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+  }
+  .social-icons {
+    /* margin-top: 40px; Remove or reduce if we have text */
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  .social-icon {
+    width: var(--icon-size, 40px);
+    height: var(--icon-size, 40px);
+    transition: transform 0.2s;
+  }
+  .social-icon:hover {
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    .bulge-plate {
+      width: 180px;
+      height: 320px;
+      margin: 0 8px;
+    }
+    .bulge-carousel-wrapper {
+      height: 360px;
+      perspective: 1000px;
+    }
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const track = document.getElementById('Track-{{ section.id }}');
+    const wrapper = document.getElementById('Wrapper-{{ section.id }}');
+    if (!track || !wrapper) return;
+    
+    let plates = Array.from(track.querySelectorAll('.bulge-plate'));
+    if (plates.length === 0) return;
+
+    // --- Configuration ---
+    const CYLINDER_RADIUS = 1200; // Radius of the curve
+    const BULGE_INTENSITY = parseFloat('{{ section.settings.bulge_intensity }}') || 1.0; 
+    const AUTO_SPEED = -1.0;      
+    
+    // --- Setup Infinite Clones ---
+    const originalCount = plates.length;
+    
+    const leftFrag = document.createDocumentFragment();
+    const rightFrag = document.createDocumentFragment();
+    
+    // Performance Optimization: 
+    // 5 Sets on each side (Total 11 sets) gives huge buffer while being lighter than 10.
+    const SETS_PER_SIDE = 5; 
+    
+    for(let i=0; i < SETS_PER_SIDE; i++) {
+        plates.forEach(p => leftFrag.appendChild(p.cloneNode(true)));
+        plates.forEach(p => rightFrag.appendChild(p.cloneNode(true)));
+    }
+    
+    track.prepend(leftFrag);
+    track.appendChild(rightFrag);
+    
+    // Re-query ALL plates
+    let allPlates = Array.from(track.querySelectorAll('.bulge-plate'));
+    
+    // Mobile Video Fix: Ensure cloned videos play
+    allPlates.forEach(plate => {
+        const vid = plate.querySelector('video');
+        if (vid) {
+            vid.muted = true;
+            vid.playsInline = true;
+            vid.play().catch(e => {});
+        }
+    });
+    
+    // Measurements
+    const pStyle = window.getComputedStyle(allPlates[0]);
+    const itemWidth = allPlates[0].offsetWidth + parseFloat(pStyle.marginLeft) + parseFloat(pStyle.marginRight);
+    
+    // single set width
+    const setWidth = itemWidth * originalCount;
+    // Width of all left clones
+    const leftClonesWidth = setWidth * SETS_PER_SIDE;
+    
+    // Precise Centering Math:
+    // We want the MIDDLE of the "Original Set" to be at the CENTER of the screen.
+    // Track Position 0 = Start of Left Clones
+    // Start of Original Set = leftClonesWidth
+    // Center of Original Set = leftClonesWidth + (setWidth / 2)
+    // Screen Center = window.innerWidth / 2
+    // We need to shift track Left (Negative) by (OriginalCenter - ScreenCenter)
+    
+    const originalCenterInTrack = leftClonesWidth + (setWidth / 2);
+    const screenCenter = window.innerWidth / 2;
+    
+    // Initial X
+    let currentX = screenCenter - originalCenterInTrack;
+    
+    // Center the first item of the main set if desired, 
+    let targetX = currentX;
+    const startXOffset = currentX;
+    
+    // --- Physics ---
+    let isDragging = false;
+    let startX = 0;
+    
+    function update() {
+        // Auto Scroll
+        if (!isDragging) {
+            targetX += AUTO_SPEED;
+        }
+        
+        // Drag Physics
+        if (isDragging) {
+            currentX = targetX;
+        } else {
+            // Smooth drift
+            currentX += (targetX - currentX) * 0.1;
+        }
+        
+        // --- Infinite Wrap (Tight Loop) ---
+        // We wrap every time we travel 1 FULL SET WIDTH.
+        // This ensures "Video 1" follows "Video Last" instantly.
+        
+        const dist = currentX - startXOffset;
+        
+        // Wrap Thresholds
+        if (dist <= -setWidth) {
+            // Moved Left by 1 set width -> Jump back right 1 set width
+            currentX += setWidth;
+            targetX += setWidth; // Sync target to prevent jump
+        } else if (dist >= setWidth) {
+            // Moved Right by 1 set width -> Jump back left 1 set width
+            currentX -= setWidth;
+            targetX -= setWidth;
+        }
+        
+        // Apply Translation
+        track.style.transform = `translateX(${currentX}px)`;
+        
+        // --- Cylinder / Bulge Math ---
+        const centerX = window.innerWidth / 2;
+        
+        allPlates.forEach(plate => {
+            const rect = plate.getBoundingClientRect();
+            const plateCenter = rect.left + (rect.width / 2);
+            
+            // Distance from center of screen
+            const dist = plateCenter - centerX;
+            
+            // Transform to Cylinder Coords
+            const angle = (dist / CYLINDER_RADIUS) * BULGE_INTENSITY; 
+            const angleDeg = angle * (180 / Math.PI);
+            
+            // Z-Offset (Curve)
+            // Center (angle 0) -> cos 1 -> z 0.
+            // Sides (angle != 0) -> cos < 1 -> z < 0.
+            const z = CYLINDER_RADIUS * (Math.cos(angle) - 1);
+            
+            // Rotate Y
+            // Angle matches the position on cylinder
+            const rotateY = angleDeg; 
+            
+            // Scale: Slight boost to center
+            const scale = 1.0 - (Math.abs(dist) / (window.innerWidth * 1.5));
+            
+            plate.style.transform = `translateZ(${z}px) rotateY(${rotateY}deg) scale(${Math.max(scale, 0.6)})`;
+            
+            // Z-Index
+            plate.style.zIndex = Math.round(1000 + z);
+        });
+        
+        requestAnimationFrame(update);
+    }
+    
+    update();
+    
+    // --- Events ---
+    // Mouse
+    wrapper.addEventListener('mousedown', e => {
+        isDragging = true;
+        startX = e.pageX;
+        e.preventDefault(); // Prevent text select
+    });
+    window.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        const dx = e.pageX - startX;
+        targetX += dx;
+        startX = e.pageX;
+    });
+    window.addEventListener('mouseup', () => { isDragging = false; });
+    
+    // Touch
+    wrapper.addEventListener('touchstart', e => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+    });
+    wrapper.addEventListener('touchmove', e => {
+        if (!isDragging) return;
+        const dx = e.touches[0].clientX - startX;
+        targetX += dx;
+        startX = e.touches[0].clientX;
+    });
+    wrapper.addEventListener('touchend', () => { isDragging = false; });
+});
+</script>

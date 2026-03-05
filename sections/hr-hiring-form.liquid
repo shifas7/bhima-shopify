@@ -1,0 +1,316 @@
+{% schema %}
+{
+  "name": "HR Hiring Form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join Our Team"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "We are always looking for talented individuals."
+    },
+
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f4f7f6"
+    },
+    {
+      "type": "color",
+      "id": "form_bg",
+      "label": "Form Container Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Form Options"
+    },
+    {
+      "type": "textarea",
+      "id": "job_positions",
+      "label": "Job Positions",
+      "info": "Enter each job position on a new line.",
+      "default": "Administrative Assistant\nHuman Resources Manager\nSales Representative\nCustomer Service Associate\nMarketing Specialist\nSocial Media Manager\nContent Writer\nGraphic Designer\nWeb Developer\nSoftware Engineer\nProduct Manager\nProject Manager\nData Analyst\nAccountant\nFinancial Analyst\nOperations Manager\nSupply Chain Coordinator\nWarehouse Associate\nStore Manager\nAssistant Store Manager\nVisual Merchandiser\nIT Support Specialist\nNetwork Administrator\nLegal Counsel\nExecutive Assistant\nBusiness Development Manager\nQuality Assurance Specialist\nRecruiter\nIntern"
+    },
+    {
+      "type": "textarea",
+      "id": "locations",
+      "label": "Locations",
+      "info": "Enter each location on a new line.",
+      "default": "New York, NY\nLos Angeles, CA\nChicago, IL\nHouston, TX\nPhoenix, AZ\nPhiladelphia, PA\nSan Antonio, TX\nSan Diego, CA\nDallas, TX\nSan Jose, CA\nAustin, TX\nJacksonville, FL\nFort Worth, TX\nColumbus, OH\nSan Francisco, CA\nCharlotte, NC\nIndianapolis, IN\nSeattle, WA\nRemote / Work from Home"
+    }
+  ],
+  "presets": [
+    {
+      "name": "HR Hiring Form"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .hr-hiring-section {
+    padding: 60px 20px;
+    background-color: {{ section.settings.bg_color }};
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #333;
+  }
+
+  .hr-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hr-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .hr-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: {{ section.settings.accent_color }};
+  }
+
+  .hr-header p {
+    font-size: 1.1rem;
+    color: #666;
+  }
+
+  .hr-form-container {
+    background: {{ section.settings.form_bg }};
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group.full-width {
+    grid-column: span 2;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #444;
+  }
+
+  .form-input, .form-select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #f9f9f9;
+    color: #333;
+  }
+
+  .form-input:focus, .form-select:focus {
+    outline: none;
+    border-color: {{ section.settings.accent_color }};
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+  }
+
+  .file-upload-wrapper {
+    position: relative;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    background: #fafafa;
+    transition: all 0.3s ease;
+  }
+
+  .file-upload-wrapper:hover {
+    border-color: {{ section.settings.accent_color }};
+    background: #f0f0f0;
+  }
+
+  .submit-btn {
+    background-color: {{ section.settings.accent_color }};
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .submit-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+
+  .success-message {
+    display: none;
+    text-align: center;
+    padding: 40px;
+    background: #e8f5e9;
+    border-radius: 16px;
+    color: #2e7d32;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  .success-message h3 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+  
+  .success-message svg {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+    fill: #2e7d32;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+    .form-group.full-width {
+      grid-column: span 1;
+    }
+    .hr-form-container {
+      padding: 25px;
+    }
+  }
+</style>
+
+<div class="hr-hiring-section">
+  <div class="hr-container">
+    <div class="hr-header">
+      <h2>{{ section.settings.heading }}</h2>
+      <p>{{ section.settings.subheading }}</p>
+    </div>
+
+    <div class="hr-form-container">
+      
+      {% form 'contact', class: 'hr-application-form' %}
+        
+        {% if form.posted_successfully? %}
+          <div class="success-message" style="display: block;">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1.25 17.292l-4.5-4.5 1.762-1.766L10.75 13.76l7.5-7.5 1.762 1.766-9.262 9.266z"/>
+            </svg>
+            <h3>Application Submitted!</h3>
+            <p>Thank you for your interest. We will review your application and get back to you shortly.</p>
+          </div>
+          <style>
+            .hr-application-form .form-grid, 
+            .hr-application-form .form-group {
+              display: none;
+            }
+          </style>
+        {% elsif form.errors %}
+          <div class="error-message">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">First Name *</label>
+            <input type="text" name="contact[First Name]" class="form-input" required placeholder="John" value="{{ form.first_name }}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name *</label>
+            <input type="text" name="contact[Last Name]" class="form-input" required placeholder="Doe" value="{{ form.last_name }}">
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input type="email" name="contact[email]" class="form-input" required placeholder="john@example.com" value="{{ form.email }}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number *</label>
+            <input type="tel" name="contact[Phone]" class="form-input" required placeholder="+1 (555) 000-0000" value="{{ form.phone }}">
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">For Which Job Position You are Applying? *</label>
+          <select name="contact[Job Position]" class="form-select" required>
+            <option value="" disabled selected>Select a position...</option>
+            {% assign positions = section.settings.job_positions | newline_to_br | split: '<br />' %}
+            {% for position in positions %}
+              {% assign trimmed_position = position | strip %}
+              {% if trimmed_position != blank %}
+                <option value="{{ trimmed_position }}">{{ trimmed_position }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">For Which Locations You are Applying? *</label>
+          <select name="contact[Location]" class="form-select" required>
+            <option value="" disabled selected>Select a location...</option>
+            {% assign locations = section.settings.locations | newline_to_br | split: '<br />' %}
+            {% for location in locations %}
+              {% assign trimmed_location = location | strip %}
+              {% if trimmed_location != blank %}
+                <option value="{{ trimmed_location }}">{{ trimmed_location }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">Link to CV / Resume *</label>
+          <div class="file-upload-wrapper" style="padding: 15px; text-align: left;">
+             <input type="url" name="contact[CV Link]" class="form-input" required placeholder="https://docs.google.com/... (Google Drive, Dropbox, LinkedIn)" style="width: 100%;">
+             <p style="margin-top:10px; font-size: 0.8rem; color: #888;">
+               <strong>Note:</strong> Please provide a link to your CV (Google Drive, Dropbox, etc.). <br>
+               Direct file uploads are not supported in this form.
+             </p>
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <button type="submit" class="submit-btn">Submit Application</button>
+        </div>
+
+      {% endform %}
+    </div>
+  </div>
+</div>

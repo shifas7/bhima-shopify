@@ -245,7 +245,7 @@
     "2046dd06-c8ff-4d5c-9e09-e8c21ef98855": {
       "type": "nov-product-template-related",
       "settings": {
-        "heading": "<h2>PRODUCT RELATED</h2>",
+        "heading": "<h2>RELATED PRODUCT</h2>",
         "heading_color": "#222222",
         "subheading": "",
         "subheading_color": "#666666",

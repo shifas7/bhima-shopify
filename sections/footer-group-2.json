@@ -78,7 +78,7 @@
             "img_width": 160,
             "img_spacing": 23,
             "h_t": false,
-            "address": "Mahatma Gandhi Rd, near Ayurveda College, Ayurveda College Junction, Vanchiyoor, Thiruvananthapuram, Kerala 695001",
+            "address": "Mahatma Gandhi Road, Near Ayurveda College, Ayurveda College Junction, Vanchiyoor, Thiruvananthapuram, Kerala 695001",
             "phone": "7356641888, 9207729021",
             "email": "care@bhimajewellery.com",
             "time": "All Day: 10:00AM - 08:30PM",
@@ -110,7 +110,7 @@
         "block_html_Ycf7xa": {
           "type": "block_html",
           "settings": {
-            "block_title": "",
+            "block_title": "Find Us Online",
             "h_t": false,
             "img_width": 120,
             "img_spacing": 12,
@@ -141,8 +141,8 @@
       "settings": {
         "animate": true,
         "container": "container-fluid",
-        "color_section": "scheme-82a33867-d1f5-4ba2-bbac-c11b4346b404",
-        "background_color": "#282828",
+        "color_section": "background-2",
+        "background_color": "#000000",
         "background_image_size": "auto",
         "bg_size": "full",
         "input_color": "#b5b5b5",
@@ -152,11 +152,11 @@
         "submit_color": "scheme-82a33867-d1f5-4ba2-bbac-c11b4346b404",
         "submit_btn_type": "btn-primary",
         "show_footer_copyright": true,
-        "color_copyright": "scheme-82a33867-d1f5-4ba2-bbac-c11b4346b404",
+        "color_copyright": "background-2",
         "bg_copyright": "rgba(0,0,0,0)",
-        "copyright_border_top_color": "#878787",
+        "copyright_border_top_color": "#222",
         "copyright_border_top_opa": 100,
-        "copyright": "Copyright © 2025 Bhima Jewellery. All Rights Reserved.",
+        "copyright": "Copyright © 2026 Bhima Jewellery. All Rights Reserved.",
         "show_payment": true,
         "payment_mw": 215,
         "mobile_acc": true

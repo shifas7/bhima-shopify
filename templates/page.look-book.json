@@ -1,0 +1,129 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "nov-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "lookbook_hero_9jGi7A": {
+      "type": "lookbook-hero",
+      "name": "Lookbook Hero Banner",
+      "settings": {
+        "image_desktop": "shopify://shop_images/Diamond-01.jpg",
+        "image_mobile": "shopify://shop_images/Diamond-02.jpg",
+        "button_text": "Explore Collections",
+        "scroll_target": "lookbook-collections"
+      }
+    },
+    "lookbook_collections_3WHMUV": {
+      "type": "lookbook-collections",
+      "blocks": {
+        "collection_plate_nd6cQk": {
+          "type": "collection_plate",
+          "settings": {
+            "image": "shopify://shop_images/output1copy.jpg",
+            "title": "Wedding set",
+            "subtitle": "All category wedding style",
+            "text_color": "#000000",
+            "link": "",
+            "button_text": "Explore Collections"
+          }
+        },
+        "collection_plate_xRizGL": {
+          "type": "collection_plate",
+          "settings": {
+            "image": "shopify://shop_images/Artboard_5.jpg",
+            "title": "Wedding set",
+            "subtitle": "All category wedding style",
+            "text_color": "#000000",
+            "link": "",
+            "button_text": "Explore Collections"
+          }
+        },
+        "collection_plate_g3iFGf": {
+          "type": "collection_plate",
+          "settings": {
+            "image": "shopify://shop_images/Brouchure_2024-23.jpg",
+            "title": "Wedding set",
+            "subtitle": "All category wedding style",
+            "text_color": "#000000",
+            "link": "",
+            "button_text": "Explore Collections"
+          }
+        }
+      },
+      "block_order": [
+        "collection_plate_nd6cQk",
+        "collection_plate_xRizGL",
+        "collection_plate_g3iFGf"
+      ],
+      "name": "Lookbook Collections",
+      "settings": {
+        "enable_autoplay": true,
+        "autoplay_interval": 5
+      }
+    },
+    "lookbook_product_grid_nfN9dT": {
+      "type": "lookbook-product-grid",
+      "blocks": {
+        "card_JD3hxf": {
+          "type": "card",
+          "settings": {
+            "overlay_color": "#2c0e0e",
+            "button_text": "Enquire Now"
+          }
+        },
+        "card_rJBBrh": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/output1copy.jpg",
+            "image_2": "shopify://shop_images/IMG_0650copy.jpg",
+            "image_3": "shopify://shop_images/output4copy.jpg",
+            "image_4": "shopify://shop_images/output3copy.jpg",
+            "overlay_color": "#98dcec",
+            "button_text": "Enquire Now"
+          }
+        }
+      },
+      "block_order": [
+        "card_JD3hxf",
+        "card_rJBBrh"
+      ],
+      "name": "Lookbook Product Grid",
+      "settings": {
+        "title": "DIAMOND",
+        "columns_desktop": 3,
+        "whatsapp_number": "919876543210",
+        "anchor_id": "product-grid"
+      }
+    },
+    "hr_hiring_form_rWRbgY": {
+      "type": "hr-hiring-form",
+      "name": "HR Hiring Form",
+      "settings": {
+        "heading": "Join Our Team",
+        "subheading": "We are always looking for talented individuals.",
+        "email_recipient": "careersbhima@gmail.com",
+        "bg_color": "#f4f7f6",
+        "form_bg": "#ffffff",
+        "accent_color": "#000000"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "lookbook_hero_9jGi7A",
+    "lookbook_collections_3WHMUV",
+    "lookbook_product_grid_nfN9dT",
+    "hr_hiring_form_rWRbgY"
+  ]
+}

@@ -1,0 +1,145 @@
+{% schema %}
+{
+  "name": "Lookbook Hero Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Explore Collections"
+    },
+    {
+      "type": "text",
+      "id": "scroll_target",
+      "label": "Scroll Target ID",
+      "default": "lookbook-collections",
+      "info": "The ID of the section to scroll to when clicked."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lookbook Hero Banner"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="lookbook-hero-section">
+  <div class="lookbook-hero-container">
+    <div class="lookbook-image-wrapper">
+      <picture>
+        <source media="(max-width: 767px)" srcset="{{ section.settings.image_mobile | image_url: width: 800 }}">
+        <source media="(min-width: 768px)" srcset="{{ section.settings.image_desktop | image_url: width: 2000 }}">
+        <img src="{{ section.settings.image_desktop | image_url: width: 2000 }}" 
+             width="{{ section.settings.image_desktop.width }}"
+             height="{{ section.settings.image_desktop.height }}"
+             alt="{{ section.settings.button_text }}" 
+             class="lookbook-hero-img">
+      </picture>
+      
+      <button class="lookbook-explore-btn" onclick="scrollToCollections()">
+        {{ section.settings.button_text }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function scrollToCollections() {
+    const targetId = "{{ section.settings.scroll_target }}";
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      console.warn('Scroll target not found:', targetId);
+    }
+  }
+</script>
+
+<style>
+  .lookbook-hero-section {
+    width: 100%;
+    padding: 20px;
+    background-color: #fff; /* Ensure bg is white as per image design */
+    box-sizing: border-box;
+  }
+
+  .lookbook-hero-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .lookbook-image-wrapper {
+    position: relative;
+    border-radius: 16px;
+    overflow: visible; /* Allow button to overflow for the mobile 'half-out' look if needed */
+  }
+
+  /* Image Styling */
+  .lookbook-hero-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 16px;
+  }
+
+  /* Button Styling - Base */
+  .lookbook-explore-btn {
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid #e0e0e0;
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-family: 'Inter', sans-serif; /* Or custom font */
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Soft shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    z-index: 2;
+    position: absolute;
+    white-space: nowrap;
+  }
+
+  .lookbook-explore-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  }
+
+  /* Desktop Specifics */
+  @media (min-width: 768px) {
+    .lookbook-explore-btn {
+      bottom: 24px;   /* Position inside the image? or overlapping? Image 1 suggests overlapping the corner */
+      right: 24px;
+      /* If the user wanted it strictly overlapping the corner edge like mobile, we'd use transform. 
+         But image 1 (desktop) shows it cleanly inside or just on the edge. 
+         I will place it 'inside' with margin for now, as that's safer for desktop layouts usually. 
+         Let's stick to valid absolute positioning. */
+    }
+  }
+
+  /* Mobile Specifics */
+  @media (max-width: 767px) {
+    .lookbook-hero-section {
+      padding: 15px;
+      margin-bottom: 25px; /* Extra space for the button hanging out */
+    }
+
+    .lookbook-explore-btn {
+      bottom: 0px; 
+      left: 50%;
+      transform: translate(-50%, 50%); /* Center and push down 50% of its own height */
+    }
+  }
+</style>

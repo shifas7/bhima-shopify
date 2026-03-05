@@ -1,0 +1,214 @@
+{% doc %}
+  @prompt
+    create a terms and conditions section. A heading and content section.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-terms-section-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 60px 20px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-terms-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.content_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-terms-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: {{ block.settings.heading_weight }};
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 {{ block.settings.heading_spacing }}px;
+    text-align: {{ block.settings.text_alignment }};
+  }
+
+  .ai-terms-content-{{ ai_gen_id }} {
+    font-size: {{ block.settings.content_size }}px;
+    line-height: {{ block.settings.line_height }};
+    color: {{ block.settings.content_color }};
+    text-align: {{ block.settings.text_alignment }};
+  }
+
+  .ai-terms-content-{{ ai_gen_id }} h2,
+  .ai-terms-content-{{ ai_gen_id }} h3,
+  .ai-terms-content-{{ ai_gen_id }} h4 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: {{ block.settings.heading_color }};
+  }
+
+  .ai-terms-content-{{ ai_gen_id }} p {
+    margin-bottom: 15px;
+  }
+
+  .ai-terms-content-{{ ai_gen_id }} ul,
+  .ai-terms-content-{{ ai_gen_id }} ol {
+    margin-bottom: 15px;
+    padding-left: 25px;
+  }
+
+  .ai-terms-content-{{ ai_gen_id }} li {
+    margin-bottom: 8px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-terms-section-{{ ai_gen_id }} {
+      padding: 40px 15px;
+    }
+
+    .ai-terms-heading-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.heading_size }}px * 0.8);
+    }
+
+    .ai-terms-content-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.content_size }}px * 0.9);
+    }
+  }
+{% endstyle %}
+
+<div class="ai-terms-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-terms-container-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank %}
+      <h1 class="ai-terms-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h1>
+    {% endif %}
+
+    {% if block.settings.content != blank %}
+      <div class="ai-terms-content-{{ ai_gen_id }}">
+        {{ block.settings.content }}
+      </div>
+    {% else %}
+      <div class="ai-terms-content-{{ ai_gen_id }}">
+        <p>Add your terms and conditions content here. You can format it with headings, paragraphs, lists, and more.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Terms and conditions",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Terms and Conditions"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading weight",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semibold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "Spacing below heading",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<p>Please add your terms and conditions content here. You can include multiple paragraphs, headings, and lists to organize your legal information clearly.</p>"
+    },
+    {
+      "type": "range",
+      "id": "content_size",
+      "label": "Content size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.6
+    },
+    {
+      "type": "color",
+      "id": "content_color",
+      "label": "Content color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content width",
+      "min": 600,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "default": 900
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "justify", "label": "Justify" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Terms and conditions"
+    }
+  ]
+}
+{% endschema %}

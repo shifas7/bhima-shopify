@@ -1,0 +1,94 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "nov-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "fairytale_promo_QQXj9W": {
+      "type": "fairytale-promo",
+      "blocks": {
+        "content_row_XXCT4J": {
+          "type": "content_row",
+          "settings": {
+            "image_layout": "collage",
+            "image": "shopify://shop_images/Artboard_15.jpg",
+            "image_1": "shopify://shop_images/Artboard_13.jpg",
+            "image_2": "shopify://shop_images/Artboard_14.jpg",
+            "image_3": "shopify://shop_images/Artboard_15.jpg",
+            "image_4": "shopify://shop_images/Artboard_12.jpg",
+            "image_position": "left",
+            "title": "A Grand Success Story",
+            "text": "Season 1 welcomed an incredible 7,500+ visitors, transforming the exhibition into a royal wedding destination where families explored timeless craftsmanship and bridal elegance."
+          }
+        },
+        "content_row_gbrjWP": {
+          "type": "content_row",
+          "settings": {
+            "image_layout": "collage",
+            "image": "shopify://shop_images/Artboard_15.jpg",
+            "image_1": "shopify://shop_images/Artboard_7_13f3b547-768b-4122-912d-853e1209cefd.jpg",
+            "image_2": "shopify://shop_images/Artboard_5_cc10bcfa-ba1f-42a5-8119-fad97fcc5e2d.jpg",
+            "image_3": "shopify://shop_images/Artboard_8.jpg",
+            "image_4": "shopify://shop_images/Artboard_6_99252c9f-7004-41fb-9699-248584dc62e3.jpg",
+            "image_position": "right",
+            "title": "350+ Exclusive Wedding Sets",
+            "text": "From majestic temple jewellery to contemporary diamond bridal collections, over 350 curated wedding sets were showcased — each designed to make every bride feel like royalty."
+          }
+        },
+        "content_row_Gdxbqy": {
+          "type": "content_row",
+          "settings": {
+            "image_layout": "collage",
+            "image": "shopify://shop_images/Artboard_15.jpg",
+            "image_1": "shopify://shop_images/Artboard_12_dd745b8e-4cf3-4447-86f0-1c6929dd4bd2.jpg",
+            "image_2": "shopify://shop_images/Artboard_11_1b4d88c6-9475-4696-b79c-fb55ec24b710.jpg",
+            "image_3": "shopify://shop_images/Artboard_10.jpg",
+            "image_4": "shopify://shop_images/Artboard_13_f060043c-1cf9-41c4-aa44-35e2e993ae38.jpg",
+            "image_position": "left",
+            "title": "Exclusive Wedding Season Privileges",
+            "text": "Special wedding discounts and curated seasonal offers made dream jewellery\nmore accessible and memorable for every visiting family"
+          }
+        },
+        "video_carousel_ahAREU": {
+          "type": "video_carousel",
+          "settings": {
+            "title": "Moments to Remember",
+            "text": "Themed selfie stations created picture-perfect memories, allowing guests to capture their magical bridal journey in a royal ambiance",
+            "video_1": "shopify://files/videos/1.mp4",
+            "video_2": "shopify://files/videos/2_c95fd35f-f003-4d73-9848-1074fdc512ab.mp4",
+            "video_3": "shopify://files/videos/3.mp4",
+            "video_4": "shopify://files/videos/4.mp4"
+          }
+        }
+      },
+      "block_order": [
+        "content_row_XXCT4J",
+        "content_row_gbrjWP",
+        "content_row_Gdxbqy",
+        "video_carousel_ahAREU"
+      ],
+      "name": "Fairytale Promo Section",
+      "settings": {
+        "bg_color": "#f8dda4",
+        "bg_image": "shopify://shop_images/Event_Fairy_Tale_7095ea8c-3d23-402a-aa76-fd0a77dd257a.jpg",
+        "bg_image_mobile": "shopify://shop_images/Event_Fairy_Tale_mobile.jpg",
+        "logo_image": "shopify://shop_images/2_2c6a0993-5544-4b98-98c4-7a73ec190ab5.png",
+        "bottom_badge": "shopify://shop_images/1_314089a9-9c77-44f6-aa6b-56e9aa0ba4a2.png"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "fairytale_promo_QQXj9W"
+  ]
+}

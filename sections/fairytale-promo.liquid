@@ -1,0 +1,658 @@
+<div class="fairytale-section" style="--bg-color: {{ section.settings.bg_color }};">
+  
+  <div class="fairytale-banner">
+    <!-- Background Image (Desktop) -->
+    {% if section.settings.bg_image != blank %}
+      <img src="{{ section.settings.bg_image | image_url }}" width="{{ section.settings.bg_image.width }}" height="{{ section.settings.bg_image.height }}" class="fairytale-bg-image fairytale-desktop-only {% if section.settings.bg_image_mobile == blank %}fairytale-show-always{% endif %}" alt="Fairytale Background" loading="lazy">
+    {% else %}
+      {% comment %} theme-check-disable MissingAsset {% endcomment %}
+      <img src="{{ 'Event_Fairy_Tale_.jpg' | asset_url }}" width="1920" height="1080" class="fairytale-bg-image fairytale-desktop-only {% if section.settings.bg_image_mobile == blank %}fairytale-show-always{% endif %}" alt="Fairytale Background" loading="lazy">
+    {% endif %}
+
+    <!-- Background Image (Mobile) -->
+    {% if section.settings.bg_image_mobile != blank %}
+      <img src="{{ section.settings.bg_image_mobile | image_url }}" width="{{ section.settings.bg_image_mobile.width }}" height="{{ section.settings.bg_image_mobile.height }}" class="fairytale-bg-image fairytale-mobile-only" alt="Fairytale Mobile Background" loading="lazy">
+    {% endif %}
+
+    <!-- Center Logo/Stats Overlay -->
+    <div class="fairytale-overlay-content">
+      {% if section.settings.logo_image != blank %}
+        <img src="{{ section.settings.logo_image | image_url }}" width="{{ section.settings.logo_image.width }}" height="{{ section.settings.logo_image.height }}" class="fairytale-logo" alt="Logo" loading="lazy">
+      {% else %}
+        {% comment %} theme-check-disable MissingAsset {% endcomment %}
+        <img src="{{ '1.png' | asset_url }}" width="800" height="400" class="fairytale-logo" alt="Overview Stats" loading="lazy">
+      {% endif %}
+
+      <!-- Optional Bottom Badge under the logo -->
+      {% if section.settings.bottom_badge != blank %}
+        <img src="{{ section.settings.bottom_badge | image_url }}" width="{{ section.settings.bottom_badge.width }}" height="{{ section.settings.bottom_badge.height }}" class="fairytale-bottom-badge" alt="Bottom Badge" loading="lazy">
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Content Rows -->
+  <div class="fairytale-content-container">
+    {% for block in section.blocks %}
+      {% if block.type == 'content_row' %}
+        <div class="fairytale-content-row {% if block.settings.image_position == 'right' %}row-reverse{% endif %}">
+          
+          <div class="fairytale-image-col">
+            {% if block.settings.image_layout == 'collage' %}
+              <div class="fairytale-collage-wrapper">
+                <div class="fairytale-collage-item item-1">
+                  {% if block.settings.image_1 != blank %}
+                    <img src="{{ block.settings.image_1 | image_url }}" width="{{ block.settings.image_1.width }}" height="{{ block.settings.image_1.height }}" alt="Collage Photo 1" loading="lazy">
+                  {% else %}
+                    <div class="fairytale-placeholder"></div>
+                  {% endif %}
+                </div>
+                <div class="fairytale-collage-item item-2">
+                  {% if block.settings.image_2 != blank %}
+                    <img src="{{ block.settings.image_2 | image_url }}" width="{{ block.settings.image_2.width }}" height="{{ block.settings.image_2.height }}" alt="Collage Photo 2" loading="lazy">
+                  {% else %}
+                    <div class="fairytale-placeholder"></div>
+                  {% endif %}
+                </div>
+                <div class="fairytale-collage-item item-3">
+                  {% if block.settings.image_3 != blank %}
+                    <img src="{{ block.settings.image_3 | image_url }}" width="{{ block.settings.image_3.width }}" height="{{ block.settings.image_3.height }}" alt="Collage Photo 3" loading="lazy">
+                  {% else %}
+                    <div class="fairytale-placeholder"></div>
+                  {% endif %}
+                </div>
+                <div class="fairytale-collage-item item-4">
+                  {% if block.settings.image_4 != blank %}
+                    <img src="{{ block.settings.image_4 | image_url }}" width="{{ block.settings.image_4.width }}" height="{{ block.settings.image_4.height }}" alt="Collage Photo 4" loading="lazy">
+                  {% else %}
+                    <div class="fairytale-placeholder"></div>
+                  {% endif %}
+                </div>
+              </div>
+            {% else %}
+              {% if block.settings.image != blank %}
+                <img src="{{ block.settings.image | image_url }}" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" class="fairytale-shape" alt="{{ block.settings.title | escape }}" loading="lazy">
+              {% else %}
+                {% comment %} theme-check-disable MissingAsset {% endcomment %}
+                <img src="{{ '2.png' | asset_url }}" width="400" height="400" class="fairytale-shape" alt="Content Shape" loading="lazy">
+              {% endif %}
+            {% endif %}
+          </div>
+          
+          <div class="fairytale-text-col">
+            <h2 class="fairytale-title">{{ block.settings.title }}</h2>
+            <div class="fairytale-desc">{{ block.settings.text }}</div>
+          </div>
+
+        </div>
+
+      {% elsif block.type == 'video_carousel' %}
+        <div class="fairytale-video-section">
+          <div class="fairytale-video-header">
+            <h2 class="fairytale-video-title">{{ block.settings.title }}</h2>
+            <div class="fairytale-video-desc">{{ block.settings.text }}</div>
+          </div>
+          
+          <div class="fairytale-video-grid">
+            {% for i in (1..5) %}
+              {% capture video_setting %}video_{{ i }}{% endcapture %}
+              {% capture poster_setting %}poster_{{ i }}{% endcapture %}
+              
+              {% assign video_obj = block.settings[video_setting] %}
+              {% assign poster_image = block.settings[poster_setting] %}
+
+              {% if video_obj != blank %}
+                <div class="fairytale-video-item">
+                  {{ video_obj | video_tag: loop: true, muted: false, controls: false, image_size: 'master', class: 'fairytale-video-player', onclick: 'this.paused ? this.play() : this.pause()' }}
+                  <div class="fairytale-play-btn">
+                    <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                </div>
+              {% elsif poster_image != blank %}
+                 <div class="fairytale-video-item">
+                    <img src="{{ poster_image | image_url }}" width="{{ poster_image.width }}" height="{{ poster_image.height }}" alt="Video Poster" class="fairytale-video-player">
+                    <div class="fairytale-play-btn">
+                      <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                 </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+</div>
+
+<style>
+  .fairytale-section {
+    background-color: var(--bg-color, #f8dda4);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    /* Hide potential overflow from overlapping elements */
+    overflow: hidden; 
+  }
+
+  .fairytale-banner {
+    position: relative;
+    width: 100%;
+    /* Keep a max-height so the hero image doesn't take too much space on ultra-wide screens */
+    max-height: 80vh; 
+    display: flex;
+    justify-content: center;
+  }
+
+  .fairytale-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    /* Fades the bottom of the image into the background color */
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, black 30%, black 100%);
+    mask-image: linear-gradient(to top, transparent 0%, black 30%, black 100%);
+  }
+
+  .fairytale-mobile-only {
+    display: none; /* Hidden on desktop */
+  }
+
+  .fairytale-desktop-only {
+    display: block; /* Visible on desktop */
+  }
+
+  /* If a mobile image isn't uploaded, show the desktop banner on all screens */
+  .fairytale-desktop-only.fairytale-show-always {
+    display: block !important;
+  }
+
+  .fairytale-overlay-content {
+    position: absolute;
+    bottom: 0;
+    transform: translateY(50%); /* Pulls exactly half the block down past the background */
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+  }
+
+  .fairytale-logo {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0px 8px 16px rgba(0,0,0,0.1));
+  }
+
+  .fairytale-bottom-badge {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin-top: 20px; /* Space between logo and badge */
+  }
+
+  .fairytale-content-container {
+    padding: 450px 20px 80px 20px; /* Increased space for the overlapping logo + badge block */
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .fairytale-content-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 80px;
+    gap: 40px;
+  }
+
+  .fairytale-content-row.row-reverse {
+    flex-direction: row-reverse;
+  }
+
+  .fairytale-image-col {
+    flex: 1 1 45%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .fairytale-shape {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .fairytale-text-col {
+    flex: 1 1 45%;
+  }
+
+  .fairytale-title {
+    color: #b82e2e; /* Red color matching UI */
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+
+  .fairytale-desc {
+    color: #111;
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .fairytale-collage-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-10deg);
+    margin: 40px 0;
+  }
+
+  .fairytale-collage-item {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #b82e2e;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    animation: fairytaleFloat 6s ease-in-out infinite; 
+  }
+
+  @keyframes fairytaleFloat {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  
+  .fairytale-collage-item img, .fairytale-collage-item .fairytale-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .fairytale-placeholder {
+    background-color: #ce363c; /* Red placeholder */
+  }
+
+  .fairytale-collage-wrapper .item-1 {
+    width: 90px;
+    height: 180px;
+    z-index: 1;
+    margin-right: -15px;
+    animation-delay: 0s;
+  }
+  .fairytale-collage-wrapper .item-2 {
+    width: 140px;
+    height: 270px;
+    z-index: 4;
+    animation-delay: 1.5s;
+  }
+  .fairytale-collage-wrapper .item-3 {
+    width: 125px;
+    height: 220px;
+    z-index: 3;
+    margin-left: -20px;
+    animation-delay: 3s;
+  }
+  .fairytale-collage-wrapper .item-4 {
+    width: 90px;
+    height: 150px;
+    z-index: 2;
+    margin-left: -15px;
+    animation-delay: 4.5s;
+  }
+
+  /* Video Section Styles */
+  .fairytale-video-section {
+    margin: 100px 0;
+    width: 100%;
+  }
+
+  .fairytale-video-header {
+    text-align: center;
+    margin-bottom: 50px;
+    max-width: 700px;
+    margin-inline: auto;
+  }
+
+  .fairytale-video-title {
+    color: #b82e2e;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+
+  .fairytale-video-desc {
+    color: #111;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .fairytale-video-grid {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: nowrap;
+    overflow-x: auto; /* Allow scrolling on smaller screens if items overflow */
+    padding-bottom: 20px;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+  }
+  
+  .fairytale-video-grid::-webkit-scrollbar {
+    display: none; /* Hide scrollbar Chrome/Safari */
+  }
+
+  .fairytale-video-item {
+    flex: 0 0 200px; /* Fixed width for portrait videos */
+    height: 350px;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    background-color: #000;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+
+  .fairytale-video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+  }
+
+  .fairytale-play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #b82e2e;
+    pointer-events: none; /* Let clicks pass through to video */
+    transition: opacity 0.3s ease;
+  }
+
+  /* Hide play button when playing */
+  .fairytale-video-item.is-playing .fairytale-play-btn {
+    opacity: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .fairytale-video-grid {
+      justify-content: flex-start;
+      padding: 0 20px 20px 20px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .fairytale-desktop-only {
+      display: none;
+    }
+    .fairytale-mobile-only {
+      display: block;
+    }
+    
+    .fairytale-banner {
+      /* Remove max-height constraint to let the hero image shape the height proportionately */
+      max-height: auto;
+    }
+    .fairytale-overlay-content {
+      width: 95%;
+      transform: translateY(40%); /* Adjust overlap slightly on mobile */
+    }
+    .fairytale-content-container {
+      padding-top: 320px; /* Increased mobile top padding */
+    }
+    .fairytale-content-row {
+      flex-direction: column !important;
+      text-align: center;
+      gap: 15px; /* Brought shape and text closer */
+      margin-bottom: 50px;
+    }
+    .fairytale-image-col, .fairytale-text-col {
+      width: 100%;
+    }
+    .fairytale-title {
+      font-size: 18px; /* Slightly smaller for mobile */
+      margin-bottom: 10px;
+    }
+    .fairytale-desc {
+      font-size: 14px;
+    }
+    .fairytale-bottom-badge {
+      margin-top: 15px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .fairytale-content-container {
+      padding-top: 100px;
+      padding-bottom: 50px;
+    }
+    .fairytale-title {
+      font-size: 16px;
+    }
+    .fairytale-desc {
+      font-size: 13px;
+    }
+    .fairytale-overlay-content {
+      transform: translateY(45%);
+    }
+    .fairytale-collage-wrapper {
+      transform: rotate(-8deg) scale(0.85); /* Slightly smaller and angled differently on mobile */
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Fairytale Promo Section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f8dda4"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Hero Background Image (Desktop)",
+      "info": "Leave blank to use default 'Event_Fairy_Tale_.jpg' asset if uploaded."
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image_mobile",
+      "label": "Hero Background Image (Mobile)",
+      "info": "Upload a portrait/square image specifically for mobile devices. If left blank, the Desktop image will be used."
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Center Overlay Image",
+      "info": "Leave blank to use default '1.png' asset if uploaded."
+    },
+    {
+      "type": "image_picker",
+      "id": "bottom_badge",
+      "label": "Bottom Badge Image",
+      "info": "Optional image displayed directly beneath the Center Overlay Logo (e.g., the '100+ Wedding Sets' bar)."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "content_row",
+      "name": "Content Row",
+      "settings": [
+        {
+          "type": "select",
+          "id": "image_layout",
+          "label": "Image Layout Style",
+          "options": [
+            { "value": "single", "label": "Single Image" },
+            { "value": "collage", "label": "4-Image Collage" }
+          ],
+          "default": "collage"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Side Shape Image",
+          "info": "Leave blank to use default '2.png' asset if uploaded."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Collage Photo 1 (Left)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Collage Photo 2 (Center Left)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Collage Photo 3 (Center Right)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "Collage Photo 4 (Right)"
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "A Grand Success Story"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Content Text",
+          "default": "Season 1 welcomed an incredible 7,500+ visitors, transforming the exhibition into a royal wedding destination where families explored timeless craftsmanship and bridal elegance."
+        }
+      ]
+    },
+    {
+      "type": "video_carousel",
+      "name": "Video Carousel",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Moments to Remember"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "Themed selfie stations created picture-perfect memories, allowing guests to capture their magical bridal journey in a royal ambiance"
+        },
+        { "type": "header", "content": "Video 1" },
+        { "type": "video", "id": "video_1", "label": "Upload Video" },
+        { "type": "image_picker", "id": "poster_1", "label": "Optional Custom Cover Image" },
+        
+        { "type": "header", "content": "Video 2" },
+        { "type": "video", "id": "video_2", "label": "Upload Video" },
+        { "type": "image_picker", "id": "poster_2", "label": "Optional Custom Cover Image" },
+        
+        { "type": "header", "content": "Video 3" },
+        { "type": "video", "id": "video_3", "label": "Upload Video" },
+        { "type": "image_picker", "id": "poster_3", "label": "Optional Custom Cover Image" },
+        
+        { "type": "header", "content": "Video 4" },
+        { "type": "video", "id": "video_4", "label": "Upload Video" },
+        { "type": "image_picker", "id": "poster_4", "label": "Optional Custom Cover Image" },
+        
+        { "type": "header", "content": "Video 5" },
+        { "type": "video", "id": "video_5", "label": "Upload Video" },
+        { "type": "image_picker", "id": "poster_5", "label": "Optional Custom Cover Image" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fairytale Promo Section",
+      "blocks": [
+        {
+          "type": "content_row",
+          "settings": {
+            "image_layout": "collage",
+            "image_position": "left",
+            "title": "A Grand Success Story",
+            "text": "Season 1 welcomed an incredible 7,500+ visitors, transforming the exhibition into a royal wedding destination where families explored timeless craftsmanship and bridal elegance."
+          }
+        },
+        {
+          "type": "content_row",
+          "settings": {
+            "image_layout": "collage",
+            "image_position": "right",
+            "title": "350+ Exclusive Wedding Sets",
+            "text": "From majestic temple jewellery to contemporary diamond bridal collections, over 350 curated wedding sets were showcased — each designed to make every bride feel like royalty."
+          }
+        },
+        {
+          "type": "video_carousel",
+          "settings": {
+            "title": "Moments to Remember",
+            "text": "Themed selfie stations created picture-perfect memories, allowing guests to capture their magical bridal journey in a royal ambiance"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add robust play/pause class toggling for video carousels
+    const videoItems = document.querySelectorAll('.fairytale-video-item');
+    videoItems.forEach(function(item) {
+      const video = item.querySelector('video');
+      if (video) {
+        video.addEventListener('play', function() {
+          item.classList.add('is-playing');
+          
+          // Pause all other videos
+          document.querySelectorAll('.fairytale-video-item video').forEach(function(otherVideo) {
+            if (otherVideo !== video && !otherVideo.paused) {
+              otherVideo.pause();
+            }
+          });
+        });
+        video.addEventListener('pause', function() {
+          item.classList.remove('is-playing');
+        });
+        /* Also catch ended state so the play button comes back */
+        video.addEventListener('ended', function() {
+          item.classList.remove('is-playing');
+        });
+      }
+    });
+  });
+</script>

@@ -1,0 +1,478 @@
+{% schema %}
+{
+  "name": "Lookbook Product Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "DIAMOND"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Cards per row (Desktop)"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp Number",
+      "info": "Enter number with country code, e.g., 919876543210",
+      "default": "919876543210"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Section Anchor ID",
+      "info": "Unique ID for linking (e.g., 'diamond-collection'). Use this ID in Lookbook blocks with a '#' prefix.",
+      "default": "product-grid"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Product Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card Image (Main)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Card Image 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Card Image 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "Card Image 4"
+        },
+        {
+          "type": "color",
+          "id": "overlay_color",
+          "label": "Overlay/Gradient Color",
+          "default": "#2c0e0e",
+          "info": "The color fading in from the bottom"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Enquire Now"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lookbook Product Grid"
+    }
+  ]
+}
+{% endschema %}
+
+<div id="{{ section.settings.anchor_id }}" class="lb-product-grid-section">
+  {% if section.settings.title != blank %}
+    <h2 class="lb-grid-title">{{ section.settings.title }}</h2>
+  {% endif %}
+
+  <div class="lb-product-grid lb-grid-{{ section.settings.columns_desktop }}">
+    {% for block in section.blocks %}
+      <div class="lb-product-card" {{ block.shopify_attributes }}>
+        
+        <div class="lb-slider-container">
+            <div class="lb-slider-track">
+                {% comment %} Render Main Image {% endcomment %}
+                {% if block.settings.image %}
+                    <img src="{{ block.settings.image | image_url: width: 800 }}" 
+                         width="{{ block.settings.image.width }}"
+                         height="{{ block.settings.image.height }}"
+                         data-full-src="{{ block.settings.image | image_url: width: 2000 }}"
+                         loading="lazy" 
+                         alt="{{ section.settings.title }}" 
+                         class="lb-card-img active" data-index="0">
+                {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'lb-card-img placeholder' }}
+                {% endif %}
+
+                {% comment %} Render Extra Images {% endcomment %}
+                {% if block.settings.image_2 %}
+                     <img src="{{ block.settings.image_2 | image_url: width: 800 }}" 
+                         width="{{ block.settings.image_2.width }}"
+                         height="{{ block.settings.image_2.height }}"
+                         data-full-src="{{ block.settings.image_2 | image_url: width: 2000 }}"
+                         loading="lazy" 
+                         alt="{{ section.settings.title }}" 
+                         class="lb-card-img" data-index="1">
+                {% endif %}
+                {% if block.settings.image_3 %}
+                     <img src="{{ block.settings.image_3 | image_url: width: 800 }}" 
+                         width="{{ block.settings.image_3.width }}"
+                         height="{{ block.settings.image_3.height }}"
+                         data-full-src="{{ block.settings.image_3 | image_url: width: 2000 }}"
+                         loading="lazy" 
+                         alt="{{ section.settings.title }}" 
+                         class="lb-card-img" data-index="2">
+                {% endif %}
+                {% if block.settings.image_4 %}
+                     <img src="{{ block.settings.image_4 | image_url: width: 800 }}" 
+                         width="{{ block.settings.image_4.width }}"
+                         height="{{ block.settings.image_4.height }}"
+                         data-full-src="{{ block.settings.image_4 | image_url: width: 2000 }}"
+                         loading="lazy" 
+                         alt="{{ section.settings.title }}" 
+                         class="lb-card-img" data-index="3">
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Gradient Overlay -->
+        <div class="lb-card-overlay" style="background: linear-gradient(to top, {{ block.settings.overlay_color }} 0%, {{ block.settings.overlay_color | color_modify: 'alpha', 0.8 }} 30%, transparent 100%);">
+          <div class="lb-card-content">
+            
+            <!-- Real Pagination Dots -->
+            <div class="lb-slider-pagination">
+                <span class="lb-slider-dot active" data-index="0"></span>
+                {% if block.settings.image_2 %}<span class="lb-slider-dot" data-index="1"></span>{% endif %}
+                {% if block.settings.image_3 %}<span class="lb-slider-dot" data-index="2"></span>{% endif %}
+                {% if block.settings.image_4 %}<span class="lb-slider-dot" data-index="3"></span>{% endif %}
+            </div>
+
+            <button type="button" class="lb-enquire-btn trigger-modal">
+              {{ block.settings.button_text }}
+            </button>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Modal Container -->
+<div id="lb-enquire-modal" class="lb-modal-overlay">
+    <div class="lb-modal-content">
+        <button type="button" class="lb-close-btn">&times;</button>
+        
+        <div class="lb-modal-image-container">
+            <img src="" width="600" height="600" alt="Product" id="lb-modal-img">
+            <div class="lb-modal-dots">...</div>
+        </div>
+
+        <form id="lb-enquire-form">
+            <div class="lb-form-row">
+                <div class="lb-input-group">
+                    <label>Name*</label>
+                    <input type="text" id="lb-name" required>
+                </div>
+                <div class="lb-input-group">
+                    <label>Phone*</label>
+                    <input type="tel" id="lb-phone" required>
+                </div>
+            </div>
+
+            <div class="lb-form-row">
+                <div class="lb-input-group">
+                    <label>Mail</label>
+                    <input type="email" id="lb-mail">
+                </div>
+                <div class="lb-input-group">
+                    <label>Looking for</label>
+                    <input type="text" id="lb-looking-for">
+                </div>
+            </div>
+
+            <div class="lb-form-row">
+                <div class="lb-input-group">
+                    <label>Expected weight</label>
+                    <input type="text" id="lb-weight">
+                </div>
+                <div class="lb-input-group">
+                    <label>Remarks</label>
+                    <input type="text" id="lb-remarks">
+                </div>
+            </div>
+
+            <div class="lb-form-action">
+                <button type="submit" class="lb-submit-btn">Enquire Now</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('lb-enquire-modal');
+    const closeBtn = document.querySelector('.lb-close-btn');
+    const triggers = document.querySelectorAll('.trigger-modal');
+    const modalImg = document.getElementById('lb-modal-img');
+    const form = document.getElementById('lb-enquire-form');
+
+    let currentProductImageLink = "";
+
+    // --- Slider Logic ---
+    const cards = document.querySelectorAll('.lb-product-card');
+    
+    cards.forEach(card => {
+        const track = card.querySelector('.lb-slider-track');
+        const dots = card.querySelectorAll('.lb-slider-dot');
+        
+        if(!track || dots.length <= 1) return; // No slider needed
+
+        // Scroll Listener
+        track.addEventListener('scroll', () => {
+            const width = track.offsetWidth;
+            const scrollLeft = track.scrollLeft;
+            const activeIndex = Math.round(scrollLeft / width);
+            
+            dots.forEach(dot => dot.classList.remove('active'));
+            if(dots[activeIndex]) dots[activeIndex].classList.add('active');
+        });
+
+        // Click Dots
+        dots.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                const index = parseInt(e.target.dataset.index);
+                const width = track.offsetWidth;
+                track.scrollTo({
+                    left: width * index,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    });
+
+    // --- Modal Logic ---
+    triggers.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const card = this.closest('.lb-product-card');
+            const track = card.querySelector('.lb-slider-track');
+            
+            // Find visible image based on scroll position logic or "active" dot
+            // Better: calculate directly from scroll pos again or finding the image center
+            // Simpler: Just check which image is most visible
+            let visibleImg = null;
+            
+            if (track) {
+                const width = track.offsetWidth;
+                const scrollLeft = track.scrollLeft;
+                const activeIndex = Math.round(scrollLeft / width);
+                visibleImg = track.querySelectorAll('.lb-card-img')[activeIndex];
+            } else {
+                 visibleImg = card.querySelector('.lb-card-img');
+            }
+
+            // Fallback
+            if(!visibleImg) visibleImg = card.querySelector('.lb-card-img');
+
+            let src = "";
+            if(visibleImg.dataset.fullSrc) {
+                src = visibleImg.dataset.fullSrc;
+            } else {
+                src = visibleImg.src;
+            }
+
+            modalImg.src = src;
+            currentProductImageLink = src;
+            
+            // Handle valid URL for sharing
+            if(currentProductImageLink.startsWith('//')) {
+                currentProductImageLink = 'https:' + currentProductImageLink;
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) {
+        if(e.target === modal) closeModal();
+    });
+
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('lb-name').value;
+        const phone = document.getElementById('lb-phone').value;
+        const mail = document.getElementById('lb-mail').value;
+        const looking = document.getElementById('lb-looking-for').value;
+        const weight = document.getElementById('lb-weight').value;
+        const remarks = document.getElementById('lb-remarks').value;
+
+        // Construct Message
+        let message = `*New Enquiry from Website*\n\n`;
+        message += `*Product Image*: ${currentProductImageLink}\n`;
+        message += `*Name*: ${name}\n`;
+        message += `*Phone*: ${phone}\n`;
+        if(mail) message += `*Mail*: ${mail}\n`;
+        if(looking) message += `*Looking for*: ${looking}\n`;
+        if(weight) message += `*Expected Weight*: ${weight}\n`;
+        if(remarks) message += `*Remarks*: ${remarks}\n`;
+
+        const waNumber = "{{ section.settings.whatsapp_number }}";
+        const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+        
+        window.open(url, '_blank');
+        closeModal();
+    });
+});
+</script>
+
+<style>
+  /* Existing Grid Styles */
+  .lb-product-grid-section {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .lb-grid-title {
+    font-family: 'Inter', sans-serif; font-size: 24px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 30px; color: #000;
+  }
+  .lb-product-grid { display: grid; gap: 24px; width: 100%; }
+  @media (min-width: 900px) { .lb-grid-3 { grid-template-columns: repeat(3, 1fr); } .lb-grid-2 { grid-template-columns: repeat(2, 1fr); } .lb-grid-4 { grid-template-columns: repeat(4, 1fr); } }
+  @media (min-width: 600px) and (max-width: 899px) { .lb-product-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 599px) { .lb-product-grid { grid-template-columns: 1fr; } }
+  
+  .lb-product-card { position: relative; border-radius: 30px; overflow: hidden; aspect-ratio: 4/5; }
+  
+  /* Slider Styles */
+  .lb-slider-container { width: 100%; height: 100%; }
+  .lb-slider-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .lb-slider-track::-webkit-scrollbar { display: none; }
+  
+  .lb-card-img { 
+    flex: 0 0 100%; 
+    min-width: 100%;
+    height: 100%; 
+    object-fit: cover; 
+    display: block; 
+    scroll-snap-align: start;
+  }
+
+  .lb-card-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 30px; pointer-events: none; /* Allow swipe through overlay if needed, but buttons need events */ }
+  .lb-card-overlay > * { pointer-events: auto; }
+
+  /* New Dots Styles */
+  .lb-slider-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    z-index: 2;
+  }
+  .lb-slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .lb-slider-dot.active {
+    background: #fff;
+    transform: scale(1.2);
+  }
+  
+  /* Removed old text deco styles */
+  
+  .lb-enquire-btn {
+    background: #fff; color: #000; border: none; cursor: pointer;
+    padding: 12px 32px; border-radius: 25px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .lb-enquire-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.2); }
+
+  /* Modal Styles */
+  .lb-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6); z-index: 1000;
+    display: flex; justify-content: center; align-items: center;
+    visibility: hidden; opacity: 0; transition: opacity 0.3s;
+  }
+  .lb-modal-overlay.active { visibility: visible; opacity: 1; }
+
+  .lb-modal-content {
+    background: #e6e6e6; /* Specific grey from design */
+    width: 90%; max-width: 600px;
+    border-radius: 30px;
+    padding: 0;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    overflow: hidden;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .lb-close-btn {
+    position: absolute; top: 20px; right: 20px;
+    background: #fff; border: none; width: 36px; height: 36px; border-radius: 50%;
+    font-size: 24px; line-height: 36px; cursor: pointer; color: #000;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 5; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .lb-modal-image-container {
+    width: 100%; height: 250px; position: relative;
+  }
+  .lb-modal-image-container img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .lb-modal-dots {
+    position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+    color: #fff; font-size: 24px; font-weight: bold; letter-spacing: 2px;
+  }
+
+  #lb-enquire-form {
+    padding: 30px;
+  }
+
+  .lb-form-row {
+    display: flex; gap: 20px; margin-bottom: 20px;
+  }
+  @media (max-width: 500px) { .lb-form-row { flex-direction: column; gap: 10px; margin-bottom: 10px; } }
+
+  .lb-input-group { flex: 1; display: flex; flex-direction: column; }
+  .lb-input-group label {
+    font-family: 'Inter', sans-serif; font-size: 13px; color: #333; margin-bottom: 6px; font-weight: 500;
+  }
+  .lb-input-group input {
+    border: none; border-radius: 12px; padding: 12px 16px;
+    background: #fff; font-family: 'Inter', sans-serif; font-size: 14px;
+    outline: none;
+  }
+  .lb-input-group input:focus { box-shadow: 0 0 0 2px #ccc; }
+
+  .lb-form-action { text-align: center; margin-top: 20px; }
+  .lb-submit-btn {
+    background: #fff; border: none; padding: 14px 40px; border-radius: 30px;
+    font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600; cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .lb-submit-btn:hover { transform: translateY(-2px); }
+
+</style>
