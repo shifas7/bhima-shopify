@@ -1,4 +1,24 @@
 {%- assign sst = section.settings -%}
+{%- liquid
+  assign banner_img = blank
+  if collection.metafields.custom.collection_banner.value != blank
+    assign banner_img = collection.metafields.custom.collection_banner.value
+  elsif sst.use_collection_image_fallback and collection.image != blank
+    assign banner_img = collection.image
+  else
+    assign banner_img = sst.banner
+  endif
+
+  assign banner_mobile_img = blank
+  if collection.metafields.custom.collection_banner_mobile.value != blank
+    assign banner_mobile_img = collection.metafields.custom.collection_banner_mobile.value
+  endif
+
+  assign banner_link = blank
+  if collection.metafields.custom.collection_banner_link.value != blank
+    assign banner_link = collection.metafields.custom.collection_banner_link.value
+  endif
+-%}
 {% if template == "collection.leftsidebar" %}
   {% assign viewtype = "leftsidebar" %}
 {% elsif template == "collection.rightsidebar" %}
@@ -67,6 +87,56 @@
       }
     }
   {% endif %}
+  .collection_banner {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    border-radius: 8px;
+  }
+  .collection_banner--full {
+    border-radius: 0;
+    margin-bottom: 40px;
+  }
+  .collection_banner a {
+    display: block;
+    width: 100%;
+  }
+  .collection_banner img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+  }
+  .collection_banner a:hover img {
+    transform: scale(1.015);
+    filter: brightness(0.95);
+  }
+  @media (max-width: 767px) {
+    .collection_banner {
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .collection_banner--full {
+      border-radius: 0;
+      margin-bottom: 25px;
+    }
+  }
+  {% if sst.banner_height_mode == 'custom' %}
+    .collection_banner .respone_image {
+      padding-top: 0 !important;
+      height: {{ sst.banner_height_desktop }}px !important;
+    }
+    .collection_banner .respone_image img {
+      height: 100% !important;
+      object-fit: cover;
+      object-position: center;
+    }
+    @media (max-width: 767px) {
+      .collection_banner .respone_image {
+        height: {{ sst.banner_height_mobile }}px !important;
+      }
+    }
+  {% endif %}
 {% endstyle %}
 {% render 'nov-breadcrumb', class_br: 'breadcrumb_collection' %}
 {% if sst.show_list_collection %}
@@ -107,14 +177,42 @@
   </div>
 {% endif %}
 <div id="main-collection-filters" class="collection-{{ viewtype }}" data-id="{{ section.id }}">
+  {%- if banner_img != blank and sst.banner_full_width -%}
+    <div class="collection_banner collection_banner--full">
+      {%- if banner_link != blank -%}<a href="{{ banner_link }}">{%- endif -%}
+      <div class="d-none d-md-block">
+        {% render 'nov-aspect-image', image: banner_img %}
+      </div>
+      <div class="d-block d-md-none">
+        {%- if banner_mobile_img != blank -%}
+          {% render 'nov-aspect-image', image: banner_mobile_img %}
+        {%- else -%}
+          {% render 'nov-aspect-image', image: banner_img %}
+        {%- endif -%}
+      </div>
+      {%- if banner_link != blank -%}</a>{%- endif -%}
+    </div>
+  {%- endif -%}
+
   {% if viewtype != 'full_width' %}
     <div class="container">
   {% endif %}
-    {% if sst.banner != blank %}
+    {%- if banner_img != blank and sst.banner_full_width == false -%}
       <div class="collection_banner">
-        {% render 'nov-aspect-image', image: sst.banner %}
+        {%- if banner_link != blank -%}<a href="{{ banner_link }}">{%- endif -%}
+        <div class="d-none d-md-block">
+          {% render 'nov-aspect-image', image: banner_img %}
+        </div>
+        <div class="d-block d-md-none">
+          {%- if banner_mobile_img != blank -%}
+            {% render 'nov-aspect-image', image: banner_mobile_img %}
+          {%- else -%}
+            {% render 'nov-aspect-image', image: banner_img %}
+          {%- endif -%}
+        </div>
+        {%- if banner_link != blank -%}</a>{%- endif -%}
       </div>
-    {% endif %}
+    {%- endif -%}
     <div class="collection-top">
       <div class="filter_button collection-heading font-800 f_pr text-uppercase mb-20 nov_btn_act{% if viewtype == 'canvasleft' or viewtype == 'canvastop' or viewtype == 'canvasbottom' %} d-inline-block{% endif %}{% if viewtype == 'withoutsidebar' %} d-none{% endif %}" data-overlay="true" data-toggle="FilterSidebar">
         <i class="zmdi zmdi-tune"></i>
@@ -332,6 +430,49 @@
         "type": "image_picker",
         "id": "banner",
         "label": "Banner"
+      },
+      {
+        "type": "checkbox",
+        "id": "banner_full_width",
+        "label": "Full width banner",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "use_collection_image_fallback",
+        "label": "Use collection featured image as fallback banner",
+        "default": false,
+        "info": "If checked and no metafield banner is set, the collection's featured image will be used as the banner. Note: this image is also used as the breadcrumbs background."
+      },
+      {
+        "type": "select",
+        "id": "banner_height_mode",
+        "label": "Banner height mode",
+        "default": "custom",
+        "options": [
+          { "value": "auto", "label": "Natural image aspect ratio" },
+          { "value": "custom", "label": "Custom height (cropped)" }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "banner_height_desktop",
+        "min": 150,
+        "max": 600,
+        "step": 10,
+        "unit": "px",
+        "label": "Custom height desktop",
+        "default": 300
+      },
+      {
+        "type": "range",
+        "id": "banner_height_mobile",
+        "min": 100,
+        "max": 400,
+        "step": 10,
+        "unit": "px",
+        "label": "Custom height mobile",
+        "default": 200
       },
       {
         "type": "header",
