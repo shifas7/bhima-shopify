@@ -1,0 +1,426 @@
+{%- comment -%}
+  BHIMA — product detail page, main section.
+
+  Page order, exactly as approved:
+    hero (gallery + information + delivery check w/ dispatch note +
+            purchase + assistance)
+    → certification
+    → specifications | price breakup | promotional banner
+    → delivery policy + shipping & return accordions
+    → (optional) editorial story card
+    → sticky purchase bar
+
+  Additive by design: it renders the `pdp-*` snippets and leaves
+  nov-product-template.liquid and every product-single-* snippet untouched, so
+  the other product templates keep working exactly as they do today.
+{%- endcomment -%}
+
+{%- liquid
+  assign sst = section.settings
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+
+{{ 'photoswipe.css' | asset_url | stylesheet_tag }}
+{{ 'bhima-pdp.css' | asset_url | stylesheet_tag }}
+
+{%- assign pdp_canvas = sst.page_background | default: '#FFFDF9' -%}
+{% style %}
+  body { background-color: {{ pdp_canvas }}; }
+  .bhima-pdp { --pdp-canvas: {{ pdp_canvas }}; }
+  {%- if sst.container_width != blank and sst.container_width > 0 %}
+  .bhima-pdp { --pdp-container: {{ sst.container_width }}px; }
+  {%- endif %}
+{% endstyle %}
+
+<div class="bhima-pdp" data-section-id="{{ section.id }}" data-wishlist-product>
+  <div class="container">
+
+    {%- if sst.show_breadcrumb -%}
+      <nav class="pdp-crumbs" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">{{ 'general.breadcrumbs.home' | t }}</a>
+        {%- for c in product.collections limit: 1 -%}
+          {%- unless c.handle == 'all' -%}
+            <span class="sep">/</span>
+            <a href="{{ c.url }}">{{ c.title }}</a>
+          {%- endunless -%}
+        {%- endfor -%}
+        {%- if product.type != blank -%}
+          <span class="sep">/</span>
+          <span>{{ product.type }}</span>
+        {%- endif -%}
+        <span class="sep">/</span>
+        <span aria-current="page">{{ product.title }}</span>
+      </nav>
+    {%- endif -%}
+
+    {%- comment -%} ------------------------------------------------ hero {%- endcomment -%}
+    <div class="product-single pdp-hero__grid" data-wishlist-img="{{ product.media.first.preview_image.src | image_url: width: 200 }}">
+      <div class="pdp-hero__media">{% render 'pdp-gallery' %}</div>
+      <div class="pdp-hero__panel">{% render 'pdp-info-panel' %}</div>
+    </div>
+
+    {%- comment -%}
+      Shipping timeline. The dispatch promise normally rides along inside the
+      delivery-check card in the hero, where it belongs topically and does not
+      sit alone in a full-width box. This strip is the fallback for when the
+      delivery check is switched off, so the copy is never lost.
+    {%- endcomment -%}
+    {%- unless sst.show_delivery_check -%}
+      {% render 'pdp-shipping-strip' %}
+    {%- endunless -%}
+
+    {%- comment -%}
+      Certification band. It occupies the slot the delivery check used to hold —
+      the delivery check now sits in the hero panel, where the quantity stepper
+      was.
+    {%- endcomment -%}
+    {% render 'pdp-certified', variant: 'band' %}
+
+    {%- comment -%} ---------- specifications | price breakup | campaign ---------- {%- endcomment -%}
+    <div class="pdp-infogrid">
+      {% render 'pdp-specifications' %}
+      {% render 'pdp-price-breakdown' %}
+      {% render 'pdp-promo-banner' %}
+    </div>
+
+    {%- comment -%} ----------------------------------------------- policies {%- endcomment -%}
+    {% render 'pdp-policies' %}
+
+    {%- comment -%}
+      The editorial story card. The approved design does not include it — the
+      product description now sits above the fold in the hero — so it is off by
+      default. Switching it on restores the previous card, content and all.
+    {%- endcomment -%}
+    {%- if sst.show_story_card -%}
+      {% render 'pdp-story-details' %}
+    {%- endif -%}
+  </div>
+
+  {%- if sst.show_sticky_bar -%}
+    {% render 'pdp-sticky-bar' %}
+  {%- endif -%}
+</div>
+
+{% render 'nov-popup-share' %}
+{% render 'nov-popup-ask' %}
+{% render 'nov-popup-video-call' %}
+
+<script src="{{ 'bhima-pdp.js' | asset_url }}" defer></script>
+<script src="{{ 'bhima-delivery.js' | asset_url }}" defer></script>
+
+{%- comment -%} Fullscreen gallery — same PhotoSwipe contract as the legacy template. {%- endcomment -%}
+<script type="module">
+  import Lightbox from '{{ 'photoswipe-lightbox.esm.min.js' | asset_url }}';
+  const prevSVG = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 11 21"><polyline fill="none" stroke="currentColor" points="10.5 0.5 0.5 10.5 10.5 20.5" stroke-width="1.25"></polyline></svg>';
+  const nextSVG = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 11 21"><polyline fill="none" stroke="currentColor" points="0.5 0.5 10.5 10.5 0.5 20.5" stroke-width="1.25"></polyline></svg>';
+  const closeSVG = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 16 14"><path d="M15 0L1 14m14 0L1 0" stroke="currentColor" fill="none" fill-rule="evenodd"></path></svg>';
+  const lightbox = new Lightbox({
+    gallery: '#proFeaturedImageZoom',
+    children: '.item_img',
+    bgOpacity: 1,
+    showHideAnimationType: 'zoom',
+    loop: true,
+    counter: true,
+    zoom: true,
+    bgClickAction: 'close',
+    arrowPrevSVG: prevSVG,
+    arrowNextSVG: nextSVG,
+    closeSVG: closeSVG,
+    pswpModule: () => import('{{ 'photoswipe.esm.min.js' | asset_url }}')
+  });
+  lightbox.init();
+</script>
+
+{%- comment -%} Structured data — the legacy template shipped microdata only. {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "url": {{ shop.url | append: product.url | json }},
+  "sku": {{ current_variant.sku | json }},
+  {%- if product.description != blank %}
+  "description": {{ product.description | strip_html | truncate: 500 | json }},
+  {%- endif %}
+  {%- if product.featured_image != blank %}
+  "image": [{{ product.featured_image | image_url: width: 1200 | prepend: 'https:' | json }}],
+  {%- endif %}
+  "brand": { "@type": "Brand", "name": {{ product.vendor | default: shop.name | json }} },
+  {%- assign review_count = product.metafields.air_reviews_product.review_count -%}
+  {%- assign review_avg = product.metafields.air_reviews_product.review_avg -%}
+  {%- if review_count != blank and review_count > 0 and review_avg != blank %}
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": {{ review_avg | json }},
+    "reviewCount": {{ review_count | json }}
+  },
+  {%- endif %}
+  "offers": {
+    "@type": "Offer",
+    "price": {{ current_variant.price | divided_by: 100.0 | json }},
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "availability": {% if current_variant.available %}"https://schema.org/InStock"{% else %}"https://schema.org/OutOfStock"{% endif %},
+    "url": {{ shop.url | append: product.url | json }}
+  }
+}
+</script>
+
+{% schema %}
+{
+  "name": "BHIMA product page",
+  "settings": [
+    { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": false },
+    { "type": "checkbox", "id": "show_sticky_bar", "label": "Show sticky purchase bar", "default": true },
+    { "type": "color", "id": "page_background", "label": "Page background", "default": "#FFFDF9" },
+    { "type": "range", "id": "container_width", "min": 1140, "max": 1600, "step": 20, "unit": "px", "label": "Content width", "default": 1320 },
+
+    { "type": "header", "content": "Product information" },
+    { "type": "checkbox", "id": "show_sku", "label": "Show product code", "default": true },
+    { "type": "text", "id": "sku_label", "label": "Product code label", "info": "Blank uses the translated default (SKU)." },
+    { "type": "checkbox", "id": "show_available", "label": "Show availability", "default": true },
+    { "type": "text", "id": "stock_label", "label": "Availability label", "info": "Blank uses the translated default." },
+    { "type": "checkbox", "id": "show_short_description", "label": "Show a short description under the price", "default": true },
+    { "type": "range", "id": "short_description_words", "min": 10, "max": 60, "step": 5, "label": "Excerpt length (words)", "default": 35 },
+    { "type": "checkbox", "id": "show_pager", "label": "Show previous / next product links", "default": true, "info": "Only appears when the visitor arrived from a collection." },
+    { "type": "text", "id": "price_note", "label": "Note under the price", "default": "(Inclusive of all taxes)" },
+    { "type": "url", "id": "reviews_anchor", "label": "Rating links to", "info": "Blank shows the rating as plain text. The customer-review section was removed, so leave this blank unless you add a reviews page or section back." },
+    { "type": "checkbox", "id": "show_hero_assurance", "label": "Show the assurance badge row in the hero", "default": false, "info": "Uses the Hero assurance blocks. Off in the approved design." },
+
+    { "type": "header", "content": "Options & quantity" },
+    { "type": "checkbox", "id": "product_swatch_enable", "label": "Use swatches", "default": true },
+    { "type": "checkbox", "id": "img_swatch", "label": "Use image swatches", "default": true },
+    { "type": "checkbox", "id": "show_quantity_selector", "label": "Show quantity selector", "default": true },
+    { "type": "checkbox", "id": "show_sizeguide", "label": "Show size guide link", "default": false },
+    { "type": "header", "content": "Size" },
+    { "type": "paragraph", "content": "Typed per product in the Shopify admin. Settings -> Custom data -> Products -> add a definition with the key custom.size, type Single line text. It renders beside the availability / SKU rows, next to the Size Guide link. Leave it empty on products that sell size as a variant option — the option selector is the source of truth there." },
+    { "type": "checkbox", "id": "show_size", "label": "Show the product size", "default": true },
+    { "type": "text", "id": "size_label", "label": "Size label", "info": "Blank uses the translated default." },
+
+    { "type": "header", "content": "Size chart" },
+    { "type": "paragraph", "content": "Shown as a link beside the availability / SKU rows; opens a dialog, or a bottom sheet on phones. Managed per collection in the Shopify admin: add a File (image) metafield with the key custom.size_chart_image to Collections. One chart per collection covers its whole catalogue. The image below is a brand-level fallback for collections that carry none." },
+    { "type": "checkbox", "id": "show_size_chart", "label": "Show the size chart link", "default": true },
+    { "type": "text", "id": "size_chart_label", "label": "Link label", "default": "Size Guide" },
+    { "type": "text", "id": "size_chart_title", "label": "Dialog title", "default": "Size Guide" },
+    { "type": "image_picker", "id": "size_chart_image", "label": "Fallback chart image", "info": "Used only for products whose collection carries no chart of its own." },
+
+    { "type": "header", "content": "Deals" },
+    { "type": "checkbox", "id": "show_progress_deals", "label": "Show stock progress bar", "default": true },
+    { "type": "checkbox", "id": "show_countdown", "label": "Show countdown", "default": true },
+
+    { "type": "header", "content": "EMI note" },
+    { "type": "paragraph", "content": "Informational only. The figure is the price divided by the tenure below — it is not a lender quote and no interest is applied. Not part of the approved design, so it is off by default." },
+    { "type": "checkbox", "id": "show_emi", "label": "Show EMI note", "default": false },
+    { "type": "number", "id": "emi_months", "label": "Tenure (months)", "default": 30 },
+    { "type": "text", "id": "emi_label", "label": "Label", "default": "EMI starting from" },
+    { "type": "text", "id": "emi_period", "label": "Period word", "default": "month" },
+
+    { "type": "header", "content": "Assistance actions" },
+    { "type": "paragraph", "content": "The Share / Ask a Question / Video Call / FAQ row under the buttons. Each control keeps the modal or link it already used." },
+    { "type": "checkbox", "id": "show_share", "label": "Show Share", "default": true },
+    { "type": "checkbox", "id": "show_ask", "label": "Show Ask a Question", "default": true },
+    { "type": "text", "id": "label_ask", "label": "Ask label", "default": "Ask a Question" },
+    { "type": "checkbox", "id": "show_videocall", "label": "Show Video Call", "default": true },
+    { "type": "text", "id": "label_videocall", "label": "Video Call label", "default": "Video Call" },
+    { "type": "checkbox", "id": "show_faq", "label": "Show FAQ", "default": true },
+    { "type": "url", "id": "faq", "label": "FAQ page", "info": "Blank links to the FAQ section on this page." },
+
+    { "type": "header", "content": "Certification" },
+    { "type": "text", "id": "certified_title", "label": "Heading", "default": "WE ARE CERTIFIED BY" },
+    { "type": "image_picker", "id": "certified_image", "label": "Certification artwork" },
+    { "type": "range", "id": "certified_width", "min": 120, "max": 520, "step": 20, "unit": "px", "label": "Artwork width", "default": 300 },
+    { "type": "checkbox", "id": "show_cert_items", "label": "Show trust items in the certification box", "default": false, "info": "Uses the Trust item blocks (BIS Hallmark, Lifetime Buyback, …). Off in the approved design; the blocks are kept so nothing is lost." },
+
+    { "type": "header", "content": "Shipping timeline" },
+    { "type": "paragraph", "content": "The strip under the hero. Keep these consistent with the delivery estimate below and with the Shipping & Delivery policy accordion." },
+    { "type": "text", "id": "ship_time", "label": "Dispatch line" },
+    { "type": "text", "id": "ship_free", "label": "Free shipping line" },
+
+    { "type": "header", "content": "Pincode delivery check" },
+    { "type": "checkbox", "id": "show_delivery_check", "label": "Show delivery check", "default": true },
+    {
+      "type": "select", "id": "delivery_provider", "label": "Data source", "default": "auto",
+      "info": "Auto = the API endpoint if one is set, then metaobject zones if any exist, then the PIN prefix rules.",
+      "options": [
+        { "value": "auto", "label": "Auto" },
+        { "value": "endpoint", "label": "API endpoint" },
+        { "value": "zones", "label": "Metaobject delivery zones" },
+        { "value": "rules", "label": "PIN prefix rules" }
+      ]
+    },
+    { "type": "text", "id": "delivery_endpoint", "label": "API endpoint URL", "info": "Optional. Supports {pincode}, {product_id} and {variant_id} placeholders; without them the values are sent as query parameters. Response contract is documented at the top of assets/bhima-delivery.js." },
+    {
+      "type": "select", "id": "delivery_endpoint_method", "label": "API method", "default": "GET",
+      "options": [
+        { "value": "GET", "label": "GET" },
+        { "value": "POST", "label": "POST" }
+      ]
+    },
+    { "type": "text", "id": "delivery_zone_type", "label": "Delivery zone metaobject type", "default": "delivery_zone", "info": "Entries need a pincode_prefixes field, plus optional min_days, max_days, serviceable, cod and label." },
+    { "type": "text", "id": "delivery_serviceable_prefixes", "label": "Serviceable PIN prefixes", "info": "Rules source. Comma separated, e.g. 67,68,56. Blank = all India." },
+    { "type": "text", "id": "delivery_express_prefixes", "label": "Faster-delivery PIN prefixes", "info": "Rules source. Comma separated. Optional." },
+    { "type": "text", "id": "delivery_blocked_prefixes", "label": "Non-serviceable PIN prefixes", "info": "Rules source. Comma separated. Optional." },
+    { "type": "number", "id": "delivery_standard_days", "label": "Standard working days", "default": 10 },
+    { "type": "number", "id": "delivery_express_days", "label": "Faster working days", "default": 7 },
+    { "type": "range", "id": "delivery_spread", "min": 0, "max": 10, "step": 1, "label": "Estimate range width (days)", "default": 5, "info": "An estimate of 10 with a width of 5 shows as 5–10 Days." },
+    { "type": "text", "id": "delivery_heading", "label": "Heading", "default": "Check delivery availability" },
+    { "type": "text", "id": "delivery_hint", "label": "Hint", "default": "Enter your pincode to check delivery availability and estimated delivery." },
+    { "type": "text", "id": "delivery_placeholder", "label": "Field placeholder", "default": "Enter Pincode" },
+    { "type": "text", "id": "delivery_button", "label": "Button label", "default": "Check" },
+    { "type": "text", "id": "delivery_checking_text", "label": "Loading message", "default": "Checking availability…" },
+    { "type": "text", "id": "delivery_available_text", "label": "Available heading", "default": "Delivery Available" },
+    { "type": "text", "id": "delivery_eta_label", "label": "Estimate label", "default": "Estimated Delivery:" },
+    { "type": "text", "id": "delivery_days_word", "label": "Days word", "default": "Days" },
+    { "type": "text", "id": "delivery_free_text", "label": "Free delivery line", "default": "Free Delivery" },
+    { "type": "text", "id": "delivery_insured_text", "label": "Insured line", "default": "Secure / Insured Delivery" },
+    { "type": "text", "id": "delivery_cod_text", "label": "Cash on delivery line", "default": "Cash on Delivery available" },
+    { "type": "text", "id": "delivery_unserved_text", "label": "Unavailable message", "default": "Delivery is currently unavailable for this pincode." },
+    { "type": "text", "id": "delivery_invalid_text", "label": "Invalid pincode message", "default": "Please enter a valid 6-digit pincode." },
+    { "type": "text", "id": "delivery_error_text", "label": "Error message", "default": "We couldn't check this pincode just now. Please try again." },
+
+    { "type": "header", "content": "Specifications" },
+    { "type": "text", "id": "specs_title", "label": "Card title", "default": "Specifications" },
+    { "type": "text", "id": "stone_type_label", "label": "Stone table — type column", "default": "Stone Type" },
+    { "type": "text", "id": "stone_weight_label", "label": "Stone table — weight column", "default": "Stone Weight" },
+    { "type": "text", "id": "stone_cost_label", "label": "Stone table — cost column", "default": "Stone Cost" },
+
+    { "type": "header", "content": "Price breakup" },
+    { "type": "paragraph", "content": "The figures come from the live-rate app's jewelry_config metafields. Only the labels are editable here." },
+    { "type": "text", "id": "breakup_title", "label": "Card title", "default": "Price Breakup" },
+    { "type": "text", "id": "label_metal_row", "label": "Metal row label", "info": "Blank shows \"Gold value (0.35 gram)\" from the product's metal type and weight." },
+    { "type": "text", "id": "label_making_row", "label": "Making charge row label" },
+    { "type": "text", "id": "label_stone_row", "label": "Stone charge row label" },
+    { "type": "text", "id": "label_tax_row", "label": "Tax row label" },
+    { "type": "text", "id": "total_label", "label": "Total row label" },
+    { "type": "checkbox", "id": "show_metal_rate", "label": "Show the applied metal rate under the total", "default": true },
+    { "type": "text", "id": "rate_note", "label": "Rate note", "info": "Fallback when the product carries no metal rate.", "default": "Today's gold rate applied" },
+
+    { "type": "header", "content": "Story card (optional)" },
+    { "type": "paragraph", "content": "Not part of the approved design. Switch it on to bring back the editorial card under the policies. Product metafields override these: custom.story_title, custom.product_story, custom.story_image" },
+    { "type": "checkbox", "id": "show_story_card", "label": "Show the story card", "default": false },
+    { "type": "text", "id": "story_eyebrow", "label": "Eyebrow", "default": "The story behind the piece" },
+    { "type": "checkbox", "id": "story_use_description", "label": "Use the product description when no story metafield exists", "default": true },
+    { "type": "text", "id": "story_title", "label": "Title" },
+    { "type": "richtext", "id": "story_text", "label": "Body copy" },
+    { "type": "image_picker", "id": "story_image", "label": "Image" },
+    { "type": "text", "id": "details_title", "label": "Details card title", "default": "The Details" },
+    { "type": "text", "id": "label_metal_details", "label": "Metal accordion label", "default": "Metal Details" },
+    { "type": "text", "id": "label_stone_details", "label": "Stone accordion label", "default": "Stone Details" }
+  ],
+  "blocks": [
+    {
+      "type": "delivery_feature",
+      "name": "Delivery promise",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Free Delivery" },
+        { "type": "text", "id": "text", "label": "Subtitle", "default": "Across India" },
+        {
+          "type": "select", "id": "icon", "label": "Icon", "default": "truck",
+          "options": [
+            { "value": "truck", "label": "Delivery" },
+            { "value": "shield", "label": "Secure" },
+            { "value": "calendar", "label": "Timeline" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "box", "label": "Package" },
+            { "value": "lock", "label": "Insured" },
+            { "value": "check-circle", "label": "Check" }
+          ]
+        },
+        { "type": "image_picker", "id": "image", "label": "Custom icon" }
+      ]
+    },
+    {
+      "type": "promo_banner",
+      "name": "Promotional campaign",
+      "settings": [
+        { "type": "paragraph", "content": "A reusable campaign banner for the third column of the information grid. Add one block per campaign; the first enabled, in-date, matching block renders. Leave every targeting field blank to show it on all products." },
+        { "type": "checkbox", "id": "enabled", "label": "Enabled", "default": true },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "SPECIAL LIMITED TIME OFFER" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Flat 10% Off" },
+        { "type": "text", "id": "offer", "label": "Offer line", "default": "on Making Charges" },
+        { "type": "text", "id": "description", "label": "Description" },
+        { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Shop Now" },
+        { "type": "url", "id": "cta_url", "label": "CTA link" },
+        { "type": "text", "id": "footnote", "label": "Footnote", "default": "*T&C Apply" },
+        {
+          "type": "select", "id": "theme", "label": "Look", "default": "cream",
+          "options": [
+            { "value": "cream", "label": "Warm cream" },
+            { "value": "ink", "label": "Ink" },
+            { "value": "gold", "label": "Gold" }
+          ]
+        },
+        { "type": "image_picker", "id": "image", "label": "Artwork — desktop" },
+        { "type": "image_picker", "id": "image_mobile", "label": "Artwork — mobile" },
+        { "type": "header", "content": "Validity" },
+        { "type": "text", "id": "start_date", "label": "Starts", "info": "YYYY-MM-DD. Blank = live now." },
+        { "type": "text", "id": "end_date", "label": "Ends", "info": "YYYY-MM-DD. Blank = no end date." },
+        { "type": "header", "content": "Targeting" },
+        { "type": "text", "id": "target_collections", "label": "Collection handles", "info": "Comma separated. Blank = all collections." },
+        { "type": "text", "id": "target_tags", "label": "Product tags", "info": "Comma separated. Blank = all tags." },
+        { "type": "text", "id": "target_types", "label": "Product types", "info": "Comma separated. Blank = all types." },
+        { "type": "text", "id": "exclude_tags", "label": "Exclude product tags", "info": "Comma separated. Optional." }
+      ]
+    },
+    {
+      "type": "assure_inline",
+      "name": "Hero assurance",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "BIS Hallmarked" },
+        {
+          "type": "select", "id": "icon", "label": "Icon", "default": "hallmark",
+          "options": [
+            { "value": "hallmark", "label": "Hallmark" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "certificate", "label": "Certificate" },
+            { "value": "lock", "label": "Secure" },
+            { "value": "gem", "label": "Gem" },
+            { "value": "check", "label": "Check" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "cert_item",
+      "name": "Trust item",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "BIS Hallmark" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Assured Purity" },
+        {
+          "type": "select", "id": "icon", "label": "Icon", "default": "hallmark",
+          "options": [
+            { "value": "hallmark", "label": "Hallmark" },
+            { "value": "certificate", "label": "Certificate" },
+            { "value": "buyback", "label": "Buyback" },
+            { "value": "return", "label": "Exchange" },
+            { "value": "gem", "label": "Gem" },
+            { "value": "shield", "label": "Shield" }
+          ]
+        },
+        { "type": "image_picker", "id": "image", "label": "Custom icon" }
+      ]
+    },
+    {
+      "type": "block_text",
+      "name": "Policy accordion",
+      "settings": [
+        { "type": "text", "id": "custom_title", "label": "Title" },
+        { "type": "richtext", "id": "custom_content", "label": "Content" },
+        {
+          "type": "select", "id": "icon", "label": "Icon", "default": "truck",
+          "options": [
+            { "value": "truck", "label": "Shipping" },
+            { "value": "return", "label": "Returns" },
+            { "value": "shield", "label": "Warranty" },
+            { "value": "care", "label": "Care" },
+            { "value": "certificate", "label": "Certificate" },
+            { "value": "info", "label": "Info" }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

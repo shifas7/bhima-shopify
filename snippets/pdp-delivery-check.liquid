@@ -1,0 +1,158 @@
+{%- comment -%}
+  Pincode delivery check — new feature.
+
+  Deliberately provider-agnostic. This snippet only renders the UI and hands
+  `assets/bhima-delivery.js` a JSON configuration; the JS picks a provider from
+  its registry and never contains a hardcoded verdict for any PIN code.
+
+  Providers shipped:
+    zones     serviceable areas defined as Shopify metaobject entries
+              (type set below, default `delivery_zone`), rendered server-side
+    rules     PIN-prefix lists + working-day estimates from the section settings
+    endpoint  any HTTP API — the live-rate backend, a 3PL, Shiprocket/Delhivery
+              behind a proxy — returning the normalised contract documented in
+              assets/bhima-delivery.js
+    auto      endpoint if a URL is set, else zones if entries exist, else rules
+
+  Swapping provider is a section setting; adding one is a
+  BhimaDelivery.registerProvider() call. No markup change either way.
+{%- endcomment -%}
+
+{%- liquid
+  assign sst = section.settings
+  assign variant = variant | default: 'band'
+  assign zone_type = sst.delivery_zone_type | default: 'delivery_zone'
+  assign zone_entries = shop.metaobjects[zone_type].values
+  assign feature_blocks = section.blocks | where: 'type', 'delivery_feature'
+-%}
+
+{%- capture zones_json -%}
+[
+{%- for zone in zone_entries -%}
+  {%- liquid
+    assign z_prefixes = zone.pincode_prefixes | default: zone.pincodes | default: zone.prefixes
+    assign z_min = zone.min_days | default: zone.delivery_days_min | default: zone.days
+    assign z_max = zone.max_days | default: zone.delivery_days_max | default: zone.days
+    assign z_service = zone.serviceable
+    assign z_label = zone.label | default: zone.name | default: zone.title
+  -%}
+  {
+    "prefixes": {{ z_prefixes | default: '' | json }},
+    "minDays": {{ z_min | default: 0 | json }},
+    "maxDays": {{ z_max | default: 0 | json }},
+    "serviceable": {% if z_service == false %}false{% else %}true{% endif %},
+    "label": {{ z_label | default: '' | json }},
+    "cod": {% if zone.cod == true %}true{% else %}false{% endif %}
+  }{% unless forloop.last %},{% endunless %}
+{%- endfor -%}
+]
+{%- endcapture -%}
+
+{%- capture delivery_config -%}
+{
+  "provider": {{ sst.delivery_provider | default: 'auto' | json }},
+  "endpoint": {{ sst.delivery_endpoint | default: '' | json }},
+  "endpointMethod": {{ sst.delivery_endpoint_method | default: 'GET' | json }},
+  "productId": {{ product.id | json }},
+  "variantId": {{ product.selected_or_first_available_variant.id | json }},
+  "sku": {{ product.selected_or_first_available_variant.sku | default: '' | json }},
+  "zones": {{ zones_json | strip_newlines | strip }},
+  "rules": {
+    "serviceablePrefixes": {{ sst.delivery_serviceable_prefixes | default: '' | json }},
+    "expressPrefixes": {{ sst.delivery_express_prefixes | default: '' | json }},
+    "blockedPrefixes": {{ sst.delivery_blocked_prefixes | default: '' | json }},
+    "standardDays": {{ sst.delivery_standard_days | default: 0 }},
+    "expressDays": {{ sst.delivery_express_days | default: 0 }},
+    "spread": {{ sst.delivery_spread | default: 3 }}
+  },
+  "strings": {
+    "checking": {{ sst.delivery_checking_text | default: 'Checking availability…' | json }},
+    "available": {{ sst.delivery_available_text | default: 'Delivery Available' | json }},
+    "etaLabel": {{ sst.delivery_eta_label | default: 'Estimated Delivery:' | json }},
+    "daysWord": {{ sst.delivery_days_word | default: 'Days' | json }},
+    "free": {{ sst.delivery_free_text | default: 'Free Delivery' | json }},
+    "insured": {{ sst.delivery_insured_text | default: 'Secure / Insured Delivery' | json }},
+    "cod": {{ sst.delivery_cod_text | default: 'Cash on Delivery available' | json }},
+    "unserved": {{ sst.delivery_unserved_text | default: 'Delivery is currently unavailable for this pincode.' | json }},
+    "invalid": {{ sst.delivery_invalid_text | default: 'Please enter a valid 6-digit pincode.' | json }},
+    "error": {{ sst.delivery_error_text | default: "We couldn't check this pincode just now. Please try again." | json }}
+  }
+}
+{%- endcapture -%}
+
+<section class="pdp-deliv pdp-deliv--{{ variant }}" id="delivery-check" data-bhima-delivery='{{ delivery_config | strip_newlines | escape }}' data-pdp-reveal>
+
+  <div class="pdp-deliv__form">
+    <p class="pdp-deliv__title">
+      {% render 'pdp-icon', icon: 'target' %}
+      <span>{{ sst.delivery_heading | default: 'Check delivery availability' }}</span>
+    </p>
+    <p class="pdp-deliv__hint">{{ sst.delivery_hint | default: 'Enter your pincode to check delivery availability and estimated delivery.' }}</p>
+
+    <form class="pdp-deliv__row" novalidate data-bhima-delivery-form>
+      <div class="pdp-deliv__field">
+        <input type="text"
+          inputmode="numeric"
+          autocomplete="postal-code"
+          maxlength="6"
+          name="pincode"
+          placeholder="{{ sst.delivery_placeholder | default: 'Enter Pincode' }}"
+          aria-label="{{ sst.delivery_placeholder | default: 'Enter Pincode' }}"
+          aria-describedby="pdp-deliv-status-{{ section.id }}"
+          data-bhima-delivery-input>
+      </div>
+      <button type="submit" class="pdp-deliv__submit" data-bhima-delivery-submit>
+        <span data-bhima-delivery-submit-label>{{ sst.delivery_button | default: 'Check' }}</span>
+        <span class="pdp-deliv__spin" aria-hidden="true"></span>
+      </button>
+    </form>
+
+    <p class="pdp-deliv__error" data-bhima-delivery-error hidden></p>
+  </div>
+
+  <div class="pdp-deliv__info" id="pdp-deliv-status-{{ section.id }}" role="status" aria-live="polite">
+
+    {%- comment -%}
+      Idle state — the merchant-managed promises. Only in the full-width band:
+      in the compact panel these repeated the trust-benefits strip, which is the
+      duplication the client flagged. The hint line carries the instruction
+      there instead.
+    {%- endcomment -%}
+    {%- if variant != 'compact' and feature_blocks.size > 0 -%}
+      <div class="pdp-deliv__promises" data-bhima-delivery-idle>
+        {%- for block in feature_blocks -%}
+          <div class="pdp-deliv__promise" {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              <img src="{{ block.settings.image | image_url: width: 90 }}" width="30" height="30" alt="" loading="lazy">
+            {%- else -%}
+              {% render 'pdp-icon', icon: block.settings.icon %}
+            {%- endif -%}
+            <b>{{ block.settings.title }}</b>
+            {%- if block.settings.text != blank -%}<span>{{ block.settings.text }}</span>{%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Result state — populated by bhima-delivery.js, never server-rendered. {%- endcomment -%}
+    <div class="pdp-deliv__result" data-bhima-delivery-result hidden></div>
+  </div>
+
+  {%- comment -%}
+    Dispatch promise. It lives here rather than in a band of its own: it is the
+    same subject as the estimate above it, and on its own it was a single
+    sentence floating in a full-width box. snippets/pdp-shipping-strip.liquid
+    still renders it as a strip when the delivery check is switched off, so the
+    copy can never be orphaned.
+  {%- endcomment -%}
+  {%- if sst.ship_time != blank or sst.ship_free != blank -%}
+    <div class="pdp-deliv__foot">
+      {%- if sst.ship_time != blank -%}
+        <p>{% render 'pdp-icon', icon: 'box' %}<span>{{ sst.ship_time }}</span></p>
+      {%- endif -%}
+      {%- if sst.ship_free != blank -%}
+        <p>{% render 'pdp-icon', icon: 'truck' %}<span>{{ sst.ship_free }}</span></p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</section>

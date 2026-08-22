@@ -153,6 +153,7 @@
 </div>
 {% render 'nov-popup-share' %}
 {% render 'nov-popup-ask' %}
+{% render 'nov-popup-video-call' %}
 {{ 'photoswipe.css' | asset_url | stylesheet_tag }}
 {{ 'css-product_detail.css' | asset_url | stylesheet_tag }}
 <script type="module">
@@ -254,6 +255,12 @@
         "type": "checkbox",
         "id": "show_ask",
         "label": "Show ask a question",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_videocall",
+        "label": "Show schedule video call CTA",
         "default": true
       },
       {
@@ -513,6 +520,16 @@
             "type": "text",
             "id": "custom_title",
             "label": "Block title"
+          },
+          {
+            "type": "image_picker",
+            "id": "promo_image",
+            "label": "Promotion Image"
+          },
+          {
+            "type": "url",
+            "id": "promo_link",
+            "label": "Promotion Link"
           },
           {
             "type": "header",

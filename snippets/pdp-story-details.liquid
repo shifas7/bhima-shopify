@@ -1,0 +1,241 @@
+{%- comment -%}
+  Paired cards: the story behind the piece + the technical details.
+
+  Story copy resolves the product metafield first, then the product description,
+  then the section setting.
+  Every detail row is conditional — a field only appears when the product
+  actually carries that data. Nothing is invented.
+{%- endcomment -%}
+
+{%- liquid
+  assign sst = section.settings
+  assign cm = product.metafields.custom
+  assign jc = product.metafields.jewelry_config
+  assign current_variant = product.selected_or_first_available_variant
+
+  # Body precedence: a per-product story metafield, then the product's own
+  # description, then the brand-level fallback copy. The description used to be
+  # rendered nowhere but the JSON-LD, so on every product without a story
+  # metafield it was invisible to customers.
+  assign story_body = cm.product_story
+  assign story_is_description = false
+  if story_body == blank and sst.story_use_description and product.description != blank
+    assign story_body = product.description
+    assign story_is_description = true
+  endif
+  if story_body == blank
+    assign story_body = sst.story_text
+  endif
+
+  # Title falls back to the collection the piece belongs to, which is what the
+  # design reference shows above the prose. Never the product title — that is
+  # already the h1.
+  assign story_title = cm.story_title | default: sst.story_title
+  if story_title == blank
+    for c in product.collections
+      unless c.handle == 'all' or c.title == 'home page' or c.title == 'Home page' or c.title == 'Upsell'
+        assign story_title = c.title
+        break
+      endunless
+    endfor
+  endif
+  assign story_image = cm.story_image.value | default: cm.story_image
+  if story_image == blank
+    assign story_image = sst.story_image
+  endif
+  if story_image == blank and product.media.size > 1
+    assign story_image = product.media[1].preview_image
+  endif
+
+  assign mt = jc.metal_type
+  assign metal_label = ''
+  assign purity_label = ''
+  case mt
+    when 'gold24kt'
+      assign metal_label = 'Gold'
+      assign purity_label = '24K'
+    when 'gold22kt'
+      assign metal_label = 'Gold'
+      assign purity_label = '22K'
+    when 'gold18kt'
+      assign metal_label = 'Gold'
+      assign purity_label = '18K'
+    when 'gold14kt'
+      assign metal_label = 'Gold'
+      assign purity_label = '14K'
+    when 'silver'
+      assign metal_label = 'Silver'
+    when 'platinum'
+      assign metal_label = 'Platinum'
+    else
+      assign metal_label = mt
+  endcase
+
+  assign stones_array = blank
+  assign has_stones = false
+  assign first_stone_type = ''
+  assign total_stone_weight = 0
+  if jc.stones != blank
+    assign stones_array = jc.stones.value | default: jc.stones
+    if stones_array != blank
+      for stone in stones_array
+        if stone.stoneType != blank or stone.stoneWeight != blank
+          assign has_stones = true
+          if first_stone_type == '' and stone.stoneType != blank
+            assign first_stone_type = stone.stoneType
+          endif
+          if stone.stoneWeight != blank and stone.stoneWeight != 0
+            assign sc = stone.stoneCount | default: 1
+            if sc == blank or sc == 0
+              assign sc = 1
+            endif
+            assign line_weight = stone.stoneWeight | times: sc
+            assign total_stone_weight = total_stone_weight | plus: line_weight
+          endif
+        endif
+      endfor
+    endif
+  endif
+
+  assign has_details = false
+  if metal_label != blank or jc.gross_weight != blank or jc.metal_weight != blank or has_stones
+    assign has_details = true
+  endif
+
+  assign has_story = false
+  if story_body != blank
+    assign has_story = true
+  endif
+-%}
+
+{%- if has_story or has_details -%}
+  <div class="pdp-duo pdp-duo--wide-left">
+
+    {%- if has_story -%}
+      <div class="pdp-card pdp-card--flush pdp-story" data-pdp-reveal>
+        <div class="pdp-story__copy">
+          <span class="pdp-eyebrow">{{ sst.story_eyebrow | default: 'The story behind the piece' }}</span>
+          {%- if story_title != blank -%}<h2 class="pdp-h2">{{ story_title }}</h2>{%- endif -%}
+          <div class="pdp-story__rte{% if story_is_description %} pdp-story__rte--desc{% endif %}">{{ story_body }}</div>
+        </div>
+        {%- if story_image != blank -%}
+          <div class="pdp-story__media">
+            <img src="{{ story_image | image_url: width: 900 }}"
+              srcset="{{ story_image | image_url: width: 500 }} 500w, {{ story_image | image_url: width: 900 }} 900w"
+              sizes="(min-width: 992px) 26vw, 92vw"
+              width="{{ story_image.width | default: 800 }}"
+              height="{{ story_image.height | default: 800 }}"
+              alt="{{ story_title | default: product.title | escape }}" loading="lazy">
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if has_details -%}
+      <div class="pdp-card pdp-details" data-pdp-reveal>
+        <p class="pdp-card-title">{{ sst.details_title | default: 'The Details' }}</p>
+
+        <div class="pdp-details__grid">
+          {%- if metal_label != blank -%}
+            <div class="pdp-detail">
+              {% render 'pdp-icon', icon: 'gem' %}
+              <div><div class="pdp-detail__k">Metal</div><div class="pdp-detail__v">{{ metal_label }}</div></div>
+            </div>
+          {%- endif -%}
+
+          {%- if purity_label != blank -%}
+            <div class="pdp-detail">
+              {% render 'pdp-icon', icon: 'hallmark' %}
+              <div><div class="pdp-detail__k">Purity</div><div class="pdp-detail__v">{{ purity_label }}</div></div>
+            </div>
+          {%- endif -%}
+
+          {%- if jc.gross_weight != blank and jc.gross_weight != 0 -%}
+            <div class="pdp-detail">
+              {% render 'pdp-icon', icon: 'scale' %}
+              <div><div class="pdp-detail__k">Product Weight</div><div class="pdp-detail__v">{{ jc.gross_weight }} g</div></div>
+            </div>
+          {%- endif -%}
+
+          {%- if has_stones and total_stone_weight != 0 -%}
+            <div class="pdp-detail">
+              {% render 'pdp-icon', icon: 'sparkle' %}
+              <div><div class="pdp-detail__k">Stone Weight</div><div class="pdp-detail__v">{{ total_stone_weight }} {% if first_stone_type contains 'iamond' %}ct{% else %}g{% endif %}</div></div>
+            </div>
+          {%- endif -%}
+
+          {%- if first_stone_type != blank -%}
+            <div class="pdp-detail">
+              {% render 'pdp-icon', icon: 'certificate' %}
+              <div><div class="pdp-detail__k">Stone Type</div><div class="pdp-detail__v">{{ first_stone_type }}</div></div>
+            </div>
+          {%- endif -%}
+
+          {%- if current_variant.sku != blank -%}
+            <div class="pdp-detail">
+              {% render 'pdp-icon', icon: 'receipt' %}
+              <div><div class="pdp-detail__k">Product Code</div><div class="pdp-detail__v">{{ current_variant.sku }}</div></div>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="pdp-details__toggles">
+          {%- if metal_label != blank or jc.metal_weight != blank -%}
+            <div class="pdp-mini" data-pdp-collapse>
+              <button type="button" class="pdp-mini__toggle" data-pdp-collapse-toggle>
+                {{ sst.label_metal_details | default: 'Metal Details' }}
+                {% render 'pdp-icon', icon: 'chevron-down' %}
+              </button>
+              <div class="pdp-mini__body" data-pdp-collapse-body>
+                <div class="pdp-mini__inner">
+                  <dl>
+                    {%- if metal_label != blank -%}<div class="pdp-kv"><dt>Metal</dt><dd>{{ metal_label }}</dd></div>{%- endif -%}
+                    {%- if purity_label != blank -%}<div class="pdp-kv"><dt>Purity</dt><dd>{{ purity_label }}</dd></div>{%- endif -%}
+                    {%- if jc.metal_weight != blank and jc.metal_weight != 0 -%}<div class="pdp-kv"><dt>Metal weight</dt><dd>{{ jc.metal_weight }} g</dd></div>{%- endif -%}
+                    {%- if jc.gross_weight != blank and jc.gross_weight != 0 -%}<div class="pdp-kv"><dt>Gross weight</dt><dd>{{ jc.gross_weight }} g</dd></div>{%- endif -%}
+                  </dl>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if has_stones -%}
+            <div class="pdp-mini" data-pdp-collapse>
+              <button type="button" class="pdp-mini__toggle" data-pdp-collapse-toggle>
+                {{ sst.label_stone_details | default: 'Stone Details' }}
+                {% render 'pdp-icon', icon: 'chevron-down' %}
+              </button>
+              <div class="pdp-mini__body" data-pdp-collapse-body>
+                <div class="pdp-mini__inner">
+                  {%- for stone in stones_array -%}
+                    {%- if stone.stoneType != blank or stone.stoneWeight != blank -%}
+                      {%- liquid
+                        assign sc = stone.stoneCount | default: 1
+                        if sc == blank or sc == 0
+                          assign sc = 1
+                        endif
+                        assign w = stone.stoneWeight | times: sc
+                        assign tl = stone.actualStoneType | default: stone.stoneType | downcase
+                      -%}
+                      <dl {% unless forloop.first %}style="margin-top:10px;padding-top:8px;border-top:1px solid var(--pdp-line)"{% endunless %}>
+                        {%- if stone.stoneType != blank -%}<div class="pdp-kv"><dt>Type</dt><dd>{{ stone.stoneType }}</dd></div>{%- endif -%}
+                        {%- if stone.stoneCount != blank and stone.stoneCount != 0 -%}<div class="pdp-kv"><dt>Count</dt><dd>{{ stone.stoneCount }}</dd></div>{%- endif -%}
+                        {%- if stone.stoneWeight != blank and stone.stoneWeight != 0 -%}<div class="pdp-kv"><dt>Weight</dt><dd>{{ w }}{% if tl contains 'diamond' %} ct{% else %} g{% endif %}</dd></div>{%- endif -%}
+                        {%- if stone.clarity != blank -%}<div class="pdp-kv"><dt>Clarity</dt><dd>{{ stone.clarity }}</dd></div>{%- endif -%}
+                        {%- if stone.color != blank -%}<div class="pdp-kv"><dt>Colour</dt><dd>{{ stone.color }}</dd></div>{%- endif -%}
+                        {%- if stone.cut != blank -%}<div class="pdp-kv"><dt>Cut</dt><dd>{{ stone.cut }}</dd></div>{%- endif -%}
+                        {%- if stone.shape != blank -%}<div class="pdp-kv"><dt>Shape</dt><dd>{{ stone.shape }}</dd></div>{%- endif -%}
+                        {%- if stone.setting != blank -%}<div class="pdp-kv"><dt>Setting</dt><dd>{{ stone.setting }}</dd></div>{%- endif -%}
+                      </dl>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+{%- endif -%}

@@ -1,0 +1,146 @@
+{%- comment -%}
+  Gallery: vertical thumb rail + snapping stage with arrows, counter and zoom.
+
+  Contracts kept for existing theme scripts:
+    #proFeaturedImageZoom + .item_img[data-pswp-*]   PhotoSwipe lightbox
+    .proFeaturedImage .item[data-media-id] + .act    nov-product-variants.js updateMedia()
+{%- endcomment -%}
+
+{%- liquid
+  assign media_items = product.media
+  assign media_count = media_items.size
+  assign rail_max = 5
+  assign overflow_count = media_count | minus: rail_max
+-%}
+
+<div class="pdp-gallery{% if media_count < 2 %} pdp-gallery--single{% endif %}" data-pdp-gallery>
+
+  {%- if media_count > 1 -%}
+    <div class="pdp-gallery__rail">
+      {%- for media in media_items limit: rail_max -%}
+        <button type="button"
+          class="pdp-thumb{% if forloop.first %} is-active{% endif %}"
+          data-pdp-thumb
+          aria-label="{{ media.alt | default: product.title | escape }}">
+          <img src="{{ media.preview_image | image_url: width: 180 }}" width="90" height="90" alt="" loading="lazy">
+          {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+            <span class="pdp-thumb__mark">{% render 'pdp-icon', icon: 'play' %}</span>
+          {%- elsif media.media_type == 'model' -%}
+            <span class="pdp-thumb__mark">{% render 'pdp-icon', icon: 'ring' %}</span>
+          {%- endif -%}
+        </button>
+      {%- endfor -%}
+
+      {%- if overflow_count > 0 -%}
+        {%- assign peek = media_items[rail_max] -%}
+        <button type="button" class="pdp-thumb pdp-thumb--more" data-pdp-fullscreen aria-label="{{ 'products.product.zoom' | t }}">
+          {%- if peek.preview_image != blank -%}
+            <img src="{{ peek.preview_image | image_url: width: 180 }}" width="90" height="90" alt="" loading="lazy">
+          {%- endif -%}
+          <span>+{{ overflow_count }}</span>
+        </button>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="pdp-gallery__stage">
+    {%- if settings.wishlist_enable -%}
+      <button type="button" class="pdp-gallery__wish" data-pdp-wish-proxy aria-label="{{ 'products.product.wishlist' | t }}">
+        {% render 'pdp-icon', icon: 'heart' %}
+      </button>
+    {%- endif -%}
+
+    <div id="proFeaturedImageZoom" class="pdp-gallery__viewport proFeaturedImage" data-pdp-gallery-media>
+      {%- for media in media_items -%}
+        {%- case media.media_type -%}
+
+          {%- when 'image' -%}
+            <a href="{{ media | image_url: width: 1946 }}"
+              class="pdp-gallery__slide item item_img{% if forloop.first %} act{% endif %}"
+              data-media-id="{{ section.id }}-{{ media.id }}"
+              data-position="{{ forloop.index0 }}"
+              data-pswp-src="{{ media | image_url: width: 1946 }}"
+              data-pswp-width="{{ media.width }}"
+              data-pswp-height="{{ media.height }}"
+              aria-label="{{ media.alt | default: product.title | escape }}">
+              <span class="pdp-gallery__frame item-content">
+                <img
+                  src="{{ media | image_url: width: 40 }}"
+                  data-src="{{ media | image_url: width: 900 }}"
+                  data-srcset="{{ media | image_url: width: 480 }} 480w, {{ media | image_url: width: 760 }} 760w, {{ media | image_url: width: 1100 }} 1100w, {{ media | image_url: width: 1500 }} 1500w"
+                  data-sizes="auto"
+                  class="lazyload"
+                  width="{{ media.width }}"
+                  height="{{ media.height }}"
+                  alt="{{ media.alt | default: product.title | escape }}"
+                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+              </span>
+            </a>
+
+          {%- when 'video' -%}
+            <div class="pdp-gallery__slide item{% if forloop.first %} act{% endif %}"
+              data-media-id="{{ section.id }}-{{ media.id }}" data-position="{{ forloop.index0 }}">
+              <div class="pdp-gallery__frame item-content">
+                <img src="{{ media.preview_image | image_url: width: 1100 }}" width="{{ media.preview_image.width }}" height="{{ media.preview_image.height }}" alt="{{ media.alt | escape }}" loading="lazy">
+              </div>
+              <button type="button" class="pdp-gallery__play" data-pdp-video-play aria-label="{{ 'products.product.play_video' | t }}">
+                <span>{% render 'pdp-icon', icon: 'play' %}</span>
+              </button>
+              <template data-pdp-video-source>
+                {{ media | video_tag: controls: true, image_size: '1100x' }}
+              </template>
+            </div>
+
+          {%- when 'external_video' -%}
+            <div class="pdp-gallery__slide item{% if forloop.first %} act{% endif %}"
+              data-media-id="{{ section.id }}-{{ media.id }}" data-position="{{ forloop.index0 }}">
+              <div class="pdp-gallery__frame item-content">
+                <img src="{{ media.preview_image | image_url: width: 1100 }}" width="{{ media.preview_image.width }}" height="{{ media.preview_image.height }}" alt="{{ media.alt | escape }}" loading="lazy">
+              </div>
+              <button type="button" class="pdp-gallery__play" data-pdp-video-play aria-label="{{ 'products.product.play_video' | t }}">
+                <span>{% render 'pdp-icon', icon: 'play' %}</span>
+              </button>
+              <template data-pdp-video-source>{{ media | external_video_tag }}</template>
+            </div>
+
+          {%- when 'model' -%}
+            <div class="pdp-gallery__slide item{% if forloop.first %} act{% endif %}"
+              data-media-id="{{ section.id }}-{{ media.id }}" data-position="{{ forloop.index0 }}">
+              <div class="pdp-gallery__frame item-content">
+                <product-model>{{ media | media_tag: image_size: '1100x', toggleable: true }}</product-model>
+              </div>
+            </div>
+
+          {%- else -%}
+            <div class="pdp-gallery__slide item{% if forloop.first %} act{% endif %}"
+              data-media-id="{{ section.id }}-{{ media.id }}" data-position="{{ forloop.index0 }}">
+              <div class="pdp-gallery__frame item-content">{{ media | media_tag }}</div>
+            </div>
+
+        {%- endcase -%}
+      {%- else -%}
+        <div class="pdp-gallery__slide">
+          <div class="pdp-gallery__frame">{{ 'product-1' | placeholder_svg_tag }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if media_count > 1 -%}
+      <button type="button" class="pdp-gallery__arrow pdp-gallery__arrow--prev" data-pdp-gallery-prev aria-label="{{ 'general.accessibility.previous' | t }}">
+        {% render 'pdp-icon', icon: 'chevron-left' %}
+      </button>
+      <button type="button" class="pdp-gallery__arrow pdp-gallery__arrow--next" data-pdp-gallery-next aria-label="{{ 'general.accessibility.next' | t }}">
+        {% render 'pdp-icon', icon: 'chevron-right' %}
+      </button>
+      <div class="pdp-gallery__counter">
+        <span data-pdp-counter-current>01</span> / {% if media_count < 10 %}0{% endif %}{{ media_count }}
+      </div>
+    {%- endif -%}
+
+    {%- if media_count > 0 -%}
+      <button type="button" class="pdp-gallery__zoom" data-pdp-fullscreen aria-label="{{ 'products.product.zoom' | t }}">
+        {% render 'pdp-icon', icon: 'zoom' %}
+      </button>
+    {%- endif -%}
+  </div>
+</div>

@@ -1,0 +1,77 @@
+{%- comment -%}
+  Certification — the existing "WE ARE CERTIFIED BY" heading and artwork,
+  placed under the assistance actions exactly as the design shows.
+
+  Nothing here is invented: the heading and the logo strip are the section
+  settings the theme already carried (certified_title / certified_image), and
+  the `assure_inline` blocks are the fallback when no artwork is set.
+
+  The `cert_item` trust blocks (BIS Hallmark, Lifetime Buyback, …) render as a
+  compact row underneath when "Show trust items in the certification box" is
+  switched on. The approved design does not include them, so the setting is off
+  by default — the content is preserved, not deleted.
+{%- endcomment -%}
+
+{%- liquid
+  assign sst = section.settings
+  assign variant = variant | default: 'panel'
+  assign cert_blocks = section.blocks | where: 'type', 'cert_item'
+  assign assure_blocks = section.blocks | where: 'type', 'assure_inline'
+  assign has_art = false
+  if sst.certified_image != blank
+    assign has_art = true
+  endif
+  assign show_cert_items = false
+  if sst.show_cert_items and cert_blocks.size > 0
+    assign show_cert_items = true
+  endif
+-%}
+
+{%- if has_art or assure_blocks.size > 0 or show_cert_items -%}
+  <div class="pdp-certbox pdp-certbox--{{ variant }}" data-pdp-reveal>
+    {%- if sst.certified_title != blank -%}
+      <p class="pdp-certbox__title">{{ sst.certified_title }}</p>
+    {%- endif -%}
+
+    {%- if has_art -%}
+      <div class="pdp-certbox__art">
+        <img
+          src="{{ sst.certified_image | image_url: width: 900 }}"
+          srcset="{{ sst.certified_image | image_url: width: 450 }} 450w, {{ sst.certified_image | image_url: width: 900 }} 900w"
+          sizes="(min-width: 992px) {{ sst.certified_width | default: 300 }}px, 70vw"
+          width="{{ sst.certified_width | default: 300 }}"
+          height="{{ sst.certified_width | default: 300 | divided_by: sst.certified_image.aspect_ratio | round }}"
+          style="max-width:{{ sst.certified_width | default: 300 }}px"
+          alt="{{ sst.certified_title | default: 'Certified by' | escape }}"
+          loading="lazy">
+      </div>
+    {%- elsif assure_blocks.size > 0 -%}
+      <div class="pdp-certbox__badges">
+        {%- for block in assure_blocks -%}
+          <span {{ block.shopify_attributes }}>
+            {% render 'pdp-icon', icon: block.settings.icon %}
+            {{ block.settings.label }}
+          </span>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if show_cert_items -%}
+      <div class="pdp-certbox__items">
+        {%- for block in cert_blocks -%}
+          <div class="pdp-certbox__item" {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              <img src="{{ block.settings.image | image_url: width: 80 }}" width="26" height="26" alt="" loading="lazy">
+            {%- else -%}
+              {% render 'pdp-icon', icon: block.settings.icon %}
+            {%- endif -%}
+            <span>
+              <b>{{ block.settings.title }}</b>
+              {%- if block.settings.text != blank -%}<em>{{ block.settings.text }}</em>{%- endif -%}
+            </span>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

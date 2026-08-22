@@ -1,0 +1,194 @@
+{%- comment -%}
+  Specifications — column 1 of the product information grid.
+
+  Every row is read from the `jewelry_config` metafields the live-rate app
+  writes, plus the variant SKU. Nothing is hardcoded and nothing is invented: a
+  row only renders when the product actually carries that value, so a plain gold
+  chain and a diamond set both read correctly.
+{%- endcomment -%}
+
+{%- liquid
+  assign sst = section.settings
+  assign jc = product.metafields.jewelry_config
+  assign cm = product.metafields.custom
+  assign current_variant = product.selected_or_first_available_variant
+
+  assign mt = jc.metal_type
+  assign metal_label = ''
+  assign purity_label = ''
+  case mt
+    when 'gold24kt'
+      assign metal_label = 'Gold'
+      assign purity_label = '24K'
+    when 'gold22kt'
+      assign metal_label = 'Gold'
+      assign purity_label = '22K'
+    when 'gold18kt'
+      assign metal_label = 'Gold'
+      assign purity_label = '18K'
+    when 'gold14kt'
+      assign metal_label = 'Gold'
+      assign purity_label = '14K'
+    when 'gold9kt'
+      assign metal_label = 'Gold'
+      assign purity_label = '9K'
+    when 'silver'
+      assign metal_label = 'Silver'
+    when 'platinum'
+      assign metal_label = 'Platinum'
+    else
+      assign metal_label = mt
+  endcase
+
+  assign stones_array = blank
+  assign has_stones = false
+  if jc.stones != blank
+    assign stones_array = jc.stones.value | default: jc.stones
+    if stones_array != blank
+      for stone in stones_array
+        if stone.stoneType != blank or stone.stoneWeight != blank or stone.stoneCost != blank
+          assign has_stones = true
+          break
+        endif
+      endfor
+    endif
+  endif
+
+  # Size — the same custom.size metafield the hero panel shows. SKU appears in
+  # both places in the approved design too, so this follows that pattern.
+  # A bare "0" is a migration placeholder, not a merchant-entered size — see
+  # pdp-info-panel.liquid for why it has to be filtered rather than just blank.
+  assign spec_size = cm.size
+  if spec_size != blank
+    assign spec_size = spec_size.value | default: spec_size
+  endif
+  assign spec_size_check = spec_size | strip
+  if spec_size_check == blank or spec_size_check == '0'
+    assign spec_size = blank
+  endif
+  unless sst.show_size
+    assign spec_size = blank
+  endunless
+  assign spec_size_label = sst.size_label
+  if spec_size_label == blank
+    assign spec_size_label = 'products.product.size' | t
+  endif
+
+  assign has_rows = false
+  if current_variant.sku != blank or metal_label != blank or jc.gross_weight != blank or jc.metal_weight != blank or cm.dimensions != blank or cm.certification != blank or spec_size != blank
+    assign has_rows = true
+  endif
+-%}
+
+{%- if has_rows or has_stones -%}
+  <div class="pdp-card pdp-specs" data-pdp-reveal>
+    <p class="pdp-cardhead">
+      {% render 'pdp-icon', icon: 'gear' %}
+      <span>{{ sst.specs_title | default: 'Specifications' }}</span>
+    </p>
+
+    <dl class="pdp-specs__list">
+      {%- if current_variant.sku != blank -%}
+        <div class="pdp-specs__row">
+          <dt>{% render 'pdp-icon', icon: 'star' %}<span>{{ 'products.product.product_code' | t }}</span></dt>
+          <dd>{{ current_variant.sku }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- if jc.gross_weight != blank and jc.gross_weight != 0 -%}
+        <div class="pdp-specs__row">
+          <dt>{% render 'pdp-icon', icon: 'scale' %}<span>{{ 'products.product.product_weight' | t }}</span></dt>
+          <dd>{{ jc.gross_weight }} {{ 'products.product.per_gram' | t }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- if metal_label != blank -%}
+        <div class="pdp-specs__row">
+          <dt>{% render 'pdp-icon', icon: 'gem' %}<span>{{ 'products.product.metal_type' | t }}</span></dt>
+          <dd>{{ metal_label }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- if purity_label != blank -%}
+        <div class="pdp-specs__row">
+          <dt>{% render 'pdp-icon', icon: 'hallmark' %}<span>{{ 'products.product.purity' | t }}</span></dt>
+          <dd>{{ purity_label }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- if jc.metal_weight != blank and jc.metal_weight != 0 -%}
+        <div class="pdp-specs__row">
+          <dt>{% render 'pdp-icon', icon: 'coins' %}<span>{{ 'products.product.metal_weight' | t }}</span></dt>
+          <dd>{{ jc.metal_weight }} {{ 'products.product.per_gram' | t }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- if spec_size != blank -%}
+        <div class="pdp-specs__row">
+          <dt>{% render 'pdp-icon', icon: 'ruler' %}<span>{{ spec_size_label }}</span></dt>
+          <dd>{{ spec_size }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- if cm.dimensions != blank -%}
+        <div class="pdp-specs__row">
+          <dt>{% render 'pdp-icon', icon: 'ring' %}<span>Dimensions</span></dt>
+          <dd>{{ cm.dimensions }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- if cm.certification != blank -%}
+        <div class="pdp-specs__row">
+          <dt>{% render 'pdp-icon', icon: 'certificate' %}<span>Certification</span></dt>
+          <dd>{{ cm.certification }}</dd>
+        </div>
+      {%- endif -%}
+    </dl>
+
+    {%- if has_stones -%}
+      <div class="pdp-specs__stones">
+        <p class="pdp-subhead">{{ 'products.product.stone_details' | t }}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>{{ sst.stone_type_label | default: 'Stone Type' }}</th>
+              <th>{{ sst.stone_weight_label | default: 'Stone Weight' }}</th>
+              <th>{{ sst.stone_cost_label | default: 'Stone Cost' }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for stone in stones_array -%}
+              {%- if stone.stoneType != blank or stone.stoneWeight != blank or stone.stoneCost != blank -%}
+                {%- liquid
+                  assign stone_count = stone.stoneCount | default: 1
+                  if stone_count == blank or stone_count == 0
+                    assign stone_count = 1
+                  endif
+                  assign row_weight = stone.stoneWeight | times: stone_count
+                  assign stone_type_lower = stone.actualStoneType | default: stone.stoneType | downcase
+                -%}
+                <tr>
+                  <td>{{ stone.stoneType | default: '—' }}</td>
+                  <td>
+                    {%- if stone.stoneWeight != blank and stone.stoneWeight != 0 -%}
+                      {%- if stone_type_lower contains 'diamond' -%}
+                        {{ row_weight }} ct
+                      {%- else -%}
+                        {{ row_weight }} {{ 'products.product.per_gram' | t }}
+                      {%- endif -%}
+                    {%- else -%}—{%- endif -%}
+                  </td>
+                  <td>
+                    {%- if stone.stoneCost != blank and stone.stoneCost != 0 -%}
+                      {{ stone.stoneCost | times: 100 | round | money }}
+                    {%- else -%}—{%- endif -%}
+                  </td>
+                </tr>
+              {%- endif -%}
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

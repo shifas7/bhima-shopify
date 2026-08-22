@@ -1,0 +1,248 @@
+{%- comment -%}
+  Product information panel — the right column of the hero.
+
+  Order:
+    collection eyebrow → title → rating → price → description →
+    availability / SKU / size guide → delivery check → variants →
+    Add to Bag / Buy It Now / wishlist → assistance actions
+
+  Notes on two client-requested changes:
+    · The rating is display-only unless a reviews anchor is configured — the
+      customer-review section was removed, so a link would go nowhere.
+    · The delivery check sits where the quantity stepper used to be. It is
+      rendered immediately *before* the product form, never inside it: a form
+      cannot be nested in another form, and an Enter keypress inside the product
+      form would otherwise fire add-to-cart.
+
+  `.product-single__title` is required by nuranium.js when adding to wishlist.
+{%- endcomment -%}
+
+{%- liquid
+  assign sst = section.settings
+  assign current_variant = product.selected_or_first_available_variant
+
+  assign review_avg = product.metafields.air_reviews_product.review_avg
+  assign review_count = product.metafields.air_reviews_product.review_count
+  assign has_rating = false
+  if review_count != blank and review_count > 0
+    assign has_rating = true
+    assign rounded = review_avg | round
+  endif
+
+  assign sku_label = sst.sku_label
+  if sku_label == blank
+    assign sku_label = 'products.product.lable_sku' | t
+  endif
+
+  assign stock_label = sst.stock_label
+  if stock_label == blank
+    assign stock_label = 'products.product.available' | t
+  endif
+
+  # Size — a single-line text metafield typed per product in the admin.
+  # Bulk import / migration tooling has left this at a literal "0" on
+  # products nobody has actually sized yet, and Liquid's blank check treats
+  # "0" as a real value (it is a non-empty string) — so that placeholder was
+  # rendering as if a merchant had typed it. Trim and reject both "" and "0"
+  # so the row only ever shows a size someone deliberately entered.
+  assign product_size = product.metafields.custom.size
+  if product_size != blank
+    assign product_size = product_size.value | default: product_size
+  endif
+  assign product_size_check = product_size | strip
+  if product_size_check == blank or product_size_check == '0'
+    assign product_size = blank
+  endif
+  assign has_size = false
+  if sst.show_size and product_size != blank
+    assign has_size = true
+  endif
+  assign size_label = sst.size_label
+  if size_label == blank
+    assign size_label = 'products.product.size' | t
+  endif
+
+  assign primary_collection = blank
+  for c in product.collections
+    unless c.handle == 'all' or c.title == 'home page' or c.title == 'Home page' or c.title == 'Upsell'
+      assign primary_collection = c
+      break
+    endunless
+  endfor
+-%}
+
+<div class="pdp-panel">
+
+  {%- liquid
+    assign has_pager = false
+    if sst.show_pager and collection != blank
+      if collection.previous_product != blank or collection.next_product != blank
+        assign has_pager = true
+      endif
+    endif
+  -%}
+
+  {%- if primary_collection != blank or product.type != blank or has_pager -%}
+    <div class="pdp-panel__topline">
+      {%- if primary_collection != blank -%}
+        <a class="pdp-panel__eyebrow" href="{{ primary_collection.url }}">{{ primary_collection.title }}</a>
+      {%- elsif product.type != blank -%}
+        <span class="pdp-panel__eyebrow">{{ product.type }}</span>
+      {%- else -%}
+        <span></span>
+      {%- endif -%}
+
+      {%- if has_pager -%}
+        <nav class="pdp-pager" aria-label="{{ 'products.general.previous_product' | t }} / {{ 'products.general.next_product' | t }}">
+          {%- if collection.previous_product != blank -%}
+            <a href="{{ collection.previous_product.url }}" aria-label="{{ 'products.general.previous_product' | t }}" title="{{ 'products.general.previous_product' | t }}">
+              {% render 'pdp-icon', icon: 'chevron-left' %}
+            </a>
+          {%- else -%}
+            <span class="is-off">{% render 'pdp-icon', icon: 'chevron-left' %}</span>
+          {%- endif -%}
+
+          <a href="{{ collection.url }}" aria-label="{{ 'products.general.back_to_collection' | t }}" title="{{ 'products.general.back_to_collection' | t }}">
+            {% render 'pdp-icon', icon: 'grid' %}
+          </a>
+
+          {%- if collection.next_product != blank -%}
+            <a href="{{ collection.next_product.url }}" aria-label="{{ 'products.general.next_product' | t }}" title="{{ 'products.general.next_product' | t }}">
+              {% render 'pdp-icon', icon: 'chevron-right' %}
+            </a>
+          {%- else -%}
+            <span class="is-off">{% render 'pdp-icon', icon: 'chevron-right' %}</span>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <h1 class="pdp-panel__title product-single__title" itemprop="name">{{ product.title }}</h1>
+
+  {%- if settings.show_rating -%}
+    <div class="pdp-panel__rating">
+      {%- if has_rating -%}
+        <span class="pdp-stars" aria-label="{{ review_avg }} / 5">
+          {%- for i in (1..5) -%}
+            <span class="{% if i > rounded %}is-empty{% endif %}">{% render 'pdp-icon', icon: 'star' %}</span>
+          {%- endfor -%}
+        </span>
+        <span class="pdp-panel__score">{{ review_avg }}</span>
+        <span class="divider">|</span>
+        {%- if sst.reviews_anchor != blank -%}
+          <a href="{{ sst.reviews_anchor }}">{{ 'products.product.review_all_count' | t: count: review_count }}</a>
+        {%- else -%}
+          <span>{{ review_count }} {{ 'products.product.reviews_count' | t }}</span>
+        {%- endif -%}
+      {%- else -%}
+        <span class="AirReviews-Widget AirReviews-Widget--Stars"></span>
+        {%- if sst.reviews_anchor != blank -%}
+          <a href="{{ sst.reviews_anchor }}">{{ 'products.product.review_all_btn' | t }}</a>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="pdp-panel__price">
+    {% render 'pdp-price', current_variant: current_variant %}
+    {%- if sst.price_note != blank -%}
+      <p class="pdp-panel__taxnote">{{ sst.price_note }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if sst.show_short_description and product.description != blank -%}
+    {%- assign excerpt_words = sst.short_description_words | default: 35 -%}
+    <p class="pdp-panel__excerpt">{{ product.description | strip_html | truncatewords: excerpt_words }}</p>
+  {%- endif -%}
+
+  {%- if sst.show_available or sst.show_sku or has_size -%}
+    <div class="pdp-panel__metawrap">
+      <dl class="pdp-panel__meta">
+        {%- if sst.show_available -%}
+          <div class="pdp-panel__metarow">
+            <dt>{{ stock_label }}</dt>
+            <dd>
+              {%- if product.available -%}
+                <span class="pdp-panel__stock pdp-panel__stock--in">{{ 'products.product.in_stock' | t }}</span>
+              {%- else -%}
+                <span class="pdp-panel__stock pdp-panel__stock--out">{{ 'products.product.sold_out' | t }}</span>
+              {%- endif -%}
+            </dd>
+          </div>
+        {%- endif -%}
+        {%- if sst.show_sku and current_variant.sku != blank -%}
+          <div class="pdp-panel__metarow">
+            <dt>{{ sku_label }}</dt>
+            <dd itemprop="sku"><span id="variantSku">{{ current_variant.sku }}</span></dd>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%}
+          Size, typed per product in the admin (custom.size). Sits beside the
+          Size Guide link on purpose: the measurement and the chart that explains
+          it belong together, above the fold where they affect the decision.
+          Products that sell size as a variant option should leave the metafield
+          empty — the option selector is the source of truth there.
+        {%- endcomment -%}
+        {%- if has_size -%}
+          <div class="pdp-panel__metarow">
+            <dt>{{ size_label }}</dt>
+            <dd>{{ product_size }}</dd>
+          </div>
+        {%- endif -%}
+      </dl>
+
+      {%- if sst.show_size_chart -%}
+        {% render 'pdp-size-chart', part: 'trigger' %}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- if sst.show_hero_assurance -%}
+    {%- assign assure_blocks = section.blocks | where: 'type', 'assure_inline' -%}
+    {%- if assure_blocks.size > 0 -%}
+      <div class="pdp-panel__assure">
+        {%- for block in assure_blocks -%}
+          <span {{ block.shopify_attributes }}>
+            {% render 'pdp-icon', icon: block.settings.icon %}
+            {{ block.settings.label }}
+          </span>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+
+  {% render 'product-single-deal' %}
+
+  {%- comment -%}
+    Delivery check — outside the product form on purpose, see the header note.
+  {%- endcomment -%}
+  {%- if sst.show_delivery_check -%}
+    {% render 'pdp-delivery-check', variant: 'compact' %}
+  {%- endif -%}
+
+  <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" id="product-form-{{ section.id }}">
+    {% render 'pdp-variants', current_variant: current_variant %}
+    {% render 'pdp-purchase', current_variant: current_variant %}
+  </form>
+
+  {% render 'pdp-assistance-bar' %}
+</div>
+
+{%- if sst.show_size_chart -%}
+  {% render 'pdp-size-chart', part: 'dialog' %}
+{%- endif -%}
+
+{%- comment -%} Bottom sheet host — the option node is moved in here on phones. {%- endcomment -%}
+<div class="pdp-sheet" data-pdp-sheet role="dialog" aria-modal="true" aria-label="{{ 'products.product.select_options' | t }}">
+  <div class="pdp-sheet__scrim" data-pdp-sheet-close></div>
+  <div class="pdp-sheet__panel">
+    <div class="pdp-sheet__grip"></div>
+    <p class="pdp-sheet__title">{{ 'products.product.select_options' | t }}</p>
+    <div data-pdp-options-slot></div>
+    <button type="button" class="pdp-btn pdp-sheet__done" data-pdp-sheet-close>
+      <span>{{ 'products.product.done' | t }}</span>
+    </button>
+  </div>
+</div>

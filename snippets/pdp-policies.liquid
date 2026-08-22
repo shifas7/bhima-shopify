@@ -1,0 +1,30 @@
+{%- comment -%}
+  Delivery Policy + Shipping & Return, as side-by-side accordions.
+
+  Content is the existing `block_text` blocks, byte for byte — the copy the
+  merchant already wrote in the theme editor. Only the presentation is new:
+  each policy is now its own bordered accordion bar rather than a stacked list
+  inside a card, matching the approved design.
+
+  Any number of policy blocks is supported; they lay out two per row on desktop
+  and one per row on phones.
+{%- endcomment -%}
+
+{%- assign policy_blocks = section.blocks | where: 'type', 'block_text' -%}
+
+{%- if policy_blocks.size > 0 -%}
+  <div class="pdp-polgrid" data-pdp-reveal>
+    {%- for block in policy_blocks -%}
+      <div class="pdp-pol" data-pdp-collapse {{ block.shopify_attributes }}>
+        <button type="button" class="pdp-pol__toggle" data-pdp-collapse-toggle>
+          {% render 'pdp-icon', icon: block.settings.icon %}
+          <span class="pdp-pol__name">{{ block.settings.custom_title }}</span>
+          <span class="pdp-pol__chev">{% render 'pdp-icon', icon: 'chevron-down' %}</span>
+        </button>
+        <div class="pdp-pol__body" data-pdp-collapse-body>
+          <div class="pdp-pol__inner pdp-rte">{{ block.settings.custom_content }}</div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+{%- endif -%}

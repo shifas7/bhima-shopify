@@ -601,6 +601,13 @@
       "select_options": "Select Options"
     },
     "product": {
+      "product_weight": "Product Weight",
+      "metal_type": "Metal Type",
+      "purity": "Purity",
+      "size": "Size",
+      "metal_weight": "Metal Weight",
+      "buy_it_now": "Buy It Now",
+      "review_all_count": "View all {{ count }} reviews",
       "regular_price": "Regular price",
       "compare_at": "Compare price",
       "sold_out": "Sold out",

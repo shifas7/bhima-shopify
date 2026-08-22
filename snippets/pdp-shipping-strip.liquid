@@ -1,0 +1,27 @@
+{%- comment -%}
+  Existing shipping timeline, as a horizontal information strip.
+
+  Same two merchant-authored lines the legacy panel carried (ship_time /
+  ship_free) — only the placement and the styling changed.
+{%- endcomment -%}
+
+{%- liquid
+  assign sst = section.settings
+-%}
+
+{%- if sst.ship_time != blank or sst.ship_free != blank -%}
+  <div class="pdp-shipstrip" data-pdp-reveal>
+    {%- if sst.ship_time != blank -%}
+      <div class="pdp-shipstrip__item">
+        {% render 'pdp-icon', icon: 'box' %}
+        <span>{{ sst.ship_time }}</span>
+      </div>
+    {%- endif -%}
+    {%- if sst.ship_free != blank -%}
+      <div class="pdp-shipstrip__item">
+        {% render 'pdp-icon', icon: 'truck' %}
+        <span>{{ sst.ship_free }}</span>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

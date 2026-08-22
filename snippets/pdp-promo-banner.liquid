@@ -1,0 +1,256 @@
+{%- comment -%}
+  Reusable promotional / campaign banner — column 3 of the product information
+  grid.
+
+  This is a generic campaign slot, not a Bhima-quality panel. It is designed so
+  one banner definition serves the whole catalogue: nothing about it is written
+  per product.
+
+  Where the content comes from, first match wins:
+
+    1. a metaobject entry referenced by the product metafield
+       `custom.promo_banner` — per-product or per-collection campaign override,
+       managed in Settings → Custom data
+    2. the `promo_banner` blocks on this section — the campaign library the
+       merchant maintains in the theme editor, each with its own validity window
+       and optional targeting
+
+  Every candidate must pass the same gate: enabled, inside its validity window,
+  and matching this product's collections / tags / type. The first candidate
+  that passes renders; if none do, the column simply does not render and the
+  grid falls back to two columns.
+
+  Fields: eyebrow · heading · offer line · description · CTA label · CTA URL ·
+  footnote · desktop image · mobile image · start date · end date · targeting.
+{%- endcomment -%}
+
+{%- liquid
+  assign now_epoch = 'now' | date: '%s' | times: 1
+
+  assign promo_found = false
+  assign p_eyebrow = ''
+  assign p_heading = ''
+  assign p_offer = ''
+  assign p_description = ''
+  assign p_cta_label = ''
+  assign p_cta_url = ''
+  assign p_footnote = ''
+  assign p_image = blank
+  assign p_image_mobile = blank
+  assign p_theme = 'cream'
+  assign p_attrs = ''
+
+  # ---------------------------------------------------------------- metaobject
+  # A product- or collection-level override, so a single campaign entry can be
+  # pointed at exactly the pieces it applies to without touching the theme.
+  assign mo = product.metafields.custom.promo_banner.value
+  if mo != blank
+    assign mo_enabled = true
+    if mo.enabled == false
+      assign mo_enabled = false
+    endif
+
+    assign mo_live = true
+    if mo.start_at != blank
+      assign mo_start = mo.start_at | date: '%s' | times: 1
+      if mo_start > 0 and now_epoch < mo_start
+        assign mo_live = false
+      endif
+    endif
+    if mo.end_at != blank
+      assign mo_end = mo.end_at | date: '%s' | times: 1
+      if mo_end > 0 and now_epoch > mo_end
+        assign mo_live = false
+      endif
+    endif
+
+    if mo_enabled and mo_live and mo.heading != blank
+      assign promo_found = true
+      assign p_eyebrow = mo.eyebrow
+      assign p_heading = mo.heading
+      assign p_offer = mo.offer
+      assign p_description = mo.description
+      assign p_cta_label = mo.cta_label
+      assign p_cta_url = mo.cta_url
+      assign p_footnote = mo.footnote
+      assign p_image = mo.image.value | default: mo.image
+      assign p_image_mobile = mo.image_mobile.value | default: mo.image_mobile
+      if mo.theme != blank
+        assign p_theme = mo.theme
+      endif
+    endif
+  endif
+
+  # ------------------------------------------------------------ section blocks
+  unless promo_found
+    assign promo_blocks = section.blocks | where: 'type', 'promo_banner'
+    for block in promo_blocks
+      assign bs = block.settings
+      unless bs.enabled
+        continue
+      endunless
+      if bs.heading == blank and bs.offer == blank
+        continue
+      endif
+
+      # Validity window
+      assign live = true
+      if bs.start_date != blank
+        assign start_epoch = bs.start_date | date: '%s' | times: 1
+        if start_epoch > 0 and now_epoch < start_epoch
+          assign live = false
+        endif
+      endif
+      if bs.end_date != blank
+        assign end_epoch = bs.end_date | date: '%s' | times: 1
+        if end_epoch > 0 and now_epoch > end_epoch
+          assign live = false
+        endif
+      endif
+      unless live
+        continue
+      endunless
+
+      # Targeting — every filter left blank means "all products"
+      assign matches = true
+
+      if bs.target_collections != blank
+        assign wanted = bs.target_collections | downcase | replace: ' ', '' | split: ','
+        assign hit = false
+        for handle in wanted
+          for c in product.collections
+            if c.handle == handle
+              assign hit = true
+              break
+            endif
+          endfor
+          if hit
+            break
+          endif
+        endfor
+        unless hit
+          assign matches = false
+        endunless
+      endif
+
+      if matches and bs.target_tags != blank
+        assign wanted_tags = bs.target_tags | downcase | split: ','
+        assign hit = false
+        for raw_tag in wanted_tags
+          assign wanted_tag = raw_tag | strip
+          for tag in product.tags
+            assign tag_lower = tag | downcase
+            if tag_lower == wanted_tag
+              assign hit = true
+              break
+            endif
+          endfor
+          if hit
+            break
+          endif
+        endfor
+        unless hit
+          assign matches = false
+        endunless
+      endif
+
+      if matches and bs.target_types != blank
+        assign wanted_types = bs.target_types | downcase | split: ','
+        assign hit = false
+        assign this_type = product.type | downcase
+        for raw_type in wanted_types
+          assign wanted_type = raw_type | strip
+          if this_type == wanted_type
+            assign hit = true
+            break
+          endif
+        endfor
+        unless hit
+          assign matches = false
+        endunless
+      endif
+
+      if matches and bs.exclude_tags != blank
+        assign blocked_tags = bs.exclude_tags | downcase | split: ','
+        for raw_tag in blocked_tags
+          assign blocked_tag = raw_tag | strip
+          for tag in product.tags
+            assign tag_lower = tag | downcase
+            if tag_lower == blocked_tag
+              assign matches = false
+              break
+            endif
+          endfor
+          unless matches
+            break
+          endunless
+        endfor
+      endif
+
+      if matches
+        assign promo_found = true
+        assign p_eyebrow = bs.eyebrow
+        assign p_heading = bs.heading
+        assign p_offer = bs.offer
+        assign p_description = bs.description
+        assign p_cta_label = bs.cta_label
+        assign p_cta_url = bs.cta_url
+        assign p_footnote = bs.footnote
+        assign p_image = bs.image
+        assign p_image_mobile = bs.image_mobile
+        assign p_theme = bs.theme | default: 'cream'
+        assign p_attrs = block.shopify_attributes
+        break
+      endif
+    endfor
+  endunless
+-%}
+
+{%- if promo_found -%}
+  <div class="pdp-promo pdp-promo--{{ p_theme }}" data-pdp-reveal {{ p_attrs }}>
+
+    {%- if p_image != blank or p_image_mobile != blank -%}
+      <div class="pdp-promo__art" aria-hidden="true">
+        {%- if p_image_mobile != blank and p_image != blank -%}
+          <picture>
+            <source media="(max-width: 767px)" srcset="{{ p_image_mobile | image_url: width: 700 }}">
+            <img src="{{ p_image | image_url: width: 700 }}" alt="" loading="lazy" width="350" height="350">
+          </picture>
+        {%- else -%}
+          {%- assign art = p_image | default: p_image_mobile -%}
+          <img src="{{ art | image_url: width: 700 }}" alt="" loading="lazy" width="350" height="350">
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="pdp-promo__body">
+      {%- if p_eyebrow != blank -%}
+        <p class="pdp-promo__eyebrow">{{ p_eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if p_heading != blank -%}
+        <p class="pdp-promo__heading">{{ p_heading }}</p>
+      {%- endif -%}
+
+      {%- if p_offer != blank -%}
+        <p class="pdp-promo__offer">{{ p_offer }}</p>
+      {%- endif -%}
+
+      {%- if p_description != blank -%}
+        <p class="pdp-promo__text">{{ p_description }}</p>
+      {%- endif -%}
+
+      {%- if p_cta_label != blank -%}
+        {%- comment -%}
+          A campaign CTA with no link set falls back to the catalogue rather
+          than rendering a dead "#" control.
+        {%- endcomment -%}
+        <a class="pdp-promo__cta" href="{{ p_cta_url | default: routes.all_products_collection_url }}">{{ p_cta_label }}</a>
+      {%- endif -%}
+    </div>
+
+    {%- if p_footnote != blank -%}
+      <p class="pdp-promo__note">{{ p_footnote }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}

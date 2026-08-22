@@ -71,11 +71,24 @@
                       {% endfor %}
                     </div>
                     <div class="col-md-2 cart__update-wrapper mb-sm-20">
-                      <div class="cart__qty">
-                        <input type="button" class="js-qty__adjust minus js-qty__adjust--minus" value="-" />
-                        <input class="cart__qty-input" data-price="{{ item.price }}" data-line="{{ forloop.index }}" type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" step="1" min="1" max="{% if item.variant.inventory_management == blank or item.variant.inventory_policy == 'continue' %}99999999{% else %}{{ item.variant.inventory_quantity }}{% endif %}" pattern="[0-9]*">
-                        <input type="button" class="js-qty__adjust plus js-qty__adjust--plus" value="+" /> 
-                      </div>
+                      {%- comment -%}
+                        One piece per line — see templates/cart.json.liquid for
+                        the reasoning. The input stays (hidden) so the update
+                        form keeps its `updates[]` entry in line order and
+                        nuranium.js still finds `.cart__qty-input`.
+                      {%- endcomment -%}
+                      {%- if settings.cart_fixed_quantity -%}
+                        <div class="cart__qty cart__qty--fixed">
+                          <span class="cart__qty-static">{{ item.quantity }}</span>
+                          <input class="cart__qty-input" data-price="{{ item.price }}" data-line="{{ forloop.index }}" type="hidden" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}">
+                        </div>
+                      {%- else -%}
+                        <div class="cart__qty">
+                          <input type="button" class="js-qty__adjust minus js-qty__adjust--minus" value="-" />
+                          <input class="cart__qty-input" data-price="{{ item.price }}" data-line="{{ forloop.index }}" type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" step="1" min="1" max="{% if item.variant.inventory_management == blank or item.variant.inventory_policy == 'continue' %}99999999{% else %}{{ item.variant.inventory_quantity }}{% endif %}" pattern="[0-9]*">
+                          <input type="button" class="js-qty__adjust plus js-qty__adjust--plus" value="+" />
+                        </div>
+                      {%- endif -%}
                     </div>
                     <div class="col-md-2 total price-st">
                       <div class="hidden">{{ 'cart.label.total' | t }}</div>

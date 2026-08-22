@@ -1,0 +1,179 @@
+{%- comment -%}
+  BHIMA — Live Video Call + trust benefits.
+
+  The video-call CTA keeps the three actions the existing banner section
+  offered, unchanged:
+    modal      → #ShopVideoCall, the contact form snippet the theme ships
+    whatsapp   → wa.me deep link, pre-filled with this product
+    custom_url → a booking page (Calendly and the like)
+
+  The benefits are section blocks, so the copy stays merchant-managed. Each
+  block feeds both the three columns inside the card and the reassurance strip
+  underneath — the strip uses the short line, the card uses the long one.
+{%- endcomment -%}
+
+{{ 'bhima-pdp.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'bhima-pdp.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign sst = section.settings
+  assign benefits = section.blocks | where: 'type', 'benefit'
+-%}
+
+<section class="bhima-pdp pdp-band" id="video-call" data-section-id="{{ section.id }}">
+  <div class="container">
+
+    {%- if sst.show_card -%}
+      {%- assign vc_layout = sst.layout | default: 'banner' -%}
+      {%- assign vc_side = sst.copy_position | default: 'right' -%}
+      <div class="pdp-vcall pdp-vcall--{{ vc_layout }} pdp-vcall--{{ vc_side }}" data-pdp-reveal>
+        <div class="pdp-vcall__media">
+          {%- if sst.image != blank -%}
+            <img src="{{ sst.image | image_url: width: 900 }}"
+              srcset="{{ sst.image | image_url: width: 500 }} 500w, {{ sst.image | image_url: width: 900 }} 900w"
+              sizes="100vw"
+              width="{{ sst.image.width }}"
+              height="{{ sst.image.height }}"
+              alt="{{ sst.heading | escape }}"
+              loading="lazy">
+          {%- else -%}
+            <img src="{{ 'nov-video-call-banner.jpg' | asset_url }}" alt="{{ sst.heading | escape }}" width="600" height="600" loading="lazy">
+          {%- endif -%}
+        </div>
+
+        <div class="pdp-vcall__copy">
+          <h2 class="pdp-vcall__title">{{ sst.heading | default: 'Live Video Call' }}</h2>
+          {%- if sst.subheading != blank -%}
+            <p class="pdp-vcall__text">{{ sst.subheading }}</p>
+          {%- endif -%}
+
+          {%- if sst.btn_label != blank -%}
+            {%- if sst.action_type == 'whatsapp' -%}
+              {%- assign default_wa_msg = 'Hi, I would like to schedule a live video call to view ' | append: product.title | append: ' (' | append: shop.url | append: product.url | append: ')' -%}
+              {%- assign wa_message = sst.wa_message | default: default_wa_msg | url_encode -%}
+              <a class="pdp-vcall__cta" target="_blank" rel="noopener"
+                href="https://wa.me/{{ sst.wa_number | replace: '+', '' | replace: ' ', '' }}?text={{ wa_message }}">
+                {% render 'pdp-icon', icon: 'video' %}
+                <span>{{ sst.btn_label }}</span>
+              </a>
+            {%- elsif sst.action_type == 'custom_url' -%}
+              <a class="pdp-vcall__cta" href="{{ sst.custom_url }}" target="_blank" rel="noopener">
+                {% render 'pdp-icon', icon: 'video' %}
+                <span>{{ sst.btn_label }}</span>
+              </a>
+            {%- else -%}
+              <button type="button" class="pdp-vcall__cta" data-toggle="modal" data-target="#ShopVideoCall">
+                {% render 'pdp-icon', icon: 'video' %}
+                <span>{{ sst.btn_label }}</span>
+              </button>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+
+        {%- if sst.show_card_benefits and benefits.size > 0 -%}
+          <div class="pdp-vcall__benefits">
+            {%- for block in benefits -%}
+              <div class="pdp-vcall__benefit" {{ block.shopify_attributes }}>
+                {%- if block.settings.image != blank -%}
+                  <img src="{{ block.settings.image | image_url: width: 120 }}" width="34" height="34" alt="" loading="lazy">
+                {%- else -%}
+                  {% render 'pdp-icon', icon: block.settings.icon %}
+                {%- endif -%}
+                <b>{{ block.settings.title }}</b>
+                {%- if block.settings.text != blank -%}<p>{{ block.settings.text }}</p>{%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if sst.show_trust_strip and benefits.size > 0 -%}
+      <div class="pdp-trust" data-pdp-reveal>
+        {%- for block in benefits -%}
+          {%- assign short_text = block.settings.short_text | default: block.settings.text -%}
+          <div class="pdp-trust__item" {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              <img src="{{ block.settings.image | image_url: width: 90 }}" width="30" height="30" alt="" loading="lazy">
+            {%- else -%}
+              {% render 'pdp-icon', icon: block.settings.icon %}
+            {%- endif -%}
+            <span>
+              <b>{{ block.settings.title }}</b>
+              {%- if short_text != blank -%}<em>{{ short_text }}</em>{%- endif -%}
+            </span>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "BHIMA video call & trust",
+  "settings": [
+    { "type": "header", "content": "Live Video Call" },
+    { "type": "checkbox", "id": "show_card", "label": "Show the Live Video Call card", "default": true },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Falls back to the theme's video-call artwork. For the banner layout use a wide image — around 2400x800 — with the subject away from the copy side." },
+    {
+      "type": "select", "id": "layout", "label": "Layout", "default": "banner",
+      "options": [
+        { "value": "banner", "label": "Full-width banner (image behind the copy)" },
+        { "value": "split", "label": "Split (image beside the copy)" }
+      ]
+    },
+    {
+      "type": "select", "id": "copy_position", "label": "Banner copy sits", "default": "right",
+      "options": [
+        { "value": "right", "label": "Right" },
+        { "value": "left", "label": "Left" }
+      ]
+    },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Live Video Call" },
+    { "type": "textarea", "id": "subheading", "label": "Description", "default": "Connect with our jewellery experts and get personalised style consultations." },
+    { "type": "text", "id": "btn_label", "label": "Button label", "default": "Schedule a Video Call" },
+    {
+      "type": "select", "id": "action_type", "label": "Button action", "default": "modal",
+      "options": [
+        { "value": "modal", "label": "Open the video-call request form" },
+        { "value": "whatsapp", "label": "WhatsApp" },
+        { "value": "custom_url", "label": "Custom link" }
+      ]
+    },
+    { "type": "text", "id": "wa_number", "label": "WhatsApp number", "info": "With country code, e.g. +919999999999." },
+    { "type": "text", "id": "wa_message", "label": "WhatsApp message", "info": "Blank sends a message naming this product." },
+    { "type": "url", "id": "custom_url", "label": "Custom link" },
+    { "type": "checkbox", "id": "show_card_benefits", "label": "Show the benefit columns inside the card", "default": false, "info": "Off by default: these repeated the reassurance strip below. With them off the card runs full width." },
+
+    { "type": "header", "content": "Trust benefits strip" },
+    { "type": "checkbox", "id": "show_trust_strip", "label": "Show the reassurance strip", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Free Delivery" },
+        { "type": "textarea", "id": "text", "label": "Description", "info": "Shown in the card columns." },
+        { "type": "text", "id": "short_text", "label": "Short line", "info": "Shown in the reassurance strip. Blank reuses the description." },
+        {
+          "type": "select", "id": "icon", "label": "Icon", "default": "truck",
+          "options": [
+            { "value": "truck", "label": "Delivery" },
+            { "value": "gem", "label": "Gem" },
+            { "value": "certificate", "label": "Certificate" },
+            { "value": "hallmark", "label": "Hallmark" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "lock", "label": "Secure" },
+            { "value": "return", "label": "Returns" }
+          ]
+        },
+        { "type": "image_picker", "id": "image", "label": "Custom icon" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "BHIMA video call & trust" }]
+}
+{% endschema %}

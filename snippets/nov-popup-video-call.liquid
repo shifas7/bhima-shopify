@@ -1,0 +1,134 @@
+<div id="ShopVideoCall" class="modal fade">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header close-icon mt-sm-40" data-dismiss="modal"></div>
+      <div class="modal-body">
+        <div class="ShopVideoCall-title font-800 text-uppercase text-center c_h mb-10" style="font-size: 20px; letter-spacing: 0.5px; color: #3b1c56;">
+          {{ 'products.product.schedule_video_call_title' | default: 'Schedule a Live Video Call' }}
+        </div>
+        <div class="text-center mb-30" style="font-size: 14px; color: #666; max-width: 320px; margin-left: auto; margin-right: auto; line-height: 1.5;">
+          {{ 'products.product.schedule_video_call_subtitle' | default: 'Experience our jewelry live from the comfort of your home. Our consultants will show you the details up close.' }}
+        </div>
+        
+        {% form 'contact', id: 'product-single__video-call-form', class: 'video-call-form' %}
+          <input type="hidden" name="contact[Form Type]" value="Live Video Call Request">
+          <input type="hidden" name="contact[Product Name]" value="{{ product.title }}">
+          <input type="hidden" name="contact[Product URL]" value="{{ shop.url | append: product.url }}">
+          <input type="hidden" name="contact[Product SKU]" value="{{ product.selected_or_first_available_variant.sku }}">
+          
+          {% if form.posted_successfully? %}
+            <div class="alert alert-success text-center mb-20">
+              <i class="zmdi zmdi-check-circle" style="font-size: 24px; vertical-align: middle; margin-right: 5px;"></i>
+              <span>{{ 'contact.form.post_success' | t | default: 'Thank you! Your video call request has been submitted. We will contact you shortly to confirm.' }}</span>
+            </div>
+          {% endif %}
+          
+          {{ form.errors | default_errors }}
+          
+          {% unless form.posted_successfully? %}
+            <div class="form-group mb-15">
+              <input type="text" name="contact[name]" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" class="form-control" placeholder="{{ 'page.contact.form.name' | t | default: 'Your Name' }}" required style="height: 48px; border: 1px solid #e1e1e1; border-radius: 8px; font-size: 14px;">
+            </div>
+            
+            <div class="form-group mb-15">
+              <input type="email" name="contact[email]" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" class="form-control" placeholder="{{ 'page.contact.form.email' | t | default: 'Email Address' }}" required style="height: 48px; border: 1px solid #e1e1e1; border-radius: 8px; font-size: 14px;">
+            </div>
+            
+            <div class="form-group mb-15">
+              <input type="tel" name="contact[phone]" pattern="[0-9\-+ ]*" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}" class="form-control" placeholder="{{ 'page.contact.form.phone' | t | default: 'WhatsApp / Phone Number' }}" required style="height: 48px; border: 1px solid #e1e1e1; border-radius: 8px; font-size: 14px;">
+            </div>
+            
+            <div class="row">
+              <div class="col-sm-6 form-group mb-15">
+                <label class="form-label text-left d-block font-600 mb-5" style="font-size: 12px; color: #777; font-family: var(--font-family-default);">Preferred Date</label>
+                <input type="date" name="contact[Preferred Date]" class="form-control" required min="{{ "now" | date: "%Y-%m-%d" }}" style="height: 48px; border: 1px solid #e1e1e1; border-radius: 8px; font-size: 14px; padding: 10px 15px;">
+              </div>
+              <div class="col-sm-6 form-group mb-15">
+                <label class="form-label text-left d-block font-600 mb-5" style="font-size: 12px; color: #777; font-family: var(--font-family-default);">Preferred Time Slot</label>
+                <select name="contact[Preferred Time]" class="form-control" required style="height: 48px; border: 1px solid #e1e1e1; border-radius: 8px; font-size: 14px; padding: 0 15px; background: #fff; appearance: auto;">
+                  <option value="Morning (10:00 AM - 1:00 PM)">Morning (10:00 AM - 1:00 PM)</option>
+                  <option value="Afternoon (1:00 PM - 5:00 PM)">Afternoon (1:00 PM - 5:00 PM)</option>
+                  <option value="Evening (5:00 PM - 8:00 PM)">Evening (5:00 PM - 8:00 PM)</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group mb-25">
+              <textarea rows="4" class="form-control" name="contact[Notes]" placeholder="Any specific designs or gold/diamond specifications you'd like to see?" style="border: 1px solid #e1e1e1; border-radius: 8px; font-size: 14px; padding: 12px 15px; min-height: 100px; resize: vertical;"></textarea>
+            </div>
+            
+            <button class="btn btn_submit text-center w-100" type="submit" style="background-color: #3b1c56; color: #ffffff; height: 50px; font-weight: 700; font-size: 14px; border-radius: 8px; letter-spacing: 0.5px; border: none; text-transform: uppercase; transition: all 0.3s ease;">
+              <span>Submit Request</span>
+            </button>
+          {% endunless %}
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  #ShopVideoCall .modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    padding: 10px;
+  }
+  #ShopVideoCall .modal-header.close-icon {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    z-index: 10;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+  }
+  #ShopVideoCall .modal-header.close-icon:hover {
+    opacity: 1;
+  }
+  #ShopVideoCall .modal-header.close-icon::before,
+  #ShopVideoCall .modal-header.close-icon::after {
+    position: absolute;
+    left: 14px;
+    top: 5px;
+    content: ' ';
+    height: 20px;
+    width: 2px;
+    background-color: #333;
+  }
+  #ShopVideoCall .modal-header.close-icon::before {
+    transform: rotate(45deg);
+  }
+  #ShopVideoCall .modal-header.close-icon::after {
+    transform: rotate(-45deg);
+  }
+  #ShopVideoCall button.btn_submit:hover {
+    background-color: #d4af37 !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+  }
+  #ShopVideoCall input:focus, 
+  #ShopVideoCall select:focus, 
+  #ShopVideoCall textarea:focus {
+    border-color: #d4af37 !important;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1) !important;
+    outline: none;
+  }
+</style>
+
+{% comment %} Script to auto-open modal if success message or error is present on page load {% endcomment %}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (window.location.hash === '#product-single__video-call-form' || urlParams.has('customer_posted') || document.querySelector('#ShopVideoCall .alert-success') || document.querySelector('#ShopVideoCall .errors')) {
+      setTimeout(function() {
+        $('#ShopVideoCall').modal('show');
+      }, 500);
+    }
+  });
+</script>

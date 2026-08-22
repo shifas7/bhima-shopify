@@ -1,0 +1,111 @@
+{%- comment -%}
+  Size chart — trigger + dialog.
+
+  Rendered in two parts so the dialog can live outside the product form while
+  the link sits inline next to the SKU / availability rows:
+
+    {% render 'pdp-size-chart', part: 'trigger' %}
+    {% render 'pdp-size-chart', part: 'dialog' %}
+
+  One image, held against the collection — never the product. A single chart
+  covers a whole catalogue. Resolution order, first hit wins:
+
+    1. collection file metafield  custom.size_chart_image
+    2. the section's fallback image (brand-level catch-all)
+
+  Nothing renders when no chart is found — no empty link, no empty dialog.
+
+  Deliberately just a file upload: no rich-text field, and no metaobject
+  definition for the merchant to set up. The dialog heading uses the collection's
+  own name, so a per-chart title field is not needed either.
+
+  The theme's legacy `data-toggle="CanvasSizeGuide"` button pointed at an element
+  that does not exist anywhere in this theme, so this is a new implementation
+  rather than a reuse.
+{%- endcomment -%}
+
+{%- liquid
+  assign sst = section.settings
+  assign part = part | default: 'trigger'
+
+  assign chart_title = ''
+  assign chart_image = blank
+
+  # 1 — the collection the piece belongs to
+  for c in product.collections
+    unless c.handle == 'all'
+      assign cm = c.metafields.custom
+      if cm.size_chart_image != blank
+        assign chart_image = cm.size_chart_image.value | default: cm.size_chart_image
+        assign chart_title = c.title
+        break
+      endif
+    endunless
+  endfor
+
+  # 2 — brand-level fallback for collections that carry no chart of their own
+  if chart_image == blank and sst.size_chart_image != blank
+    assign chart_image = sst.size_chart_image
+  endif
+
+  assign heading = sst.size_chart_title | default: 'Size Guide'
+  if chart_title != blank
+    assign heading = chart_title | append: ' — ' | append: heading
+  endif
+-%}
+
+{%- if chart_image != blank -%}
+  {%- if part == 'trigger' -%}
+
+    <button type="button"
+      class="pdp-sizelink"
+      data-pdp-sizechart-open
+      aria-haspopup="dialog"
+      aria-controls="pdp-sizechart-{{ section.id }}">
+      {% render 'pdp-icon', icon: 'ruler' %}
+      <span>{{ sst.size_chart_label | default: 'Size Guide' }}</span>
+    </button>
+
+  {%- else -%}
+
+    <div class="pdp-modal" id="pdp-sizechart-{{ section.id }}" data-pdp-sizechart hidden>
+      <div class="pdp-modal__scrim" data-pdp-sizechart-close></div>
+      <div class="pdp-modal__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="pdp-sizechart-title-{{ section.id }}"
+        tabindex="-1">
+
+        {%- comment -%} Drag affordance: this is a bottom sheet on phones. {%- endcomment -%}
+        <div class="pdp-modal__grip" aria-hidden="true"></div>
+
+        <div class="pdp-modal__head">
+          <p class="pdp-modal__title" id="pdp-sizechart-title-{{ section.id }}">{{ heading }}</p>
+          <button type="button" class="pdp-modal__x" data-pdp-sizechart-close aria-label="{{ 'general.accessibility.close_modal' | t | default: 'Close' }}">
+            <svg viewBox="0 0 20 20" width="20" height="20" fill="none" aria-hidden="true">
+              <path d="M5.5 5.5l9 9m0-9-9 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="pdp-modal__body">
+          {%- comment -%}
+            Wrapped in its own scroller: a wide chart scrolls inside the box
+            rather than widening the dialog on a phone.
+          {%- endcomment -%}
+          <div class="pdp-sizechart__figure">
+            <img
+              src="{{ chart_image | image_url: width: 1400 }}"
+              srcset="{{ chart_image | image_url: width: 700 }} 700w, {{ chart_image | image_url: width: 1400 }} 1400w"
+              sizes="(min-width: 768px) 660px, 92vw"
+              width="{{ chart_image.width | default: 1400 }}"
+              height="{{ chart_image.height | default: 900 }}"
+              alt="{{ heading | escape }}"
+              loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {%- endif -%}
+{%- endif -%}

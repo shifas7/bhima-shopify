@@ -1,0 +1,180 @@
+{%- comment -%}
+  BHIMA — recently viewed products.
+
+  Reuses the theme's existing recently-viewed engine (Shopify.Products from
+  jquery.products.min.js, backed by the shopify_recently_viewed cookie) with a
+  PDP-scoped wrapper and template id, so the data source, the cookie and the
+  recording behaviour are exactly the ones the theme already ships. Only the
+  presentation is new — the tiles are now the same card as the related-products
+  rail, with name and price.
+{%- endcomment -%}
+
+{{ 'bhima-pdp.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'bhima-pdp.js' | asset_url }}" defer></script>
+<script src="{{ 'jquery.tmpl.min.js' | asset_url }}" defer></script>
+<script src="{{ 'jquery.products.min.js' | asset_url }}" defer></script>
+
+{%- assign sst = section.settings -%}
+
+<section class="bhima-pdp pdp-band" id="recently-viewed" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="pdp-recentwrap" id="pdp-recent-card-{{ section.id }}" hidden>
+      <div class="pdp-railblock pdp-rail pdp-rail--recent" data-pdp-rail>
+        <h2 class="pdp-railtitle">{{ sst.heading | default: 'Recently Viewed Products' }}</h2>
+
+        <div class="pdp-rail__body">
+          <button type="button" class="pdp-rail__btn pdp-rail__btn--prev" data-pdp-rail-prev aria-label="{{ 'general.accessibility.previous' | t }}">
+            {% render 'pdp-icon', icon: 'chevron-left' %}
+          </button>
+
+          <div class="pdp-rail__track" id="pdp-recently-viewed" data-pdp-rail-track></div>
+
+          <button type="button" class="pdp-rail__btn pdp-rail__btn--next" data-pdp-rail-next aria-label="{{ 'general.accessibility.next' | t }}">
+            {% render 'pdp-icon', icon: 'chevron-right' %}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- comment -%}
+  jQuery.tmpl compiles the template body into a single-quoted JS string, so the
+  image-size argument below has to use double quotes — a single quote anywhere
+  in here ends that string and the compile fails with "Invalid or unexpected
+  token". This is the same pattern the theme's own recently-viewed template
+  uses. The block is never HTML-parsed, so the nested quotes inside the
+  attribute are safe.
+{%- endcomment -%}
+<script id="pdp-recently-viewed-template" type="text/x-jquery-tmpl">
+{%- raw -%}
+  <article class="pdp-pcard item-product" data-product-id="product-${handle}">
+    <div class="pdp-pcard__media">
+      <a href="${url}" aria-label="${title}">
+        <span class="pdp-pcard__frame">
+          {{if featured_image}}
+            <img class="product__thumbnail" src="${Shopify.Products.resizeImage(featured_image, "500x")}" alt="${title}" loading="lazy">
+          {{/if}}
+        </span>
+      </a>
+{%- endraw -%}
+{%- if settings.wishlist_enable -%}
+{%- comment -%}
+  No title attribute here: nuranium.js sets it (and the .btn-tootip label) from
+  the theme strings as soon as it binds the icon, and keeping quoted copy out of
+  a jQuery.tmpl body removes any chance of an apostrophe breaking the compile.
+{%- endcomment -%}
+{%- raw -%}
+      <a href="#" class="pdp-pcard__wish" data-icon-wishlist data-product-handle="${handle}" data-id="${id}">
+{%- endraw -%}
+        {% render 'pdp-icon', icon: 'heart' %}
+        <span class="pdp-visually-hidden btn-tootip"></span>
+{%- raw -%}
+      </a>
+{%- endraw -%}
+{%- endif -%}
+{%- raw -%}
+    </div>
+    <div class="pdp-pcard__body">
+      <h3 class="pdp-pcard__title"><a href="${url}" class="product__title">${title}</a></h3>
+      <div class="pdp-pcard__price">${Shopify.formatMoney(price, theme.moneyFormat)}</div>
+{%- endraw -%}
+{%- if sst.show_quick_add -%}
+  {%- comment -%}
+    Quick add. `/products/<handle>.js` gives the full variant list, so a
+    single-variant piece can post straight to the cart and anything with
+    options links through to its page instead. nuranium.js binds
+    .product-form__cart-submit on `document`, so these injected buttons are
+    already covered.
+  {%- endcomment -%}
+  {%- raw -%}
+      {{if available && variants.length == 1}}
+        <form action="{%- endraw -%}{{ routes.cart_add_url }}{%- raw -%}" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="id" value="${variants[0].id}">
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit" name="add" data-handle="${handle}" data-pdp-atc
+            data-added-label="{%- endraw -%}{{ 'products.product.added_to_bag' | t | escape }}{%- raw -%}"
+            class="pdp-pcard__add btnAddToCart product-form__cart-submit">
+            <span data-pdp-atc-label>{%- endraw -%}{{ sst.add_label | default: 'Add to bag' | escape }}{%- raw -%}</span>
+            <span class="load"></span>
+          </button>
+        </form>
+      {{else}}
+        <a href="${url}" class="pdp-pcard__add">{%- endraw -%}{{ 'products.product.select_options' | t | escape }}{%- raw -%}</a>
+      {{/if}}
+  {%- endraw -%}
+{%- endif -%}
+{%- raw -%}
+    </div>
+  </article>
+{%- endraw -%}
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    if (!window.jQuery || !window.Shopify || !Shopify.Products) return;
+
+    var card = document.getElementById('pdp-recent-card-{{ section.id }}');
+
+    Shopify.Products.showRecentlyViewed({
+      {%- comment -%} +1 because the piece being viewed is dropped below. {%- endcomment -%}
+      howManyToShow: {{ sst.limit | default: 10 | plus: 1 }},
+      wrapperId: 'pdp-recently-viewed',
+      templateId: 'pdp-recently-viewed-template',
+      onComplete: function () {
+        var track = document.getElementById('pdp-recently-viewed');
+        if (!track) return;
+
+        // The cookie already holds this product on any repeat visit, so drop the
+        // piece being viewed rather than showing it back to the customer.
+        var here = {{ product.url | json }};
+        Array.prototype.slice.call(track.children).forEach(function (tile) {
+          var link = tile.querySelector('a[href]');
+          var href = link && link.getAttribute('href');
+          if (href && href.split('?')[0] === here) tile.parentNode.removeChild(tile);
+        });
+
+        if (!track.children.length) {
+          if (card) card.hidden = true;
+          return;
+        }
+
+        if (card) card.hidden = false;
+        // Let the shared rail controller re-measure now the cards exist, and
+        // re-apply the wishlist state to the freshly injected hearts.
+        document.dispatchEvent(new CustomEvent('pdp:carousel:ready'));
+        window.dispatchEvent(new Event('resize'));
+
+        // These hearts are injected after nuranium.js has already painted the
+        // page, and `nuranium` lives inside a closure, so mirror the saved
+        // state onto them from the same localStorage key it owns. The click
+        // handler is delegated on document, so it already covers them.
+        try {
+          var saved = JSON.parse(localStorage.getItem('wishListsArr') || '[]');
+          saved.forEach(function (handle) {
+            Array.prototype.forEach.call(
+              track.querySelectorAll('[data-product-handle="' + handle + '"]'),
+              function (icon) { icon.classList.add('whislist-added'); }
+            );
+          });
+        } catch (error) { /* nothing saved yet */ }
+      }
+    });
+
+    // Record last, so the piece being viewed never appears in its own strip.
+    Shopify.Products.recordRecentlyViewed();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "BHIMA recently viewed",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Recently Viewed Products" },
+    { "type": "range", "id": "limit", "min": 4, "max": 20, "step": 1, "label": "Pieces to show", "default": 10 },
+    { "type": "checkbox", "id": "show_quick_add", "label": "Show quick add on the cards", "default": true },
+    { "type": "text", "id": "add_label", "label": "Quick add label", "default": "Add to bag" }
+  ],
+  "presets": [{ "name": "BHIMA recently viewed" }]
+}
+{% endschema %}

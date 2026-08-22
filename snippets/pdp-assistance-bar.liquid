@@ -1,0 +1,50 @@
+{%- comment -%}
+  Assistance actions — Share | Ask a Question | Video Call | FAQ.
+
+  One clean horizontal row under the purchase actions, as drawn. Every control
+  keeps the integration it already had:
+    Share        → #Shopshare modal      (snippets/nov-popup-share)
+    Ask          → #Shopask modal        (snippets/nov-popup-ask)
+    Video Call   → #ShopVideoCall modal  (snippets/nov-popup-video-call)
+    FAQ          → the FAQ page URL, or the on-page FAQ section anchor
+{%- endcomment -%}
+
+{%- liquid
+  assign sst = section.settings
+  assign show_share = sst.show_share
+  assign show_ask = sst.show_ask
+  assign show_vc = sst.show_videocall
+  assign show_faq = sst.show_faq
+-%}
+
+{%- if show_share or show_ask or show_vc or show_faq -%}
+  <div class="pdp-assist">
+    {%- if show_share -%}
+      <button type="button" class="pdp-assist__item" data-toggle="modal" data-target="#Shopshare">
+        {% render 'pdp-icon', icon: 'share' %}
+        <span>{{ 'products.product.label_share' | t }}</span>
+      </button>
+    {%- endif -%}
+
+    {%- if show_ask -%}
+      <button type="button" class="pdp-assist__item" data-toggle="modal" data-target="#Shopask">
+        {% render 'pdp-icon', icon: 'help' %}
+        <span>{{ sst.label_ask | default: 'Ask a Question' }}</span>
+      </button>
+    {%- endif -%}
+
+    {%- if show_vc -%}
+      <button type="button" class="pdp-assist__item" data-toggle="modal" data-target="#ShopVideoCall">
+        {% render 'pdp-icon', icon: 'video' %}
+        <span>{{ sst.label_videocall | default: 'Video Call' }}</span>
+      </button>
+    {%- endif -%}
+
+    {%- if show_faq -%}
+      <a href="{{ sst.faq | default: '#faq' }}" class="pdp-assist__item">
+        {% render 'pdp-icon', icon: 'chat' %}
+        <span>{{ 'products.product.label_faq' | t }}</span>
+      </a>
+    {%- endif -%}
+  </div>
+{%- endif -%}

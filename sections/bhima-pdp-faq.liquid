@@ -1,0 +1,102 @@
+{%- comment -%}
+  Product FAQ.
+
+  Answers live in `faq` blocks so they are editable in the theme editor and can
+  be tailored per template. The "view all" link points at the existing FAQ page
+  so the two never contradict each other.
+{%- endcomment -%}
+
+{{ 'bhima-pdp.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'bhima-pdp.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign sst = section.settings
+  assign faqs = section.blocks | where: 'type', 'faq'
+-%}
+
+{%- if faqs.size > 0 -%}
+  <section class="bhima-pdp pdp-band pdp-faq" id="faq" data-section-id="{{ section.id }}">
+    <div class="container">
+      <div class="pdp-card pdp-card--flush" data-pdp-reveal>
+
+        <div class="pdp-faq__head">
+          <div>
+            {%- if sst.eyebrow != blank -%}
+              <span class="pdp-eyebrow">{{ sst.eyebrow }}</span>
+            {%- endif -%}
+            <h2 class="pdp-h2" style="margin:0">{{ sst.heading | default: 'Questions, Answered' }}</h2>
+            {%- if sst.subheading != blank -%}
+              <p class="pdp-faq__lede">{{ sst.subheading }}</p>
+            {%- endif -%}
+          </div>
+
+          {%- if sst.link != blank -%}
+            <a href="{{ sst.link }}" class="pdp-linkish">
+              {{ sst.link_label | default: 'View all FAQs' }}
+              {% render 'pdp-icon', icon: 'arrow-right' %}
+            </a>
+          {%- endif -%}
+        </div>
+
+        <div class="pdp-policies">
+          {%- for block in faqs -%}
+            <div class="pdp-policy{% if forloop.first and sst.open_first %} is-open{% endif %}"
+              data-pdp-collapse
+              data-pdp-collapse-group="faq"
+              {{ block.shopify_attributes }}>
+              <button type="button" class="pdp-policy__toggle" data-pdp-collapse-toggle>
+                <span class="pdp-policy__name pdp-policy__name--q">{{ block.settings.question }}</span>
+                <span class="pdp-policy__chev">{% render 'pdp-icon', icon: 'chevron-down' %}</span>
+              </button>
+              <div class="pdp-policy__body" data-pdp-collapse-body>
+                <div class="pdp-policy__inner pdp-policy__inner--q">{{ block.settings.answer }}</div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {%- for block in faqs -%}
+      {
+        "@type": "Question",
+        "name": {{ block.settings.question | json }},
+        "acceptedAnswer": { "@type": "Answer", "text": {{ block.settings.answer | strip_html | json }} }
+      }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "BHIMA product FAQ",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Good to Know" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Questions, Answered" },
+    { "type": "textarea", "id": "subheading", "label": "Supporting text" },
+    { "type": "checkbox", "id": "open_first", "label": "Open the first answer", "default": true },
+    { "type": "url", "id": "link", "label": "View all FAQs link" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "View all FAQs" }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer", "label": "Answer" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "BHIMA product FAQ" }]
+}
+{% endschema %}

@@ -1,0 +1,158 @@
+{%- comment -%}
+  BHIMA — product rails.
+
+  Two full-width carousels, stacked, matching the approved design:
+    1. Related Products      — Shopify's native `related` recommendations
+    2. Complete the Look     — optional, same source order as before:
+                                 a. product metafield custom.style_with
+                                 b. a collection chosen in the section settings
+                                 c. Shopify's native `complementary` intent
+                                 d. the product's own collection (server-rendered
+                                    fallback, so the rail is never empty)
+
+  The recommendation logic is untouched; only the layout and the cards changed.
+  Each rail still removes itself when Shopify returns nothing and no fallback
+  is available, so no placeholder products are ever shown.
+{%- endcomment -%}
+
+{{ 'bhima-pdp.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'bhima-pdp.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign sst = section.settings
+  assign limit = sst.limit | default: 8
+
+  assign manual = product.metafields.custom.style_with.value
+  assign look_source = 'recommendations'
+  if manual != blank and manual.size > 0
+    assign look_source = 'metafield'
+  elsif sst.collection != blank and sst.collection.products_count > 0
+    assign look_source = 'collection'
+  endif
+
+  # Last resort, and the behaviour the previous template shipped: the product's
+  # own collection. Shopify returns nothing for intent=complementary until a
+  # merchant links products in Search & Discovery, and an empty rail is worse
+  # than a same-collection one.
+  assign own_collection = blank
+  for item in product.collections
+    if item.handle != 'all' and item.all_products_count > 1
+      assign own_collection = item
+      break
+    endif
+  endfor
+-%}
+
+<section class="bhima-pdp pdp-band" id="related-products" data-section-id="{{ section.id }}">
+  <div class="container">
+
+    {%- comment -%} ---------- Related products ---------- {%- endcomment -%}
+    <div class="pdp-railblock pdp-rail pdp-rail--also" data-pdp-rail data-pdp-reveal>
+      <pdp-also data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ limit }}&intent=related">
+        {%- if recommendations.performed and recommendations.products_count > 0 -%}
+          {% render 'pdp-rail-inner', sst: sst, heading: sst.also_heading, items: recommendations.products, limit: limit %}
+        {%- endif -%}
+      </pdp-also>
+    </div>
+
+    {%- comment -%} ---------- Complete the look ---------- {%- endcomment -%}
+    {%- if sst.show_look_rail -%}
+      <div class="pdp-railblock pdp-rail pdp-rail--look" data-pdp-rail data-pdp-reveal>
+        {%- if look_source == 'recommendations' -%}
+          <pdp-look data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ limit }}&intent=complementary">
+            {%- if recommendations.performed and recommendations.products_count > 0 -%}
+              {% render 'pdp-rail-inner', sst: sst, heading: sst.look_heading, items: recommendations.products, limit: limit %}
+            {%- endif -%}
+          </pdp-look>
+          {%- if own_collection != blank -%}
+            <template data-pdp-look-fallback>
+              {% render 'pdp-rail-inner', sst: sst, heading: sst.look_heading, items: own_collection.products, limit: limit %}
+            </template>
+          {%- endif -%}
+        {%- elsif look_source == 'metafield' -%}
+          {% render 'pdp-rail-inner', sst: sst, heading: sst.look_heading, items: manual, limit: limit %}
+        {%- else -%}
+          {% render 'pdp-rail-inner', sst: sst, heading: sst.look_heading, items: sst.collection.products, limit: limit %}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<script>
+  (function () {
+    // Shopify returned nothing for this intent. Use the server-rendered
+    // same-collection rail if the section supplied one, otherwise drop the rail.
+    function settle(host, cardClass) {
+      var card = host.closest('.' + cardClass);
+      var fallback = card && card.querySelector('template[data-pdp-look-fallback]');
+      if (fallback) {
+        host.innerHTML = fallback.innerHTML;
+        fallback.parentNode.removeChild(fallback);
+        document.dispatchEvent(new CustomEvent('pdp:carousel:ready'));
+        return;
+      }
+      if (card) card.remove();
+    }
+
+    function define(name, cardClass) {
+      if (window.customElements.get(name)) return;
+      customElements.define(name, class extends HTMLElement {
+        connectedCallback() {
+          if (this.innerHTML.trim().length) return;
+          var host = this;
+          var loaded = false;
+          var load = function () {
+            if (loaded) return;
+            loaded = true;
+            fetch(host.dataset.url)
+              .then(function (r) { return r.text(); })
+              .then(function (text) {
+                var doc = new DOMParser().parseFromString(text, 'text/html');
+                var incoming = doc.querySelector(name);
+                if (incoming && incoming.innerHTML.trim().length) {
+                  host.innerHTML = incoming.innerHTML;
+                  document.dispatchEvent(new CustomEvent('pdp:carousel:ready'));
+                } else {
+                  settle(host, cardClass);
+                }
+              })
+              .catch(function () { settle(host, cardClass); });
+          };
+          // Watch the rail, not this element: while empty it has zero height,
+          // and a zero-area target can fail to report as intersecting.
+          var watched = host.closest('.' + cardClass) || host;
+          if (!('IntersectionObserver' in window)) { load(); return; }
+          var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              observer.unobserve(watched);
+              load();
+            });
+          }, { rootMargin: '600px' });
+          observer.observe(watched);
+          setTimeout(load, 4000);
+        }
+      });
+    }
+    define('pdp-look', 'pdp-rail--look');
+    define('pdp-also', 'pdp-rail--also');
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "BHIMA product rails",
+  "settings": [
+    { "type": "text", "id": "also_heading", "label": "Related products heading", "default": "Related Products" },
+    { "type": "checkbox", "id": "show_look_rail", "label": "Show the Complete the Look rail", "default": true, "info": "A second full-width carousel under Related Products." },
+    { "type": "text", "id": "look_heading", "label": "Complete the Look heading", "default": "Complete the Look" },
+    { "type": "collection", "id": "collection", "label": "Complete-the-look fallback collection", "info": "Used when the product has no custom.style_with metafield." },
+    { "type": "range", "id": "limit", "min": 4, "max": 12, "step": 1, "label": "Products per rail", "default": 8 },
+    { "type": "checkbox", "id": "show_quick_add", "label": "Show quick add on the cards", "default": false },
+    { "type": "text", "id": "add_label", "label": "Quick add label", "default": "Add" }
+  ],
+  "presets": [{ "name": "BHIMA product rails" }]
+}
+{% endschema %}

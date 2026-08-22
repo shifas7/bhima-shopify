@@ -1,0 +1,43 @@
+# Editors and tools that save atomically drop a temporary sibling next to the
+# real file (pdp-specifications.liquid.tmp.24812.e7f129d0f225, foo.liquid~,
+# .foo.liquid.swp). The `theme dev` watcher picks those up mid-write and the
+# upload fails with "Must have a .liquid file extension", which then wedges the
+# whole sync until the server is restarted. Ignoring them keeps the watcher on
+# real files only.
+#
+# The temp patterns are deliberately spelled out per real extension rather than
+# using a loose `*.tmp.*`: assets/jquery.tmpl.min.js is a required file, and a
+# broad pattern anywhere near it is not worth the risk. Both the bare and `**/`
+# forms are listed because a leading glob does not always cross a separator.
+
+*.tmp
+**/*.tmp
+
+*.liquid.tmp.*
+**/*.liquid.tmp.*
+*.json.tmp.*
+**/*.json.tmp.*
+*.css.tmp.*
+**/*.css.tmp.*
+*.js.tmp.*
+**/*.js.tmp.*
+
+# Editor backups and swap files
+*~
+**/*~
+*.swp
+**/*.swp
+*.swo
+**/*.swo
+*.orig
+**/*.orig
+*.rej
+**/*.rej
+*.bak
+**/*.bak
+
+# OS noise
+.DS_Store
+**/.DS_Store
+Thumbs.db
+**/Thumbs.db

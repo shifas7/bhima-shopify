@@ -1,0 +1,419 @@
+{%- liquid
+  assign sst = section.settings
+  capture container_class
+    if sst.container == 'container-full'
+      echo 'container-full'
+    elsif sst.container == 'container-fluid'
+      echo 'container-fluid'
+    else
+      echo 'container'
+    endif
+  endcapture
+-%}
+
+{%- style -%}
+  #nov-video-call-{{ section.id }} {
+    padding-top: {{ sst.distance_top_xl }}px;
+    padding-bottom: {{ sst.distance_bottom_xl }}px;
+  }
+  @media (max-width: 1199px) {
+    #nov-video-call-{{ section.id }} {
+      padding-top: {{ sst.distance_top_lg }}px;
+      padding-bottom: {{ sst.distance_bottom_lg }}px;
+    }
+  }
+  @media (max-width: 991px) {
+    #nov-video-call-{{ section.id }} {
+      padding-top: {{ sst.distance_top_md }}px;
+      padding-bottom: {{ sst.distance_bottom_md }}px;
+    }
+  }
+  @media (max-width: 767px) {
+    #nov-video-call-{{ section.id }} {
+      padding-top: {{ sst.distance_top_sm }}px;
+      padding-bottom: {{ sst.distance_bottom_sm }}px;
+    }
+  }
+
+  #nov-video-call-{{ section.id }} .video-call-card {
+    background-color: {{ sst.bg_color }};
+    border-radius: {{ sst.border_radius }}px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.01);
+    border: 1px solid {{ sst.border_color }};
+    transition: all 0.3s ease;
+  }
+  
+  #nov-video-call-{{ section.id }} .video-call-card:hover {
+    box-shadow: 0 15px 35px rgba(59, 28, 86, 0.05);
+    border-color: #d4af37;
+  }
+
+  #nov-video-call-{{ section.id }} .video-call-title {
+    color: {{ sst.title_color }};
+    font-family: var(--font-family-primary);
+    font-weight: 800;
+  }
+
+  #nov-video-call-{{ section.id }} .video-call-desc {
+    color: {{ sst.desc_color }};
+    font-family: var(--font-family-default);
+  }
+
+  #nov-video-call-{{ section.id }} .btn-video-call {
+    background-color: {{ sst.btn_bg_color }};
+    color: {{ sst.btn_text_color }};
+    border-radius: {{ sst.btn_border_radius }}px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    padding: 14px 35px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-block;
+    text-transform: none;
+    border: none;
+  }
+
+  #nov-video-call-{{ section.id }} .btn-video-call:hover {
+    background-color: {{ sst.btn_bg_hover_color }};
+    color: {{ sst.btn_text_hover_color }};
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(59, 28, 86, 0.15);
+  }
+
+  @media (max-width: 767px) {
+    #nov-video-call-{{ section.id }} .video-call-content-wrapper {
+      padding: 30px 20px !important;
+      text-align: center !important;
+    }
+    #nov-video-call-{{ section.id }} .video-call-image-wrapper {
+      min-height: 200px !important;
+    }
+  }
+{%- endstyle -%}
+
+<div id="nov-video-call-{{ section.id }}" class="nov-video-call-section {{ sst.class_section }}">
+  <div class="{{ container_class }}">
+    <div class="video-call-card">
+      <div class="row no-gutters align-items-stretch">
+        
+        <div class="col-md-5 col-lg-4 d-flex align-items-stretch">
+          <div class="video-call-image-wrapper w-100 position-relative" style="min-height: 280px;">
+            {%- if sst.image != blank -%}
+              <img class="w-100 h-100 lazyload" data-src="{{ sst.image | image_url: width: 600 }}" style="object-fit: cover; position: absolute; top:0; left:0; right:0; bottom:0;" alt="Schedule a video call">
+            {%- else -%}
+              <img class="w-100 h-100 lazyload" data-src="{{ 'nov-video-call-banner.jpg' | asset_url }}" style="object-fit: cover; position: absolute; top:0; left:0; right:0; bottom:0;" alt="Schedule a video call">
+            {%- endif -%}
+          </div>
+        </div>
+        
+        <div class="col-md-7 col-lg-8 d-flex align-items-center">
+          <div class="video-call-content-wrapper p-30 p-md-40 p-lg-50 text-left w-100">
+            <h2 class="video-call-title mb-10" style="font-size: {{ sst.title_size }}px; line-height: 1.2;">
+              {{ sst.heading }}
+            </h2>
+            <div class="video-call-desc mb-25" style="font-size: {{ sst.desc_size }}px; line-height: 1.5;">
+              {{ sst.subheading }}
+            </div>
+            
+            {%- if sst.action_type == 'modal' -%}
+              <button class="btn btn-video-call" data-toggle="modal" data-target="#ShopVideoCall">
+                {{ sst.btn_label }}
+              </button>
+            {%- elsif sst.action_type == 'whatsapp' -%}
+              {%- assign default_wa_msg = 'Hi, I would like to schedule a live video call to view ' | append: product.title | append: ' (' | append: shop.url | append: product.url | append: ')' -%}
+              {%- assign wa_message = sst.wa_message | default: default_wa_msg | url_encode -%}
+              <a href="https://wa.me/{{ sst.wa_number | replace: '+', '' | replace: ' ', '' }}?text={{ wa_message }}" class="btn btn-video-call" target="_blank">
+                {{ sst.btn_label }}
+              </a>
+            {%- else -%}
+              <a href="{{ sst.custom_url }}" class="btn btn-video-call" target="_blank">
+                {{ sst.btn_label }}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Video Call Banner",
+    "class": "index-section nov-video-call",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Live Video Call"
+      },
+      {
+        "type": "range",
+        "id": "title_size",
+        "min": 18,
+        "max": 40,
+        "step": 1,
+        "label": "Heading Font Size",
+        "default": 24,
+        "unit": "px"
+      },
+      {
+        "type": "textarea",
+        "id": "subheading",
+        "label": "Subheading / Description",
+        "default": "Join a live video call with our consultants to see your favourite designs up close!"
+      },
+      {
+        "type": "range",
+        "id": "desc_size",
+        "min": 12,
+        "max": 20,
+        "step": 1,
+        "label": "Description Font Size",
+        "default": 15,
+        "unit": "px"
+      },
+      {
+        "type": "text",
+        "id": "btn_label",
+        "label": "Button Label",
+        "default": "Schedule a Video Call"
+      },
+      {
+        "type": "select",
+        "id": "action_type",
+        "label": "Button Click Action",
+        "default": "modal",
+        "options": [
+          {
+            "value": "modal",
+            "label": "Open Booking Modal"
+          },
+          {
+            "value": "whatsapp",
+            "label": "Redirect to WhatsApp"
+          },
+          {
+            "value": "url",
+            "label": "Redirect to Custom URL"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "wa_number",
+        "label": "WhatsApp Number (e.g. +919999999999)",
+        "default": "+919999999999",
+        "info": "Used only if WhatsApp action is selected."
+      },
+      {
+        "type": "textarea",
+        "id": "wa_message",
+        "label": "Custom WhatsApp Message",
+        "info": "Leave blank to use default template with product link."
+      },
+      {
+        "type": "text",
+        "id": "custom_url",
+        "label": "Custom URL (e.g. Calendly)",
+        "default": "https://calendly.com",
+        "info": "Used only if Custom URL action is selected."
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Banner Illustration Image",
+        "info": "Upload an image. If left blank, the default jewelry expert phone call illustration will be used."
+      },
+      {
+        "type": "header",
+        "content": "Design Styling"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Card Background Color",
+        "default": "#f4f8f5"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "label": "Card Border Color",
+        "default": "#e6f0e7"
+      },
+      {
+        "type": "range",
+        "id": "border_radius",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "label": "Card Border Radius",
+        "default": 16,
+        "unit": "px"
+      },
+      {
+        "type": "color",
+        "id": "title_color",
+        "label": "Heading Color",
+        "default": "#3b1c56"
+      },
+      {
+        "type": "color",
+        "id": "desc_color",
+        "label": "Description Color",
+        "default": "#666666"
+      },
+      {
+        "type": "color",
+        "id": "btn_bg_color",
+        "label": "Button Background Color",
+        "default": "#e2f0d9"
+      },
+      {
+        "type": "color",
+        "id": "btn_text_color",
+        "label": "Button Text Color",
+        "default": "#1e4620"
+      },
+      {
+        "type": "range",
+        "id": "btn_border_radius",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "label": "Button Border Radius",
+        "default": 30,
+        "unit": "px"
+      },
+      {
+        "type": "color",
+        "id": "btn_bg_hover_color",
+        "label": "Button Hover Background Color",
+        "default": "#3b1c56"
+      },
+      {
+        "type": "color",
+        "id": "btn_text_hover_color",
+        "label": "Button Hover Text Color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout Width",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Container"
+          },
+          {
+            "value": "container-fluid",
+            "label": "Container Fluid"
+          },
+          {
+            "value": "container-full",
+            "label": "Full Width"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "class_section",
+        "label": "Custom CSS Class"
+      },
+      {
+        "type": "header",
+        "content": "Section Spacing"
+      },
+      {
+        "type": "range",
+        "id": "distance_top_xl",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "label": "Top Spacing (Desktop)",
+        "default": 30,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "distance_bottom_xl",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "label": "Bottom Spacing (Desktop)",
+        "default": 30,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "distance_top_lg",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "label": "Top Spacing (Laptop)",
+        "default": 30,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "distance_bottom_lg",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "label": "Bottom Spacing (Laptop)",
+        "default": 30,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "distance_top_md",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "label": "Top Spacing (Tablet)",
+        "default": 20,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "distance_bottom_md",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "label": "Bottom Spacing (Tablet)",
+        "default": 20,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "distance_top_sm",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "label": "Top Spacing (Mobile)",
+        "default": 15,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "distance_bottom_sm",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "label": "Bottom Spacing (Mobile)",
+        "default": 15,
+        "unit": "px"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Video Call Banner"
+      }
+    ]
+  }
+{% endschema %}

@@ -2383,6 +2383,13 @@
         "default": "<p>I agree with the Terms & conditions<\/p>"
       },
       {
+          "type": "checkbox",
+          "id": "cart_fixed_quantity",
+          "label": "One piece per line",
+          "default": true,
+          "info": "Hides the quantity stepper in the cart drawer and on the cart page. Each piece is made to order, so a line is always the quantity that was added. The remove button stays."
+        },
+        {
         "type": "select",
         "id": "cart_status_addtocart",
         "label": "Cart status when Add To Cart",

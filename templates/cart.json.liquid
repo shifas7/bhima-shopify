@@ -61,11 +61,28 @@
               <span class="quantity"> x {{ item.quantity }}</span>
               {% endcomment %}
               <div class="cart__item-bottom d-flex align-items-center mt-20">
-                <div class="cart__mini--qty d-flex align-items-center">
-                  <a class="cart__mini-qty cart__mini-qty--minus" href="#">-</a>
-                  <input class="cart__mini-qty--input" type="number" name="updates[]" id="updates_{{ item.key }}" data-price="{{ item.price }}" data-id="{{ item.id }}" data-line="{{ forloop.index }}" step="1" value="{{ item.quantity }}" min="1" max="{{ item.product.variants[0].inventory_quantity }}" pattern="[0-9]*" />
-                  <a class="cart__mini-qty cart__mini-qty--plus" href="#">+</a>
-                </div>
+                {%- comment -%}
+                  One piece per line: each item is made to order, so the stepper
+                  is hidden and the quantity is shown as a value. The input stays
+                  in the DOM (hidden) because nuranium.js reads
+                  `.cart__mini-qty--input` when it refreshes the drawer, and the
+                  cart form needs its `updates[]` entry to stay in line order.
+                  Removing the -/+ anchors is what disables the control: the
+                  handler is delegated on `.cart__mini-qty`, so with no anchors
+                  it never fires.
+                {%- endcomment -%}
+                {%- if settings.cart_fixed_quantity -%}
+                  <div class="cart__mini--qty cart__mini--qty-fixed d-flex align-items-center">
+                    <span class="cart__mini-qty--static">{{ 'cart.label.quantity' | t }}: {{ item.quantity }}</span>
+                    <input class="cart__mini-qty--input" type="hidden" name="updates[]" id="updates_{{ item.key }}" data-price="{{ item.price }}" data-id="{{ item.id }}" data-line="{{ forloop.index }}" value="{{ item.quantity }}" />
+                  </div>
+                {%- else -%}
+                  <div class="cart__mini--qty d-flex align-items-center">
+                    <a class="cart__mini-qty cart__mini-qty--minus" href="#">-</a>
+                    <input class="cart__mini-qty--input" type="number" name="updates[]" id="updates_{{ item.key }}" data-price="{{ item.price }}" data-id="{{ item.id }}" data-line="{{ forloop.index }}" step="1" value="{{ item.quantity }}" min="1" max="{{ item.product.variants[0].inventory_quantity }}" pattern="[0-9]*" />
+                    <a class="cart__mini-qty cart__mini-qty--plus" href="#">+</a>
+                  </div>
+                {%- endif -%}
                 <span class="remove-from-cart" title="remove from cart" data-line="{{ forloop.index }}" data-product-id={{ item.id }}>
                   <i class="rbb-icon-delete-outline-2" aria-hidden="true"></i>
                 </span>

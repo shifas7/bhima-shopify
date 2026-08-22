@@ -1,0 +1,113 @@
+{%- comment -%}
+  Purchase actions: quantity stepper, then Add to Bag / Buy It Now / wishlist
+  as one horizontal row (approved design).
+
+  Contracts preserved:
+    .product-form__item--submit    toggled for sold-out by nov-product-variants.js
+    button[name="add"] > #AddToCartText
+    .product-form__cart-submit     nuranium.js AJAX add-to-cart
+    .product-form__item--checkout  enabled / disabled by the variant script
+    .product-single__wishlist a[data-icon-wishlist]  nuranium.js wishlist
+
+  The dynamic-checkout form is nested exactly as the original snippet had it:
+  the browser folds it into the outer product form, so Buy It Now always posts
+  the variant currently held in #variant_id.
+
+  The wishlist control is no longer hidden — the heart in this row IS the
+  canonical anchor nuranium.js binds, and the gallery / sticky hearts proxy to
+  it, so the three can never diverge.
+{%- endcomment -%}
+
+{%- liquid
+  assign sst = section.settings
+  assign emi_months = sst.emi_months | default: 0
+  assign show_emi = false
+  if sst.show_emi and emi_months > 0 and current_variant.price > 0
+    assign show_emi = true
+    assign emi_value = current_variant.price | divided_by: emi_months
+  endif
+-%}
+
+{%- comment -%}
+  Quantity. Off for this store — one piece is made at a time — in which case the
+  form still posts an explicit quantity of 1 and no empty row is left behind.
+{%- endcomment -%}
+{%- if sst.show_quantity_selector -%}
+  <div class="pdp-qtyrow">
+    <div class="pdp-qty" data-pdp-qty>
+      <button type="button" data-pdp-qty-step="-1" aria-label="{{ 'products.product.decrease_quantity' | t }}">&minus;</button>
+      <input type="number" id="Quantity" name="quantity" value="1" min="1" step="1"
+        class="quantity-selector product-form__input" aria-label="{{ 'products.product.quantity' | t }}">
+      <button type="button" data-pdp-qty-step="1" aria-label="{{ 'products.product.increase_quantity' | t }}">+</button>
+    </div>
+  </div>
+{%- else -%}
+  <input type="hidden" id="Quantity" name="quantity" value="1" min="1" step="1">
+{%- endif -%}
+
+{%- comment -%}
+  The sticky bar appears once this row scrolls away, so the anchor lives on the
+  buttons themselves rather than on the quantity row that may not render.
+{%- endcomment -%}
+<div class="pdp-actions" data-pdp-sticky-anchor>
+  <div class="product-form__item product-form__item--submit pdp-actions__bag{% unless current_variant.available %} soldout{% endunless %}"
+    {%- unless current_variant.available %} data-toggle="modal" data-target="#Form_newletter"{% endunless %}>
+    <button type="submit"
+      name="add"
+      id="AddToCart"
+      data-handle="{{ product.handle }}"
+      data-pdp-atc
+      data-added-label="{{ 'products.product.added_to_bag' | t }}"
+      data-failed-label="{{ 'products.product.unavailable' | t }}"
+      class="pdp-btn pdp-btn--bag btnAddToCart btn{% unless settings.cart_status_addtocart == 'goto_page_cart' %} product-form__cart-submit{% endunless %}">
+      {% render 'pdp-icon', icon: 'bag' %}
+      <span id="AddToCartText" data-pdp-atc-label>
+        {%- if current_variant.available -%}
+          {%- if current_variant.inventory_policy == 'continue' and current_variant.inventory_management == 'shopify' -%}
+            {{ 'products.product.pre_order' | t }}
+          {%- else -%}
+            {{ 'products.product.add_to_bag' | t }}
+          {%- endif -%}
+        {%- else -%}
+          {{ 'products.product.notify_me' | t }}
+        {%- endif -%}
+      </span>
+      <span class="load"></span>
+    </button>
+  </div>
+
+  {%- if settings.payment_button_enable and current_variant.available -%}
+    <div class="product-form__item product-form__item--checkout pdp-actions__buy">
+      {%- form 'product', product, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+        {{ form | payment_button }}
+      {%- endform -%}
+    </div>
+  {%- endif -%}
+
+  {%- if settings.wishlist_enable -%}
+    <div class="product-single__wishlist pdp-actions__wish">
+      <a href="#" data-icon-wishlist
+        data-product-handle="{{ product.handle }}"
+        data-id="{{ product.id | json }}"
+        title="{{ 'products.product.wishlist' | t }}"
+        aria-label="{{ 'products.product.wishlist' | t }}">
+        {% render 'pdp-icon', icon: 'heart' %}
+        <span class="wishlist-text pdp-visually-hidden">{{ 'products.product.wishlist' | t }}</span>
+      </a>
+    </div>
+  {%- endif -%}
+</div>
+
+{%- comment -%}
+  Populated by bhima-pdp.js from the cart reply — for example Shopify refusing a
+  second add once inventory is down to the single piece. Silent failure here
+  would read as a broken button.
+{%- endcomment -%}
+<p class="pdp-atc-error" data-pdp-atc-error role="status" aria-live="polite" hidden></p>
+
+{%- if show_emi -%}
+  <p class="pdp-emi">
+    {{ sst.emi_label | default: 'EMI starting from' }} {{ emi_value | money }}/{{ sst.emi_period | default: 'month' }}
+    {% render 'pdp-icon', icon: 'info' %}
+  </p>
+{%- endif -%}

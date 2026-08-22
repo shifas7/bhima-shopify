@@ -1,0 +1,156 @@
+{%- comment -%}
+  Sticky purchase bar.
+
+  Contracts preserved for nov-product-variants.js (ProductVariantSelectsStick):
+    #product-form-sticky-{{ section.id }}
+    #variant_id-stick
+    <product-variant-selects-stick data-section / data-url>
+    #ProductPriceStick-{{ section.id }}
+    #productSelectStick
+    .product-form__item--submit / .product-form__item--checkout
+
+  Visibility is driven by bhima-pdp.js, not by the legacy scroll handler, so it
+  only appears once the real CTA has scrolled away.
+{%- endcomment -%}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+
+  assign discount_metafield = product.metafields.pricing.discount
+  assign discount_enabled = false
+  assign discount_amount = 0
+  if discount_metafield != blank
+    if discount_metafield.value != blank
+      assign discount_data = discount_metafield.value
+    else
+      assign discount_data = discount_metafield
+    endif
+    if discount_data.enabled == true or discount_data.enabled == 'true'
+      assign discount_enabled = true
+      assign discount_amount = discount_data.discount_amount | default: 0
+    endif
+  endif
+  if discount_enabled and discount_amount != blank and discount_amount != 0
+    assign current_price_rupees = current_variant.price | divided_by: 100.0
+    assign price_before_discount = current_price_rupees | plus: discount_amount
+    assign price_before_discount_cents = price_before_discount | times: 100
+  endif
+-%}
+
+<div class="pdp-sticky" data-pdp-sticky>
+  <div class="container">
+    <div class="pdp-sticky__inner">
+
+      <div class="pdp-sticky__thumb">
+        {%- if product.featured_image != blank -%}
+          <img src="{{ product.featured_image | image_url: width: 120 }}" width="60" height="72" alt="{{ product.title | escape }}" loading="lazy">
+        {%- endif -%}
+      </div>
+
+      <div class="pdp-sticky__info">
+        <p class="pdp-sticky__title">{{ product.title }}</p>
+        <div id="ProductPriceStick-{{ section.id }}" class="pdp-sticky__price">
+          {%- if discount_enabled and discount_amount != blank and discount_amount != 0 -%}
+            <s>{{ price_before_discount_cents | money }}</s>
+            <span class="product-price__sale">
+              <span itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}" class="money">{{ current_variant.price | money }}</span>
+            </span>
+          {%- elsif current_variant.compare_at_price > current_variant.price -%}
+            <s>{{ current_variant.compare_at_price | money }}</s>
+            <span class="product-price__sale">
+              <span itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}" class="money">{{ current_variant.price | money }}</span>
+            </span>
+          {%- else -%}
+            <span class="product-price__price">
+              <span itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}" class="money">{{ current_variant.price | money }}</span>
+            </span>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <form action="{{ routes.cart_add_url }}"
+        method="post"
+        enctype="multipart/form-data"
+        id="product-form-sticky-{{ section.id }}"
+        class="pdp-sticky__form product-form product-form-{{ section.id }}"
+        data-section="{{ section.id }}">
+
+        <input id="variant_id-stick" type="hidden" name="id" value="{{ current_variant.id }}">
+        <input type="hidden" name="quantity" value="1" min="1" step="1">
+
+        {%- unless product.has_only_default_variant -%}
+          <product-variant-selects-stick data-section="{{ section.id }}" data-url="{{ product.url }}" data-product-id="{{ section.id }}" data-product-url="{{ product.url }}">
+            {%- for option in product.options_with_values -%}
+              <div class="product-form__input product-form__input--dropdown">
+                <label class="form__label" for="Option-sticky-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
+                <select id="Option-sticky-{{ section.id }}-{{ forloop.index0 }}"
+                  class="select__select"
+                  name="options[{{ option.name | escape }}]"
+                  form="product-form-{{ section.id }}">
+                  {%- for value in option.values -%}
+                    <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>{{ value }}</option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            {%- endfor -%}
+            <script type="application/json">{{ product.variants | json }}</script>
+          </product-variant-selects-stick>
+
+          <select id="productSelectStick" class="pdp-legacy-hook" tabindex="-1" aria-hidden="true">
+            {%- for variant in product.variants -%}
+              {%- if variant.available -%}
+                <option value="{{ variant.id }}" data-sku="{{ variant.sku }}" data-qty="{{ variant.inventory_quantity }}"{% if variant == current_variant %} selected="selected"{% endif %}>{{ variant.title }}</option>
+              {%- else -%}
+                <option value="{{ variant.id }}" data-sku="{{ variant.sku }}" data-qty="{{ variant.inventory_quantity }}" disabled="disabled">{{ variant.title }} - {{ 'products.product.sold_out' | t }}</option>
+              {%- endif -%}
+            {%- endfor -%}
+          </select>
+        {%- endunless -%}
+
+        <div class="product-form__item product-form__item--submit{% unless current_variant.available %} soldout{% endunless %}"
+          {%- unless current_variant.available %} data-toggle="modal" data-target="#Form_newletter"{% endunless %}>
+          <button type="submit"
+            name="add"
+            data-handle="{{ product.handle }}"
+            data-pdp-atc
+            data-added-label="{{ 'products.product.added_to_bag' | t }}"
+            class="pdp-btn pdp-btn--bag pdp-sticky__submit btnAddToCart btn{% unless settings.cart_status_addtocart == 'goto_page_cart' %} product-form__cart-submit{% endunless %}">
+            <span id="AddToCartText" data-pdp-atc-label>
+              {%- if current_variant.available -%}
+                {%- if current_variant.inventory_policy == 'continue' and current_variant.inventory_management == 'shopify' -%}
+                  {{ 'products.product.pre_order' | t }}
+                {%- else -%}
+                  {{ 'products.product.add_to_cart' | t }}
+                {%- endif -%}
+              {%- else -%}
+                {{ 'products.product.notify_me' | t }}
+              {%- endif -%}
+            </span>
+            <span class="load"></span>
+          </button>
+        </div>
+
+        {%- comment -%}
+          Buy It Now proxies to the hero dynamic-checkout button rather than
+          posting its own checkout, so there is exactly one Buy It Now
+          implementation on the page. It hides itself when that button is not
+          rendered (payment button disabled, or the variant is sold out).
+        {%- endcomment -%}
+        {%- if settings.payment_button_enable -%}
+          <button type="button"
+            class="pdp-btn pdp-btn--gold pdp-sticky__buy"
+            data-pdp-buy-proxy
+            hidden>
+            <span>{{ 'products.product.buy_it_now' | t }}</span>
+          </button>
+        {%- endif -%}
+      </form>
+
+      {%- if settings.wishlist_enable -%}
+        <button type="button" class="pdp-sticky__wish" data-pdp-wish-proxy aria-label="{{ 'products.product.wishlist' | t }}">
+          {% render 'pdp-icon', icon: 'heart' %}
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

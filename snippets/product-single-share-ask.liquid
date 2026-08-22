@@ -15,6 +15,14 @@
       </div>
     </div>
   {% endif %}
+  {% if section.settings.show_videocall %}
+    <div class="product-single__videocall">
+      <div class="product-single__share-ask-sizeguide-title pointer" data-toggle="modal" data-target="#ShopVideoCall">
+        <i class="zmdi zmdi-videocam align-middle"></i>
+        <span class="f_pr align-middle">{{ 'products.product.label_videocall' | t | default: 'Video Call' }}</span>
+      </div>
+    </div>
+  {% endif %}
   {% if section.settings.show_sizeguide %}
     <div class="product-single__sizeguide">
       <div class="product-single__share-ask-sizeguide-title pointer nov_btn_act" data-toggle="CanvasSizeGuide" data-overlay="true">

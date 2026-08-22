@@ -1,0 +1,240 @@
+{%- comment -%}
+  Price Breakup — column 2 of the product information grid.
+
+  The arithmetic is unchanged from snippets/product-single-tab.liquid: every
+  figure still comes from the `jewelry_config` metafields the live-rate app
+  writes, and this snippet does not calculate, round or re-derive anything the
+  app did not already publish. Presentation only.
+
+  Row labels fall back to the translated defaults and can each be overridden
+  from the section settings.
+{%- endcomment -%}
+
+{%- liquid
+  assign configured = product.metafields.jewelry_config.configured
+  assign is_configured = false
+  if configured == true or configured == 'true'
+    assign is_configured = true
+  endif
+-%}
+
+{%- if is_configured -%}
+  {%- liquid
+    assign sst = section.settings
+    assign jc = product.metafields.jewelry_config
+    assign metal_weight = jc.metal_weight
+    assign mt = jc.metal_type
+    assign metal_rate = jc.metal_rate
+    assign tax_percent = jc.tax_percent
+
+    assign metal_name = ''
+    case mt
+      when 'gold24kt', 'gold22kt', 'gold18kt', 'gold14kt', 'gold9kt'
+        assign metal_name = 'Gold'
+      when 'silver'
+        assign metal_name = 'Silver'
+      when 'platinum'
+        assign metal_name = 'Platinum'
+    endcase
+
+    assign stones_metafield = jc.stones
+    assign stone_cost_total = 0
+    assign stones_array = blank
+
+    if stones_metafield != blank
+      assign stones_array = stones_metafield.value
+      if stones_array == blank or stones_array == null
+        assign stones_array = stones_metafield
+      endif
+      if stones_array != blank
+        for stone in stones_array
+          if stone.stoneCost != blank and stone.stoneCost != 0
+            assign stone_cost_total = stone_cost_total | plus: stone.stoneCost
+          endif
+        endfor
+      endif
+    endif
+
+    assign metal_cost = jc.metal_cost
+
+    assign labour_charge = jc.labour_charge
+    if labour_charge == blank or labour_charge == null
+      assign labour_charge = 0
+    endif
+    assign wastage_charge = jc.wastage_charge
+    if wastage_charge == blank or wastage_charge == null
+      assign wastage_charge = 0
+    endif
+    assign making_charge = jc.making_charge
+    if making_charge == blank or making_charge == null
+      assign making_charge = 0
+    endif
+    assign making_charge_temp = labour_charge | plus: wastage_charge
+    assign making_charge_total = making_charge_temp | plus: making_charge
+
+    assign discount_metafield = product.metafields.pricing.discount
+    assign discount_enabled = false
+    assign discount_amount = 0
+    assign discount_title = ''
+    if discount_metafield != blank
+      if discount_metafield.value != blank
+        assign discount_data = discount_metafield.value
+      else
+        assign discount_data = discount_metafield
+      endif
+      if discount_data.enabled == true or discount_data.enabled == 'true'
+        assign discount_enabled = true
+        assign discount_amount = discount_data.discount_amount | default: 0
+        assign discount_title = discount_data.discount_title | default: ''
+      endif
+    endif
+
+    assign tax_amount = jc.tax_amount
+    if discount_enabled and discount_amount != blank and discount_amount != 0
+      assign current_price_rupees = product.price | divided_by: 100.0
+      assign price_before_discount = current_price_rupees | plus: discount_amount
+    endif
+
+    # Row labels — settings first, translated defaults second.
+    assign label_metal = sst.label_metal_row
+    if label_metal == blank
+      if metal_name != blank
+        assign label_metal = 'products.product.metal_value_named' | t: metal: metal_name
+      else
+        assign label_metal = 'products.product.metal_value' | t
+      endif
+    endif
+    assign label_making = sst.label_making_row
+    if label_making == blank
+      assign label_making = 'products.product.making_charges' | t
+    endif
+    assign label_stone = sst.label_stone_row
+    if label_stone == blank
+      assign label_stone = 'products.product.stone_charges' | t
+    endif
+    assign label_tax = sst.label_tax_row
+    if label_tax == blank
+      assign label_tax = 'products.product.gst' | t
+    endif
+    assign label_total = sst.total_label
+    if label_total == blank
+      assign label_total = 'products.product.total_to_pay' | t
+    endif
+  -%}
+
+  <div class="pdp-card pdp-breakup" data-pdp-reveal>
+    <p class="pdp-cardhead">
+      {% render 'pdp-icon', icon: 'receipt' %}
+      <span>{{ sst.breakup_title | default: 'Price Breakup' }}</span>
+    </p>
+
+    <dl class="pdp-breakup__list">
+      {%- if metal_cost != blank and metal_cost != 0 -%}
+        <div class="pdp-breakup__row">
+          <dt>
+            {% render 'pdp-icon', icon: 'coins' %}
+            <span>
+              {{- label_metal -}}
+              {%- if metal_weight != blank and metal_weight != 0 %} ({{ metal_weight }} {{ 'products.product.per_gram' | t }}){% endif -%}
+            </span>
+          </dt>
+          <dd>{{ metal_cost | times: 100 | round | money }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- if making_charge != blank and making_charge != 0 -%}
+        <div class="pdp-breakup__row">
+          <dt>{% render 'pdp-icon', icon: 'hammer' %}<span>{{ label_making }}</span></dt>
+          <dd>{{ making_charge | times: 100 | round | money }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- if labour_charge != blank and labour_charge != 0 -%}
+        <div class="pdp-breakup__row">
+          <dt>{% render 'pdp-icon', icon: 'hammer' %}<span>{{ 'products.product.labour_charges' | t }}</span></dt>
+          <dd>{{ labour_charge | times: 100 | round | money }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- if wastage_charge != blank and wastage_charge != 0 -%}
+        <div class="pdp-breakup__row">
+          <dt>{% render 'pdp-icon', icon: 'percent' %}<span>{{ 'products.product.wastage' | t }}</span></dt>
+          <dd>{{ wastage_charge | times: 100 | round | money }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Only a combined figure supplied — keep the column reconciling. {%- endcomment -%}
+      {%- if making_charge == 0 and labour_charge == 0 and wastage_charge == 0 and making_charge_total != 0 -%}
+        <div class="pdp-breakup__row">
+          <dt>{% render 'pdp-icon', icon: 'hammer' %}<span>{{ label_making }}</span></dt>
+          <dd>{{ making_charge_total | times: 100 | round | money }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- if stone_cost_total != blank and stone_cost_total != 0 -%}
+        <div class="pdp-breakup__row">
+          <dt>{% render 'pdp-icon', icon: 'sparkle' %}<span>{{ label_stone }}</span></dt>
+          <dd>{{ stone_cost_total | times: 100 | round | money }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- if discount_enabled and discount_amount != blank and discount_amount != 0 -%}
+        <div class="pdp-breakup__row pdp-breakup__row--credit">
+          <dt>
+            {% render 'pdp-icon', icon: 'tag' %}
+            <span>{{ 'products.product.discount' | t }}{% if discount_title != blank %} ({{ discount_title }}){% endif %}</span>
+          </dt>
+          <dd>&minus;{{ discount_amount | times: 100 | round | money }}</dd>
+        </div>
+      {%- endif -%}
+
+      {%- if tax_amount != blank and tax_amount != 0 -%}
+        <div class="pdp-breakup__row">
+          <dt>
+            {% render 'pdp-icon', icon: 'receipt' %}
+            <span>
+              {{- label_tax -}}
+              {%- if tax_percent != blank and tax_percent != 0 -%}
+                {%- comment -%} number_decimal renders as "3.0"; show "3" when it is whole. {%- endcomment -%}
+                {%- assign tax_percent_int = tax_percent | round -%}
+                {%- if tax_percent_int == tax_percent %} ({{ tax_percent_int }}%){% else %} ({{ tax_percent }}%){% endif -%}
+              {%- endif -%}
+            </span>
+          </dt>
+          <dd>{{ tax_amount | times: 100 | round | money }}</dd>
+        </div>
+      {%- endif -%}
+    </dl>
+
+    <div class="pdp-breakup__total">
+      <span>{{ label_total }}</span>
+      <b>
+        {%- if discount_enabled and discount_amount != blank and discount_amount != 0 -%}
+          <s>{{ price_before_discount | times: 100 | round | money }}</s>
+        {%- endif -%}
+        {{ product.price | money }}
+      </b>
+    </div>
+
+    {%- if sst.show_metal_rate -%}
+      {%- if metal_rate != blank and metal_rate != 0 -%}
+        <p class="pdp-breakup__rate">
+          {% render 'pdp-icon', icon: 'clock' %}
+          <span>
+            {%- if metal_name != blank -%}
+              {{ 'products.product.rate_today_named' | t: metal: metal_name }}
+            {%- else -%}
+              {{ 'products.product.rate_today' | t }}
+            {%- endif -%}
+            <em>{{ metal_rate | times: 100 | round | money_without_trailing_zeros }} / {{ 'products.product.per_gram' | t }}</em>
+          </span>
+        </p>
+      {%- elsif sst.rate_note != blank -%}
+        <p class="pdp-breakup__rate">
+          {% render 'pdp-icon', icon: 'clock' %}
+          <span>{{ sst.rate_note }}</span>
+        </p>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+{%- endif -%}

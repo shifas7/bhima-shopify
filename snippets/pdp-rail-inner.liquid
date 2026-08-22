@@ -1,0 +1,26 @@
+{%- comment -%}
+  Inner markup for a product rail: centred heading, snapping track and circular
+  edge arrows. Rendered inside [data-pdp-rail] so bhima-pdp.js binds the arrows.
+{%- endcomment -%}
+
+{%- if heading != blank -%}
+  <h2 class="pdp-railtitle">{{ heading }}</h2>
+{%- endif -%}
+
+<div class="pdp-rail__body">
+  <button type="button" class="pdp-rail__btn pdp-rail__btn--prev" data-pdp-rail-prev aria-label="{{ 'general.accessibility.previous' | t }}">
+    {% render 'pdp-icon', icon: 'chevron-left' %}
+  </button>
+
+  <div class="pdp-rail__track" data-pdp-rail-track>
+    {%- for item in items limit: limit -%}
+      {%- unless item.id == product.id -%}
+        {% render 'pdp-product-card', card_product: item, sst: sst %}
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+
+  <button type="button" class="pdp-rail__btn pdp-rail__btn--next" data-pdp-rail-next aria-label="{{ 'general.accessibility.next' | t }}">
+    {% render 'pdp-icon', icon: 'chevron-right' %}
+  </button>
+</div>

@@ -1,0 +1,123 @@
+{%- comment -%}
+  Customer reviews.
+
+  The score and count are server-rendered from the Air Reviews metafields.
+  The rating distribution is only drawn when a metafield actually supplies the
+  per-star counts — it is never estimated. Individual reviews, customer photos,
+  filters and the helpful button all belong to the reviews app; add its block
+  here (Add block -> Apps) rather than having them re-implemented with fake data.
+{%- endcomment -%}
+
+{{ 'bhima-pdp.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'bhima-pdp.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign sst = section.settings
+  assign review_avg = product.metafields.air_reviews_product.review_avg
+  assign review_count = product.metafields.air_reviews_product.review_count
+  assign has_reviews = false
+  if review_count != blank and review_count > 0
+    assign has_reviews = true
+    assign rounded = review_avg | round
+  endif
+
+  assign dist = product.metafields.air_reviews_product.review_distribution.value
+  assign has_dist = false
+  if dist != blank and has_reviews
+    assign has_dist = true
+  endif
+-%}
+
+<section class="bhima-pdp pdp-band" id="reviews" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="pdp-card" data-pdp-reveal>
+      <p class="pdp-card-title">{{ sst.heading | default: 'Customer Reviews' }}</p>
+
+      <div class="pdp-reviews__grid{% unless has_dist %} pdp-reviews__grid--nodist{% endunless %}">
+        <div>
+          {%- if has_reviews -%}
+            <div class="pdp-reviews__score">
+              {{ review_avg }}
+              <span class="pdp-stars" aria-label="{{ review_avg }} / 5">
+                {%- for i in (1..5) -%}
+                  <span class="{% if i > rounded %}is-empty{% endif %}">{% render 'pdp-icon', icon: 'star' %}</span>
+                {%- endfor -%}
+              </span>
+            </div>
+            <p class="pdp-reviews__count">{{ sst.based_on | default: 'Based on' }} {{ review_count }} {{ sst.reviews_word | default: 'reviews' }}</p>
+          {%- else -%}
+            <div class="pdp-reviews__score" style="font-size:28px">
+              <span class="pdp-stars">
+                {%- for i in (1..5) -%}<span class="is-empty">{% render 'pdp-icon', icon: 'star' %}</span>{%- endfor -%}
+              </span>
+            </div>
+            <p class="pdp-reviews__count">{{ sst.empty_text | default: 'Be the first to review this piece' }}</p>
+          {%- endif -%}
+        </div>
+
+        {%- if has_dist -%}
+          <div class="pdp-bars">
+            {%- for step in (1..5) -%}
+              {%- liquid
+                assign star = 6 | minus: step
+                assign key = star | prepend: 'star_'
+                assign n = dist[key] | default: 0
+                assign pct = 0
+                if review_count > 0
+                  assign pct = n | times: 100 | divided_by: review_count
+                endif
+              -%}
+              <div class="pdp-bar">
+                <span class="pdp-bar__star">{{ star }} {% render 'pdp-icon', icon: 'star' %}</span>
+                <span class="pdp-bar__track"><span class="pdp-bar__fill" style="width:{{ pct }}%"></span></span>
+                <span class="pdp-bar__n">{{ n }}</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <div class="pdp-reviews__app" id="reviews-list">
+          {%- for block in section.blocks -%}
+            {%- render block -%}
+          {%- endfor -%}
+
+          {%- if section.blocks.size == 0 and request.design_mode -%}
+            <div class="pdp-reviews__empty">Add your reviews app block here (Add block &rarr; Apps).</div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%}
+          Without an explicit link the button jumps to the reviews app block,
+          which holds the full list — never a dead control.
+        {%- endcomment -%}
+        {%- if sst.all_reviews_link != blank or has_reviews -%}
+          <div class="pdp-reviews__cta">
+            <a href="{{ sst.all_reviews_link | default: '#reviews-list' }}" class="pdp-btn pdp-btn--outline-gold">
+              {{ sst.all_reviews_label | default: 'View all reviews' }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "BHIMA reviews",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Customer Reviews" },
+    { "type": "text", "id": "based_on", "label": "\"Based on\" label", "default": "Based on" },
+    { "type": "text", "id": "reviews_word", "label": "\"reviews\" word", "default": "reviews" },
+    { "type": "text", "id": "empty_text", "label": "No-reviews text", "default": "Be the first to review this piece" },
+    { "type": "url", "id": "all_reviews_link", "label": "View all reviews link" },
+    { "type": "text", "id": "all_reviews_label", "label": "View all reviews label", "default": "View all reviews" },
+    {
+      "type": "paragraph",
+      "content": "The rating bars appear only when a review_distribution metafield supplies per-star counts. They are never estimated."
+    }
+  ],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "BHIMA reviews" }]
+}
+{% endschema %}

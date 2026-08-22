@@ -1,0 +1,36 @@
+/* ==========================================================================
+   BHIMA — cart tweaks
+   Kept out of css-novstyle.css so theme updates don't clobber it, and loaded
+   globally from snippets/nov-head-css.liquid because the cart drawer is
+   injected by AJAX on every page.
+   ========================================================================== */
+
+/* One piece per line: the quantity stepper is replaced by a plain value.
+   Governed by the "One piece per line" theme setting. */
+
+.cart__mini--qty-fixed .cart__mini-qty--static {
+  font-size: 13px;
+  line-height: 1;
+  color: #666666;
+  letter-spacing: 0.02em;
+}
+
+.cart__qty--fixed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.cart__qty--fixed .cart__qty-static {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1c1c1c;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 767px) {
+  /* The cart page stacks into labelled rows on phones; keep the value left
+     aligned with the rest of the row rather than centred in a dead column. */
+  .cart__qty--fixed { justify-content: flex-start; min-height: 0; }
+}

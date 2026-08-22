@@ -1,0 +1,90 @@
+{%- comment -%}
+  Product card for the PDP rails and the recently-viewed strip.
+
+  Wishlist contract (nuranium.js `doAddOrRemoveWishlist`):
+    .item-product [data-icon-wishlist] with sibling .product__title / .product__thumbnail
+  Quick add, when switched on, uses the same .product-form__cart-submit AJAX
+  hook as the rest of the theme.
+
+  The approved design shows image → name → price only, so quick add is off by
+  default; the section setting "Show quick add" restores it without any markup
+  change.
+{%- endcomment -%}
+
+{%- liquid
+  assign card_product = card_product | default: product
+  assign variant = card_product.selected_or_first_available_variant
+  assign single_variant = false
+  if card_product.has_only_default_variant or card_product.variants.size == 1
+    assign single_variant = true
+  endif
+  assign show_add = false
+  if sst.show_quick_add
+    assign show_add = true
+  endif
+-%}
+
+<article class="pdp-pcard item-product" data-product-id="product-{{ card_product.handle }}">
+  <div class="pdp-pcard__media">
+    <a href="{{ card_product.url }}" aria-label="{{ card_product.title | escape }}">
+      <span class="pdp-pcard__frame">
+        {%- if card_product.featured_image != blank -%}
+          <img class="product__thumbnail"
+            src="{{ card_product.featured_image | image_url: width: 500 }}"
+            srcset="{{ card_product.featured_image | image_url: width: 320 }} 320w, {{ card_product.featured_image | image_url: width: 560 }} 560w"
+            sizes="(min-width: 992px) 17vw, 44vw"
+            width="{{ card_product.featured_image.width }}"
+            height="{{ card_product.featured_image.height }}"
+            alt="{{ card_product.featured_image.alt | default: card_product.title | escape }}"
+            loading="lazy">
+        {%- endif -%}
+      </span>
+    </a>
+
+    {%- if settings.wishlist_enable -%}
+      <a href="#" class="pdp-pcard__wish"
+        data-icon-wishlist
+        data-product-handle="{{ card_product.handle }}"
+        data-id="{{ card_product.id | json }}"
+        title="{{ 'products.product.wishlist' | t }}"
+        aria-label="{{ 'products.product.wishlist' | t }}">
+        {% render 'pdp-icon', icon: 'heart' %}
+        <span class="pdp-visually-hidden btn-tootip">{{ 'products.product.wishlist' | t }}</span>
+      </a>
+    {%- endif -%}
+  </div>
+
+  <div class="pdp-pcard__body">
+    <h3 class="pdp-pcard__title">
+      <a href="{{ card_product.url }}" class="product__title">{{ card_product.title }}</a>
+    </h3>
+
+    <div class="pdp-pcard__price">
+      {{ card_product.price | money }}
+      {%- if card_product.compare_at_price > card_product.price -%}
+        <s>{{ card_product.compare_at_price | money }}</s>
+      {%- endif -%}
+    </div>
+
+    {%- if show_add -%}
+      {%- if single_variant and variant.available -%}
+        <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="id" value="{{ variant.id }}">
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit" name="add"
+            data-handle="{{ card_product.handle }}"
+            data-pdp-atc
+            data-added-label="{{ 'products.product.added_to_bag' | t }}"
+            class="pdp-pcard__add btnAddToCart{% unless settings.cart_status_addtocart == 'goto_page_cart' %} product-form__cart-submit{% endunless %}">
+            <span data-pdp-atc-label>{{ sst.add_label | default: 'Add' }}</span>
+            <span class="load"></span>
+          </button>
+        </form>
+      {%- else -%}
+        <a href="{{ card_product.url }}" class="pdp-pcard__add">
+          <span>{{ 'products.product.select_options' | t }}</span>
+        </a>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</article>
