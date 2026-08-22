@@ -2,42 +2,36 @@
   Reusable promotional / campaign banner — column 3 of the product information
   grid.
 
-  This is a generic campaign slot, not a Bhima-quality panel. It is designed so
-  one banner definition serves the whole catalogue: nothing about it is written
-  per product.
+  Image-only, by request: the artwork carries the whole message (offer, terms,
+  branding), so the only admin inputs are the artwork itself and where it links
+  to. There is no heading / description / eyebrow field to fill in — the image
+  is the content. One banner definition serves the whole catalogue.
 
-  Where the content comes from, first match wins:
+  Where the artwork comes from, first match wins:
 
     1. a metaobject entry referenced by the product metafield
-       `custom.promo_banner` — per-product or per-collection campaign override,
+       `custom.promo_banner` — a per-product or per-collection override,
        managed in Settings → Custom data
     2. the `promo_banner` blocks on this section — the campaign library the
-       merchant maintains in the theme editor, each with its own validity window
-       and optional targeting
+       merchant maintains in the theme editor, each with its own validity
+       window and optional targeting
 
-  Every candidate must pass the same gate: enabled, inside its validity window,
-  and matching this product's collections / tags / type. The first candidate
-  that passes renders; if none do, the column simply does not render and the
-  grid falls back to two columns.
+  Every candidate must pass the same gate: enabled, carrying at least one image,
+  inside its validity window, and matching this product's collections / tags /
+  type. The first candidate that passes renders; if none do, the column simply
+  does not render and the grid falls back to two columns.
 
-  Fields: eyebrow · heading · offer line · description · CTA label · CTA URL ·
-  footnote · desktop image · mobile image · start date · end date · targeting.
+  Fields: desktop image · mobile image · CTA link · start date · end date ·
+  targeting.
 {%- endcomment -%}
 
 {%- liquid
   assign now_epoch = 'now' | date: '%s' | times: 1
 
   assign promo_found = false
-  assign p_eyebrow = ''
-  assign p_heading = ''
-  assign p_offer = ''
-  assign p_description = ''
-  assign p_cta_label = ''
   assign p_cta_url = ''
-  assign p_footnote = ''
   assign p_image = blank
   assign p_image_mobile = blank
-  assign p_theme = 'cream'
   assign p_attrs = ''
 
   # ---------------------------------------------------------------- metaobject
@@ -64,20 +58,18 @@
       endif
     endif
 
-    if mo_enabled and mo_live and mo.heading != blank
+    assign mo_image = mo.image.value | default: mo.image
+    assign mo_image_mobile = mo.image_mobile.value | default: mo.image_mobile
+    assign mo_has_image = false
+    if mo_image != blank or mo_image_mobile != blank
+      assign mo_has_image = true
+    endif
+
+    if mo_enabled and mo_live and mo_has_image
       assign promo_found = true
-      assign p_eyebrow = mo.eyebrow
-      assign p_heading = mo.heading
-      assign p_offer = mo.offer
-      assign p_description = mo.description
-      assign p_cta_label = mo.cta_label
+      assign p_image = mo_image
+      assign p_image_mobile = mo_image_mobile
       assign p_cta_url = mo.cta_url
-      assign p_footnote = mo.footnote
-      assign p_image = mo.image.value | default: mo.image
-      assign p_image_mobile = mo.image_mobile.value | default: mo.image_mobile
-      if mo.theme != blank
-        assign p_theme = mo.theme
-      endif
     endif
   endif
 
@@ -89,7 +81,7 @@
       unless bs.enabled
         continue
       endunless
-      if bs.heading == blank and bs.offer == blank
+      if bs.image == blank and bs.image_mobile == blank
         continue
       endif
 
@@ -189,68 +181,45 @@
 
       if matches
         assign promo_found = true
-        assign p_eyebrow = bs.eyebrow
-        assign p_heading = bs.heading
-        assign p_offer = bs.offer
-        assign p_description = bs.description
-        assign p_cta_label = bs.cta_label
-        assign p_cta_url = bs.cta_url
-        assign p_footnote = bs.footnote
         assign p_image = bs.image
         assign p_image_mobile = bs.image_mobile
-        assign p_theme = bs.theme | default: 'cream'
+        assign p_cta_url = bs.cta_url
         assign p_attrs = block.shopify_attributes
         break
       endif
     endfor
   endunless
+
+  assign p_alt = ''
+  if p_image != blank
+    assign p_alt = p_image.alt
+  endif
+  if p_alt == blank and p_image_mobile != blank
+    assign p_alt = p_image_mobile.alt
+  endif
+  if p_alt == blank
+    assign p_alt = 'Special offer'
+  endif
 -%}
 
 {%- if promo_found -%}
-  <div class="pdp-promo pdp-promo--{{ p_theme }}" data-pdp-reveal {{ p_attrs }}>
-
-    {%- if p_image != blank or p_image_mobile != blank -%}
-      <div class="pdp-promo__art" aria-hidden="true">
-        {%- if p_image_mobile != blank and p_image != blank -%}
-          <picture>
-            <source media="(max-width: 767px)" srcset="{{ p_image_mobile | image_url: width: 700 }}">
-            <img src="{{ p_image | image_url: width: 700 }}" alt="" loading="lazy" width="350" height="350">
-          </picture>
-        {%- else -%}
-          {%- assign art = p_image | default: p_image_mobile -%}
-          <img src="{{ art | image_url: width: 700 }}" alt="" loading="lazy" width="350" height="350">
-        {%- endif -%}
-      </div>
-    {%- endif -%}
-
-    <div class="pdp-promo__body">
-      {%- if p_eyebrow != blank -%}
-        <p class="pdp-promo__eyebrow">{{ p_eyebrow }}</p>
+  <div class="pdp-promo" data-pdp-reveal {{ p_attrs }}>
+    {%- capture promo_art -%}
+      {%- if p_image_mobile != blank and p_image != blank -%}
+        <picture>
+          <source media="(max-width: 767px)" srcset="{{ p_image_mobile | image_url: width: 700 }} 1x, {{ p_image_mobile | image_url: width: 1400 }} 2x">
+          <img src="{{ p_image | image_url: width: 700 }}" srcset="{{ p_image | image_url: width: 700 }} 1x, {{ p_image | image_url: width: 1400 }} 2x" alt="{{ p_alt | escape }}" loading="lazy" width="{{ p_image.width }}" height="{{ p_image.height }}">
+        </picture>
+      {%- else -%}
+        {%- assign art = p_image | default: p_image_mobile -%}
+        <img src="{{ art | image_url: width: 700 }}" srcset="{{ art | image_url: width: 700 }} 1x, {{ art | image_url: width: 1400 }} 2x" alt="{{ p_alt | escape }}" loading="lazy" width="{{ art.width }}" height="{{ art.height }}">
       {%- endif -%}
+    {%- endcapture -%}
 
-      {%- if p_heading != blank -%}
-        <p class="pdp-promo__heading">{{ p_heading }}</p>
-      {%- endif -%}
-
-      {%- if p_offer != blank -%}
-        <p class="pdp-promo__offer">{{ p_offer }}</p>
-      {%- endif -%}
-
-      {%- if p_description != blank -%}
-        <p class="pdp-promo__text">{{ p_description }}</p>
-      {%- endif -%}
-
-      {%- if p_cta_label != blank -%}
-        {%- comment -%}
-          A campaign CTA with no link set falls back to the catalogue rather
-          than rendering a dead "#" control.
-        {%- endcomment -%}
-        <a class="pdp-promo__cta" href="{{ p_cta_url | default: routes.all_products_collection_url }}">{{ p_cta_label }}</a>
-      {%- endif -%}
-    </div>
-
-    {%- if p_footnote != blank -%}
-      <p class="pdp-promo__note">{{ p_footnote }}</p>
+    {%- if p_cta_url != blank -%}
+      <a class="pdp-promo__link" href="{{ p_cta_url }}">{{ promo_art }}</a>
+    {%- else -%}
+      <div class="pdp-promo__link">{{ promo_art }}</div>
     {%- endif -%}
   </div>
 {%- endif -%}

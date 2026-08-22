@@ -1094,108 +1094,45 @@
 
 /* --------------------------------------------------------------------------
    Promotional campaign banner
+   Image only, by request — the artwork carries the whole message, so the card
+   is just that image filling the column, optionally wrapped in a link. It
+   stretches to match whichever sibling column (Specifications / Price Breakup)
+   is tallest, with a sensible floor when it is the only card in the row.
    -------------------------------------------------------------------------- */
 
 .pdp-promo {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  padding: 0;
   overflow: hidden;
-  min-height: 100%;
-  padding: clamp(20px, 2vw, 28px);
-  border: 1px solid var(--pdp-gold-soft);
-  border-radius: var(--pdp-radius-lg);
   background: var(--pdp-cream);
+  border: 1px solid var(--pdp-line);
+  border-radius: var(--pdp-radius-lg);
 }
 
-.pdp-promo--gold { background: var(--pdp-gold-wash); border-color: var(--pdp-gold); }
-.pdp-promo--ink { background: var(--pdp-ink); border-color: var(--pdp-ink); }
+.pdp-promo__link {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+}
 
-.pdp-promo__art {
+.pdp-promo__link img {
   position: absolute;
-  right: -6%;
-  bottom: -4%;
-  width: 46%;
-  max-width: 190px;
-  pointer-events: none;
-  opacity: 0.9;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s var(--pdp-ease);
 }
 
-.pdp-promo__art img { width: 100%; height: auto; object-fit: contain; }
-
-.pdp-promo__body { position: relative; z-index: 1; max-width: 74%; }
+a.pdp-promo__link:hover img { transform: scale(1.03); }
 
 @media (max-width: 767px) {
-  .pdp-promo__body { max-width: 100%; }
-  .pdp-promo__art { position: static; width: 120px; margin: 14px 0 0; }
+  .pdp-promo__link { min-height: 220px; }
 }
 
-.pdp-promo__eyebrow {
-  margin: 0 0 10px;
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--pdp-gold-deep);
-}
 
-.pdp-promo__heading {
-  margin: 0;
-  font-family: var(--pdp-font-display);
-  font-size: clamp(24px, 2.6vw, 32px);
-  font-weight: 500;
-  line-height: 1.1;
-  color: var(--pdp-ink);
-}
-
-.pdp-promo__offer {
-  margin: 6px 0 0;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--pdp-ink-soft);
-}
-
-.pdp-promo__text { margin: 12px 0 0; font-size: 11.5px; line-height: 1.6; color: var(--pdp-ink-mute); }
-
-.pdp-promo__cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 18px;
-  min-height: 40px;
-  padding: 0 22px;
-  border: 1px solid var(--pdp-ink);
-  border-radius: var(--pdp-radius);
-  background: var(--pdp-ink);
-  color: #fff;
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  transition: background 0.35s var(--pdp-ease), color 0.35s var(--pdp-ease);
-}
-
-.pdp-promo__cta:hover { background: var(--pdp-gold-deep); border-color: var(--pdp-gold-deep); color: #fff; }
-
-.pdp-promo__note {
-  position: relative;
-  z-index: 1;
-  margin: 14px 0 0;
-  text-align: right;
-  font-size: 9.5px;
-  letter-spacing: 0.06em;
-  color: var(--pdp-ink-mute);
-}
-
-.pdp-promo--ink .pdp-promo__eyebrow { color: var(--pdp-gold-soft); }
-.pdp-promo--ink .pdp-promo__heading { color: #fff; }
-.pdp-promo--ink .pdp-promo__offer,
-.pdp-promo--ink .pdp-promo__text,
-.pdp-promo--ink .pdp-promo__note { color: rgba(255, 255, 255, 0.72); }
-.pdp-promo--ink .pdp-promo__cta { background: #fff; border-color: #fff; color: var(--pdp-ink); }
-.pdp-promo--ink .pdp-promo__cta:hover { background: var(--pdp-gold-soft); border-color: var(--pdp-gold-soft); }
 
 /* --------------------------------------------------------------------------
    Variant options

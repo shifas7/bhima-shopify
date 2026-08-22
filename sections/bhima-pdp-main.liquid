@@ -333,25 +333,11 @@
       "type": "promo_banner",
       "name": "Promotional campaign",
       "settings": [
-        { "type": "paragraph", "content": "A reusable campaign banner for the third column of the information grid. Add one block per campaign; the first enabled, in-date, matching block renders. Leave every targeting field blank to show it on all products." },
+        { "type": "paragraph", "content": "A reusable campaign banner for the third column of the information grid. Image only — the artwork carries the offer, so upload it with the text already on it (Canva, Photoshop, etc.). Add one block per campaign; the first enabled, in-date, matching block renders. Leave every targeting field blank to show it on all products." },
         { "type": "checkbox", "id": "enabled", "label": "Enabled", "default": true },
-        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "SPECIAL LIMITED TIME OFFER" },
-        { "type": "text", "id": "heading", "label": "Heading", "default": "Flat 10% Off" },
-        { "type": "text", "id": "offer", "label": "Offer line", "default": "on Making Charges" },
-        { "type": "text", "id": "description", "label": "Description" },
-        { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Shop Now" },
-        { "type": "url", "id": "cta_url", "label": "CTA link" },
-        { "type": "text", "id": "footnote", "label": "Footnote", "default": "*T&C Apply" },
-        {
-          "type": "select", "id": "theme", "label": "Look", "default": "cream",
-          "options": [
-            { "value": "cream", "label": "Warm cream" },
-            { "value": "ink", "label": "Ink" },
-            { "value": "gold", "label": "Gold" }
-          ]
-        },
         { "type": "image_picker", "id": "image", "label": "Artwork — desktop" },
-        { "type": "image_picker", "id": "image_mobile", "label": "Artwork — mobile" },
+        { "type": "image_picker", "id": "image_mobile", "label": "Artwork — mobile", "info": "Optional. Falls back to the desktop artwork." },
+        { "type": "url", "id": "cta_url", "label": "Link", "info": "Where the banner goes on click. Leave blank for a non-clickable banner." },
         { "type": "header", "content": "Validity" },
         { "type": "text", "id": "start_date", "label": "Starts", "info": "YYYY-MM-DD. Blank = live now." },
         { "type": "text", "id": "end_date", "label": "Ends", "info": "YYYY-MM-DD. Blank = no end date." },

@@ -243,17 +243,32 @@ Source order, first match wins:
 2. the `promo_banner` blocks on `bhima-pdp-main` — the campaign library the
    merchant maintains in the theme editor
 
-Every candidate passes the same gate: **enabled**, inside its **validity
-window**, and matching this product's **collections / tags / type**. If none
-pass, the column does not render and the grid closes up to two columns.
+Every candidate passes the same gate: **enabled**, carrying at least one image,
+inside its **validity window**, and matching this product's **collections /
+tags / type**. If none pass, the column does not render and the grid closes up
+to two columns.
 
-Per campaign: enable/disable · eyebrow · heading · offer line · description ·
-CTA label · CTA link · footnote · look (cream / ink / gold) · desktop artwork ·
-mobile artwork · start date · end date · target collection handles · target tags
-· target product types · excluded tags.
+**Image only, by request.** The artwork carries the whole message — offer,
+terms, branding — so there is no heading / description / eyebrow field to fill
+in; text is baked into the uploaded image (Canva, Photoshop, whatever the
+merchant already uses). Per campaign: enable/disable · desktop artwork · mobile
+artwork (optional, falls back to desktop) · link (optional — the card renders
+as a plain `<div>` rather than a dead `<a>` when blank) · start date · end date
+· target collection handles · target tags · target product types · excluded
+tags. Card sizing is automatic: the image fills the column via `object-fit:
+cover` and the column's height stretches to match Specifications / Price
+Breakup, whichever is taller, with a 320px floor (220px on phones) so a lone
+card never collapses.
+
+An earlier version of this block had text fields — eyebrow, heading, offer
+line, description, CTA label, footnote, a cream/ink/gold "look" selector — all
+removed on the client's instruction once a real campaign asset (a fully
+designed graphic banner) was supplied. They are gone from the schema, not
+hidden, so there is nothing left over to confuse a merchant filling this in.
 
 Suits flat discounts on making charges, festival offers, wedding-collection
-campaigns, monthly plans, gold-coin offers, limited-time and seasonal pushes.
+campaigns, monthly plans, gold-coin offers, limited-time and seasonal pushes —
+each is one image upload.
 
 ---
 
