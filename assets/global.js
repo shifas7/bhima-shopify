@@ -750,14 +750,14 @@ novtheme.searchTrendWidth = function () {
         if ($(this).find('.search-results__block').length == 0) {
             $('<div class="search-results__block"></div>').css({ 'position': 'absolute', 'top': offSet}).appendTo($(this)).hide();
         }
-        if (currentWidth > 767) {
+        if (width > 767) {
             searchTrend.css({'top': offSetTrend, 'width': width, 'left': offSetleft });
             $(this).find('.search-results__block').css({'width': width, 'left': offSetleft });
             searchOverlay.css({'top': offSet, 'width': width, 'left': offSetleft});
 
         }else{
-            searchTrend.css({'top': offSetTrend, 'width': currentWidth, 'left': 0});
-            $(this).find('.search-results__block').css({'width': currentWidth, 'left': 0 });
+            searchTrend.css({'top': offSetTrend, 'width': width, 'left': 0});
+            $(this).find('.search-results__block').css({'width': width, 'left': 0 });
         }
     });
 };
@@ -1107,7 +1107,7 @@ novtheme.CollectionPageLoadmore = function() {
             var n = product_grid.find('.product--item').length;
             $('.pagination__count .count').text(n);
             $('.pagination__bar .progress').css('width',  n/m*100 + '%');
-            if ($('.AirReviews-Widget').length > 0) {
+            if ($('.AirReviews-Widget').length > 0 && typeof window.avadaAirReviewRerender === 'function') {
                 window.avadaAirReviewRerender();
             }
         })

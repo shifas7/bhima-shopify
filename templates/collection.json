@@ -47,7 +47,7 @@
         "grid_number_lg": 3,
         "grid_number_md": 3,
         "grid_number_sm": 2,
-        "grid_number_xs": 2,
+        "grid_number_xs": 1,
         "limit": 13,
         "show_nav": false,
         "animate": true,

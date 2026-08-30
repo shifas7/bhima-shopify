@@ -63,7 +63,18 @@ class CollecttionFilterProduct extends HTMLElement {
   }
 
   static renderProductGridContainer(html) {
-    document.getElementById('CollectionProductContainer').innerHTML = new DOMParser().parseFromString(html, 'text/html').getElementById('CollectionProductContainer').innerHTML;
+    const parsedHTML = new DOMParser().parseFromString(html, 'text/html');
+    const productContainer = document.getElementById('CollectionProductContainer');
+    const sourceProductContainer = parsedHTML.getElementById('CollectionProductContainer');
+    if (!productContainer || !sourceProductContainer) return;
+
+    productContainer.innerHTML = sourceProductContainer.innerHTML;
+
+    const collectionCount = document.querySelector('.collection-shell__count');
+    const sourceCollectionCount = parsedHTML.querySelector('.collection-shell__count');
+    if (collectionCount && sourceCollectionCount) {
+      collectionCount.innerHTML = sourceCollectionCount.innerHTML;
+    }
     $('.selector-wrapper-1').each(function(){
       if ($(this).hasClass('opt-color.hide')) {
         $(this).closest('.item-product__popup--variant').find('.btn-close-quick-add').hide();
@@ -173,8 +184,13 @@ class CollecttionFilterProduct extends HTMLElement {
   }
 
   createSearchParams(form) {
-    const formData = new FormData(form);
-    return new URLSearchParams(formData).toString();
+    if (!(form instanceof HTMLFormElement)) return null;
+
+    const searchParams = new URLSearchParams(new FormData(form));
+    Array.from(searchParams.entries()).forEach(([key, value]) => {
+      if (value === '') searchParams.delete(key);
+    });
+    return searchParams.toString();
   }
   
   onSubmitForm(searchParams, event) {
@@ -183,20 +199,22 @@ class CollecttionFilterProduct extends HTMLElement {
 
   onSubmitHandler(event) {
     event.preventDefault();
+    const eventForm = event.target.closest('form');
+    if (!eventForm || !eventForm.isConnected) return;
+
     const sortFilterForms = document.querySelectorAll('collection-filter-product form');
-      const searchParams = this.createSearchParams(event.target.closest('form'));
-      this.onSubmitForm(searchParams, event);
-      const forms = [];
-      sortFilterForms.forEach((form) => {
-        forms.push(this.createSearchParams(form));
-      });
-      this.onSubmitForm(forms.join('&'), event);
+    const forms = [];
+    sortFilterForms.forEach((form) => {
+      const searchParams = this.createSearchParams(form);
+      if (searchParams !== null) forms.push(searchParams);
+    });
+    this.onSubmitForm(forms.join('&'), event);
   }
   
   onSubmitHandlerSortBy(event, form){
     event.preventDefault();
-    const formData = new FormData(form);
-    const searchParams = new URLSearchParams(formData).toString();
+    const searchParams = this.createSearchParams(form);
+    if (searchParams === null) return;
     CollecttionFilterProduct.renderPage(searchParams, event);
   }
 
@@ -207,7 +225,11 @@ class CollecttionFilterProduct extends HTMLElement {
       event.currentTarget.href.indexOf('?') == -1
         ? ''
         : event.currentTarget.href.slice(event.currentTarget.href.indexOf('?') + 1);
-    CollecttionFilterProduct.renderPage(url);
+    const searchParams = new URLSearchParams(url);
+    Array.from(searchParams.entries()).forEach(([key, value]) => {
+      if (value === '') searchParams.delete(key);
+    });
+    CollecttionFilterProduct.renderPage(searchParams.toString());
   }
 }
 
@@ -216,6 +238,17 @@ CollecttionFilterProduct.searchParamsInitial = window.location.search.slice(1);
 CollecttionFilterProduct.searchParamsPrev = window.location.search.slice(1);
 customElements.define('collection-filter-product', CollecttionFilterProduct);
 CollecttionFilterProduct.setListeners();
+
+document.addEventListener('keydown', (event) => {
+  if (!(event.target instanceof Element)) return;
+  const trigger = event.target.closest(
+    '.template-collection .filter_button[role="button"], .template-collection .collection-toolbar__sort-trigger[role="button"]'
+  );
+  if (!trigger || (event.key !== 'Enter' && event.key !== ' ')) return;
+
+  event.preventDefault();
+  trigger.click();
+});
 
 class PriceRange extends HTMLElement {
   constructor() {

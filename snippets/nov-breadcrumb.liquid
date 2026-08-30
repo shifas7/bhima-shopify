@@ -1,4 +1,4 @@
-{% if settings.breadcrumbs_enable %}
+{% if settings.breadcrumbs_enable or force %}
   <section id="NovBreadcrumbs" class="{{ class_br }}{% if collection.handle == 'flash-deals' %} collection-deal{% endif %}">
     <div class="container position-relative">
       {% if class_br != 'breadcrumb_product' %}
@@ -47,6 +47,14 @@
           </li>
         {% endif %}
       </ol>
+      {% if show_collection_count and request.page_type == 'collection' %}
+        {%- assign breadcrumb_page_size = products_per_page | default: 12 -%}
+        {%- paginate collection.products by breadcrumb_page_size -%}
+          <p class="collection-shell__count pagination__count">
+            {{ 'collections.general.product_count_html' | t: count: collection.products.size, total: collection.products_count }}
+          </p>
+        {%- endpaginate -%}
+      {% endif %}
       {% if collection.handle == 'flash-deals' and template.name contains 'collection' %}
         <div class="breadcrumb-deal d-flex align-items-center">
           {% if settings.icon_deal != blank %}

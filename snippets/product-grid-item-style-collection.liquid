@@ -55,7 +55,7 @@
   endif
 -%}
 
-<div class="item-product{% if settings.show_border_product %} h_bd{% endif %}{% if settings.show_background_product %} bg{% endif %}" data-product-id="product-{{ product.id }}" data-json-product='{"variants": {{ product.variants | json | escape }},"media": {{ product.media | json }}}'>
+<div class="item-product collection-product-card{% if settings.show_border_product %} h_bd{% endif %}{% if settings.show_background_product %} bg{% endif %}" data-product-id="product-{{ product.id }}" data-json-product='{"variants": {{ product.variants | json | escape }},"media": {{ product.media | json }}}'>
   <div class="inner-top">
     <div class="product-top thumbnail-container{% if settings.show_second_image_product and product.images.size > 1 %} has-multiimage{% endif %}">
       <a href="{{ product.url | within: collection }}">
@@ -100,7 +100,7 @@
                 {% if current_variant.inventory_policy == 'continue' and current_variant.inventory_management == 'shopify' %}
                   {{ 'products.product.pre_order' | t }}
                 {% else %}
-                  {{ 'products.product.add_to_cart' | t }}
+                  {{ 'products.product.add_to_bag' | t }}
                 {% endif %}
               </span>
               <span class="load"></span>
@@ -109,7 +109,7 @@
                 {% if current_variant.inventory_policy == 'continue' and current_variant.inventory_management == 'shopify' %}
                   {{ 'products.product.pre_order' | t }}
                 {% else %}
-                  {{ 'products.product.add_to_cart' | t }}
+                  {{ 'products.product.add_to_bag' | t }}
                 {% endif %}
                 </span>
               {% endif %}
