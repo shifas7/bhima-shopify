@@ -1976,6 +1976,14 @@ $(document).ready(function() {
         }
     });
 
+    if ($(window).width() < 768) {
+        const $initialFooterButton = $('.nov-footer .f_btn_sl').first();
+        if ($initialFooterButton.length) {
+            $initialFooterButton.addClass('active');
+            $initialFooterButton.parents('.block_footer').find('.block-content.h_t').show();
+        }
+    }
+
     $(".faqs-main .panel-header").click(function(e) {
         if ($(this).hasClass("collapsed")) {
             $(".faqs-main").removeClass('active');
