@@ -33,23 +33,27 @@
 {% style %}
   .ai-utility-bar-{{ ai_gen_id }} {
     width: 100%;
-    background-color: {{ block.settings.background_color }};
-    color: {{ block.settings.text_color }};
-    padding: {{ block.settings.padding_vertical }}px 0;
-    font-size: {{ block.settings.font_size }}px;
-    border-bottom: {{ block.settings.border_thickness }}px solid {{ block.settings.border_color }};
+    min-height: 44px;
+    box-sizing: border-box;
+    overflow: visible;
+    background-color: #F8F1E7;
+    color: #29231D;
+    padding: 0;
+    font-size: 13px;
+    border-bottom: 1px solid #E6D8C7;
     position: relative;
     z-index: 100;
   }
 
   .ai-utility-bar-container-{{ ai_gen_id }} {
+    min-height: 44px;
     max-width: {{ settings.container }}px;
     margin: 0 auto;
     padding: 0 {{ settings.container_fluid }}px;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto max-content minmax(0, 1fr);
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    column-gap: 22px;
   }
 
   .ai-utility-bar-left-{{ ai_gen_id }},
@@ -57,122 +61,101 @@
   .ai-utility-bar-right-{{ ai_gen_id }} {
     display: flex;
     align-items: center;
-    gap: 20px;
+    min-width: 0;
+    gap: 14px;
+    white-space: nowrap;
   }
 
   .ai-utility-bar-left-{{ ai_gen_id }} {
-    flex: 1;
+    flex: 0 1 auto;
     justify-content: flex-start;
   }
 
   .ai-utility-bar-center-{{ ai_gen_id }} {
-    flex: 1;
+    flex: 0 1 auto;
     justify-content: center;
     text-align: center;
   }
 
   .ai-utility-bar-right-{{ ai_gen_id }} {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;
     justify-content: flex-end;
   }
 
   .ai-utility-bar-link-{{ ai_gen_id }} {
-    color: {{ block.settings.text_color }};
+    color: #29231D;
     text-decoration: none;
     transition: color 0.3s ease;
     white-space: nowrap;
   }
 
   .ai-utility-bar-link-{{ ai_gen_id }}:hover {
-    color: {{ block.settings.link_hover_color }};
+    color: #B77A18;
   }
 
   .ai-utility-bar-phone-{{ ai_gen_id }} {
-    color: {{ block.settings.text_color }};
+    color: #29231D;
     text-decoration: none;
     transition: color 0.3s ease;
     white-space: nowrap;
   }
 
   .ai-utility-bar-phone-{{ ai_gen_id }}:hover {
-    color: {{ block.settings.link_hover_color }};
+    color: #B77A18;
   }
 
   .ai-utility-bar-announcement-{{ ai_gen_id }} {
     margin: 0;
     font-weight: {{ block.settings.announcement_font_weight }};
-  }
-
-  .ai-utility-bar-dropdown-{{ ai_gen_id }} {
-    position: relative;
-  }
-
-  .ai-utility-bar-dropdown-toggle-{{ ai_gen_id }} {
-    background: none;
-    border: none;
-    color: {{ block.settings.text_color }};
-    cursor: pointer;
-    font-size: {{ block.settings.font_size }}px;
-    padding: 8px 12px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 6px;
-    transition: color 0.3s ease;
+    gap: 7px;
     white-space: nowrap;
   }
 
-  .ai-utility-bar-dropdown-toggle-{{ ai_gen_id }}:hover {
-    color: {{ block.settings.link_hover_color }};
+  .ai-utility-bar-rate-viewport-{{ ai_gen_id }} {
+    flex: 0 1 clamp(260px, 27vw, 430px);
+    width: clamp(260px, 27vw, 430px);
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
   }
 
-  .ai-utility-bar-dropdown-icon-{{ ai_gen_id }} {
-    width: 12px;
-    height: 12px;
-    transition: transform 0.3s ease;
-  }
-
-  .ai-utility-bar-dropdown-{{ ai_gen_id }}.active .ai-utility-bar-dropdown-icon-{{ ai_gen_id }} {
-    transform: rotate(180deg);
-  }
-
-  .ai-utility-bar-dropdown-menu-{{ ai_gen_id }} {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    background-color: {{ block.settings.dropdown_bg_color }};
-    border: 1px solid {{ block.settings.border_color }};
-    border-radius: {{ block.settings.dropdown_border_radius }}px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    min-width: 200px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-    z-index: 1000;
-  }
-
-  .ai-utility-bar-dropdown-{{ ai_gen_id }}.active .ai-utility-bar-dropdown-menu-{{ ai_gen_id }} {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-
-  .ai-utility-bar-dropdown-item-{{ ai_gen_id }} {
-    padding: 12px 16px;
+  .ai-utility-bar-rate-ticker-{{ ai_gen_id }} {
     display: flex;
-    justify-content: space-between;
+    width: max-content;
+    min-width: max-content;
     align-items: center;
-    color: {{ block.settings.dropdown_text_color }};
-    transition: background-color 0.2s ease;
-    border-bottom: 1px solid {{ block.settings.border_color }};
+    white-space: nowrap;
+    will-change: transform;
   }
 
-  .ai-utility-bar-dropdown-item-{{ ai_gen_id }}:last-child {
-    border-bottom: none;
+  .ai-utility-bar-rate-ticker-{{ ai_gen_id }}.is-looping {
+    animation: ai-utility-rate-marquee-{{ ai_gen_id }} 34s linear infinite;
   }
 
-  .ai-utility-bar-dropdown-item-{{ ai_gen_id }}:hover {
-    background-color: {{ block.settings.dropdown_hover_bg }};
+  .ai-utility-bar-rate-viewport-{{ ai_gen_id }}:hover .ai-utility-bar-rate-ticker-{{ ai_gen_id }} {
+    animation-play-state: paused;
+  }
+
+  .ai-utility-bar-rate-item-{{ ai_gen_id }} {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 6px;
+    padding: 0 14px;
+    color: #29231D;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .ai-utility-bar-rate-item-{{ ai_gen_id }}:not(:last-child)::after {
+    content: '';
+    width: 1px;
+    height: 14px;
+    margin-left: 14px;
+    background: #E6D8C7;
   }
 
   .ai-utility-bar-rate-label-{{ ai_gen_id }} {
@@ -181,12 +164,29 @@
 
   .ai-utility-bar-rate-price-{{ ai_gen_id }} {
     font-weight: 600;
-    color: {{ block.settings.price_color }};
+    color: #B77A18;
+  }
+
+  @keyframes ai-utility-rate-marquee-{{ ai_gen_id }} {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+
+  @media screen and (min-width: 992px) and (max-width: 1199px) {
+    .ai-utility-bar-rate-viewport-{{ ai_gen_id }} {
+      flex-basis: clamp(210px, 24vw, 320px);
+      width: clamp(210px, 24vw, 320px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-utility-bar-rate-ticker-{{ ai_gen_id }}.is-looping { animation: none; }
   }
 
   @media screen and (max-width: 991px) {
     .ai-utility-bar-container-{{ ai_gen_id }} {
       flex-direction: column;
+      display: flex;
       gap: 12px;
       padding: 0 20px;
     }
@@ -198,13 +198,8 @@
       justify-content: center;
     }
 
-    .ai-utility-bar-dropdown-menu-{{ ai_gen_id }} {
-      right: 50%;
-      transform: translateX(50%) translateY(-10px);
-    }
-
-    .ai-utility-bar-dropdown-{{ ai_gen_id }}.active .ai-utility-bar-dropdown-menu-{{ ai_gen_id }} {
-      transform: translateX(50%) translateY(0);
+    .ai-utility-bar-rate-viewport-{{ ai_gen_id }} {
+      width: min(100%, 360px);
     }
   }
 
@@ -219,6 +214,252 @@
       font-size: {{ block.settings.font_size | times: 0.9 }}px;
     }
   }
+
+  /* Approved compact utility-bar presentation. Scoped to this block only. */
+  utility-bar-{{ ai_gen_id }}.ai-utility-bar-{{ ai_gen_id }} {
+    min-height: 44px;
+    padding: 0;
+    background: #F8F1E7;
+    border-color: #E6D8C7;
+    color: #29231D;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-container-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: none;
+    min-height: 44px;
+    padding: 0 clamp(24px, 2.5vw, 40px);
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) minmax(420px, 38vw);
+    align-items: center;
+    column-gap: 22px;
+    background: #F8F1E7;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-left-{{ ai_gen_id }},
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-center-{{ ai_gen_id }},
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-right-{{ ai_gen_id }} {
+    min-width: 0;
+    gap: 0;
+    white-space: nowrap;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-left-{{ ai_gen_id }} {
+    flex: 0 0 auto;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-left-{{ ai_gen_id }} .ai-utility-bar-phone-{{ ai_gen_id }}::before {
+    content: '';
+    width: 1px;
+    height: 18px;
+    margin: 0 20px;
+    background: #E6D8C7;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-center-{{ ai_gen_id }} {
+    justify-content: center;
+    overflow: visible;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-announcement-{{ ai_gen_id }}::after {
+    content: '•';
+    margin: 0 12px;
+    color: #B77A18;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-right-{{ ai_gen_id }} {
+    justify-content: flex-end;
+    overflow: visible;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-link-{{ ai_gen_id }},
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-phone-{{ ai_gen_id }},
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-announcement-{{ ai_gen_id }},
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-rate-item-{{ ai_gen_id }} {
+    color: #29231D;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-link-{{ ai_gen_id }},
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-phone-{{ ai_gen_id }},
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-announcement-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-icon-{{ ai_gen_id }},
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-announcement-{{ ai_gen_id }} > i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    color: #B77A18;
+    font-size: 15px;
+    line-height: 1;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-icon-{{ ai_gen_id }} svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-rate-viewport-{{ ai_gen_id }} {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-rate-ticker-{{ ai_gen_id }} {
+    width: max-content;
+    min-width: max-content;
+    overflow: visible;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-rate-item-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 14px;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-rate-item-{{ ai_gen_id }}:not(:last-child)::after {
+    content: '';
+    width: 1px;
+    height: 14px;
+    margin-left: 14px;
+    background: #E6D8C7;
+  }
+
+  utility-bar-{{ ai_gen_id }} .ai-utility-bar-rate-price-{{ ai_gen_id }} {
+    color: #B77A18;
+    font-weight: 500;
+  }
+
+  @media screen and (max-width: 1199px) {
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-container-{{ ai_gen_id }} {
+      grid-template-columns: auto minmax(0, 1fr) minmax(300px, 32vw);
+      column-gap: 16px;
+      padding-right: 24px;
+      padding-left: 24px;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    utility-bar-{{ ai_gen_id }}.ai-utility-bar-{{ ai_gen_id }} {
+      height: 38px;
+      min-height: 38px;
+      max-height: 38px;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-container-{{ ai_gen_id }} {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      height: 38px;
+      min-height: 38px;
+      max-height: 38px;
+      padding: 0 14px;
+      gap: 8px;
+      background: #F8F1E7;
+    }
+
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-left-{{ ai_gen_id }} {
+      display: none;
+    }
+
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-center-{{ ai_gen_id }} {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 11.5px;
+      color: #29231D;
+      gap: 6px;
+    }
+
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-announcement-{{ ai_gen_id }},
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-link-{{ ai_gen_id }} {
+      font-size: 11.5px;
+      line-height: 1.2;
+      white-space: nowrap;
+      color: #29231D;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-announcement-{{ ai_gen_id }} > i {
+      font-size: 13px;
+      color: #B77A18;
+      margin-right: 4px;
+    }
+
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-center-{{ ai_gen_id }}::after {
+      display: none;
+    }
+
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-right-{{ ai_gen_id }} {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex: 0 0 auto;
+      max-width: 50%;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-rate-viewport-{{ ai_gen_id }} {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+      mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+    }
+
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-rate-ticker-{{ ai_gen_id }} {
+      display: flex;
+      width: max-content;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-rate-item-{{ ai_gen_id }} {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 8px;
+      font-size: 11.5px;
+      line-height: 1;
+      color: #29231D;
+    }
+
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-rate-item-{{ ai_gen_id }}:not(:last-child)::after {
+      height: 11px;
+      margin-left: 8px;
+      background-color: #E6D8C7;
+    }
+
+    utility-bar-{{ ai_gen_id }} .ai-utility-bar-rate-price-{{ ai_gen_id }} {
+      color: #B77A18;
+      font-weight: 600;
+    }
+  }
 {% endstyle %}
 
 <utility-bar-{{ ai_gen_id }} class="ai-utility-bar-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
@@ -226,30 +467,32 @@
     <div class="ai-utility-bar-left-{{ ai_gen_id }}">
       {% if block.settings.store_locations_text != blank and block.settings.store_locations_link != blank %}
         <a href="{{ block.settings.store_locations_link }}" class="ai-utility-bar-link-{{ ai_gen_id }}">
-          {{ block.settings.store_locations_text }}
+          <span class="ai-utility-bar-icon-{{ ai_gen_id }}" aria-hidden="true">{% render 'icon-pin' %}</span>
+          <span>{{ block.settings.store_locations_text }}</span>
         </a>
       {% endif %}
 
       {% if block.settings.phone_number != blank %}
         <a href="tel:{{ block.settings.phone_number | replace: ' ', '' | replace: '-', '' }}" class="ai-utility-bar-phone-{{ ai_gen_id }}">
-          {{ block.settings.phone_number }}
+          <span class="ai-utility-bar-icon-{{ ai_gen_id }}" aria-hidden="true">{% render 'icon-phone' %}</span>
+          <span>{{ block.settings.phone_number }}</span>
         </a>
       {% endif %}
     </div>
 
     <div class="ai-utility-bar-center-{{ ai_gen_id }}">
       {% if block.settings.announcement_text != blank %}
-        <p class="ai-utility-bar-announcement-{{ ai_gen_id }}">{{ block.settings.announcement_text }}</p>
+        <p class="ai-utility-bar-announcement-{{ ai_gen_id }}"><i class="rbb-icon-delivery-1" aria-hidden="true"></i><span>{{ block.settings.announcement_text }}</span></p>
       {% endif %}
-    </div>
 
-    <div class="ai-utility-bar-right-{{ ai_gen_id }}">
       {% if block.settings.custom_page_text != blank and block.settings.custom_page_link != blank %}
         <a href="{{ block.settings.custom_page_link }}" class="ai-utility-bar-link-{{ ai_gen_id }}">
           {{ block.settings.custom_page_text }}
         </a>
       {% endif %}
+    </div>
 
+    <div class="ai-utility-bar-right-{{ ai_gen_id }}">
       {% assign has_rates = false %}
       {% for i in (1..8) %}
         {% assign rate_label_key = 'rate_' | append: i | append: '_label' %}
@@ -262,19 +505,8 @@
       {% endfor %}
 
       {% if has_rates %}
-        <div class="ai-utility-bar-dropdown-{{ ai_gen_id }}" data-dropdown>
-          <button 
-            class="ai-utility-bar-dropdown-toggle-{{ ai_gen_id }}" 
-            aria-expanded="false"
-            aria-label="Toggle metal rates dropdown"
-          >
-            {{ block.settings.dropdown_title }}
-            <svg class="ai-utility-bar-dropdown-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
-
-          <div class="ai-utility-bar-dropdown-menu-{{ ai_gen_id }}" id="metal-rates-menu-{{ ai_gen_id }}">
+        <div class="ai-utility-bar-rate-viewport-{{ ai_gen_id }}" role="region" aria-label="Live metal rates">
+          <div class="ai-utility-bar-rate-ticker-{{ ai_gen_id }}" id="metal-rates-menu-{{ ai_gen_id }}">
             <!-- Static fallback rates (shown while loading or if API fails) -->
             {% for i in (1..8) %}
               {% assign rate_label_key = 'rate_' | append: i | append: '_label' %}
@@ -283,7 +515,7 @@
               {% assign rate_price = block.settings[rate_price_key] %}
               
               {% if rate_price != blank %}
-                <div class="ai-utility-bar-dropdown-item-{{ ai_gen_id }} static-rate-item" data-rate-index="{{ i }}">
+                <div class="ai-utility-bar-rate-item-{{ ai_gen_id }} static-rate-item" data-rate-index="{{ i }}">
                   <span class="ai-utility-bar-rate-label-{{ ai_gen_id }}">{{ rate_label }}</span>
                   <span class="ai-utility-bar-rate-price-{{ ai_gen_id }}">{{ rate_price }}</span>
                 </div>
@@ -308,13 +540,29 @@
       }
 
       connectedCallback() {
-        this.dropdown = this.querySelector('[data-dropdown]');
-        if (this.dropdown) {
-          this.toggle = this.dropdown.querySelector('.ai-utility-bar-dropdown-toggle-{{ ai_gen_id }}');
-          this.ratesMenu = this.querySelector('#metal-rates-menu-{{ ai_gen_id }}');
-          this.setupEventListeners();
+        this.ratesMenu = this.querySelector('#metal-rates-menu-{{ ai_gen_id }}');
+        if (this.ratesMenu) {
+          this.syncTicker();
           this.loadMetalPrices();
         }
+      }
+
+      syncTicker() {
+        const existingClones = this.ratesMenu.querySelectorAll('[data-rate-clone="true"]');
+        existingClones.forEach((clone) => clone.remove());
+
+        const rateItems = Array.from(
+          this.ratesMenu.querySelectorAll('.ai-utility-bar-rate-item-{{ ai_gen_id }}')
+        ).filter((item) => item.dataset.rateClone !== 'true' && item.style.display !== 'none');
+
+        rateItems.forEach((item) => {
+          const clone = item.cloneNode(true);
+          clone.dataset.rateClone = 'true';
+          clone.setAttribute('aria-hidden', 'true');
+          this.ratesMenu.appendChild(clone);
+        });
+
+        this.ratesMenu.classList.toggle('is-looping', rateItems.length > 0);
       }
 
       async loadMetalPrices() {
@@ -335,13 +583,15 @@
             
             result.data.formatted.forEach(rate => {
               const rateItem = document.createElement('div');
-              rateItem.className = 'ai-utility-bar-dropdown-item-{{ ai_gen_id }} dynamic-rate-item';
+              rateItem.className = 'ai-utility-bar-rate-item-{{ ai_gen_id }} dynamic-rate-item';
               rateItem.innerHTML = `
                 <span class="ai-utility-bar-rate-label-{{ ai_gen_id }}">${rate.label}</span>
                 <span class="ai-utility-bar-rate-price-{{ ai_gen_id }}">${rate.price}</span>
               `;
               this.ratesMenu.appendChild(rateItem);
             });
+
+            this.syncTicker();
             
             this.ratesLoaded = true;
           }
@@ -350,48 +600,7 @@
           // Keep static rates visible if API fails
         }
       }
-
-      setupEventListeners() {
-        this.toggle.addEventListener('click', (e) => {
-          e.stopPropagation();
-          this.toggleDropdown();
-        });
-
-        document.addEventListener('click', (e) => {
-          if (!this.dropdown.contains(e.target)) {
-            this.closeDropdown();
-          }
-        });
-
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') {
-            this.closeDropdown();
-          }
-        });
-      }
-
-      toggleDropdown() {
-        const isActive = this.dropdown.classList.contains('active');
-        if (isActive) {
-          this.closeDropdown();
-        } else {
-          this.openDropdown();
-        }
-      }
-
-      openDropdown() {
-        this.dropdown.classList.add('active');
-        this.toggle.setAttribute('aria-expanded', 'true');
-        // Reload prices when dropdown opens (refresh every time)
-        this.loadMetalPrices();
-      }
-
-      closeDropdown() {
-        this.dropdown.classList.remove('active');
-        this.toggle.setAttribute('aria-expanded', 'false');
-      }
     }
-
     customElements.define('utility-bar-{{ ai_gen_id }}', UtilityBar{{ ai_gen_id }});
   })();
 </script>

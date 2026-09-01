@@ -15,8 +15,9 @@
     {% if linklists[child_list_handle].links != blank %}
       <li class="nav--lv1 parent--lv1 site-nav--Default{% if link.active %} site-nav--active{% endif %}">
         <a href="{{ link.url }}" class="site-nav__link--main d-flex align-items-center" title="{{ link.title }}">
+          <span class="site-nav--icon">{% render 'bhima-nav-icon', title: link.title %}</span>
           <span class="site-nav--title">{{ link.title }}</span>
-          <span class="site-nav--direc d-none"><i class="zmdi zmdi-chevron-down"></i></span>
+          <span class="site-nav--direc"><i class="zmdi zmdi-chevron-down"></i></span>
         </a>
         <div class="nav-dropdown--lv1 MenuDefault">
           {% if three_level_nav %}
@@ -28,7 +29,7 @@
                     <a href="{{ childlink.url }}" class="site-nav__link--second site-nav__link">
                       <span>{{ childlink.title | escape }}</span>
                       {% if linklists[grand_child_list_handle].links != blank %}
-                      <span class="site-nav--direc d-none"><i class="zmdi zmdi-chevron-down"></i></span>
+                      <span class="site-nav--direc"><i class="zmdi zmdi-chevron-down"></i></span>
                       {% endif %}
                     </a>
                     {% if linklists[grand_child_list_handle].links != blank %}
@@ -59,7 +60,10 @@
       </li>
     {% else %}
       <li class="nav--lv1{% if link.active %} site-nav--active{% endif %}">
-        <a href="{{ link.url }}" class="site-nav__link--main" title="{{ link.title }}">{{ link.title }}</a>
+        <a href="{{ link.url }}" class="site-nav__link--main d-flex align-items-center" title="{{ link.title }}">
+          <span class="site-nav--icon">{% render 'bhima-nav-icon', title: link.title %}</span>
+          <span class="site-nav--title">{{ link.title }}</span>
+        </a>
       </li>
     {% endif %}
   {% endfor %}

@@ -282,11 +282,17 @@ novtheme.Header_mobile = function() {
         }
         body.css('overflow', 'auto');
         sidebarOverlay.add(showMegamenu).add(mobileMenu).removeClass('act');
-    })
+    });
+    $('#mobile_menu_close').click(function() {
+        showMegamenu.removeClass('act');
+        body.css('overflow', 'auto');
+        sidebarOverlay.add(mobileMenu).removeClass('act');
+        sidebarOverlay.css('z-index', '99');
+    });
     $('.search_overlay').click(function() {
         mobilesearch.removeClass('act');
         mobileBtnSearch.removeClass('act');
-    })
+    });
 };
 novtheme.Copy = function () {
     $('.copy-btn').click(function() {

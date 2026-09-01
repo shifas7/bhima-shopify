@@ -1,20 +1,67 @@
 <div id="mobile_menu">
-  {% if settings.mobile_search %}
-    {% render 'nov-formsearch-inline' %}
-  {% endif %}
+  <div class="mobile_menu-header d-flex align-items-center justify-content-between">
+    <div class="mobile_menu-logo">
+      <a href="{{ routes.root_url }}">
+        <img
+          src="{{ 'Logo.png' | file_img_url: '200x' }}"
+          alt="Bhima Jewellery"
+          width="140"
+          height="47"
+          style="height: auto; max-width: 140px;"
+          loading="lazy"
+        >
+      </a>
+    </div>
+    <div id="mobile_menu_close" class="mobile_menu-close pointer" aria-label="Close menu">
+      <i class="zmdi zmdi-close"></i>
+    </div>
+  </div>
+
   <div class="canvas-menu">
   </div>
-  <div class="mobile_bottom">
-    {% if settings.hotline != blank %}
-      <div class="mobile_contact">{{ settings.hotline }}</div>
-    {% endif %}
-    {% if settings.email != blank %}
-      <div class="mobile_email">{{ settings.email }}</div>
-    {% endif %}
-    {% if settings.mobile_social %}
-      <div class="color-{{ settings.color_social }}">
-        {% render 'nov-social' %}
-      </div>
-    {% endif %}
+
+  <div class="mobile-drawer-bottom">
+    <div class="mobile-drawer-utilities">
+      <a href="/pages/store-locations" class="mobile-drawer-util-item">
+        <span class="drawer-icon">{% render 'icon-pin' %}</span>
+        <span>Store Locator</span>
+      </a>
+      <a href="tel:+918547771777" class="mobile-drawer-util-item mobile-drawer-call">
+        <span class="drawer-icon">{% render 'icon-phone' %}</span>
+        <div class="mobile-drawer-call-text">
+          <span>Call Us</span>
+          <small>+91 85477 71777</small>
+        </div>
+      </a>
+      <a href="{{ routes.account_url }}" class="mobile-drawer-util-item">
+        <span class="drawer-icon">{% render 'icon-account' %}</span>
+        <span>Account</span>
+      </a>
+      <a href="{{ routes.account_url }}" class="mobile-drawer-util-item">
+        <span class="drawer-icon"><i class="zmdi zmdi-dropbox"></i></span>
+        <span>Orders</span>
+      </a>
+      <a href="/pages/{{ settings.link_page_wishlist | default: 'wishlist' }}" class="mobile-drawer-util-item">
+        <span class="drawer-icon">{% render 'icon-heart' %}</span>
+        <span>Wishlist</span>
+        <span class="WishlistCount drawer-count-badge">0</span>
+      </a>
+      <a href="{{ routes.cart_url }}" class="mobile-drawer-util-item">
+        <span class="drawer-icon">{% render 'icon-cart' %}</span>
+        <span>Cart</span>
+        <span class="CartCount drawer-count-badge">{{ cart.item_count }}</span>
+      </a>
+      {% if customer %}
+        <a href="{{ routes.account_logout_url }}" class="mobile-drawer-util-item">
+          <span class="drawer-icon"><i class="zmdi zmdi-power"></i></span>
+          <span>Logout</span>
+        </a>
+      {% else %}
+        <a href="{{ routes.account_login_url }}" class="mobile-drawer-util-item">
+          <span class="drawer-icon"><i class="zmdi zmdi-sign-in"></i></span>
+          <span>Login / Register</span>
+        </a>
+      {% endif %}
+    </div>
   </div>
 </div>

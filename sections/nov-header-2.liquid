@@ -1,4 +1,5 @@
 {{ 'css-header2.css' | asset_url | stylesheet_tag }}
+{{ 'bhima-header-footer.css' | asset_url | stylesheet_tag }}
 {% assign sst = section.settings %}
 {% style -%}
   @media(min-width: 768px) {
@@ -24,6 +25,667 @@
     color: {{ sst.badge_color }};
     background: {{ sst.badge_bg }};
     border: none;
+  }
+
+  /* Approved desktop main-header alignment. This intentionally excludes utility, nav and mobile header. */
+  @media (min-width: 768px) {
+    .site-header .header-content {
+      min-height: 98px;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      background: #FFFDF9;
+      border-bottom: 1px solid #E9E1D6;
+    }
+
+    .site-header .header-content > .container-fluid,
+    .site-header .header-content > .container {
+      box-sizing: border-box;
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding-right: clamp(24px, 3vw, 46px);
+      padding-left: clamp(24px, 3vw, 46px);
+    }
+
+    .site-header .bhima-header-main {
+      display: grid;
+      grid-template-columns: minmax(230px, 245px) minmax(320px, 1fr) auto;
+      align-items: center;
+      column-gap: clamp(36px, 3.8vw, 65px);
+      min-height: 98px;
+    }
+
+    .site-header .bhima-header-brand,
+    .site-header .bhima-header-search-wrap,
+    .site-header .bhima-header-actions {
+      min-width: 0;
+    }
+
+    .site-header .bhima-header-brand {
+      display: flex;
+      align-items: center;
+    }
+
+    .site-header .bhima-header-brand .site-header__logo {
+      display: flex;
+      align-items: center;
+      width: 235px !important;
+      max-width: 235px !important;
+    }
+
+    .site-header .bhima-header-brand .site-header__logo img {
+      display: block;
+      width: 100% !important;
+      max-height: 68px;
+      object-fit: contain;
+    }
+
+    .site-header .bhima-header-search-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .site-header .bhima-header-search,
+    .site-header .bhima-header-search .search-header-inline {
+      width: 100%;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    .site-header .bhima-header-search .search-header__content {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 50px;
+      height: 50px;
+      border: 1px solid #E9E1D6;
+      border-radius: 25px;
+      background: #FFFDF9;
+      box-shadow: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .site-header .bhima-header-search .search-header__content:focus-within {
+      border-color: #C58A2A;
+      box-shadow: 0 0 0 3px rgba(183, 122, 24, 0.08);
+    }
+
+    .site-header .bhima-header-search .search-header__content > .icon {
+      display: none !important;
+    }
+
+    .site-header .bhima-header-search .search-header__input {
+      width: 100%;
+      height: 50px !important;
+      padding: 0 18px 0 50px !important;
+      border: 0 !important;
+      background: transparent !important;
+      color: #29231D;
+      font-size: 13.5px;
+      font-weight: 400;
+    }
+
+    .site-header .bhima-header-search .search-header__input::placeholder {
+      color: #71695F;
+      font-size: 13.5px;
+      font-weight: 400;
+      opacity: 1;
+    }
+
+    .site-header .bhima-header-search .search-header__submit {
+      position: absolute !important;
+      z-index: 1;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      margin: 0 !important;
+      transform: none !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px !important;
+      height: 50px !important;
+      padding: 0 !important;
+      border: 0;
+      background: transparent !important;
+      color: #29231D;
+    }
+
+    .site-header .bhima-header-search .search-header__submit-icon,
+    .site-header .bhima-header-search .search-header__submit-icon i {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px !important;
+      line-height: 1;
+    }
+
+    .site-header .bhima-header-search .search-header__submit-text {
+      display: none !important;
+    }
+
+    .site-header .bhima-header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: clamp(24px, 2.2vw, 32px);
+    }
+
+    .site-header .bhima-header-action {
+      min-width: 0;
+      text-align: center;
+    }
+
+    .site-header .bhima-header-action > a,
+    .site-header .bhima-header-action .site-header__cart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      gap: 4px;
+      color: #29231D;
+      font-size: 12.5px;
+      font-weight: 400;
+      line-height: 1.25;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .site-header .bhima-header-action > a:hover,
+    .site-header .bhima-header-action .site-header__cart:hover {
+      color: #B77A18;
+    }
+
+    .site-header .bhima-header-action__icon,
+    .site-header .bhima-header-action .site-header__cart-icon {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 21px;
+      height: 21px;
+      color: currentColor;
+    }
+
+    .site-header .bhima-header-action__icon svg {
+      display: block;
+      width: 21px !important;
+      height: 21px !important;
+    }
+
+    .site-header .bhima-header-action__icon i {
+      font-size: 21px !important;
+      line-height: 1;
+    }
+
+    .site-header .contentsticky_store_locator {
+      display: none;
+    }
+
+    .site-header .bhima-header-action__label {
+      display: block;
+      color: currentColor;
+      font-size: 12.5px;
+      font-weight: 400;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+    .site-header .bhima-header-action .WishlistCount,
+    .site-header .bhima-header-action .site-header__cart-count {
+      top: -5px;
+      right: -6px;
+      width: 15px;
+      min-width: 15px;
+      height: 15px;
+      padding: 0;
+      border-radius: 50%;
+      background: #B77A18;
+      color: #FFFDF9;
+      font-size: 9px;
+      font-weight: 500;
+      line-height: 15px;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1199px) {
+    .site-header .bhima-header-main {
+      grid-template-columns: minmax(180px, 205px) minmax(240px, 1fr) auto;
+      column-gap: 20px;
+      min-height: 92px;
+    }
+
+    .site-header .header-content {
+      min-height: 92px;
+    }
+
+    .site-header .bhima-header-brand .site-header__logo {
+      width: 200px !important;
+      max-width: 200px !important;
+    }
+
+    .site-header .bhima-header-search,
+    .site-header .bhima-header-search .search-header-inline {
+      max-width: 100%;
+    }
+
+    .site-header .bhima-header-actions {
+      gap: 16px;
+    }
+
+    .site-header .bhima-header-action__label {
+      font-size: 12px;
+    }
+  }
+
+  /* Approved desktop primary navigation presentation. Menu data and dropdowns remain unchanged. */
+  @media (min-width: 768px) {
+    .site-header .header-bottom {
+      display: block !important;
+      height: 58px !important;
+      min-height: 58px !important;
+      max-height: 58px !important;
+      background: #FFFDF9 !important;
+      border-top: 1px solid #E9E1D6 !important;
+      border-bottom: 1px solid #E9E1D6 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .site-header .header-bottom > .container-fluid,
+    .site-header .header-bottom > .container {
+      box-sizing: border-box !important;
+      width: 100% !important;
+      max-width: calc(var(--container) + var(--bhima-header-gutter) + var(--bhima-header-gutter)) !important;
+      margin: 0 auto !important;
+      padding-right: clamp(16px, 2.5vw, 40px) !important;
+      padding-left: clamp(16px, 2.5vw, 40px) !important;
+      height: 58px !important;
+    }
+
+    .site-header .contentsticky_menu {
+      width: 100% !important;
+      height: 58px !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+
+    .site-header #AccessibleNav,
+    .site-header #AccessibleNav .site-nav {
+      width: 100% !important;
+      height: 58px !important;
+    }
+
+    .site-header #AccessibleNav .site-nav {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      align-items: stretch !important;
+      justify-content: space-between !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: visible !important;
+      list-style: none !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1 {
+      position: relative !important;
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: stretch !important;
+      justify-content: center !important;
+      flex: 0 1 auto !important;
+      min-width: 0 !important;
+      height: 58px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      background: transparent !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1:not(:last-child)::after {
+      content: '' !important;
+      position: absolute !important;
+      right: 0 !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+      width: 1px !important;
+      height: 26px !important;
+      background-color: #E9E1D6 !important;
+      pointer-events: none !important;
+      z-index: 1 !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1 > .site-nav__link--main {
+      position: relative !important;
+      display: inline-flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 7px !important;
+      height: 58px !important;
+      min-width: 0 !important;
+      padding: 0 clamp(8px, 1.1vw, 20px) !important;
+      background: transparent !important;
+      color: #29231D !important;
+      font-size: 14px !important;
+      font-weight: 450 !important;
+      line-height: 1 !important;
+      letter-spacing: 0 !important;
+      white-space: nowrap !important;
+      text-decoration: none !important;
+      transition: color 0.15s ease !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1 > .site-nav__link--main:hover {
+      color: #B77A18 !important;
+      background: transparent !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1.site-nav--active {
+      box-shadow: inset 0 -2.5px 0 #B77A18 !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1.site-nav--active > .site-nav__link--main {
+      color: #29231D !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1 .site-nav--icon {
+      display: inline-flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 18px !important;
+      height: 18px !important;
+      min-width: 18px !important;
+      max-width: 18px !important;
+      flex: 0 0 18px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      color: #B77A18 !important;
+      line-height: 1 !important;
+      vertical-align: middle !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1 .site-nav--icon svg {
+      display: block !important;
+      width: 18px !important;
+      height: 18px !important;
+      min-width: 18px !important;
+      max-width: 18px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      color: #B77A18 !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1 .site-nav--icon img {
+      display: block !important;
+      width: 18px !important;
+      height: 18px !important;
+      object-fit: contain !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1 .site-nav--title {
+      display: inline-block !important;
+      color: inherit !important;
+      font-size: 14px !important;
+      font-weight: 450 !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1 .site-nav--arrow {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 10px !important;
+      height: 6px !important;
+      min-width: 10px !important;
+      max-width: 10px !important;
+      flex: 0 0 10px !important;
+      margin: 0 0 0 5px !important;
+      padding: 0 !important;
+      color: #B77A18 !important;
+      line-height: 1 !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1 .site-nav--arrow svg {
+      display: block !important;
+      width: 10px !important;
+      height: 6px !important;
+      color: #B77A18 !important;
+      margin: 0 !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1 > .site-nav__link--main::before,
+    .site-header #AccessibleNav .site-nav > .parent--lv1 > .site-nav__link--main::after {
+      display: none !important;
+      content: none !important;
+    }
+
+    /* Mega Menu Full-Width Container & Grid */
+    .site-header .header-bottom {
+      position: relative !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1.site-nav--has-megamenu {
+      position: static !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1:not(.site-nav--has-megamenu) {
+      position: relative !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1 .nav-dropdown--lv1 {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      position: absolute !important;
+      top: 100% !important;
+      z-index: 999 !important;
+      background: #FFFDF9 !important;
+      background-color: #FFFDF9 !important;
+      border-top: 1px solid #E9E1D6 !important;
+      border-bottom: 1px solid #E9E1D6 !important;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06) !important;
+      transition: opacity 0.18s ease, visibility 0.18s ease !important;
+      pointer-events: none !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1:hover > .nav-dropdown--lv1,
+    .site-header #AccessibleNav .site-nav > .nav--lv1:focus-within > .nav-dropdown--lv1,
+    .site-header #AccessibleNav .site-nav > .nav--lv1.active > .nav-dropdown--lv1 {
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1 .bhima-megamenu-panel {
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      background: #FFFDF9 !important;
+      background-color: #FFFDF9 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    .bhima-megamenu-container {
+      box-sizing: border-box !important;
+      width: 100% !important;
+      max-width: calc(var(--container) + var(--bhima-header-gutter) + var(--bhima-header-gutter)) !important;
+      margin: 0 auto !important;
+      padding: 30px clamp(16px, 2.5vw, 40px) 34px !important;
+    }
+
+    .bhima-megamenu-grid {
+      display: grid !important;
+      grid-auto-flow: column !important;
+      grid-auto-columns: minmax(0, 1fr) !important;
+      align-items: start !important;
+      gap: 0 !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    .bhima-megamenu-col {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      box-sizing: border-box !important;
+      padding: 0 clamp(10px, 1.4vw, 24px) !important;
+      position: relative !important;
+      min-width: 0 !important;
+    }
+
+    .bhima-megamenu-col:first-child {
+      padding-left: 0 !important;
+    }
+
+    .bhima-megamenu-col:not(:last-child)::after {
+      content: "" !important;
+      position: absolute !important;
+      right: 0 !important;
+      top: 0 !important;
+      bottom: 0 !important;
+      width: 1px !important;
+      background-color: #E9E1D6 !important;
+      pointer-events: none !important;
+    }
+
+    .bhima-megamenu-heading {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      margin-bottom: 14px !important;
+      width: 100% !important;
+    }
+
+    .bhima-megamenu-heading-link {
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      color: #29231D !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.5px !important;
+      line-height: 1.2 !important;
+      text-decoration: none !important;
+      white-space: nowrap !important;
+      transition: color 0.15s ease !important;
+    }
+
+    .bhima-megamenu-heading-link:hover {
+      color: #B77A18 !important;
+    }
+
+    .bhima-megamenu-accent {
+      display: block !important;
+      width: 24px !important;
+      height: 1.5px !important;
+      background-color: #B77A18 !important;
+      margin-top: 6px !important;
+      border-radius: 1px !important;
+    }
+
+    .bhima-megamenu-links {
+      list-style: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+    }
+
+    .bhima-megamenu-link-item {
+      list-style: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .bhima-megamenu-link {
+      font-size: 13.5px !important;
+      font-weight: 400 !important;
+      color: #29231D !important;
+      line-height: 1.4 !important;
+      text-decoration: none !important;
+      display: inline-block !important;
+      white-space: nowrap !important;
+      transition: color 0.15s ease !important;
+    }
+
+    .bhima-megamenu-link:hover {
+      color: #B77A18 !important;
+    }
+
+    .site-header #AccessibleNav .site-nav > .nav--lv1 .bhima-dropdown-simple {
+      left: 0 !important;
+      min-width: 200px !important;
+      padding: 16px 20px !important;
+      border-radius: 0 0 4px 4px !important;
+    }
+
+    .bhima-dropdown-simple__list {
+      list-style: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+    }
+
+    .bhima-dropdown-simple__item {
+      list-style: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .bhima-dropdown-simple__link {
+      font-size: 13.5px !important;
+      font-weight: 400 !important;
+      color: #29231D !important;
+      text-decoration: none !important;
+      display: inline-block !important;
+      white-space: nowrap !important;
+      transition: color 0.15s ease !important;
+    }
+
+    .bhima-dropdown-simple__link:hover {
+      color: #B77A18 !important;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1366px) {
+    .site-header #AccessibleNav .site-nav > .nav--lv1 > .site-nav__link--main {
+      gap: 6px !important;
+      padding-right: clamp(4px, 0.8vw, 12px) !important;
+      padding-left: clamp(4px, 0.8vw, 12px) !important;
+      font-size: 13.5px !important;
+    }
+    .site-header #AccessibleNav .site-nav > .nav--lv1 .site-nav--icon {
+      width: 17px !important;
+      height: 17px !important;
+      min-width: 17px !important;
+      max-width: 17px !important;
+      flex: 0 0 17px !important;
+    }
+    .site-header #AccessibleNav .site-nav > .nav--lv1 .site-nav--icon svg {
+      width: 17px !important;
+      height: 17px !important;
+    }
+    .site-header #AccessibleNav .site-nav > .nav--lv1 .site-nav--title {
+      font-size: 13.5px !important;
+    }
   }
 {%- endstyle %}
 <header class="site-header{% if sst.stickymenu %} sticky-header{% endif %}">
@@ -66,65 +728,61 @@
   {% endif %}
   <div class="header-content position-relative header-search__parent d-none d-md-block pt-35 pb-35 pt-md-20 pb-md-20 color-{{ sst.color_header }}">
     <div class="{{ sst.container }}">
-      <div class="row align-items-center">
-        <div class="col-md-4 d-flex align-items-center">
-          <div class="site-nav--btn d-flex d-xl-none align-items-center">
-            <span class="icon"><span></span></span>
-          </div>
-          <div class="contentsticky_search d-flex">
-            <div class="search__btn-overlay nov_btn_act header-icon color-hover" data-toggle="search_canvas" data-overlay="true">
-              {% render 'icon-search' %}
-              <span class="header-label">{{ 'general.search.submit' | t }}</span>
-            </div>
+      <div class="bhima-header-main">
+        <div class="contentsticky_logo bhima-header-brand">
+          {% if sst.logo %}
+            <a href="{{ routes.root_url }}" class="site-header__logo d-flex position-relative">
+              {%- assign image_size_2x = sst.w_logo | times: 2 | at_most: 5760 -%}
+              <img srcset="{{ sst.logo | image_url: width: sst.w_logo }} 1x, {{ sst.logo | image_url: width: image_size_2x }} 2x"
+                src="{{ sst.logo | image_url: width: sst.w_logo | append: 'x' }}"
+                class="w-100"
+                alt="{{ sst.logo.alt | default: shop.name | escape }}"
+                width="{{ sst.logo.width }}"
+                height="{{ sst.logo.height }}"
+                style="height: auto"
+              >
+            </a>
+          {% else %}
+            <div class="h4 site-header__logo d-inline-block mb-0"><a class="site-header__logo-link" href="/" itemprop="url">{{ shop.name }}</a></div>
+          {% endif %}
+        </div>
+
+        <div class="contentsticky_search bhima-header-search-wrap">
+          <div class="bhima-header-search site-header__search">
+            {% render 'nov-formsearch-inline' %}
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="contentsticky_logo d-flex justify-content-center">
-            {% if sst.logo %}
-              <a href="{{ routes.root_url }}" class="site-header__logo d-flex position-relative">
-                {%- assign image_size_2x = sst.w_logo | times: 2 | at_most: 5760 -%}
-                <img srcset="{{ sst.logo | image_url: width: sst.w_logo }} 1x, {{ sst.logo | image_url: width: image_size_2x }} 2x"
-                  src="{{ sst.logo | image_url: width: sst.w_logo | append: 'x' }}"
-                  class="w-100" 
-                  alt="{{ sst.logo.alt | default: shop.name | escape }}"
-                  width="{{ sst.logo.width }}"
-                  height="{{ sst.logo.height }}"
-                  style="height: auto" 
-                >
-              </a>
-            {% else %}
-              <div class="h4 site-header__logo d-inline-block mb-0"><a class="site-header__logo-link" href="/" itemprop="url">{{ shop.name }}</a></div>
-            {% endif %}
+
+        <div class="bhima-header-actions">
+          <div class="contentsticky_store_locator bhima-header-action">
+            <a href="{{ pages['store-locations'].url | default: '/pages/store-locations' }}" title="Store Locator">
+              <span class="bhima-header-action__icon" aria-hidden="true">{% render 'icon-pin' %}</span>
+              <span class="bhima-header-action__label">Store Locator</span>
+            </a>
           </div>
-        </div>
-        <div class="col-md-4 d-flex align-items-center justify-content-end">
-          <div class="header-group-item d-flex align-items-center justify-content-end">
-            <div class="contentsticky_account">
-              <a href="#" class="header-icon nov_btn_act" data-toggle="header_settings" data-overlay="true" title="{{ 'layout.customer.account' | t }}">
-                {% if sst.account_svg %}
-                  {% render 'icon-account' %}
-                {% else %}
-                  <i class="{{ sst.account_icon }} position-relative"></i>
-                {% endif %}
-              </a>
-            </div>
-            {% if settings.wishlist_enable %}
-              <div class="contentsticky_wishlist header--wishlist">
-                <a href="/pages/{{ settings.link_page_wishlist }}" class="position-relative" rel="nofollow" title="{{ 'layout.customer.wishlists' | t }}">
+
+          {% if settings.wishlist_enable %}
+            <div class="contentsticky_wishlist header--wishlist bhima-header-action">
+              <a href="/pages/{{ settings.link_page_wishlist }}" class="position-relative" rel="nofollow" title="{{ 'layout.customer.wishlists' | t }}">
+                <span class="bhima-header-action__icon" aria-hidden="true">
                   {% if sst.wishlist_svg %}
                     {% render 'icon-heart' %}
                   {% else %}
                     <i class="{{ sst.wishlist }} position-relative"></i>
                   {% endif %}
                   <span class="WishlistCount text-center">0</span>
-                </a>
-              </div>
-            {% endif %}
-            <div class="contentsticky_cart">
-              <div id="cart_block">
-                <div class="header-cart d-flex justify-content-center">
-                  <div class="site-header__cart text-center d-flex align-items-center pointer">
-                    <div class="site-header__cart-icon header-icon" title="{{ 'layout.cart.title_cart' | t }}">
+                </span>
+                <span class="bhima-header-action__label">Wishlist</span>
+              </a>
+            </div>
+          {% endif %}
+
+          <div class="contentsticky_cart bhima-header-action">
+            <div id="cart_block">
+              <div class="header-cart d-flex justify-content-center">
+                <div class="site-header__cart text-center pointer">
+                  <div class="site-header__cart-icon header-icon" title="{{ 'layout.cart.title_cart' | t }}">
+                    <span class="bhima-header-action__icon" aria-hidden="true">
                       {% if sst.cart_svg %}
                         {% render 'icon-cart' %}
                       {% else %}
@@ -133,17 +791,31 @@
                       <span class="site-header__cart-count">
                         <span class="CartCount">{{ cart.item_count }}</span>
                       </span>
-                    </div>
+                    </span>
                   </div>
+                  <span class="bhima-header-action__label">{{ 'layout.cart.title_cart' | t }} (<span class="CartCount">{{ cart.item_count }}</span>)</span>
                 </div>
               </div>
             </div>
+          </div>
+
+          <div class="contentsticky_account bhima-header-action">
+            <a href="#" class="header-icon nov_btn_act" data-toggle="header_settings" data-overlay="true" title="{{ 'layout.customer.account' | t }}">
+              <span class="bhima-header-action__icon" aria-hidden="true">
+                {% if sst.account_svg %}
+                  {% render 'icon-account' %}
+                {% else %}
+                  <i class="{{ sst.account_icon }} position-relative"></i>
+                {% endif %}
+              </span>
+              <span class="bhima-header-action__label">Account</span>
+            </a>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="header-bottom color-{{ sst.color_header_bottom }} text-center d-none d-xl-block bd-t">
+  <div class="header-bottom color-{{ sst.color_header_bottom }} text-center d-none d-md-block bd-t">
     <div class="{{ sst.container }}">
       <div class="contentsticky_menu">
         <nav id="AccessibleNav">{% render 'site-nav' color: sst.color_menu, mainmenu: sst.main_linklist %}</nav>
@@ -152,12 +824,16 @@
   </div>
   <div class="header-mobile d-md-none color-{{ sst.color_header_sm }}{% if sst.stickymenu_sm %} sticky-header-mobile{% endif %}">
     <div class="header-mobile-content">
-      <div class="row align-items-center h-100">
-        <div class="col-3 d-flex align-items-center">
-          <div id="show-megamenu" class="item-mobile-top">
-            <div class="icon-directional"></div>
+      <div class="bhima-mobile-header-bar">
+        <div class="bhima-mobile-header__left d-flex align-items-center">
+          <div id="show-megamenu" class="item-mobile-top pointer" aria-label="Toggle navigation menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="bhima-hamburger-icon" aria-hidden="true">
+              <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
           </div>
-          <div class="mobile-btn_search item-mobile-top">
+          <div class="mobile-btn_search item-mobile-top pointer" aria-label="Toggle search">
             {% render 'icon-search' %}
             <i class="zmdi zmdi-close"></i>
           </div>
@@ -165,30 +841,45 @@
             {% render 'nov-formsearch-inline' %}
           </div>
         </div>
-        <div class="mobile_logo col-6 text-center">
+
+        <div class="bhima-mobile-header__center mobile_logo text-center">
           {% if sst.logo_mobile %}
-          <a href="/" class="site-header__logo-image img-fluid d-inline-block">
-            {%- assign image_size = sst.wm_logo | append: 'x' -%}
-            <img srcset="{{ sst.logo_mobile | image_url: width: image_size }} 1x, {{ sst.logo_mobile | image_url: width: image_size, scale: 2 }} 2x"
-              src="{{ sst.logo_mobile | image_url: width: sst.w_logo | append: 'x' }}"
-              loading="lazy"
-              width="{{ sst.logo_mobile.width }}"
-              height="{{ sst.logo_mobile.height }}"
-              alt="{{ sst.logo_mobile.alt | default: shop.name | escape }}"
-              style="height: auto; max-width: {{ sst.wm_logo }}px;">
-          </a>
+            <a href="{{ routes.root_url }}" class="site-header__logo-image d-inline-block">
+              <img
+                src="{{ sst.logo_mobile | image_url: width: 360 }}"
+                loading="lazy"
+                width="{{ sst.logo_mobile.width }}"
+                height="{{ sst.logo_mobile.height }}"
+                alt="{{ sst.logo_mobile.alt | default: shop.name | escape }}"
+                class="bhima-mobile-logo-img"
+              >
+            </a>
           {% else %}
-          <a class="site-header__logo-link" href="/" itemprop="url">{{ shop.name }}</a>
+            <a class="site-header__logo-link" href="{{ routes.root_url }}" itemprop="url">{{ shop.name }}</a>
           {% endif %}
         </div>
-        <div class="mobile_cart col-3 d-flex justify-content-end align-items-center">
-          <div class="header-cart">
-            <div class="site-header__cart position-relative">
-              <span class="cart-count position-absolute" title="{{ 'layout.cart.title_cart' | t }}">
-                <span class="CartCount">{{ cart.item_count }}</span>
-              </span>
-              <div class="site-header__cart-icon">
-                <i class="rbb-icon-shopping-{{ sst.cart_type }}-{{ sst.cart }} position-relative"></i>
+
+        <div class="bhima-mobile-header__right mobile-actions d-flex align-items-center justify-content-end">
+          <div class="mobile_wishlist item-mobile-top">
+            <a href="/pages/{{ settings.link_page_wishlist | default: 'wishlist' }}" class="position-relative d-flex align-items-center justify-content-center" rel="nofollow" title="{{ 'layout.customer.wishlists' | t }}">
+              <span class="mobile-action-icon">{% render 'icon-heart' %}</span>
+              <span class="WishlistCount cart-count position-absolute text-center">0</span>
+            </a>
+          </div>
+
+          <div class="mobile_cart item-mobile-top">
+            <div class="header-cart">
+              <div class="site-header__cart position-relative d-flex align-items-center justify-content-center pointer">
+                <span class="cart-count position-absolute" title="{{ 'layout.cart.title_cart' | t }}">
+                  <span class="CartCount">{{ cart.item_count }}</span>
+                </span>
+                <div class="site-header__cart-icon mobile-action-icon">
+                  {% if sst.cart_svg %}
+                    {% render 'icon-cart' %}
+                  {% else %}
+                    <i class="rbb-icon-shopping-{{ sst.cart_type }}-{{ sst.cart }} position-relative"></i>
+                  {% endif %}
+                </div>
               </div>
             </div>
           </div>
