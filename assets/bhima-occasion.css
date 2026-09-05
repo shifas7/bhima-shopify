@@ -1,0 +1,306 @@
+/* BHIMA — Shop by Occasion. Isolated to this section so the homepage's
+   approved header, footer and existing sections remain unaffected. */
+
+.bhima-occasion {
+  --occasion-measure: var(--bhima-home-container, 1360px);
+  --occasion-gutter: var(--bhima-home-gutter, clamp(16px, 3.2vw, 40px));
+  --occasion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  background: var(--bhima-color-page, #FFFDF9);
+  padding-block: var(--occasion-pt, 56px) var(--occasion-pb, 56px);
+  overflow: hidden;
+}
+
+.bhima-occasion *,
+.bhima-occasion *::before,
+.bhima-occasion *::after {
+  box-sizing: border-box;
+}
+
+.bhima-occasion__inner {
+  width: 100%;
+  max-width: calc(var(--occasion-measure) + (var(--occasion-gutter) * 2));
+  margin-inline: auto;
+  padding-inline: var(--occasion-gutter);
+}
+
+/* `.title_section` is intentional: it is the homepage's shared heading hook
+   used by Shop by Category and New Arrivals. The divider below repeats the
+   same line-and-jewel motif already used by New Arrivals. */
+.bhima-occasion .bhima-occasion__heading.title_section {
+  margin: 0 0 28px;
+}
+
+body.template-index .main-content .bhima-occasion .bhima-occasion__heading .title,
+.bhima-occasion .bhima-occasion__heading .title {
+  width: auto;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family-primary, inherit);
+  font-size: var(--bhima-font-section, 26px);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bhima-color-text, #29231D);
+  text-align: center;
+}
+
+body.template-index .main-content .bhima-occasion .bhima-occasion__heading .title::after,
+.bhima-occasion .bhima-occasion__heading .title::after {
+  content: '' !important;
+  display: block !important;
+  width: 112px !important;
+  height: 8px !important;
+  margin: 12px auto 0 !important;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='112' height='8' viewBox='0 0 112 8' fill='none'%3E%3Cline x1='0' y1='4' x2='46' y2='4' stroke='%23B77A18' stroke-width='1'/%3E%3Ccircle cx='51' cy='4' r='1.5' fill='%23B77A18'/%3E%3Ccircle cx='56' cy='4' r='2.2' fill='%23B77A18'/%3E%3Ccircle cx='61' cy='4' r='1.5' fill='%23B77A18'/%3E%3Cline x1='66' y1='4' x2='112' y2='4' stroke='%23B77A18' stroke-width='1'/%3E%3C/svg%3E") center center / contain no-repeat !important;
+}
+
+.bhima-occasion__track {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--occasion-gap, 14px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bhima-occasion__item {
+  display: flex;
+  min-width: 0;
+}
+
+.bhima-occasion__card {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--bhima-color-border-light, #E6D8C7);
+  border-radius: var(--occasion-radius, 6px);
+  background: var(--bhima-color-soft, #F8F1E7);
+  color: var(--occasion-label-color, #FFFDF9);
+  text-decoration: none;
+  transition: border-color 0.35s var(--occasion-ease), box-shadow 0.35s var(--occasion-ease);
+}
+
+.bhima-occasion__card:hover,
+.bhima-occasion__card:focus-visible {
+  border-color: var(--bhima-color-gold, #B77A18);
+  box-shadow: 0 8px 22px rgba(41, 35, 29, 0.1);
+}
+
+.bhima-occasion__card:focus-visible {
+  outline: 2px solid var(--bhima-color-gold, #B77A18);
+  outline-offset: 3px;
+}
+
+.bhima-occasion__image,
+.bhima-occasion__image--empty {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--occasion-focal, center center);
+  transition: transform 0.6s var(--occasion-ease);
+}
+
+.bhima-occasion__image--empty {
+  background: linear-gradient(135deg, #F3EADC 0%, #FBF6EE 52%, #EFE3D0 100%);
+}
+
+.bhima-occasion__card:hover .bhima-occasion__image,
+.bhima-occasion__card:focus-visible .bhima-occasion__image {
+  transform: scale(1.025);
+}
+
+.bhima-occasion__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(41, 35, 29, calc(0.68 * var(--occasion-overlay-strength, 0.62))) 0%,
+    rgba(41, 35, 29, calc(0.28 * var(--occasion-overlay-strength, 0.62))) 26%,
+    rgba(41, 35, 29, 0) 58%
+  );
+}
+
+.bhima-occasion__label {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  left: 14px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 24px;
+  color: var(--occasion-label-color, #FFFDF9);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 8px rgba(41, 35, 29, 0.3);
+  transition: color 0.3s ease, transform 0.3s var(--occasion-ease);
+}
+
+.bhima-occasion__card:hover .bhima-occasion__label,
+.bhima-occasion__card:focus-visible .bhima-occasion__label {
+  color: #F6E4B6;
+  transform: translateY(-2px);
+}
+
+.bhima-occasion__icon,
+.bhima-occasion__icon-image {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+}
+
+.bhima-occasion__icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.35;
+}
+
+.bhima-occasion__icon-image {
+  display: block;
+  object-fit: contain;
+}
+
+.bhima-occasion__label-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.bhima-occasion__card--static {
+  cursor: default;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .bhima-occasion__track {
+    grid-template-columns: repeat(5, minmax(calc((100% - (var(--occasion-gap, 14px) * 3)) / 4), 1fr));
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .bhima-occasion__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bhima-occasion__item {
+    scroll-snap-align: start;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .bhima-occasion__track {
+    grid-template-columns: repeat(5, 38%);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .bhima-occasion__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bhima-occasion__item {
+    scroll-snap-align: start;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  body.template-index .main-content .bhima-occasion .bhima-occasion__heading .title,
+  .bhima-occasion .bhima-occasion__heading .title {
+    font-size: 22.1px !important;
+  }
+
+  body.template-index .main-content .bhima-occasion .bhima-occasion__heading .title::after,
+  .bhima-occasion .bhima-occasion__heading .title::after {
+    width: 96px !important;
+    margin-top: 10px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .bhima-occasion {
+    padding-block: 12px;
+  }
+
+  .bhima-occasion .bhima-occasion__heading.title_section {
+    margin-bottom: 16px;
+  }
+
+  body.template-index .main-content .bhima-occasion .bhima-occasion__heading .title,
+  .bhima-occasion .bhima-occasion__heading .title {
+    font-size: 19.5px !important;
+    letter-spacing: 0.04em;
+  }
+
+  body.template-index .main-content .bhima-occasion .bhima-occasion__heading .title::after,
+  .bhima-occasion .bhima-occasion__heading .title::after {
+    width: 86px !important;
+    margin-top: 9px !important;
+  }
+
+  .bhima-occasion__track {
+    grid-template-columns: repeat(5, 74vw);
+    gap: var(--occasion-gap, 14px);
+    margin-inline: calc(var(--occasion-gutter) * -1);
+    padding-inline: var(--occasion-gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: var(--occasion-gutter);
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .bhima-occasion__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bhima-occasion__item {
+    scroll-snap-align: start;
+  }
+
+  .bhima-occasion__card {
+    height: clamp(220px, 58vw, 280px);
+    aspect-ratio: auto;
+  }
+
+  .bhima-occasion__label {
+    right: 13px;
+    bottom: 13px;
+    left: 13px;
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bhima-occasion__card,
+  .bhima-occasion__image,
+  .bhima-occasion__label {
+    transition: none;
+  }
+
+  .bhima-occasion__card:hover .bhima-occasion__image,
+  .bhima-occasion__card:focus-visible .bhima-occasion__image,
+  .bhima-occasion__card:hover .bhima-occasion__label,
+  .bhima-occasion__card:focus-visible .bhima-occasion__label {
+    transform: none;
+  }
+}

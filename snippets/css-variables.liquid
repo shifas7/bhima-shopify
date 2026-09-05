@@ -150,6 +150,46 @@
         --bhima-font-size-footer-heading: 14.5px;
         --bhima-font-size-footer-link: 13.5px;
 
+        /* Bhima Jewellery — shared brand palette.
+           The header/footer tokens above are locked; these complete the
+           approved system so the page body speaks the same language. */
+        --bhima-color-page: #FFFDF9;
+        --bhima-color-soft: #F8F1E7;
+        --bhima-color-footer: #F6E8D2;
+        --bhima-color-footer-border: #E4CFAF;
+        --bhima-color-border-light: #E6D8C7;
+
+        /* Homepage foundation — content measure.
+           Deliberately narrower than --container (which the locked header
+           still uses) so homepage cards never stretch on 1680/1920 screens. */
+        --bhima-home-container: 1360px;
+        --bhima-home-gutter: clamp(16px, 3.2vw, 40px);
+
+        /* Homepage foundation — vertical rhythm */
+        --bhima-space-band: clamp(32px, 4vw, 48px);
+        --bhima-space-heading: clamp(18px, 2.2vw, 26px);
+        --bhima-space-card: clamp(16px, 1.6vw, 22px);
+        --bhima-space-grid: clamp(16px, 1.8vw, 24px);
+
+        /* Homepage foundation — type scale (px, because html font-size steps
+           down at small breakpoints and rem would compound the reduction) */
+        --bhima-font-display: clamp(26px, 2.6vw, 38px);
+        --bhima-font-section: clamp(20px, 1.8vw, 26px);
+        --bhima-font-subsection: clamp(15px, 1.2vw, 17px);
+        --bhima-font-body: clamp(13.5px, 1vw, 15px);
+        --bhima-font-product-title: 14px;
+        --bhima-font-product-meta: 12px;
+        --bhima-font-price: 15px;
+        --bhima-font-button: 12.5px;
+        --bhima-letterspacing-eyebrow: 0.14em;
+        --bhima-letterspacing-heading: 0.02em;
+
+        /* Homepage foundation — surfaces */
+        --bhima-radius-card: 8px;
+        --bhima-radius-media: 6px;
+        --bhima-shadow-card: 0 1px 2px rgba(41, 35, 29, 0.035);
+        --bhima-shadow-card-hover: 0 6px 20px rgba(41, 35, 29, 0.07);
+
         --heading-font-size-h1: {{ settings.heading_font_size_h1 | divided_by: 10.0 | append: 'rem' }};
         --heading-font-size-h2: {{ settings.heading_font_size_h2 | divided_by: 10.0 | append: 'rem' }};
         --heading-font-size-h3: {{ settings.heading_font_size_h3 | divided_by: 10.0 | append: 'rem' }};

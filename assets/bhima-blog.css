@@ -1,0 +1,209 @@
+/* BHIMA — Blog / Latest Articles. Isolated to this section so the
+   homepage's approved header, footer and existing sections remain
+   unaffected. A compact, premium editorial card replaces the stock
+   theme's oversized horizontal blog card. The heading above this card
+   grid is rendered by the shared `heading-section` snippet, so it
+   automatically matches the same gold hairline divider and typography
+   used by every other homepage section — no separate CSS needed here. */
+
+.bhima-blog-card {
+  --blog-ivory: #FFFDF9;
+  --blog-ink: #29231D;
+  --blog-muted: #71695F;
+  --blog-gold: #B77A18;
+  --blog-gold-light: #C58A2A;
+  --blog-border: #E6D8C7;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--blog-border);
+  background: #FFFFFF;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bhima-blog-card:hover,
+.bhima-blog-card:focus-visible {
+  border-color: var(--blog-gold);
+  box-shadow: 0 6px 18px rgba(41, 35, 29, 0.05);
+}
+
+.bhima-blog-card__media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #F8F1E7;
+}
+
+.bhima-blog-card__image,
+.bhima-blog-card__media .placeholder-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transform: scale(1);
+  transition: transform 0.5s ease;
+}
+
+.bhima-blog-card:hover .bhima-blog-card__image,
+.bhima-blog-card:focus-visible .bhima-blog-card__image {
+  transform: scale(1.03);
+}
+
+.bhima-blog-card__body {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 18px 20px 18px;
+}
+
+/* A very small, quiet nod to the brand's own jewel motif — not a
+   category label, just a mark of craft above the article metadata. */
+.bhima-blog-card__accent {
+  display: block;
+  width: 6px;
+  height: 6px;
+  margin-bottom: 8px;
+  border: 1px solid var(--blog-gold);
+  transform: rotate(45deg);
+}
+
+.bhima-blog-card__type {
+  margin-bottom: 6px;
+  color: var(--blog-gold);
+  font-family: var(--font-family-default, Arial, sans-serif);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.bhima-blog-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.bhima-blog-card__date,
+.bhima-blog-card__author {
+  color: var(--blog-muted);
+  font-family: var(--font-family-default, Arial, sans-serif);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bhima-blog-card__title {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0 0 8px;
+  color: var(--blog-ink);
+  font-family: var(--font-family-primary, Georgia, serif);
+  font-size: clamp(17px, 1.5vw, 20px);
+  font-weight: 600;
+  line-height: 1.35;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.bhima-blog-card__excerpt {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0 0 12px;
+  color: var(--blog-muted);
+  font-family: var(--font-family-default, Arial, sans-serif);
+  font-size: 13.5px;
+  line-height: 1.55;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.bhima-blog-card__cta {
+  display: inline-flex;
+  align-items: center;
+  margin-top: auto;
+  color: var(--blog-gold);
+  font-family: var(--font-family-default, Arial, sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.bhima-blog-card__cta-arrows {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.bhima-blog-card__cta svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.6;
+  transition: transform 0.3s ease;
+}
+
+.bhima-blog-card__cta svg.bhima-blog-card__cta-arrow--ghost {
+  width: 0;
+  margin-left: 0;
+  opacity: 0;
+  transition: width 0.3s ease, opacity 0.3s ease, margin-left 0.3s ease;
+}
+
+.bhima-blog-card:hover .bhima-blog-card__cta,
+.bhima-blog-card:focus-visible .bhima-blog-card__cta {
+  color: var(--blog-gold-light);
+}
+
+.bhima-blog-card:hover .bhima-blog-card__cta svg,
+.bhima-blog-card:focus-visible .bhima-blog-card__cta svg {
+  transform: translateX(2px);
+}
+
+.bhima-blog-card:hover .bhima-blog-card__cta svg.bhima-blog-card__cta-arrow--ghost,
+.bhima-blog-card:focus-visible .bhima-blog-card__cta svg.bhima-blog-card__cta-arrow--ghost {
+  width: 15px;
+  margin-left: 2px;
+  opacity: 1;
+}
+
+/* Equal-height cards within a Swiper row */
+.bhima-blog__carousel .swiper-slide {
+  height: auto;
+  display: flex;
+}
+
+@media (max-width: 767px) {
+  .bhima-blog-card__body {
+    padding: 14px 16px 16px;
+  }
+
+  .bhima-blog-card__title {
+    font-size: 16px;
+  }
+
+  .bhima-blog-card__excerpt {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bhima-blog-card,
+  .bhima-blog-card__image,
+  .bhima-blog-card__cta svg,
+  .bhima-blog-card__cta-arrow--ghost {
+    transition: none;
+  }
+}

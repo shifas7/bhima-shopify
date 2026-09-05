@@ -1,0 +1,464 @@
+/* ==========================================================================
+   BHIMA — Editorial Collection / Featured Edits
+
+   Three wide editorial cards. Each card is ONE full-bleed image with the
+   campaign text laid over its left side. The image is the card background at
+   100% x 100%; the text is real HTML sitting on top of it. There is no text
+   panel and no image/text split.
+
+   Stack inside a card:
+     .bhima-edit__img      absolute, inset 0, object-fit: cover
+     .bhima-edit__scrim    a warm fade for contrast, gone before mid-card
+     .bhima-edit__content  flex-centred over the left, capped by --edits-textw
+
+   Layout is one CSS scroll-snap track: swipeable carousel below 992px, plain
+   three-up grid above. No JavaScript; only the track scrolls, never the page.
+
+   Palette and type come from the Phase 1 tokens in
+   snippets/css-variables.liquid (--bhima-*), each with a literal fallback so
+   the section does not depend on bhima-home.css and works on any template.
+
+   Note on specificity: bhima-home.css styles bare elements at
+   `body.template-index .main-content p` / `... h1-h6` (two classes plus two
+   type selectors). Card text therefore carries three classes, or it would
+   render one size on the homepage and another everywhere else.
+   ========================================================================== */
+
+.bhima-edits {
+  --edits-measure: var(--bhima-home-container, 1360px);
+  --edits-gutter: var(--bhima-home-gutter, clamp(16px, 3.2vw, 40px));
+  --edits-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  background-color: var(--bhima-color-page, #FFFDF9);
+  padding-top: var(--edits-pt, 28px);
+  padding-bottom: var(--edits-pb, 28px);
+}
+
+.bhima-edits *,
+.bhima-edits *::before,
+.bhima-edits *::after {
+  box-sizing: border-box;
+}
+
+.bhima-edits__inner {
+  width: 100%;
+  max-width: calc(var(--edits-measure) + (var(--edits-gutter) * 2));
+  margin-inline: auto;
+  padding-inline: var(--edits-gutter);
+}
+
+/* --------------------------------------------------------------- heading
+   Optional and blank by default — the cards introduce the content. */
+.bhima-edits__head {
+  margin: 0 0 var(--bhima-space-heading, 24px);
+}
+
+.bhima-edits__head--center {
+  text-align: center;
+}
+
+.bhima-edits .bhima-edits__head .bhima-edits__heading {
+  margin: 0;
+  font-family: var(--font-family-primary, inherit);
+  font-size: var(--bhima-font-section, clamp(20px, 1.8vw, 26px));
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--bhima-color-text, #29231D);
+}
+
+.bhima-edits .bhima-edits__head .bhima-edits__subheading {
+  margin: 8px 0 0;
+  font-size: var(--bhima-font-body, 14.5px);
+  line-height: 1.6;
+  color: var(--bhima-color-text-secondary, #71695F);
+  max-width: 64ch;
+}
+
+.bhima-edits__head--center .bhima-edits__subheading {
+  margin-inline: auto;
+}
+
+/* --------------------------------------------------------------- the track */
+.bhima-edits__track {
+  display: grid;
+  grid-auto-flow: column;
+  /* --edits-peek is unitless so the card can be sized against the VIEWPORT,
+     not against the track (which is already inset by the page gutter). 86
+     therefore means 86vw, which is what the brief asks for. */
+  grid-auto-columns: calc(var(--edits-peek, 86) * 1vw);
+  gap: var(--edits-gap, 20px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  align-items: stretch;
+
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.bhima-edits__track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Let the row bleed to both screen edges while the first card still lines up
+   with the page gutter, so a swiped card can reach the very edge. The track is
+   its own scroll container, so this adds no page-level overflow. */
+@media (max-width: 991px) {
+  .bhima-edits__track {
+    margin-inline: calc(var(--edits-gutter) * -1);
+    padding-inline: var(--edits-gutter);
+    scroll-padding-inline: var(--edits-gutter);
+  }
+}
+
+/* Two cards plus a peek on larger phones and small tablets. */
+@media (min-width: 600px) and (max-width: 991px) {
+  .bhima-edits__track {
+    grid-auto-columns: 62%;
+  }
+}
+
+/* Three up, no scrolling. */
+@media (min-width: 992px) {
+  .bhima-edits__track {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    grid-template-columns: repeat(var(--edits-columns, 3), minmax(0, 1fr));
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+}
+
+.bhima-edits__item {
+  display: flex;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+/* --------------------------------------------------------------- the card
+   A fixed-height box: the image fills it, the text sits on top. */
+.bhima-edit {
+  position: relative;
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: var(--edits-h-mobile, 210px);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  background-color: var(--bhima-color-soft, #F8F1E7);
+  border: 1px solid var(--bhima-color-border-light, #E6D8C7);
+  border-radius: var(--edits-radius, 6px);
+  transition: border-color 0.3s var(--edits-ease), box-shadow 0.3s var(--edits-ease);
+}
+
+@media (min-width: 768px) {
+  .bhima-edit {
+    height: var(--edits-h, 200px);
+  }
+}
+
+.bhima-edit:hover,
+.bhima-edit:focus-visible {
+  border-color: var(--bhima-color-gold, #B77A18);
+  box-shadow: var(--bhima-shadow-card-hover, 0 6px 20px rgba(41, 35, 29, 0.07));
+}
+
+/* Visible keyboard focus on the whole card, since the card is the link. */
+.bhima-edit:focus-visible {
+  outline: 2px solid var(--bhima-color-gold, #B77A18);
+  outline-offset: 3px;
+}
+
+/* ------------------------------------------------------- 1. the image
+   The card background. Nothing is layered under it and nothing splits it. */
+.bhima-edit__img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--edit-focal, right center);
+  transition: transform 0.6s var(--edits-ease);
+}
+
+/* Empty image picker — a warm ivory plate rather than the stock grey block,
+   so the card still reads correctly while artwork is being chosen. */
+.bhima-edit__img--empty {
+  background-color: var(--bhima-color-soft, #F8F1E7);
+  background-image: linear-gradient(115deg, #F3EADC 0%, #FBF6EE 52%, #EFE3D0 100%);
+}
+
+/* Restrained hover: a 2.5% drift, nothing more. */
+.bhima-edit:hover .bhima-edit__img,
+.bhima-edit:focus-visible .bhima-edit__img {
+  transform: scale(1.025);
+}
+
+/* ------------------------------------------------------- 2. the scrim
+   Contrast for the text, not a panel. It starts warm and is fully clear well
+   before the middle of the card, so the image stays the dominant element.
+   --edits-scrim (0-1) is the merchant's "Readability gradient". */
+.bhima-edit__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 253, 249, calc(0.94 * var(--edits-scrim, 0.85))) 0%,
+    rgba(255, 253, 249, calc(0.78 * var(--edits-scrim, 0.85))) 30%,
+    rgba(252, 246, 236, calc(0.34 * var(--edits-scrim, 0.85))) 56%,
+    rgba(252, 246, 236, 0) 78%
+  );
+}
+
+/* A card set to light text needs the fade to darken instead. Warm ink
+   (#29231D), never black, and it still clears before mid-card. */
+.bhima-edit--text-light .bhima-edit__scrim {
+  background-image: linear-gradient(
+    to right,
+    rgba(41, 35, 29, calc(0.62 * var(--edits-scrim, 0.85))) 0%,
+    rgba(41, 35, 29, calc(0.44 * var(--edits-scrim, 0.85))) 32%,
+    rgba(41, 35, 29, calc(0.16 * var(--edits-scrim, 0.85))) 58%,
+    rgba(41, 35, 29, 0) 80%
+  );
+}
+
+/* Mirror the fade when the text is pushed to the right. */
+.bhima-edit--align-right .bhima-edit__scrim {
+  transform: scaleX(-1);
+}
+
+/* Centred text needs the fade on both sides. */
+.bhima-edit--align-center .bhima-edit__scrim {
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 253, 249, calc(0.30 * var(--edits-scrim, 0.85))) 0%,
+    rgba(255, 253, 249, calc(0.88 * var(--edits-scrim, 0.85))) 50%,
+    rgba(255, 253, 249, calc(0.30 * var(--edits-scrim, 0.85))) 100%
+  );
+}
+
+.bhima-edit--align-center.bhima-edit--text-light .bhima-edit__scrim {
+  background-image: linear-gradient(
+    to right,
+    rgba(41, 35, 29, calc(0.18 * var(--edits-scrim, 0.85))) 0%,
+    rgba(41, 35, 29, calc(0.56 * var(--edits-scrim, 0.85))) 50%,
+    rgba(41, 35, 29, calc(0.18 * var(--edits-scrim, 0.85))) 100%
+  );
+}
+
+/* ------------------------------------------------------- 3. the text
+   Flex centring rather than absolute + translate: the inset is guaranteed and
+   the copy can never escape the card if a merchant writes a long description. */
+.bhima-edit__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: 20px var(--edits-inset, 28px);
+  /* phones get more room; desktop honours the merchant's setting */
+  max-width: min(88%, 30ch);
+}
+
+@media (min-width: 768px) {
+  .bhima-edit__content {
+    padding-block: 24px;
+    max-width: var(--edits-textw, 48%);
+  }
+}
+
+.bhima-edit--align-center .bhima-edit__content {
+  align-items: center;
+  text-align: center;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.bhima-edit--align-right .bhima-edit__content {
+  align-items: flex-end;
+  text-align: right;
+  margin-left: auto;
+}
+
+/* --------------------------------------------------------------- type */
+.bhima-edits .bhima-edit .bhima-edit__title {
+  margin: 0;
+  font-family: var(--font-family-primary, inherit);
+  font-size: clamp(17px, 1.45vw, 21px);
+  font-weight: 500;
+  line-height: 1.22;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--bhima-color-text, #29231D);
+}
+
+.bhima-edits .bhima-edit .bhima-edit__desc {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--bhima-color-text-secondary, #71695F);
+}
+
+.bhima-edits .bhima-edit .bhima-edit__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  align-self: flex-start;
+  margin-top: 14px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bhima-color-gold, #B77A18);
+  transition: color 0.3s var(--edits-ease);
+}
+
+.bhima-edit--align-center .bhima-edit__cta {
+  align-self: center;
+}
+
+.bhima-edit--align-right .bhima-edit__cta {
+  align-self: flex-end;
+}
+
+/* Light-text cards: warm ivory copy, champagne CTA. */
+.bhima-edits .bhima-edit--text-light .bhima-edit__title {
+  color: var(--bhima-color-page, #FFFDF9);
+}
+
+.bhima-edits .bhima-edit--text-light .bhima-edit__desc {
+  color: rgba(255, 253, 249, 0.88);
+}
+
+.bhima-edits .bhima-edit--text-light .bhima-edit__cta {
+  color: #EAD9B4;
+}
+
+/* --------------------------------------------------------------- CTA detail
+   Underline grows in on hover, so the CTA never relies on colour alone. */
+.bhima-edit__cta-label {
+  position: relative;
+}
+
+.bhima-edit__cta-label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s var(--edits-ease);
+}
+
+.bhima-edit:hover .bhima-edit__cta-label::after,
+.bhima-edit:focus-visible .bhima-edit__cta-label::after {
+  transform: scaleX(1);
+}
+
+.bhima-edit__cta-arrow {
+  width: 16px;
+  height: 8px;
+  flex: 0 0 auto;
+  transition: transform 0.35s var(--edits-ease);
+}
+
+.bhima-edit:hover .bhima-edit__cta-arrow,
+.bhima-edit:focus-visible .bhima-edit__cta-arrow {
+  transform: translateX(4px);
+}
+
+/* Three classes, to match the base .bhima-edit__cta rule above. */
+.bhima-edits .bhima-edit:hover .bhima-edit__cta,
+.bhima-edits .bhima-edit:focus-visible .bhima-edit__cta {
+  color: var(--bhima-color-gold-secondary, #C58A2A);
+}
+
+/* A card with no link set is not interactive — drop the affordances. */
+.bhima-edit--static {
+  cursor: default;
+}
+
+.bhima-edits .bhima-edit--static .bhima-edit__cta {
+  color: var(--bhima-color-text-secondary, #71695F);
+}
+
+.bhima-edits .bhima-edit--static.bhima-edit--text-light .bhima-edit__cta {
+  color: rgba(255, 253, 249, 0.8);
+}
+
+.bhima-edits .bhima-edit--static .bhima-edit__cta-label::after {
+  display: none;
+}
+
+/* --------------------------------------------------------------- responsive */
+@media (max-width: 767px) {
+  .bhima-edits {
+    padding-top: 16px;
+    padding-bottom: 12px;
+  }
+
+  .bhima-edit__content {
+    padding-inline: max(18px, calc(var(--edits-inset, 28px) * 0.78));
+  }
+
+  /* A little more fade on a phone: the text sits over a larger share of a
+     narrower card, so it needs the extra contrast. */
+  .bhima-edit__scrim {
+    background-image: linear-gradient(
+      to right,
+      rgba(255, 253, 249, calc(0.96 * var(--edits-scrim, 0.85))) 0%,
+      rgba(255, 253, 249, calc(0.88 * var(--edits-scrim, 0.85))) 44%,
+      rgba(252, 246, 236, calc(0.42 * var(--edits-scrim, 0.85))) 72%,
+      rgba(252, 246, 236, 0) 96%
+    );
+  }
+
+  .bhima-edit--text-light .bhima-edit__scrim {
+    background-image: linear-gradient(
+      to right,
+      rgba(41, 35, 29, calc(0.68 * var(--edits-scrim, 0.85))) 0%,
+      rgba(41, 35, 29, calc(0.54 * var(--edits-scrim, 0.85))) 46%,
+      rgba(41, 35, 29, calc(0.22 * var(--edits-scrim, 0.85))) 74%,
+      rgba(41, 35, 29, 0) 96%
+    );
+  }
+
+  .bhima-edits .bhima-edit .bhima-edit__cta {
+    margin-top: 12px;
+    /* comfortable touch target without changing the visual size */
+    min-height: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bhima-edit,
+  .bhima-edit__img,
+  .bhima-edit__cta,
+  .bhima-edit__cta-arrow,
+  .bhima-edit__cta-label::after {
+    transition: none;
+  }
+
+  .bhima-edit:hover .bhima-edit__img,
+  .bhima-edit:focus-visible .bhima-edit__img {
+    transform: none;
+  }
+
+  .bhima-edits__track {
+    scroll-behavior: auto;
+  }
+}

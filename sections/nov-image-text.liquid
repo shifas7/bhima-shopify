@@ -182,6 +182,7 @@
     {% endfor %}
   }
 {% endstyle %}
+{% if sst.enable_section %}
 <div class="container-outer{{ bg_class_full }}{% if sst.animate %} wow fadeInUp{% endif %}" data-section-id="{{ section.id }}" data-section-type="nov-slick">
   <div class="{{ sst.container }}">
     <div class="container-inner{{ bg_class_contain }}">
@@ -365,11 +366,19 @@
     </div>
   </div>
 </div>
+{% endif %}
 {% schema %}
   {
     "name": "Vinova Image Width Text",
     "class": "section-image-text",
     "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_section",
+        "label": "Show section",
+        "default": false,
+        "info": "Temporarily hide this section from the storefront without deleting its content."
+      },
       {
         "type": "richtext",
         "id": "heading",

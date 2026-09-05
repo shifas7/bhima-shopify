@@ -44,6 +44,7 @@
   }
 {%- endstyle -%}
 
+{% if sst.enable_section %}
 <div class="color-{{ sst.color_section }}{{ bg_class_full }}" data-section-id="{{ section.id }}" data-section-type="nov-slick">
   <div class="{{ sst.container }}">
     <div class="container-inner{{ bg_class_contain }}">
@@ -92,11 +93,19 @@
     </div>
   </div>
 </div>
+{% endif %}
 {% schema %}
   {
     "name": "Vinova Accordion",
     "class": "section-accordion",
     "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_section",
+        "label": "Show section",
+        "default": false,
+        "info": "Temporarily hide this section from the storefront without deleting its content."
+      },
       {
         "type": "richtext",
         "id": "heading",

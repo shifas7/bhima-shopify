@@ -1,0 +1,491 @@
+{%- liquid
+  assign workshop_image = section.settings.workshop_image
+  assign workshop_alt = section.settings.workshop_alt | default: 'Bhima jewellery artisans at work'
+-%}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --craft-ivory: #fffdf9;
+    --craft-champagne: #f2e2ca;
+    --craft-sand: #e7cda9;
+    --craft-gold: #b77a18;
+    --craft-gold-light: #c58a2a;
+    --craft-ink: #29231d;
+    --craft-muted: #71695f;
+    --craft-border: #e6d8c7;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship {
+    padding: 32px var(--bhima-home-gutter, clamp(16px, 3.2vw, 40px));
+    background: var(--craft-ivory);
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__banner {
+    display: grid;
+    grid-template-columns: minmax(0, 29%) minmax(0, 46%) minmax(0, 25%);
+    align-items: stretch;
+    width: 100%;
+    max-width: 1600px;
+    min-height: 248px;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid var(--craft-border);
+    border-radius: 10px;
+    background: linear-gradient(90deg, #f6ead8 0%, #f3e3cc 29%, #ead5b8 74%, #e5caa4 100%);
+    box-shadow: 0 8px 24px rgba(93, 61, 25, .04);
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__copy,
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__trust {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__copy {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 30px 24px 30px 38px;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__heading,
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__heading p,
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__trust-number {
+    margin: 0;
+    color: var(--craft-ink);
+    font-family: var(--font-family-primary, Georgia, serif);
+    font-weight: 600;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__heading,
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__heading p {
+    font-size: clamp(22px, 1.75vw, 34px);
+    line-height: 1.08;
+    letter-spacing: .015em;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__description,
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__description p,
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__trust-description,
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__trust-description p {
+    color: var(--craft-muted);
+    font-family: var(--font-family-default, Arial, sans-serif);
+    font-size: clamp(12px, .85vw, 15px);
+    line-height: 1.45;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__description,
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__description p {
+    margin: 14px 0 0;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__cta {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 10px;
+    min-height: 38px;
+    margin-top: 19px;
+    padding: 8px 16px;
+    border: 1px solid var(--craft-gold);
+    border-radius: 5px;
+    background: rgba(255, 253, 249, .45);
+    color: var(--craft-ink);
+    font-family: var(--font-family-default, Arial, sans-serif);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .045em;
+    line-height: 1.2;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__cta:hover {
+    border-color: var(--craft-gold-light);
+    background: var(--craft-gold-light);
+    color: #fffdf9;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__media {
+    position: relative;
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    min-height: 248px;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--craft-champagne);
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__media::after {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(90deg, #f3e2ca 0%, rgba(243, 226, 202, 0) 18%, rgba(231, 205, 169, 0) 80%, #e5caa4 100%);
+    content: '';
+    pointer-events: none;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__media img,
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__media .placeholder-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 248px;
+    object-fit: cover;
+    object-position: {{ section.settings.image_position }};
+    filter: sepia(.16) saturate(.78) contrast(.96);
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__trust {
+    grid-column: 3;
+    grid-row: 1;
+    align-items: center;
+    padding: 24px 28px;
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__trust-number {
+    color: #87510e;
+    font-size: clamp(52px, 4.8vw, 84px);
+    line-height: .82;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__trust-label,
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__trust-label p {
+    margin: 8px 0 0;
+    color: #87510e;
+    font-family: var(--font-family-primary, Georgia, serif);
+    font-size: clamp(14px, 1.2vw, 22px);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: .035em;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__trust-description,
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__trust-description p {
+    max-width: 245px;
+    margin: 15px 0 0;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__motif {
+    position: relative;
+    width: 66px;
+    height: 12px;
+    margin-top: 13px;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__motif::before,
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__motif::after {
+    position: absolute;
+    top: 50%;
+    width: 27px;
+    height: 1px;
+    background: var(--craft-gold-light);
+    content: '';
+  }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__motif::before { left: 0; }
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__motif::after { right: 0; }
+
+  #shopify-section-{{ section.id }} .bhima-craftsmanship__motif span {
+    position: absolute;
+    top: 3px;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    border: 1px solid var(--craft-gold-light);
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  @media (min-width: 1441px) {
+    #shopify-section-{{ section.id }} .bhima-craftsmanship {
+      padding-right: var(--container-fluid, 75px);
+      padding-left: var(--container-fluid, 75px);
+    }
+  }
+
+  @media (max-width: 991px) {
+    #shopify-section-{{ section.id }} .bhima-craftsmanship {
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__banner {
+      grid-template-columns: minmax(0, 31%) minmax(0, 44%) minmax(0, 25%);
+      min-height: 220px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__copy {
+      padding: 24px 16px 24px 24px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__media,
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__media img,
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__media .placeholder-svg {
+      min-height: 220px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__trust {
+      padding-right: 16px;
+      padding-left: 16px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    #shopify-section-{{ section.id }} .bhima-craftsmanship {
+      padding: 16px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__banner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto auto auto;
+      min-height: 0;
+      border-radius: 16px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__copy {
+      grid-column: 1;
+      grid-row: 1;
+      min-width: 0;
+      padding: 22px 20px 20px;
+      justify-content: flex-start;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__media {
+      grid-column: 1;
+      grid-row: 2;
+      aspect-ratio: 16 / 9;
+      min-height: 0;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__media img,
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__media .placeholder-svg {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      object-fit: cover;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__trust {
+      grid-column: 1;
+      grid-row: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__heading,
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__heading p {
+      font-size: clamp(25px, 7.2vw, 32px);
+      line-height: 1.08;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__description,
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__description p {
+      max-width: 320px;
+      margin-top: 14px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__cta {
+      max-width: 100%;
+      min-height: 48px;
+      margin-top: 18px;
+      padding: 10px 22px;
+      font-size: 13px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__trust-number {
+      align-self: center;
+      font-size: clamp(54px, 17vw, 70px);
+      line-height: .82;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__trust-label,
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__trust-label p {
+      margin: 8px 0 0;
+      font-size: clamp(16px, 4.3vw, 20px);
+      line-height: 1.02;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__trust-description,
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__trust-description p {
+      max-width: 290px;
+      margin: 12px 0 0;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__motif {
+      margin-right: auto;
+      margin-left: auto;
+      margin-top: 16px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    #shopify-section-{{ section.id }} .bhima-craftsmanship {
+      padding-top: 18px;
+      padding-bottom: 18px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__copy {
+      padding: 20px 18px 18px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__trust {
+      padding-top: 18px;
+      padding-right: 18px;
+      padding-bottom: 18px;
+      padding-left: 18px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__cta {
+      padding-right: 20px;
+      padding-left: 20px;
+      font-size: 12px;
+    }
+  }
+{% endstyle %}
+
+<section class="bhima-craftsmanship" aria-label="{{ section.settings.heading | strip_html | escape }}">
+  <div class="bhima-craftsmanship__banner">
+    <div class="bhima-craftsmanship__media">
+      {% if workshop_image != blank %}
+        {{
+          workshop_image
+          | image_url: width: 1800
+          | image_tag:
+            loading: 'lazy',
+            widths: '640, 900, 1200, 1500, 1800',
+            sizes: '(min-width: 992px) 46vw, 100vw',
+            alt: workshop_alt
+        }}
+      {% else %}
+        <img
+          src="{{ 'bhima-craftsmanship-workshop.png' | asset_url }}"
+          width="1536"
+          height="1024"
+          loading="lazy"
+          alt="{{ workshop_alt }}"
+        >
+      {% endif %}
+    </div>
+
+    <div class="bhima-craftsmanship__copy">
+      <div class="bhima-craftsmanship__heading">{{ section.settings.heading }}</div>
+      <div class="bhima-craftsmanship__description">{{ section.settings.description }}</div>
+      {% if section.settings.cta_link != blank %}
+        <a class="bhima-craftsmanship__cta" href="{{ section.settings.cta_link }}">{{ section.settings.cta_text }}</a>
+      {% else %}
+        <span class="bhima-craftsmanship__cta">{{ section.settings.cta_text }}</span>
+      {% endif %}
+    </div>
+
+    <div class="bhima-craftsmanship__trust">
+      <div class="bhima-craftsmanship__trust-number">{{ section.settings.trust_number }}</div>
+      <div class="bhima-craftsmanship__trust-label">{{ section.settings.trust_label }}</div>
+      <div class="bhima-craftsmanship__trust-description">{{ section.settings.trust_description }}</div>
+      {% if section.settings.show_motif %}
+        <div class="bhima-craftsmanship__motif" aria-hidden="true"><span></span></div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Bhima Craftsmanship",
+  "tag": "section",
+  "class": "section-bhima-craftsmanship",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "workshop_image",
+      "label": "Workshop image",
+      "info": "Optional. If empty, the bundled workshop visual is used. You can replace it from the Theme Editor at any time."
+    },
+    {
+      "type": "text",
+      "id": "workshop_alt",
+      "label": "Workshop image alt text",
+      "default": "Bhima jewellery artisans at work"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Main heading",
+      "default": "<p>A CENTURY OF<br/>CRAFTSMANSHIP<br/>SINCE 1925</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>From generations of craftsmanship to<br/>today’s contemporary designs.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "DISCOVER OUR STORY →"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA link"
+    },
+    {
+      "type": "text",
+      "id": "trust_number",
+      "label": "Trust number",
+      "default": "101"
+    },
+    {
+      "type": "richtext",
+      "id": "trust_label",
+      "label": "Trust label",
+      "default": "<p>YEARS<br/>OF TRUST</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "trust_description",
+      "label": "Trust description",
+      "default": "<p>Four generations. One promise.<br/>Excellence in every detail.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_motif",
+      "label": "Show ornamental divider",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Workshop image position",
+      "default": "center center",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bhima Craftsmanship"
+    }
+  ]
+}
+{% endschema %}

@@ -57,7 +57,12 @@
 
 <div class="item-product collection-product-card{% if settings.show_border_product %} h_bd{% endif %}{% if settings.show_background_product %} bg{% endif %}" data-product-id="product-{{ product.id }}" data-json-product='{"variants": {{ product.variants | json | escape }},"media": {{ product.media | json }}}'>
   <div class="inner-top">
-    <div class="product-top thumbnail-container{% if settings.show_second_image_product and product.images.size > 1 %} has-multiimage{% endif %}">
+    {%- comment -%}
+      `compact` callers (carousels) also get the theme's aspect-ratio class, so
+      a fixed image shape is honoured in a slider. The listing page has never
+      carried this class and still does not.
+    {%- endcomment -%}
+    <div class="product-top thumbnail-container{% if settings.show_second_image_product and product.images.size > 1 %} has-multiimage{% endif %}{% if compact %} ratio-{{ card_ratio | default: settings.aspect_product_image }}{% endif %}">
       <a href="{{ product.url | within: collection }}">
         {% assign img_url = product.featured_image %}
         <div class="respone_image" style="padding-top:{{ 1 | divided_by: img_url.aspect_ratio | times: 100}}%;">
@@ -167,22 +172,30 @@
           </div>
         {% endif %}
       </div>
-      {% unless product.available %}
-        <div class="available_product d-flex">
-          <span class="product__available sold-out mt-15">
-            <i class="zmdi zmdi-alert-octagon"></i>
-            <span>{{ "products.product.sold_out" | t }}</span>
-          </span>
-        </div>
-      {% else %}
-        <div class="available_product d-flex">
-          <span class="product__available in-stock mt-15">
-            <i class="rbb-icon-check-6"></i>
-            <span>{{ "products.product.in_stock" | t }}</span>
-          </span>
-        </div>
-      {% endunless %}
-      <div class="desc mt-15">{{ product.description | strip_html | truncate: 230 }}</div>
+      {%- comment -%}
+        The stock line and the 230-character description belong to the roomy
+        listing-page grid. A caller that renders this card in a narrow carousel
+        passes `compact: true` to leave them out; without that parameter the
+        output is exactly what the listing page has always rendered.
+      {%- endcomment -%}
+      {%- unless compact -%}
+        {% unless product.available %}
+          <div class="available_product d-flex">
+            <span class="product__available sold-out mt-15">
+              <i class="zmdi zmdi-alert-octagon"></i>
+              <span>{{ "products.product.sold_out" | t }}</span>
+            </span>
+          </div>
+        {% else %}
+          <div class="available_product d-flex">
+            <span class="product__available in-stock mt-15">
+              <i class="rbb-icon-check-6"></i>
+              <span>{{ "products.product.in_stock" | t }}</span>
+            </span>
+          </div>
+        {% endunless %}
+        <div class="desc mt-15">{{ product.description | strip_html | truncate: 230 }}</div>
+      {%- endunless -%}
 
       {% render 'item-swatch', product: product, option_color_swatch: option_color_swatch, downcased_option: option_name, product_option: product_option, index: index %}
 

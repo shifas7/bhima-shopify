@@ -1,0 +1,324 @@
+{%- comment -%}
+  BHIMA — Experience Bhima.
+
+  A single two-column row: a showroom image carousel (no text overlay,
+  slides sourced from the "Carousel image" blocks) beside a content card
+  with a heading, supporting line and three experience options. Both the
+  carousel images and the options are Theme Editor blocks so the merchant
+  can add, edit or reorder them without touching Liquid.
+{%- endcomment -%}
+
+{{ 'bhima-experience.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign sst = section.settings
+  assign carousel_blocks = section.blocks | where: 'type', 'carousel_image'
+  assign option_blocks = section.blocks | where: 'type', 'experience_option'
+-%}
+
+<section class="bhima-experience" aria-label="{{ sst.heading | escape }}">
+  <div class="bhima-experience__inner">
+    <div class="bhima-experience__row">
+      <div
+        class="bhima-experience__media"
+        style="--exp-media-pos: {{ sst.image_position }};"
+        {% if carousel_blocks.size > 1 %}data-carousel data-autoplay="4800"{% endif %}
+      >
+        <div class="bhima-experience__slides">
+          {%- if carousel_blocks.size > 0 -%}
+            {%- for block in carousel_blocks -%}
+              {%- liquid
+                assign slide_image = block.settings.image
+                assign slide_alt = slide_image.alt | default: block.settings.alt | default: 'Bhima showroom'
+                assign slide_loading = 'lazy'
+                if forloop.first
+                  assign slide_loading = 'eager'
+                endif
+              -%}
+              <div class="bhima-experience__slide{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}>
+                {%- if slide_image != blank -%}
+                  {{
+                    slide_image
+                    | image_url: width: 1600
+                    | image_tag:
+                      loading: slide_loading,
+                      widths: '480, 700, 960, 1280, 1600',
+                      sizes: '(min-width: 768px) 45vw, 100vw',
+                      class: 'bhima-experience__slide-image',
+                      alt: slide_alt
+                  }}
+                {%- else -%}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'bhima-experience__slide-image placeholder-svg' }}
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            <div class="bhima-experience__slide is-active">
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'bhima-experience__slide-image placeholder-svg' }}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- if carousel_blocks.size > 1 -%}
+          <button type="button" class="bhima-experience__arrow bhima-experience__arrow--prev" aria-label="Previous image">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <button type="button" class="bhima-experience__arrow bhima-experience__arrow--next" aria-label="Next image">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M9 5l7 7-7 7"></path></svg>
+          </button>
+          <div class="bhima-experience__dots" role="tablist">
+            {%- for block in carousel_blocks -%}
+              <button
+                type="button"
+                class="bhima-experience__dot{% if forloop.first %} is-active{% endif %}"
+                role="tab"
+                aria-label="Go to image {{ forloop.index }}"
+                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              ></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="bhima-experience__card">
+        <h3 class="bhima-experience__heading">{{ sst.heading | escape }}</h3>
+        {%- if sst.subheading != blank -%}
+          <p class="bhima-experience__subheading">{{ sst.subheading | escape }}</p>
+        {%- endif -%}
+
+        <ul class="bhima-experience__options" role="list">
+          {%- for block in option_blocks -%}
+            {%- liquid
+              assign item = block.settings
+            -%}
+            <li class="bhima-experience__option" {{ block.shopify_attributes }}>
+              <span class="bhima-experience__option-icon" aria-hidden="true">
+                {%- case item.icon_type -%}
+                  {%- when 'store' -%}
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M12 21s7-7.2 7-12a7 7 0 1 0-14 0c0 4.8 7 12 7 12Z"></path><circle cx="12" cy="9" r="2.4"></circle></svg>
+                  {%- when 'shop' -%}
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M6 8h12l-1 12H7L6 8Z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+                  {%- when 'expert' -%}
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M4 13v-1a8 8 0 0 1 16 0v1"></path><rect x="3" y="13" width="4" height="6" rx="1.5"></rect><rect x="17" y="13" width="4" height="6" rx="1.5"></rect></svg>
+                  {%- when 'custom' -%}
+                    {%- if item.custom_icon != blank -%}
+                      {{ item.custom_icon | image_url: width: 60 | image_tag: loading: 'lazy', alt: '' }}
+                    {%- endif -%}
+                {%- endcase -%}
+              </span>
+              <h4 class="bhima-experience__option-title">{{ item.title | escape }}</h4>
+              <p class="bhima-experience__option-desc">{{ item.description | escape }}</p>
+              {%- if item.cta_link != blank -%}
+                <a class="bhima-experience__option-cta" href="{{ item.cta_link }}">{{ item.cta_text | escape }}</a>
+              {%- elsif item.cta_text != blank -%}
+                <span class="bhima-experience__option-cta">{{ item.cta_text | escape }}</span>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- if carousel_blocks.size > 1 -%}
+  <script>
+    (function () {
+      var media = document.querySelector('#shopify-section-{{ section.id }} .bhima-experience__media[data-carousel]');
+      if (!media) return;
+
+      var slides = Array.prototype.slice.call(media.querySelectorAll('.bhima-experience__slide'));
+      var dots = Array.prototype.slice.call(media.querySelectorAll('.bhima-experience__dot'));
+      var prevBtn = media.querySelector('.bhima-experience__arrow--prev');
+      var nextBtn = media.querySelector('.bhima-experience__arrow--next');
+      if (slides.length < 2) return;
+
+      var index = slides.findIndex(function (slide) { return slide.classList.contains('is-active'); });
+      if (index < 0) index = 0;
+      var delay = parseInt(media.getAttribute('data-autoplay'), 10) || 4800;
+      var timer = null;
+      var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function show(nextIndex) {
+        index = (nextIndex + slides.length) % slides.length;
+        slides.forEach(function (slide, i) {
+          slide.classList.toggle('is-active', i === index);
+        });
+        dots.forEach(function (dot, i) {
+          dot.classList.toggle('is-active', i === index);
+          dot.setAttribute('aria-selected', i === index ? 'true' : 'false');
+        });
+      }
+
+      function next() { show(index + 1); }
+      function prev() { show(index - 1); }
+
+      function start() {
+        stop();
+        if (!reduceMotion) {
+          timer = window.setInterval(next, delay);
+        }
+      }
+
+      function stop() {
+        if (timer) {
+          window.clearInterval(timer);
+          timer = null;
+        }
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function () {
+          prev();
+          start();
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function () {
+          next();
+          start();
+        });
+      }
+
+      dots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () {
+          show(i);
+          start();
+        });
+      });
+
+      media.addEventListener('mouseenter', stop);
+      media.addEventListener('mouseleave', start);
+
+      start();
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Experience Bhima",
+  "tag": "section",
+  "class": "section-bhima-experience",
+  "max_blocks": 16,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Showroom image carousel"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add one or more \"Carousel image\" blocks below to build the slideshow. With a single image the carousel controls are hidden and it displays as a static photo."
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "default": "center center",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" },
+        { "value": "center top", "label": "Top" },
+        { "value": "center bottom", "label": "Bottom" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Experience Bhima card"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Experience Bhima"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Supporting text",
+      "default": "Online or in-store. Jewellery should always feel personal."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "carousel_image",
+      "name": "Carousel image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Alt text",
+          "default": "Bhima showroom"
+        }
+      ]
+    },
+    {
+      "type": "experience_option",
+      "name": "Option",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "Icon",
+          "default": "store",
+          "options": [
+            { "value": "store", "label": "Store" },
+            { "value": "shop", "label": "Shop" },
+            { "value": "expert", "label": "Expert" },
+            { "value": "custom", "label": "Custom image" }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon image",
+          "info": "Used when Icon is set to Custom image."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Visit a Store"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Find your nearest Bhima showroom"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "CTA text",
+          "default": "FIND A STORE →"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "CTA link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Experience Bhima",
+      "blocks": [
+        { "type": "carousel_image", "settings": {} },
+        { "type": "carousel_image", "settings": {} },
+        { "type": "carousel_image", "settings": {} },
+        { "type": "experience_option", "settings": { "icon_type": "store", "title": "Visit a Store", "description": "Find your nearest Bhima showroom", "cta_text": "FIND A STORE →" } },
+        { "type": "experience_option", "settings": { "icon_type": "shop", "title": "Shop Online", "description": "Explore thousands of beautiful designs", "cta_text": "SHOP NOW →" } },
+        { "type": "experience_option", "settings": { "icon_type": "expert", "title": "Talk to an Expert", "description": "Get personalized assistance", "cta_text": "CONTACT US →" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

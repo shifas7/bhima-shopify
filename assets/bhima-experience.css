@@ -1,0 +1,354 @@
+/* BHIMA — Experience Bhima. Isolated to this section so the homepage's
+   approved header, footer and existing sections remain unaffected. A
+   showroom image beside a content card; one row on tablet and up, stacked
+   on mobile. */
+
+.bhima-experience {
+  --exp-measure: var(--bhima-home-container, 1360px);
+  --exp-gutter: var(--bhima-home-gutter, clamp(16px, 3.2vw, 40px));
+  --exp-ivory: #FFFDF9;
+  --exp-ink: #29231D;
+  --exp-muted: #71695F;
+  --exp-gold: #B77A18;
+  --exp-gold-light: #C58A2A;
+  --exp-border: #E6D8C7;
+  --exp-soft: #F8F1E7;
+  background: var(--exp-ivory);
+  padding-block: 20px 40px;
+}
+
+.bhima-experience *,
+.bhima-experience *::before,
+.bhima-experience *::after {
+  box-sizing: border-box;
+}
+
+.bhima-experience__inner {
+  width: 100%;
+  max-width: calc(var(--exp-measure) + (var(--exp-gutter) * 2));
+  margin-inline: auto;
+  padding-inline: var(--exp-gutter);
+}
+
+.bhima-experience__row {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- Store image carousel ---------- */
+
+.bhima-experience__media {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--exp-border);
+  border-radius: 14px;
+  background: var(--exp-soft);
+}
+
+.bhima-experience__slides {
+  position: absolute;
+  inset: 0;
+}
+
+.bhima-experience__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.bhima-experience__slide.is-active {
+  z-index: 1;
+  opacity: 1;
+}
+
+.bhima-experience__slide-image,
+.bhima-experience__slide .placeholder-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--exp-media-pos, center center);
+}
+
+.bhima-experience__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 253, 249, 0.85);
+  color: var(--exp-ink);
+  cursor: pointer;
+  opacity: 0.85;
+  transform: translateY(-50%);
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.bhima-experience__arrow svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.6;
+}
+
+.bhima-experience__arrow:hover,
+.bhima-experience__arrow:focus-visible {
+  background: var(--exp-ivory);
+  opacity: 1;
+}
+
+.bhima-experience__arrow--prev {
+  left: 10px;
+}
+
+.bhima-experience__arrow--next {
+  right: 10px;
+}
+
+.bhima-experience__dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transform: translateX(-50%);
+}
+
+.bhima-experience__dot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: none;
+  border-radius: 3px;
+  background: rgba(255, 253, 249, 0.6);
+  cursor: pointer;
+  transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+.bhima-experience__dot.is-active {
+  width: 16px;
+  background: var(--exp-ivory);
+}
+
+/* ---------- Experience card ---------- */
+
+.bhima-experience__card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 26px 24px;
+  border: 1px solid var(--exp-border);
+  border-radius: 14px;
+  background: var(--exp-ivory);
+}
+
+.bhima-experience__heading {
+  margin: 0;
+  color: var(--exp-ink);
+  font-family: var(--font-family-primary, Georgia, serif);
+  font-size: clamp(18px, 1.6vw, 23px);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.bhima-experience__subheading {
+  margin: 8px 0 0;
+  color: var(--exp-muted);
+  font-family: var(--font-family-default, Arial, sans-serif);
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.bhima-experience__options {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 20px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bhima-experience__option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.bhima-experience__option-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  color: var(--exp-gold);
+}
+
+.bhima-experience__option-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.3;
+}
+
+.bhima-experience__option-icon img {
+  display: block;
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.bhima-experience__option-title {
+  margin: 2px 0 0;
+  color: var(--exp-ink);
+  font-family: var(--font-family-default, Arial, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.bhima-experience__option-desc {
+  margin: 0;
+  max-width: 220px;
+  color: var(--exp-muted);
+  font-family: var(--font-family-default, Arial, sans-serif);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.bhima-experience__option-cta {
+  margin-top: 2px;
+  color: var(--exp-gold);
+  font-family: var(--font-family-default, Arial, sans-serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.bhima-experience__option-cta:hover,
+.bhima-experience__option-cta:focus-visible {
+  color: var(--exp-gold-light);
+  text-decoration: underline;
+}
+
+/* ---------- 576px+: two-up with the third spanning full width ---------- */
+
+@media (min-width: 576px) {
+  .bhima-experience__options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bhima-experience__option:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Tablet and up: single row, two columns ---------- */
+
+@media (min-width: 768px) {
+  .bhima-experience__row {
+    display: grid;
+    grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .bhima-experience__media {
+    aspect-ratio: auto;
+  }
+
+  .bhima-experience__options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .bhima-experience__option:last-child {
+    grid-column: auto;
+  }
+
+  .bhima-experience__option {
+    position: relative;
+    padding-inline: 16px;
+  }
+
+  .bhima-experience__option:not(:first-child)::before {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 0;
+    width: 1px;
+    background: var(--exp-border);
+    content: '';
+  }
+}
+
+@media (min-width: 1024px) {
+  .bhima-experience {
+    padding-block: 0 48px;
+  }
+
+  .bhima-experience__card {
+    padding: 30px 34px;
+  }
+
+  .bhima-experience__option {
+    padding-inline: 20px;
+  }
+}
+
+@media (min-width: 1441px) {
+  .bhima-experience__inner {
+    padding-right: var(--container-fluid, 75px);
+    padding-left: var(--container-fluid, 75px);
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 767px) {
+  .bhima-experience {
+    padding-block: 0 16px;
+  }
+
+  .bhima-experience__card {
+    padding: 20px 16px;
+  }
+
+  .bhima-experience__options {
+    row-gap: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bhima-experience__slide {
+    transition: none;
+  }
+}

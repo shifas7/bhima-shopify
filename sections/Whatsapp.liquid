@@ -112,6 +112,17 @@
     bottom: {{ section.settings.offset_y }}px;
     left: {{ section.settings.offset_x }}px;
   }
+
+  /* Below md (767px and under) the theme shows a fixed bottom tab bar
+     (#stickymenu_bottom_mobile, ~55px tall). The offsets above alone sit
+     the icon inside that bar, overlapping its last tab. Lift it clear on
+     that breakpoint only — desktop/tablet positioning is untouched. */
+  @media (max-width: 767px) {
+    .whatsapp-pos-bottom-right,
+    .whatsapp-pos-bottom-left {
+      bottom: calc({{ section.settings.offset_y }}px + 64px);
+    }
+  }
 </style>
 
 <a

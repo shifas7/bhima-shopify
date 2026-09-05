@@ -53,8 +53,14 @@
       }
     }
   {% endif %}
-  @media(max-width: 575px) {
-    #shopify-section-{{ section.id }} .slide-image .image-content, #shopify-section-{{ section.id }} picture img {
+  @media(max-width: 767px) {
+    /* "Min height slideshow mobile" — the floor that keeps a desktop-shaped
+       banner from collapsing to a sliver on phones when NO mobile image has
+       been uploaded. It deliberately does not apply to the mobile artwork
+       itself: that image is portrait and already tall, and forcing a floor
+       onto it would crop its sides on small phones.
+       Runs to 767px because that is where the mobile artwork takes over. */
+    #shopify-section-{{ section.id }} .slide-image .image-content:not(.image-content--mobile) {
       min-height: {{ sst.h_xs }}px;
       object-fit: cover;
     }
@@ -72,11 +78,62 @@
     --slider-dot-color-act: {{ sst.c_dot_a }};
     --bottom: {{ sst.dot_bottom }};
     --slider-arrow-color: {{ sst.slider_arrow_color }};
-    --slider-arrow-bg: {{ sst.slider_arrow_bg }};
-    --slider-arrow-border: {{ sst.slider_arrow_bd}};
     --slider-arrow-color-act: {{ sst.slider_arrow_color_act }};
-    --slider-arrow-bg-act: {{ sst.slider_arrow_bg_act }};
-    --slider-arrow-border-act: {{ sst.slider_arrow_bd_act }};
+    {%- comment -%}
+      --slider-arrow-bg / -border and their -act pairs used to be printed here
+      from settings that this section never declared, so they emitted invalid
+      empty values. They are omitted now: css-novstyle.css forces
+      `.section-slideshow .nav-arrow` to a transparent background and
+      currentcolor border with !important, so the slideshow's arrows are plain
+      icons and only the colour above can affect them.
+    {%- endcomment -%}
+  }
+
+  {%- comment -%}
+    ------------------------------------------------------------------
+    Bhima hero presentation tokens.
+
+    The banner artwork carries all of the campaign content (heading,
+    supporting copy, CTA, offer card), so it must never be stretched and
+    should be cropped as little as possible. These tokens feed the rules in
+    assets/bhima-home.css:
+
+      --hero-ratio        aspect ratio of the FIRST slide's desktop image.
+                          Every slide uses it so the hero height cannot jump
+                          between slides.
+      --hero-ratio-mobile same, for the mobile images.
+      --hero-max-h        height ceiling on very wide screens, so a wide
+                          banner cannot grow into a 700px+ hero.
+      --hero-crop         object-position, from the existing "Image position
+                          crop" setting. Applies at every breakpoint now,
+                          not only when custom heights are enabled.
+
+    --slider-dot-corner and --slider-arrow-corner are set here because the
+    matching theme settings do not exist in settings_data.json, which leaves
+    the global tokens invalid and renders square dots and square arrows.
+    Setting them on the section keeps every other slider in the theme
+    untouched.
+    ------------------------------------------------------------------
+  {%- endcomment -%}
+  {%- liquid
+    assign hero_first = section.blocks.first.settings
+    assign hero_ratio = hero_first.image.aspect_ratio
+    assign hero_ratio_mobile = hero_first.img_xs.aspect_ratio
+  -%}
+  #shopify-section-{{ section.id }} {
+    {%- if hero_ratio != blank and hero_ratio > 0 %}
+    --hero-ratio: {{ hero_ratio }};
+    {%- endif %}
+    {%- if hero_ratio_mobile != blank and hero_ratio_mobile > 0 %}
+    --hero-ratio-mobile: {{ hero_ratio_mobile }};
+    {%- endif %}
+    --hero-max-h: {{ sst.hero_max_height | default: 620 }}px;
+    --hero-crop: center {{ sst.img_crop_position | default: 'center' }};
+    --slider-dot-corner: {{ sst.dot_corner | default: 20 }}px;
+    --slider-dot-size: {{ sst.dot_size | default: 8 }}px;
+    --slider-dot-width-act: {{ sst.dot_size | default: 8 }}px;
+    --slider-arrow-corner: 999px;
+    --slider-arrow-size: {{ sst.arrow_size | default: 38 }}px;
   }
   {% for block in section.blocks %}
     {% assign bst = block.settings %}
@@ -237,9 +294,18 @@
                 <div class="item">
                   {% if bst.image != blank %}
                     <a href="{{ bst.slider_link }}">
-                      <div class="slide-image position-relative s-{{ forloop.index }}{% if forloop.first %} first-scale{% endif %}">
+                      <div class="slide-image position-relative s-{{ forloop.index }}{% if forloop.first and sst.hero_intro_zoom %} first-scale{% endif %}">
                         {% assign img_url = bst.image %}
-                        <div class="image-content position-relative{% if bst.img_xs != blank %} d-none d-sm-block{% endif %}" style="padding-top:{{ 1 | divided_by: img_url.aspect_ratio | times: 100}}%;">
+                        {%- comment -%}
+                          Height comes from the FIRST slide's ratio (via
+                          --hero-ratio in assets/bhima-home.css), not this
+                          slide's own, so the hero cannot change height as the
+                          carousel advances. The inline padding-top aspect box
+                          is only emitted as a fallback for the custom-height
+                          mode and for the case where the first slide has no
+                          image yet.
+                        {%- endcomment -%}
+                        <div class="image-content{% unless sst.enable_mh %} image-content--ratio{% endunless %} position-relative{% if bst.img_xs != blank %} d-none d-md-block{% endif %}"{% if sst.enable_mh or hero_ratio == blank %} style="padding-top:{{ 1 | divided_by: img_url.aspect_ratio | times: 100}}%;"{% endif %}>
                           {%- liquid
                             assign height = bst.image.width | divided_by: bst.image.aspect_ratio | round
                             assign sizes = '100vw'
@@ -264,13 +330,38 @@
                           {%- endif -%}
                         </div>
                         {% if bst.img_xs != blank %}
-                          {% assign img_url = bst.img_xs %}
-                          <picture class="d-sm-none w-100">
-                            <source media="(max-width: 375px)" srcset="{{ img_url | image_url: width: 375 }}" />
-                            <source media="(min-width: 575px)" srcset="{{ img_url | image_url: width: 575 }}" />
-                            <source media="(min-width: 376px)" srcset="{{ img_url | image_url: width: 425 }}" />
-                            <img src="{{ img_url | image_url: width: 1 }}" data-src="{{ img_url | image_url: width: 375 }}" alt="{{ img_url.alt }}" width="375" height="{{ 375 | divided_by: img_url.aspect_ratio }}" class="w-100" style="height: auto;" />
-                          </picture>
+                          {%- comment -%}
+                            Mobile artwork through the standard Shopify image
+                            pipeline. The previous markup hand-rolled a
+                            <picture> whose widest candidate was 425px and
+                            whose <img src> was a 1px placeholder, so the
+                            banner was soft on every retina phone. A real
+                            srcset lets the browser pick a density-appropriate
+                            file, and the aspect box keeps proportions exact.
+                          {%- endcomment -%}
+                          {%- liquid
+                            assign m_height = bst.img_xs.width | divided_by: bst.img_xs.aspect_ratio | round
+                            assign m_widths = '320, 375, 414, 480, 576, 640, 750, 828, 1080, 1242, 1440, 1728'
+                            assign m_priority = 'auto'
+                            if section.index == 1 and forloop.first
+                              assign m_priority = 'high'
+                            endif
+                          -%}
+                          <div class="image-content image-content--mobile{% unless sst.enable_mh %} image-content--ratio{% endunless %} position-relative d-md-none">
+                            {%- if forloop.first -%}
+                              {{
+                                bst.img_xs
+                                | image_url: width: 1728
+                                | image_tag: height: m_height, sizes: '100vw', widths: m_widths, fetchpriority: m_priority, class: 'image-entity'
+                              }}
+                            {%- else -%}
+                              {{
+                                bst.img_xs
+                                | image_url: width: 1728
+                                | image_tag: loading: 'lazy', height: m_height, sizes: '100vw', widths: m_widths, class: 'image-entity'
+                              }}
+                            {%- endif -%}
+                          </div>
                         {% endif %}
                       </div>
                     </a>
@@ -381,8 +472,13 @@
               </svg>
             </div>
           {% endif %}
+          {% comment %}
+            Dots stay available on phones too — six autoplaying slides need an
+            affordance at every width. The arrows are still held back below
+            768px in CSS so they never sit on top of the artwork on a phone.
+          {% endcomment %}
           {% if sst.show_dots or sst.show_arrow %}
-            <div class="block-direction d-none d-md-flex align-items-center position-absolute">
+            <div class="block-direction d-flex align-items-center position-absolute">
               {% if sst.show_arrow %}
                 <div class="nav-arrow nav-prev pointer">
                 </div>
@@ -455,6 +551,32 @@
       },
       {
         "type": "header",
+        "content": "Banner size"
+      },
+      {
+        "type": "paragraph",
+        "content": "By default the banner keeps the exact proportions of the image you upload, so nothing in the artwork is stretched or cropped. Use the maximum height to stop a very wide banner from becoming too tall on large screens."
+      },
+      {
+        "type": "range",
+        "id": "hero_max_height",
+        "min": 320,
+        "max": 760,
+        "step": 10,
+        "unit": "px",
+        "label": "Maximum height (desktop)",
+        "default": 620,
+        "info": "Only applies on screens wide enough that the banner would otherwise exceed this height. Raise it if any part of the artwork is being trimmed."
+      },
+      {
+        "type": "checkbox",
+        "id": "hero_intro_zoom",
+        "label": "Zoom the first slide in on load",
+        "default": false,
+        "info": "Starts the first slide at 125% and settles it to 100%. This hides roughly 12% of each edge while it animates, so leave it off when the artwork has text or an offer badge near the edges."
+      },
+      {
+        "type": "header",
         "content": "Custom Height (px)"
       },
       {
@@ -468,6 +590,7 @@
         "id": "img_crop_position",
         "label": "Image position crop",
         "default": "center",
+        "info": "Which part of the artwork to keep if the banner ever has to be cropped vertically.",
         "options": [
           { "value": "top", "label": "Top"},
           { "value": "center", "label": "Center"},
@@ -558,16 +681,30 @@
         "default": true
       },
       {
+        "type": "range",
+        "id": "arrow_size",
+        "min": 28,
+        "max": 56,
+        "step": 2,
+        "unit": "px",
+        "label": "Arrow size",
+        "default": 38
+      },
+      {
+        "type": "paragraph",
+        "content": "The slideshow draws its arrows as plain icons with no background — only the icon colour and size can be changed here."
+      },
+      {
         "type": "color",
         "id": "slider_arrow_color",
         "label": "Color",
-        "default": "#222"
+        "default": "#29231D"
       },
       {
         "type": "color",
         "id": "slider_arrow_color_act",
         "label": "Color hover",
-        "default": "#fff"
+        "default": "#B77A18"
       },
       {
         "type": "header",
@@ -582,6 +719,27 @@
       {
         "type": "header",
         "content": "Dots Slider"
+      },
+      {
+        "type": "range",
+        "id": "dot_size",
+        "min": 6,
+        "max": 16,
+        "step": 1,
+        "unit": "px",
+        "label": "Dot size",
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "dot_corner",
+        "min": 0,
+        "max": 100,
+        "step": 10,
+        "unit": "px",
+        "label": "Dot corner radius",
+        "default": 20,
+        "info": "Anything at or above half the dot size gives fully round dots. 0 gives squares. Values increase in 10px steps."
       },
       {
         "type": "color",

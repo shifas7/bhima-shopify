@@ -7,6 +7,9 @@
 {{ 'css-slick.css' | asset_url | stylesheet_tag: preload: true }}
 {{ 'css-novstyle.css' | asset_url | stylesheet_tag }}
 {{ 'bhima-cart.css' | asset_url | stylesheet_tag }}
+{%- if request.page_type == 'index' -%}
+  {{ 'bhima-home.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
 {% render 'nov-product-color-custom' %}
 
 {%- case request.page_type -%}

@@ -1,0 +1,395 @@
+{%- comment -%}
+  BHIMA — Editorial Collection / Featured Edits.
+
+  Three wide editorial cards. Each card is ONE full-bleed image with the
+  campaign text laid over its left side — the image is the whole card
+  background, never a panel beside or above the text, and the text is real
+  HTML/Liquid so it stays editable and selectable.
+
+  Layering inside a card:
+    1. <img>            absolutely positioned, object-fit: cover, 100% x 100%
+    2. .__scrim         a very subtle warm ivory (or warm ink) gradient that
+                        fades out before the middle of the card, purely for
+                        text contrast — never a visible text panel
+    3. .__content       flex-centred over the left, capped at ~48% card width
+
+  Every card is a Theme Editor block: image, focal point, title, description,
+  CTA label, CTA link, text colour, text alignment, and a show/hide toggle.
+
+  Layout is one CSS scroll-snap track: a swipeable carousel below 992px, a
+  plain three-up grid above it, no JavaScript, and only the track ever scrolls
+  horizontally. Same technique as the PDP rails, so the theme keeps one
+  carousel idiom.
+
+  Styles live in assets/bhima-editorial.css, loaded here rather than from
+  bhima-home.css so the section is self-contained on any template.
+{%- endcomment -%}
+
+{{ 'bhima-editorial.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign sst = section.settings
+
+  assign visible_blocks = 0
+  for block in section.blocks
+    if block.settings.show_card
+      assign visible_blocks = visible_blocks | plus: 1
+    endif
+  endfor
+-%}
+
+{%- if visible_blocks > 0 -%}
+  {%- style -%}
+    #shopify-section-{{ section.id }} {
+      --edits-h: {{ sst.card_height }}px;
+      --edits-h-mobile: {{ sst.card_height_mobile }}px;
+      --edits-pt: {{ sst.padding_top }}px;
+      --edits-pb: {{ sst.padding_bottom }}px;
+      --edits-gap: {{ sst.card_gap }}px;
+      --edits-inset: {{ sst.text_inset }}px;
+      --edits-textw: {{ sst.text_width }}%;
+      --edits-radius: {{ sst.corner_radius }}px;
+      --edits-scrim: {{ sst.overlay_strength | divided_by: 100.0 }};
+      --edits-peek: {{ sst.mobile_card_width }};
+      --edits-columns: {{ visible_blocks | at_most: 3 }};
+    }
+  {%- endstyle -%}
+
+  <section
+    class="bhima-edits"
+    aria-label="{{ sst.heading | default: 'Featured edits' | escape }}"
+  >
+    <div class="bhima-edits__inner">
+      {%- if sst.heading != blank or sst.subheading != blank -%}
+        <header class="bhima-edits__head{% if sst.heading_alignment == 'center' %} bhima-edits__head--center{% endif %}">
+          {%- if sst.heading != blank -%}
+            <h2 class="bhima-edits__heading">{{ sst.heading | escape }}</h2>
+          {%- endif -%}
+          {%- if sst.subheading != blank -%}
+            <p class="bhima-edits__subheading">{{ sst.subheading | escape }}</p>
+          {%- endif -%}
+        </header>
+      {%- endif -%}
+
+      <ul class="bhima-edits__track" role="list">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.show_card -%}
+            {%- liquid
+              assign card = block.settings
+
+              assign has_link = false
+              if card.cta_link != blank
+                assign has_link = true
+              endif
+
+              assign alt_text = card.image.alt
+              if alt_text == blank
+                assign alt_text = card.title
+              endif
+            -%}
+            <li class="bhima-edits__item" {{ block.shopify_attributes }}>
+              {%- comment -%}
+                One link per card: a large target and a single tab stop. With
+                no CTA link set it degrades to a plain article rather than an
+                empty anchor.
+              {%- endcomment -%}
+              <{% if has_link %}a href="{{ card.cta_link }}"{% else %}div{% endif %}
+                class="bhima-edit bhima-edit--text-{{ card.text_theme }} bhima-edit--align-{{ card.text_align }}{% unless has_link %} bhima-edit--static{% endunless %}"
+                style="--edit-focal: {{ card.focal_point }};"
+              >
+                {%- comment -%} 1. the image IS the card {%- endcomment -%}
+                {%- if card.image != blank -%}
+                  {{
+                    card.image
+                    | image_url: width: 1600
+                    | image_tag:
+                      loading: 'lazy',
+                      sizes: '(min-width: 992px) 34vw, 88vw',
+                      widths: '400, 500, 600, 700, 800, 1000, 1200, 1400, 1600',
+                      class: 'bhima-edit__img',
+                      alt: alt_text
+                  }}
+                {%- else -%}
+                  <div class="bhima-edit__img bhima-edit__img--empty" aria-hidden="true"></div>
+                {%- endif -%}
+
+                {%- comment -%} 2. contrast only, not a panel {%- endcomment -%}
+                <span class="bhima-edit__scrim" aria-hidden="true"></span>
+
+                {%- comment -%} 3. the text, over the image {%- endcomment -%}
+                <div class="bhima-edit__content">
+                  {%- if card.title != blank -%}
+                    <h3 class="bhima-edit__title">{{ card.title | escape }}</h3>
+                  {%- endif -%}
+                  {%- if card.description != blank -%}
+                    <p class="bhima-edit__desc">{{ card.description | escape }}</p>
+                  {%- endif -%}
+                  {%- if card.cta_label != blank -%}
+                    <span class="bhima-edit__cta">
+                      <span class="bhima-edit__cta-label">{{ card.cta_label | escape }}</span>
+                      <svg class="bhima-edit__cta-arrow" viewBox="0 0 16 8" aria-hidden="true" focusable="false">
+                        <path d="M0 4h14M10.5 0.5 14.5 4l-4 3.5" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  {%- endif -%}
+                </div>
+              </{% if has_link %}a{% else %}div{% endif %}>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "BHIMA editorial edits",
+  "class": "bhima-edits-section",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section heading"
+    },
+    {
+      "type": "paragraph",
+      "content": "Optional. The cards introduce the content on their own, so leave these blank for the approved look."
+    },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "text", "id": "subheading", "label": "Sub-heading" },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Centred" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Card size"
+    },
+    {
+      "type": "paragraph",
+      "content": "Each card is a single full-bleed image with the text laid over its left side. Upload artwork with clear, bright space on the left so the text stays readable."
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "min": 150,
+      "max": 320,
+      "step": 10,
+      "unit": "px",
+      "label": "Card height (desktop)",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "card_height_mobile",
+      "min": 150,
+      "max": 340,
+      "step": 10,
+      "unit": "px",
+      "label": "Card height (phones)",
+      "default": 210
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between cards",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "min": 0,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "mobile_card_width",
+      "min": 70,
+      "max": 100,
+      "step": 2,
+      "unit": "%",
+      "label": "Card width on phones",
+      "default": 86,
+      "info": "Below 100% the next card peeks in, which shows the row can be swiped."
+    },
+    {
+      "type": "header",
+      "content": "Text over the image"
+    },
+    {
+      "type": "range",
+      "id": "text_inset",
+      "min": 16,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Text inset from the card edge",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "text_width",
+      "min": 35,
+      "max": 70,
+      "step": 1,
+      "unit": "%",
+      "label": "Maximum text width",
+      "default": 48,
+      "info": "Share of the card the text may occupy, leaving the rest of the image clear. Phones widen this automatically."
+    },
+    {
+      "type": "range",
+      "id": "overlay_strength",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Readability gradient",
+      "default": 85,
+      "info": "A soft warm fade behind the text only, so it never reads as a separate panel. Lower it for artwork that is already light on the left; raise it if the text is hard to read."
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Top spacing",
+      "default": 28,
+      "info": "Desktop value. Phones use a proportionally smaller amount."
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom spacing",
+      "default": 28
+    }
+  ],
+  "blocks": [
+    {
+      "type": "edit_card",
+      "name": "Editorial card",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_card",
+          "label": "Show this card",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image",
+          "info": "Fills the whole card. Alt text falls back to the heading below."
+        },
+        {
+          "type": "select",
+          "id": "focal_point",
+          "label": "Image focal point",
+          "default": "right center",
+          "info": "Which part of the image to keep in frame. 'Right' suits artwork whose subject sits away from the text.",
+          "options": [
+            { "value": "left center", "label": "Left" },
+            { "value": "center center", "label": "Centre" },
+            { "value": "right center", "label": "Right" },
+            { "value": "center top", "label": "Top" },
+            { "value": "center bottom", "label": "Bottom" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Heading", "default": "The Bridal Edit" },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "For the moments that become memories."
+        },
+        { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Explore now" },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "CTA link",
+          "info": "Pick a collection or page. With no link set the card shows as a still card instead of an empty link."
+        },
+        {
+          "type": "select",
+          "id": "text_theme",
+          "label": "Text colour",
+          "default": "dark",
+          "info": "Dark suits the light, warm imagery this design is built around. Only switch to light for a genuinely dark image.",
+          "options": [
+            { "value": "dark", "label": "Dark (on light imagery)" },
+            { "value": "light", "label": "Light (on dark imagery)" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text alignment",
+          "default": "left",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Centred" },
+            { "value": "right", "label": "Right" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BHIMA editorial edits",
+      "blocks": [
+        {
+          "type": "edit_card",
+          "settings": {
+            "title": "The Bridal Edit",
+            "description": "For the moments that become memories.",
+            "cta_label": "Explore now"
+          }
+        },
+        {
+          "type": "edit_card",
+          "settings": {
+            "title": "Everyday Elegance",
+            "description": "Jewellery you'll never want to take off.",
+            "cta_label": "Shop now"
+          }
+        },
+        {
+          "type": "edit_card",
+          "settings": {
+            "title": "Festive Edit",
+            "description": "Celebrate every occasion in brilliance.",
+            "cta_label": "View collection"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -21,6 +21,315 @@
 		padding-left: 15px;
 		padding-right: 15px;
 	}
+
+	/* Bhima testimonial treatment. Everything is scoped to this section so the
+	   shared slider and card styles used elsewhere on the homepage stay intact. */
+	#shopify-section-{{ section.id }} .bhima-testimonials {
+		--bhima-testimonial-ink: #29231D;
+		--bhima-testimonial-muted: #71695F;
+		--bhima-testimonial-gold: #B77A18;
+		--bhima-testimonial-border: #E6D8C7;
+		--slider-arrow-size: 30px;
+		overflow-x: clip;
+		padding-top: 48px;
+		padding-bottom: 44px;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .title_section {
+		margin-bottom: 34px;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .title_section .sub_title {
+		color: var(--bhima-testimonial-muted) !important;
+		font-size: 11px;
+		font-weight: 500;
+		letter-spacing: .18em;
+		line-height: 1.5;
+		margin-bottom: 14px;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .title_section .title {
+		color: var(--bhima-testimonial-ink) !important;
+		font-size: clamp(25px, 2.15vw, 34px);
+		font-weight: 500;
+		letter-spacing: .045em;
+		line-height: 1.2;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .title_section .title::after {
+		background: var(--bhima-testimonial-gold);
+		margin-top: 17px;
+		width: 46px;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__carousel {
+		margin-bottom: 0;
+		overflow: visible;
+		padding-bottom: 14px;
+		padding-top: 10px;
+		perspective: 1200px;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__carousel .slick-list {
+		overflow: visible !important;
+		padding: 0 !important;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__carousel .slick-track {
+		display: flex;
+		align-items: stretch;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__carousel .slick-slide {
+		height: auto;
+		opacity: .72;
+		transition: opacity .35s ease, transform .35s ease;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__carousel .slick-slide.slick-center,
+	#shopify-section-{{ section.id }} .bhima-testimonials__carousel .slick-slide.slick-current {
+		opacity: 1;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__slide,
+	#shopify-section-{{ section.id }} .bhima-testimonials__slide > .testimonial-item {
+		height: 100%;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-item {
+		background: rgba(255, 253, 249, .84);
+		border: 1px solid var(--bhima-testimonial-border);
+		border-radius: 12px;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		min-height: 336px;
+		padding: 30px 28px 27px;
+		position: relative;
+		transform: translate3d(0, 0, 0) scale(1);
+		transform-origin: center center;
+		transform-style: preserve-3d;
+		transition: border-color .35s ease, background-color .35s ease, opacity .35s ease, transform .65s cubic-bezier(.22, .61, .36, 1);
+		will-change: transform;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .slick-center .testimonial-item,
+	#shopify-section-{{ section.id }} .bhima-testimonials .slick-current .testimonial-item {
+		background: #FFFDF9;
+		border-color: #D7B67B;
+		transform: translate3d(0, -6px, 20px) scale(1.02);
+		z-index: 3;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .bhima-arc-side .testimonial-item {
+		z-index: 1;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .bhima-arc-side-left .testimonial-item {
+		transform: translate3d(0, 12px, -18px) scale(.84) rotateZ(-3deg) rotateY(3deg);
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .bhima-arc-side-right .testimonial-item {
+		transform: translate3d(0, 12px, -18px) scale(.84) rotateZ(3deg) rotateY(-3deg);
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .bhima-arc-side-far .testimonial-item {
+		opacity: .64;
+		transform: translate3d(0, 22px, -36px) scale(.74);
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-rating {
+		line-height: 1;
+		margin-bottom: 23px !important;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-rating i {
+		color: rgba(183, 122, 24, .3);
+		font-size: 15px;
+		margin-right: 3px !important;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-rating i.rating {
+		color: var(--bhima-testimonial-gold) !important;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-title {
+		color: var(--bhima-testimonial-ink);
+		font-size: 13px;
+		letter-spacing: .08em;
+		margin-bottom: 13px !important;
+		text-transform: uppercase;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-item__quote {
+		color: var(--bhima-testimonial-ink);
+		font-family: var(--font-family-default);
+		font-size: 15px !important;
+		line-height: 1.7;
+		margin-inline: auto;
+		max-width: 44ch;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-item__quote p {
+		color: inherit;
+		font: inherit;
+		line-height: inherit;
+		margin: 0;
+		max-width: none;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-avatar {
+		border: 1px solid #E6D8C7;
+		box-sizing: border-box;
+		flex: 0 0 80px;
+		height: 80px;
+		margin-top: auto !important;
+		padding: 3px;
+		width: 80px;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-avatar .respone_image,
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-avatar img,
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-avatar svg {
+		height: 100%;
+		object-fit: cover;
+		width: 100%;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-avatar img {
+		transition: transform .35s ease;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .block-info {
+		margin-top: 18px !important;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-name {
+		color: var(--bhima-testimonial-ink);
+		font-family: var(--font-family-default);
+		font-size: 14px;
+		font-weight: 500;
+		letter-spacing: .02em;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-info {
+		color: var(--bhima-testimonial-muted);
+		font-size: 12px;
+		margin-top: 4px;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__controls {
+		gap: 10px;
+		margin-top: 24px !important;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__controls .nav-arrow {
+		appearance: none;
+		background: transparent !important;
+		border: 1px solid transparent !important;
+		box-shadow: none !important;
+		color: var(--bhima-testimonial-ink);
+		font-size: 18px;
+		margin: 0 !important;
+		padding: 0;
+		transition: color .25s ease, border-color .25s ease;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__controls .nav-arrow:hover {
+		border-color: var(--bhima-testimonial-border) !important;
+		color: var(--bhima-testimonial-gold);
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__controls .append-dots {
+		align-items: center;
+		display: flex;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__controls .slick-dots {
+		gap: 8px;
+		margin: 0;
+		padding: 0;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__controls .slick-dots li {
+		margin: 0 !important;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__controls .slick-dots li button {
+		background: transparent;
+		border: 1px solid #BBAF9F;
+		height: 8px;
+		width: 8px;
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials__controls .slick-dots li.slick-active button {
+		background: var(--bhima-testimonial-gold);
+		border-color: var(--bhima-testimonial-gold);
+	}
+
+	@media (max-width: 767px) {
+		#shopify-section-{{ section.id }} .bhima-testimonials {
+			padding-top: 16px;
+			padding-bottom: 16px;
+		}
+
+		#shopify-section-{{ section.id }} .bhima-testimonials .title_section {
+			margin-bottom: 16px;
+		}
+
+		#shopify-section-{{ section.id }} .bhima-testimonials__carousel {
+			padding-top: 4px;
+			padding-bottom: 8px;
+		}
+
+		#shopify-section-{{ section.id }} .bhima-testimonials .title_section .title {
+			font-size: 24px;
+			letter-spacing: .035em;
+		}
+
+		#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-item {
+			min-height: 0;
+			padding: 26px 20px 24px;
+			transform: translate3d(0, 0, 0) scale(1);
+		}
+
+		#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-item__quote {
+			font-size: 14px !important;
+			line-height: 1.65;
+		}
+
+		#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-avatar {
+			flex-basis: 72px;
+			height: 72px;
+			width: 72px;
+		}
+
+		#shopify-section-{{ section.id }} .bhima-testimonials__controls {
+			margin-top: 14px !important;
+		}
+
+		#shopify-section-{{ section.id }} .bhima-testimonials .slick-center .testimonial-item,
+		#shopify-section-{{ section.id }} .bhima-testimonials .slick-current .testimonial-item {
+			transform: translate3d(0, -3px, 0) scale(1);
+		}
+
+		#shopify-section-{{ section.id }} .bhima-testimonials .bhima-arc-side-left .testimonial-item,
+		#shopify-section-{{ section.id }} .bhima-testimonials .bhima-arc-side-right .testimonial-item {
+			transform: translate3d(0, 8px, 0) scale(.88);
+		}
+	}
+
+	@media (max-width: 375px) {
+		#shopify-section-{{ section.id }} .bhima-testimonials .testimonial-item {
+			padding-inline: 16px;
+		}
+	}
+
+	#shopify-section-{{ section.id }} .bhima-testimonials .nav-arrow:focus-visible {
+		border-color: var(--bhima-testimonial-gold) !important;
+		outline: 2px solid rgba(183, 122, 24, .32);
+		outline-offset: 3px;
+	}
 	{% if sst.text_mw != blank %}
 		#shopify-section-{{ section.id }} .testimonial-item__quote p {
 			max-width: {{ sst.text_mw }}px;
@@ -43,12 +352,15 @@
 
 {% endstyle %}
 
-<div class="color-{{ sst.color_section }}{{ bg_class_full }}" data-section-id="{{ section.id }}" data-section-type="nov-slick">
+	<div class="bhima-testimonials color-{{ sst.color_section }}{{ bg_class_full }}" data-section-id="{{ section.id }}" data-section-type="nov-slick">
 	<div class="{{ sst.container }}">
 		<div class="container-inner{{ bg_class_contain }}">
 			{% if section.blocks.size > 0 %}
 				{% render 'heading-section', sub_position: sst.subheading_position %}
-				<div class="nov-slick-carousel row spacing-30{% if sst.animate %} wow fadeInRight{% endif %} "
+				<div class="bhima-testimonials__carousel nov-slick-carousel row spacing-30{% if sst.animate %} wow fadeInRight{% endif %} "
+					id="bhima-testimonials-carousel-{{ section.id }}"
+					role="region"
+					aria-label="Customer testimonials"
 					data-loop="true"
 					data-dots="{{ sst.show_dots }}"
 					data-nav="{{ sst.show_nav }}"
@@ -60,6 +372,14 @@
 					data-items_xs="{{ sst.xs }}"
 					data-row="{{ sst.row_number }}"
 					data-center="true"
+					data-autoplay="{{ sst.autoplay }}"
+					data-autoplayTimeout="{{ sst.autoplay_speed }}"
+					data-focus="true"
+					data-hover="true"
+					data-speed="{{ sst.animation_speed }}"
+					data-swipe="true"
+					data-arc-intensity="{{ sst.arc_intensity }}"
+					data-side-scale="{{ sst.side_scale }}"
 					data-oneslider
 					{% if sst.show_nav %}data-custnav{% endif %}>
 						{% for block in section.blocks %}
@@ -78,7 +398,7 @@
 									assign ns = '<i class="rating"></i><i class="rating"></i><i class="rating"></i><i class="rating"></i><i class="rating"></i>'
 								endcase
 							-%}
-							<div class="sp-item position-relative">
+							<div class="bhima-testimonials__slide sp-item position-relative">
 								<div class="testimonial-item text-center">
 									{% if sst.s_star %}
 										<div class="testimonial-rating mb-25">{{ ns }}</div>
@@ -108,15 +428,15 @@
 						{% endfor %}
 				</div>
 				{% if sst.show_nav or sst.show_dots %}
-				<div class="d-flex justify-content-center align-items-center mt-60 {{ sst.dots_color }}">
+				<div class="bhima-testimonials__controls d-flex justify-content-center align-items-center mt-60 {{ sst.dots_color }}">
 					{% if sst.show_nav %}
-						<div class="nav-arrow nav-prev pointer"></div>
+						<button type="button" class="nav-arrow nav-prev pointer" aria-label="Previous testimonial"></button>
 					{% endif %}
 					{% if sst.show_dots %}
 						<div class="append-dots"></div>
 					{% endif %}
 					{% if sst.show_nav %}
-						<div class="nav-arrow nav-next pointer"></div>
+						<button type="button" class="nav-arrow nav-next pointer" aria-label="Next testimonial"></button>
 					{% endif %}
 				</div>
 				{% endif %}
@@ -127,6 +447,73 @@
 	</div>
 </div>
 
+<script>
+  (function () {
+    var section = document.getElementById('shopify-section-{{ section.id }}');
+    if (!section || typeof window.jQuery === 'undefined') return;
+
+    var $ = window.jQuery;
+    var slider = $(section).find('.bhima-testimonials__carousel');
+    if (!slider.length) return;
+
+    function updateArc(event, slick) {
+      slick = slick || slider.slick('getSlick');
+      if (!slick) return;
+
+      var visibleSlides = slider.find('.slick-slide.slick-active');
+      var centerSlide = visibleSlides.filter('.slick-center').first();
+      if (!centerSlide.length) centerSlide = visibleSlides.filter('.slick-current').first();
+      if (!centerSlide.length) centerSlide = visibleSlides.eq(Math.floor(visibleSlides.length / 2));
+
+      var centerPosition = visibleSlides.index(centerSlide);
+      var intensity = parseFloat(slider.attr('data-arc-intensity')) || 18;
+      var sideScale = (parseFloat(slider.attr('data-side-scale')) || 84) / 100;
+      var isMobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+
+      slider.find('.slick-slide').removeClass('bhima-arc-active bhima-arc-side bhima-arc-side-left bhima-arc-side-right bhima-arc-side-far');
+
+      visibleSlides.each(function (index) {
+        var slide = $(this);
+        var card = slide.find('.testimonial-item').first();
+        if (!card.length) return;
+
+        var offset = index - centerPosition;
+        var distance = Math.abs(offset);
+
+        if (offset === 0) {
+          slide.addClass('bhima-arc-active');
+          card.css('transform', isMobile ? 'translate3d(0, -3px, 0) scale(1)' : 'translate3d(0, -6px, 20px) scale(1.02)');
+          return;
+        }
+
+        slide.addClass('bhima-arc-side');
+        slide.addClass(offset < 0 ? 'bhima-arc-side-left' : 'bhima-arc-side-right');
+        if (distance > 1) slide.addClass('bhima-arc-side-far');
+
+        var scale = Math.pow(sideScale, Math.min(distance, 2));
+        var y = intensity * Math.min(distance, 2);
+        var z = -intensity * Math.min(distance, 2);
+        var rotation = offset < 0 ? -3 : 3;
+        card.css('transform', isMobile
+          ? 'translate3d(0, ' + Math.min(y, 8) + 'px, 0) scale(.88)'
+          : 'translate3d(0, ' + y + 'px, ' + z + 'px) scale(' + scale + ') rotateZ(' + rotation + 'deg) rotateY(' + (rotation * -1) + 'deg)');
+      });
+    }
+
+    slider.on('init.bhimaArc setPosition.bhimaArc afterChange.bhimaArc', updateArc);
+    slider.on('keydown.bhimaArc', '.nav-arrow', function (event) {
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        slider.slick('slickPrev');
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        slider.slick('slickNext');
+      }
+    });
+
+    if (slider.hasClass('slick-initialized')) updateArc(null, slider.slick('getSlick'));
+  }());
+</script>
 {% schema %}
 	{
 		"name": "Vinova Testimonials",
@@ -281,6 +668,52 @@
 				"step": 1,
 				"label": "Number row",
 				"default": 1
+			},
+			{
+				"type": "checkbox",
+				"id": "autoplay",
+				"label": "Autoplay",
+				"default": true
+			},
+			{
+				"type": "range",
+				"id": "autoplay_speed",
+				"min": 5000,
+				"max": 6000,
+				"step": 500,
+				"label": "Autoplay speed",
+				"default": 5500,
+				"unit": "ms"
+			},
+			{
+				"type": "range",
+				"id": "arc_intensity",
+				"min": 8,
+				"max": 28,
+				"step": 1,
+				"label": "Arc intensity",
+				"default": 18,
+				"unit": "px"
+			},
+			{
+				"type": "range",
+				"id": "side_scale",
+				"min": 75,
+				"max": 90,
+				"step": 1,
+				"label": "Side card scale",
+				"default": 84,
+				"unit": "%"
+			},
+			{
+				"type": "range",
+				"id": "animation_speed",
+				"min": 400,
+				"max": 1000,
+				"step": 50,
+				"label": "Animation speed",
+				"default": 650,
+				"unit": "ms"
 			},
 			{
 				"type": "header",

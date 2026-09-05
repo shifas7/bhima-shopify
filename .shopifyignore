@@ -41,3 +41,4 @@
 **/.DS_Store
 Thumbs.db
 **/Thumbs.db
+.validate-theme-settings.js

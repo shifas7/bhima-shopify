@@ -1,0 +1,201 @@
+{%- comment -%}
+  BHIMA — Smart Gold + Assurance.
+
+  A single two-column row: the Smart Gold card renders the merchant's
+  uploaded creative as-is (the image already carries its own heading, copy
+  and CTA, so no text is overlaid in Liquid) beside the Assurance card,
+  whose benefit items are Theme Editor blocks so the merchant can add, edit
+  or reorder them without touching Liquid.
+{%- endcomment -%}
+
+{{ 'bhima-smart-gold-assurance.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign sst = section.settings
+  assign gold_image = sst.gold_image
+  assign gold_alt = gold_image.alt | default: sst.gold_image_alt | default: 'Bhima Smart Gold'
+  assign gold_has_link = false
+  if sst.gold_link != blank
+    assign gold_has_link = true
+  endif
+-%}
+
+<section class="bhima-sga" aria-label="Bhima Smart Gold">
+  <div class="bhima-sga__inner">
+    <div class="bhima-sga__row">
+      <{% if gold_has_link %}a href="{{ sst.gold_link }}"{% else %}div{% endif %}
+        class="bhima-sga__gold"
+        style="--gold-fit: {{ sst.image_fit }}; --gold-pos: {{ sst.image_position }};"
+        {% if gold_has_link %}aria-label="{{ gold_alt | escape }}"{% endif %}
+      >
+        {%- if gold_image != blank -%}
+          {{
+            gold_image
+            | image_url: width: 1600
+            | image_tag:
+              loading: 'lazy',
+              widths: '480, 700, 960, 1280, 1600',
+              sizes: '(min-width: 768px) 42vw, 100vw',
+              class: 'bhima-sga__gold-image',
+              alt: gold_alt
+          }}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'bhima-sga__gold-image placeholder-svg' }}
+        {%- endif -%}
+      </{% if gold_has_link %}a{% else %}div{% endif %}>
+
+      <div class="bhima-sga__assurance">
+        <h3 class="bhima-sga__assurance-heading">{{ sst.assurance_heading | escape }}</h3>
+
+        <ul class="bhima-sga__assurance-list" role="list">
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign item = block.settings
+            -%}
+            <li class="bhima-sga__assurance-item" {{ block.shopify_attributes }}>
+              <span class="bhima-sga__assurance-icon-wrap" aria-hidden="true">
+                {%- case item.icon_type -%}
+                  {%- when 'purity' -%}
+                    <svg class="bhima-sga__assurance-icon" viewBox="0 0 24 24" focusable="false"><path d="m12 3 6 5-6 13L6 8l6-5ZM6 8h12M9 6l3 2 3-2M9 6l3-3 3 3"></path></svg>
+                  {%- when 'certified' -%}
+                    <svg class="bhima-sga__assurance-icon" viewBox="0 0 24 24" focusable="false"><path d="M12 3.2 14.2 5l3-.4.6 3 2.6 1.6-1.3 2.8 1.3 2.8-2.6 1.6-.6 3-3-.4L12 20.8l-2.2-2-3 .4-.6-3-2.6-1.6 1.3-2.8-1.3-2.8L6.2 7.6l.6-3 3 .4Z"></path><path d="m9 12.3 2 2 4-4.4"></path></svg>
+                  {%- when 'delivery' -%}
+                    <svg class="bhima-sga__assurance-icon" viewBox="0 0 24 24" focusable="false"><path d="M3 7h11v9H3z"></path><path d="M14 10.2h3.6l3 2.8v3H14z"></path><circle cx="7.2" cy="18" r="1.6"></circle><circle cx="17.2" cy="18" r="1.6"></circle></svg>
+                  {%- when 'exchange' -%}
+                    <svg class="bhima-sga__assurance-icon" viewBox="0 0 24 24" focusable="false"><path d="M4.5 8h12.7l-2.7-2.7"></path><path d="M19.5 16H6.8l2.7 2.7"></path></svg>
+                  {%- when 'buyback' -%}
+                    <svg class="bhima-sga__assurance-icon" viewBox="0 0 24 24" focusable="false"><circle cx="11" cy="13" r="6.2"></circle><path d="M11 9.8v3.2l2.3 1.3"></path><path d="M17.2 6.4a8 8 0 0 1 1.6 2.8"></path><path d="M16.5 5.6h2.6v2.6"></path></svg>
+                  {%- when 'custom' -%}
+                    {%- if item.custom_icon != blank -%}
+                      {{ item.custom_icon | image_url: width: 80 | image_tag: class: 'bhima-sga__assurance-icon-image', loading: 'lazy', alt: '' }}
+                    {%- endif -%}
+                {%- endcase -%}
+              </span>
+              <span class="bhima-sga__assurance-title">{{ item.title | escape }}</span>
+              <span class="bhima-sga__assurance-desc">{{ item.description | escape }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Smart Gold + Assurance",
+  "tag": "section",
+  "class": "section-bhima-smart-gold-assurance",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Bhima Smart Gold"
+    },
+    {
+      "type": "image_picker",
+      "id": "gold_image",
+      "label": "Smart Gold card image",
+      "info": "This image is the complete card — it should already contain its own heading, copy and CTA. It is rendered as-is, with no text overlaid."
+    },
+    {
+      "type": "text",
+      "id": "gold_image_alt",
+      "label": "Image alt text",
+      "info": "Used for accessibility if the image itself has no alt text set.",
+      "default": "Bhima Smart Gold"
+    },
+    {
+      "type": "url",
+      "id": "gold_link",
+      "label": "Card link",
+      "info": "Optional. Makes the whole image clickable, e.g. to an app download page."
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "default": "cover",
+      "options": [
+        { "value": "cover", "label": "Fill card (may crop edges)" },
+        { "value": "contain", "label": "Show full image (may letterbox)" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "default": "center center",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" },
+        { "value": "center top", "label": "Top" },
+        { "value": "center bottom", "label": "Bottom" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "The Bhima Assurance"
+    },
+    {
+      "type": "text",
+      "id": "assurance_heading",
+      "label": "Heading",
+      "default": "The Bhima Assurance"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "Icon",
+          "default": "purity",
+          "options": [
+            { "value": "purity", "label": "Purity" },
+            { "value": "certified", "label": "Certified" },
+            { "value": "delivery", "label": "Delivery" },
+            { "value": "exchange", "label": "Exchange" },
+            { "value": "buyback", "label": "Buyback" },
+            { "value": "custom", "label": "Custom image" }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon image",
+          "info": "Used when Icon is set to Custom image."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Purity Guaranteed"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Assured purity in every piece"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Smart Gold + Assurance",
+      "blocks": [
+        { "type": "benefit", "settings": { "icon_type": "purity", "title": "Purity Guaranteed", "description": "Assured purity in every piece" } },
+        { "type": "benefit", "settings": { "icon_type": "certified", "title": "Certified Jewellery", "description": "BIS Hallmarked & Certified" } },
+        { "type": "benefit", "settings": { "icon_type": "delivery", "title": "Free Delivery", "description": "Secure delivery across India" } },
+        { "type": "benefit", "settings": { "icon_type": "exchange", "title": "Easy Exchange", "description": "100% value on exchange" } },
+        { "type": "benefit", "settings": { "icon_type": "buyback", "title": "Lifetime Buyback", "description": "At prevailing rate" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

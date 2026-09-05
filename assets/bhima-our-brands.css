@@ -1,0 +1,265 @@
+/* BHIMA — Our Brands.
+   One gallery surface for the brand rail. The selectors are scoped to this
+   section so the approved homepage sections around it remain untouched. */
+
+.bhima-brands {
+  --brands-ivory: #FFFDF9;
+  --brands-champagne: #F8F1E7;
+  --brands-ink: #29231D;
+  --brands-muted: #71695F;
+  --brands-gold: #B77A18;
+  --brands-gold-light: #C58A2A;
+  --brands-border: #E6D8C7;
+  --brands-gutter: var(--bhima-home-gutter, clamp(16px, 3.2vw, 40px));
+  background: var(--brands-ivory);
+  padding-block: clamp(24px, 3vw, 40px) clamp(28px, 3.6vw, 48px);
+  overflow: hidden;
+}
+
+.bhima-brands *,
+.bhima-brands *::before,
+.bhima-brands *::after {
+  box-sizing: border-box;
+}
+
+.bhima-brands__inner {
+  width: 100%;
+  max-width: calc(var(--bhima-home-container, 1360px) + (var(--brands-gutter) * 2));
+  margin-inline: auto;
+  padding-inline: var(--brands-gutter);
+}
+
+/* Keep this section's heading compact while retaining the shared type system. */
+.bhima-brands .title_section {
+  margin-bottom: 10px;
+}
+
+body.template-index .main-content .bhima-brands .title_section .title::after {
+  display: none;
+}
+
+.bhima-brands__rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(112px, 42vw);
+  height: 14px;
+  margin: 0 auto 24px;
+  color: var(--brands-gold);
+}
+
+.bhima-brands__rule::before,
+.bhima-brands__rule::after {
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--brands-gold-light);
+  content: '';
+}
+
+.bhima-brands__rule span {
+  width: 8px;
+  height: 8px;
+  margin-inline: 9px;
+  border: 1px solid var(--brands-gold);
+  transform: rotate(45deg);
+}
+
+.bhima-brands__stage {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--brands-border);
+  border-radius: 18px;
+  background: var(--brands-champagne);
+  padding: 8px 14px;
+  box-shadow: inset 0 0 0 1px rgba(255, 253, 249, 0.72);
+  overflow: hidden;
+}
+
+.bhima-brands__row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bhima-brands__item {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Ivory-gold separators make this read as one gallery rather than five cards. */
+.bhima-brands__item:not(:last-child)::after {
+  position: absolute;
+  top: 22%;
+  right: 0;
+  width: 1px;
+  height: 56%;
+  background: var(--brands-border);
+  content: '';
+}
+
+.bhima-brands__card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: clamp(104px, 9vw, 132px);
+  padding: 22px clamp(14px, 2.2vw, 32px);
+  color: var(--brands-ink);
+  text-decoration: none;
+  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 360ms ease;
+}
+
+.bhima-brands__card:focus-visible {
+  z-index: 1;
+  border-radius: 10px;
+  outline: 2px solid var(--brands-gold);
+  outline-offset: -5px;
+}
+
+.bhima-brands__card::before {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--brands-gold);
+  content: '';
+  opacity: 0;
+  transform: translateX(-50%) rotate(45deg) scale(0.5);
+  transition: opacity 360ms ease, transform 360ms ease;
+}
+
+.bhima-brands__card::after {
+  position: absolute;
+  right: 50%;
+  bottom: 10px;
+  width: 0;
+  height: 1px;
+  background: var(--brands-gold);
+  content: '';
+  transform: translateX(50%);
+  transition: width 360ms ease;
+}
+
+.bhima-brands__logo,
+.bhima-brands__card .placeholder-svg {
+  display: block;
+  max-width: 100%;
+  max-height: var(--brands-logo-h, 60px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.76;
+  transition: opacity 360ms ease, transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* The active mark gets the spotlight; surrounding marks settle back softly. */
+.bhima-brands__row:has(.bhima-brands__card:hover) .bhima-brands__card:not(:hover) .bhima-brands__logo,
+.bhima-brands__row:has(.bhima-brands__card:focus-visible) .bhima-brands__card:not(:focus-visible) .bhima-brands__logo {
+  opacity: 0.46;
+}
+
+.bhima-brands__card:hover,
+.bhima-brands__card:focus-visible {
+  background: rgba(255, 253, 249, 0.5);
+  transform: translateY(-2px);
+}
+
+.bhima-brands__card:hover .bhima-brands__logo,
+.bhima-brands__card:focus-visible .bhima-brands__logo {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.bhima-brands__card:hover::before,
+.bhima-brands__card:focus-visible::before {
+  opacity: 1;
+  transform: translateX(-50%) rotate(45deg) scale(1);
+}
+
+.bhima-brands__card:hover::after,
+.bhima-brands__card:focus-visible::after {
+  width: 34px;
+}
+
+/* Tablet keeps the single stage and lets the rail scroll internally if needed. */
+@media (max-width: 1199px) {
+  .bhima-brands__stage {
+    padding-inline: 8px;
+  }
+
+  .bhima-brands__row {
+    justify-content: flex-start;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x proximity;
+  }
+
+  .bhima-brands__row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bhima-brands__item {
+    flex: 0 0 25%;
+    scroll-snap-align: start;
+  }
+}
+
+/* Mobile presents two marks at a time, preserving a clear swipe affordance. */
+@media (max-width: 767px) {
+  .bhima-brands {
+    padding-block: 12px;
+  }
+
+  .bhima-brands .title_section {
+    margin-bottom: 8px;
+  }
+
+  .bhima-brands__rule {
+    margin-bottom: 18px;
+  }
+
+  .bhima-brands__stage {
+    border-radius: 14px;
+    padding: 6px;
+  }
+
+  .bhima-brands__item {
+    flex: 0 0 48%;
+  }
+
+  .bhima-brands__card {
+    min-height: 100px;
+    padding: 18px 12px;
+  }
+
+  .bhima-brands__item:not(:last-child)::after {
+    top: 24%;
+    height: 52%;
+  }
+
+  /* Touch devices do not need a hover-only dimming effect. */
+  .bhima-brands__row:has(.bhima-brands__card:hover) .bhima-brands__card:not(:hover) .bhima-brands__logo {
+    opacity: 0.76;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bhima-brands__card,
+  .bhima-brands__card::before,
+  .bhima-brands__card::after,
+  .bhima-brands__logo {
+    transition: none;
+  }
+}

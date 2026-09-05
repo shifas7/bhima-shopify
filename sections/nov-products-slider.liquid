@@ -16,6 +16,24 @@
 
   assign collection = collections[sst.collection]
   assign product_limit = sst.limit
+
+  # Cards per view on small screens. Swiper accepts a fractional
+  # slidesPerView, but the "items" settings are integer ranges, so the peek is
+  # added here. With mobile_peek off these are the raw settings, exactly as
+  # before, which keeps every other slider on the theme unchanged.
+  assign items_sm = sst.sm
+  assign items_xs = sst.xs
+  if sst.mobile_peek
+    assign items_sm = sst.sm | plus: 0.3
+    assign items_xs = sst.xs | plus: 0.5
+  endif
+
+  # Which product card to render. "collection" reuses the listing page card
+  # directly so the two stay one component; the default is untouched.
+  assign card_snippet = "product-grid-item-style-1"
+  if sst.card_style == "collection"
+    assign card_snippet = "product-grid-item-style-collection"
+  endif
 -%}
 {% style %}
   {% render 'nov-section-style' %}
@@ -47,6 +65,551 @@
       --product-color-reduced-price: {{ sst.product_price_reduced_color }};
     }
   {% endif %}
+
+  /* New Arrivals keeps the existing heading settings, but presents only the
+     approved visible title and a compact jewellery-inspired divider. */
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section {
+    margin: 0 0 18px !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section .sub_title {
+    display: none !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section .title,
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section .title > *,
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section .title p {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    font-family: var(--font-family-primary) !important;
+    color: #29231D !important;
+    font-size: 26px !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1.3 !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section .title::after {
+    content: '';
+    display: block;
+    width: 112px;
+    height: 8px;
+    margin: 12px auto 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='112' height='8' viewBox='0 0 112 8' fill='none'%3E%3Cline x1='0' y1='4' x2='46' y2='4' stroke='%23B77A18' stroke-width='1'/%3E%3Ccircle cx='51' cy='4' r='1.5' fill='%23B77A18'/%3E%3Ccircle cx='56' cy='4' r='2.2' fill='%23B77A18'/%3E%3Ccircle cx='61' cy='4' r='1.5' fill='%23B77A18'/%3E%3Cline x1='66' y1='4' x2='112' y2='4' stroke='%23B77A18' stroke-width='1'/%3E%3C/svg%3E") center center / contain no-repeat;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .nov-swiper-carousel {
+    margin-top: 0 !important;
+  }
+
+  /* New Arrivals reuses the PLP card snippet directly. The PLP section's
+     inline card styles are section-scoped, so mirror that presentation here
+     without changing the collection template or the shared snippet. */
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card {
+    position: relative;
+    height: 100%;
+    margin-bottom: 0 !important;
+    border-radius: 10px !important;
+    background: transparent !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card.h_bd:before,
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card.bg:before {
+    z-index: 0;
+    border: 1px solid #f0e3d5;
+    border-radius: 10px;
+    background: #fffdf9;
+    box-shadow: none;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .inner-top {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .thumbnail-container {
+    position: static;
+    overflow: visible;
+    border-radius: 0;
+    transform: none;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .thumbnail-container > a {
+    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+    background: #fffaf1;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .respone_image {
+    background: #fffaf1;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .thumbnail-container img {
+    object-fit: contain;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .product--badge {
+    top: 12px;
+    left: 12px;
+    z-index: 3;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .button--top {
+    top: 12px;
+    right: 12px;
+    z-index: 4;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .button--top .productQuickView,
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .button--top .productWishList {
+    transform: none;
+    opacity: 1;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .item-product__wishlist,
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .btnProductQuickview {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e5d8ca;
+    border-radius: 50%;
+    background: #fffdf9;
+    color: #5a554f;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .item-product__wishlist:hover,
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .btnProductQuickview:hover,
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .item-product__wishlist.whislist-added {
+    border-color: #c98a32;
+    background: #fff3e1;
+    color: #a76100;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .product__info {
+    min-height: 105px;
+    padding: 14px 14px 62px !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .product__title {
+    min-height: 20px;
+    margin-bottom: 6px;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .product__title a {
+    color: var(--product-color-title);
+    font-size: 1.3rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .price-box {
+    margin-top: 0 !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .price-regular,
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .special-price {
+    color: var(--product-color-price);
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .old-price {
+    margin-inline-start: 8px;
+    color: var(--product-color-reduced-price);
+    font-size: 1.1rem;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .thumbnail-container > .form-btn-item-product,
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .thumbnail-container > .btn-quick-add {
+    bottom: 14px;
+    left: 14px;
+    z-index: 3;
+    width: calc(100% - 28px) !important;
+    transform: none;
+    opacity: 1;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .thumbnail-container > .form-btn-item-product .add-to-cart-btn,
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .thumbnail-container > .btn-quick-add {
+    box-sizing: border-box;
+    height: 36px;
+    border: 1px solid #d58a2c !important;
+    border-radius: 5px;
+    background: #fffdf9 !important;
+    color: #a76100 !important;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: .03em;
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .thumbnail-container > .form-btn-item-product .add-to-cart-btn:hover,
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .thumbnail-container > .btn-quick-add:hover {
+    border-color: #b86d00 !important;
+    background: #b86d00 !important;
+    color: #fff !important;
+  }
+
+  /* The live PLP card keeps this metadata collapsed at this card size. */
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .available_product,
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .desc {
+    display: none !important;
+  }
+
+  /* The shared PLP card supplies the visual hierarchy; this carousel owns the
+     slide geometry so a grid-only height rule cannot make one image fill the
+     entire homepage section. */
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .nov-swiper-carousel .swiper-wrapper {
+    align-items: flex-start;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .nov-swiper-carousel .swiper-slide.item {
+    align-self: flex-start;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .nov-swiper-carousel .swiper-slide.item > .item-product {
+    display: block;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .nov-swiper-carousel .product-top {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .nov-swiper-carousel .product-top.ratio-11 .respone_image {
+    padding-top: 100% !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .nov-swiper-carousel .product-top.ratio-34 .respone_image {
+    padding-top: 133.3333% !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-new-arrivals .nov-swiper-carousel .product-top.ratio-43 .respone_image {
+    padding-top: 75% !important;
+  }
+
+  @media screen and (max-width: 989px) {
+    #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section .title,
+    #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section .title > *,
+    #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section .title p {
+      font-size: 22.1px !important;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section .title::after {
+      width: 96px;
+      margin-top: 10px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section .title,
+    #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section .title > *,
+    #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section .title p {
+      font-size: 19.5px !important;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section .title::after {
+      width: 86px;
+      margin-top: 9px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    #shopify-section-{{ section.id }} .bhima-new-arrivals .title_section {
+      margin-bottom: 18px !important;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .product__info {
+      min-height: 96px;
+      padding: 12px 12px 58px !important;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .thumbnail-container > .form-btn-item-product,
+    #shopify-section-{{ section.id }} .bhima-new-arrivals .collection__product-content:not([data-grid='list']) .collection-product-card .thumbnail-container > .btn-quick-add {
+      bottom: 12px;
+      left: 12px;
+      width: calc(100% - 24px) !important;
+    }
+  }
+
+  /* Our Recommendations keeps the same product-card selectors as New
+     Arrivals via the shared class on its homepage instance. These rules only
+     shape the existing split composition and featured-image rail. */
+  #shopify-section-{{ section.id }} .bhima-recommendations {
+    background: var(--bhima-color-page, #FFFDF9);
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations.distance {
+    padding-top: 32px !important;
+    padding-bottom: 40px !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations > .container-fluid {
+    width: 100%;
+    max-width: none;
+    margin-inline: auto;
+    padding-inline: 15px !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations > .container-fluid > .container-inner {
+    padding-inline: 0;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .title_section {
+    margin: 0 0 50px !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .title_section .sub_title {
+    display: none !important;
+    margin: 0 !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .row {
+    display: flex;
+    align-items: flex-start;
+    margin-right: -5px;
+    margin-left: -5px;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .row > [class*="col-"] {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .row > .col-lg-3 {
+    display: block;
+    flex: 0 0 25%;
+    max-width: 25%;
+    align-self: flex-start;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .row > .col-lg-9 {
+    display: block;
+    flex: 0 0 75%;
+    max-width: 75%;
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations [data-section-type="nov-slick"],
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-slick-carousel,
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-slick-carousel .slick-list,
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-slick-carousel .slick-track {
+    width: 100%;
+    height: auto;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-slick-carousel .slick-track {
+    display: flex;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-slick-carousel .slick-slide {
+    height: auto;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 {
+    position: relative;
+    height: auto;
+    min-height: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0;
+    background: var(--bhima-color-soft, #F8F1E7);
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-slick-carousel {
+    border-radius: 20px;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 > a,
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 > .respone_image {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 .respone_image {
+    padding-top: 0 !important;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 img,
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 .placeholder-svg {
+    display: block;
+    width: 100%;
+    height: 100% !important;
+    object-fit: cover;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 .slick-arrow {
+    top: auto;
+    bottom: 25px;
+    z-index: 3;
+    width: 50px;
+    height: 50px;
+    border: 1px solid var(--bhima-color-border-light, #E6D8C7);
+    border-radius: 5px;
+    background: rgba(255, 253, 249, 0.94);
+    color: var(--bhima-color-text, #29231D);
+    opacity: 1;
+    transform: none;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 .slick-prev {
+    left: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 .slick-next {
+    left: 25.5%;
+    right: auto;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 .slick-arrow:hover {
+    border-color: var(--bhima-color-gold, #B77A18);
+    background: var(--bhima-color-gold, #B77A18);
+    color: #ffffff;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .collection__product-content,
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-swiper-carousel {
+    width: 100%;
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-swiper-carousel .swiper-wrapper {
+    align-items: stretch;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-swiper-carousel .swiper-slide.item {
+    display: flex;
+    height: auto !important;
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-swiper-carousel .swiper-slide.item > .item-product {
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-swiper-carousel .slider-nav {
+    pointer-events: none;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-swiper-carousel .slider-nav .nav-arrow {
+    pointer-events: auto;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--bhima-color-border-light, #E6D8C7);
+    border-radius: 50%;
+    background: rgba(255, 253, 249, 0.96);
+    color: var(--bhima-color-text, #29231D);
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-swiper-carousel .slider-nav .nav-arrow:hover {
+    border-color: var(--bhima-color-gold, #B77A18);
+    background: var(--bhima-color-gold, #B77A18);
+    color: #ffffff;
+  }
+
+  @media (min-width: 1441px) {
+    #shopify-section-{{ section.id }} .bhima-recommendations > .container-fluid {
+      padding-inline: var(--container-fluid, 15px) !important;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 991px) {
+    #shopify-section-{{ section.id }} .bhima-recommendations.distance {
+      padding-top: 30px !important;
+      padding-bottom: 50px !important;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .row > .col-lg-3 {
+      flex-basis: 33.333333%;
+      max-width: 33.333333%;
+      align-self: flex-start;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .row > .col-lg-9 {
+      flex-basis: 66.666667%;
+      max-width: 66.666667%;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 {
+      min-height: 0;
+    }
+  }
+
+  @media (max-width: 767px) {
+    #shopify-section-{{ section.id }} .bhima-recommendations.distance {
+      padding-top: 16px !important;
+      padding-bottom: 16px !important;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations > .container-fluid {
+      padding-inline: 15px !important;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .title_section {
+      margin-bottom: 24px !important;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .row {
+      display: block;
+      margin-inline: 0;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .row > [class*="col-"] {
+      display: block;
+      width: 100%;
+      max-width: none;
+      padding-inline: 0;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .row > .col-lg-3 {
+      margin-bottom: 24px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 {
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 1.6 / 1 !important;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 img,
+    #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 .placeholder-svg {
+      object-position: center 45%;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 .slick-arrow {
+      bottom: 16px;
+      width: 48px;
+      height: 48px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 .slick-prev {
+      left: 14px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 .slick-next {
+      left: 68px;
+      right: auto;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .nov-swiper-carousel {
+      overflow: hidden;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-recommendations .nov-swiper-carousel .slider-nav {
+      display: none;
+    }
+  }
 {% endstyle %}
 <div class="{{ bg_class_full }}">
   <div class="{{ sst.container }}">
@@ -58,12 +621,22 @@
           <div class="col-lg-3 col-md-4 mb-sm-{{ sst.spacing }} mb-xs-10" data-section-id="{{ section.id }}" data-section-type="nov-slick">
             <div class="nov-slick-carousel overflow_hidden" data-dots="false" data-nav="{{ sst.show_arrow }}" data-row="1" data-fade="true" data-speed="700">
               {% for block in section.blocks %}
-                <div class="item position-relative nov-sh-image-2">
-                  {% if block.settings.img_link != blank %}
-                    <a href="{{ block.settings.img_link }}">
-                  {% endif %}
+              <div class="item position-relative nov-sh-image-2"{% if block.settings.img != blank %} style="aspect-ratio: {{ block.settings.img.aspect_ratio }};"{% endif %}>
+                {% if block.settings.img_link != blank %}
+                  <a href="{{ block.settings.img_link }}">
+                {% endif %}
                     {% if block.settings.img != blank %}
-                      {%- render 'nov-aspect-image', image: block.settings.img -%}
+                      {% assign featured_alt = block.settings.img.alt | default: 'Featured jewellery' %}
+                      {{
+                        block.settings.img
+                        | image_url: width: 1600
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '480, 640, 800, 1000, 1200, 1600',
+                          sizes: '(min-width: 992px) 32vw, 100vw',
+                          class: 'recommendation-featured-image',
+                          alt: featured_alt
+                      }}
                     {% else %}
                       {%- capture current -%}{% cycle 1, 2, 3 %}{%- endcapture -%}
                       {{ 'collection-apparel-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
@@ -77,7 +650,7 @@
           </div>
           <div class="col-lg-9 col-md-8">
             {% comment %} product slider {% endcomment %}
-            <div data-section-id="{{ section.id }}" data-section-type="nov-swiper">
+            <div class="collection__product-content collection-template" data-grid="grid-4" data-section-id="{{ section.id }}" data-section-type="nov-swiper">
               <div class="grid--view-items nov-swiper-carousel swiper {{ sst.type_slider }}"
                 data-autoplay="false" 
                 data-loop="false"
@@ -87,13 +660,17 @@
                 data-items_xl="{{ sst.xl }}"
                 data-items_lg="{{ sst.lg }}"
                 data-items_md="{{ sst.md }}"
-                data-items_sm="{{ sst.sm }}"
-                data-items_xs="{{ sst.xs }}"
+                data-items_sm="{{ items_sm }}"
+                data-items_xs="{{ items_xs }}"
                 data-spacing="{{ sst.spacing }}">
                 <div class="swiper-wrapper">
                   {% for product in collection.products limit: product_limit %}
                     <div class="swiper-slide item">
-                      {% render 'product-grid-item-style-1', product: product, section_id: section.id %}
+                      {% if card_snippet == 'product-grid-item-style-collection' %}
+                        {% render 'product-grid-item-style-collection', product: product, section_id: section.id, viewtype: 'full_width' %}
+                      {% else %}
+                        {% render 'product-grid-item-style-1', product: product, section_id: section.id, viewtype: 'full_width' %}
+                      {% endif %}
                     </div>
                   {% else %}
                     {%- for i in (1..6) -%}
@@ -140,7 +717,7 @@
         </div>
       {% else %}
         {% comment %} product slider {% endcomment %}
-        <div data-section-id="{{ section.id }}" data-section-type="nov-swiper">
+        <div class="collection__product-content collection-template" data-grid="grid-4" data-section-id="{{ section.id }}" data-section-type="nov-swiper">
           <div class="grid--view-items nov-swiper-carousel swiper {{ sst.type_slider }}"
             data-autoplay="false" 
             data-loop="false"
@@ -150,13 +727,17 @@
             data-items_xl="{{ sst.xl }}"
             data-items_lg="{{ sst.lg }}"
             data-items_md="{{ sst.md }}"
-            data-items_sm="{{ sst.sm }}"
-            data-items_xs="{{ sst.xs }}"
+            data-items_sm="{{ items_sm }}"
+            data-items_xs="{{ items_xs }}"
             data-spacing="{{ sst.spacing }}">
             <div class="swiper-wrapper">
               {% for product in collection.products limit: product_limit %}
                 <div class="swiper-slide item">
-                  {% render 'product-grid-item-style-1', product: product, section_id: section.id %}
+                  {% if card_snippet == 'product-grid-item-style-collection' %}
+                    {% render 'product-grid-item-style-collection', product: product, section_id: section.id, viewtype: 'full_width' %}
+                  {% else %}
+                    {% render 'product-grid-item-style-1', product: product, section_id: section.id, viewtype: 'full_width' %}
+                  {% endif %}
                 </div>
               {% else %}
                 {%- for i in (1..6) -%}
@@ -203,6 +784,40 @@
     </div>
   </div>
 </div>
+
+{%- if sst.sync_slide_group -%}
+  {%- comment -%}
+    theme.Nov_Swipercarousel sets slidesPerGroup once, from the desktop column
+    count, and never overrides it per breakpoint. So a slider showing 5 cards
+    (or 1.5 on a phone) still advances 6 at a time, skipping products. The init
+    is shared by six sections, two of which are off limits here, so this patch
+    is scoped to this section instance and gated by a setting: it copies each
+    breakpoint's slidesPerView into its slidesPerGroup, leaving every other
+    slider in the theme exactly as it was.
+  {%- endcomment -%}
+  <script>
+    (function () {
+      var root = document.querySelector("#shopify-section-{{ section.id }} .nov-swiper-carousel");
+      if (!root) return;
+      var tries = 0;
+      (function wait() {
+        var sw = root.swiper;
+        if (!sw || !sw.params) {
+          if (++tries > 40) return;          // ~4s, then give up quietly
+          return setTimeout(wait, 100);
+        }
+        var group = function (n) { n = Math.floor(n || 1); return n < 1 ? 1 : n; };
+        sw.params.slidesPerGroup = group(sw.params.slidesPerView);
+        var bps = sw.params.breakpoints || {};
+        Object.keys(bps).forEach(function (k) {
+          if (bps[k] && bps[k].slidesPerView) bps[k].slidesPerGroup = group(bps[k].slidesPerView);
+        });
+        sw.update();
+      })();
+    })();
+  </script>
+{%- endif -%}
+
 {% schema %}
   {
     "name": "Vinova Products Slider",
@@ -373,7 +988,49 @@
       },
       {
         "type":  "header",
+        "content": "Product card"
+      },
+      {
+        "type": "select",
+        "id": "card_style",
+        "label": "Card style",
+        "default": "standard",
+        "info": "\"Listing page card\" renders the same component the collection pages use, so the two stay visually in step. Its stock line and long description are left out in a carousel.",
+        "options": [
+          { "value": "standard", "label": "Standard slider card" },
+          { "value": "collection", "label": "Listing page card" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "card_image_ratio",
+        "label": "Card image shape",
+        "default": "",
+        "info": "Products keep their own image proportions by default, same as the listing page. Choosing a shape crops every card to it (never stretches), which keeps titles and prices on one line across the row.",
+        "options": [
+          { "value": "", "label": "Each product’s own shape" },
+          { "value": "11", "label": "Square (1:1)" },
+          { "value": "34", "label": "Portrait (3:4)" },
+          { "value": "43", "label": "Landscape (4:3)" }
+        ]
+      },
+      {
+        "type":  "header",
         "content": "Product Item Per Row"
+      },
+      {
+        "type": "checkbox",
+        "id": "sync_slide_group",
+        "label": "Advance by the number of cards on screen",
+        "default": false,
+        "info": "Off, the arrows and swipe always jump by the desktop column count, which skips products on smaller screens."
+      },
+      {
+        "type": "checkbox",
+        "id": "mobile_peek",
+        "label": "Let the next card peek in on small screens",
+        "default": false,
+        "info": "Adds a part-card to the right on phones and small tablets so it is obvious the row can be swiped."
       },
       {
         "type": "range",

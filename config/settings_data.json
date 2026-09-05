@@ -12,7 +12,7 @@
     "license": "9d78cace-7fe9-4487-ae6b-a6ea2d987675",
     "container": 1500,
     "container_fluid": 75,
-    "background_homepage": "#ffffff",
+    "background_homepage": "#FFFDF9",
     "background_repeat_homepage": "no-repeat",
     "background_size_homepage": "cover",
     "header_layout": "header-2",

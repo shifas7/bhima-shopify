@@ -1,0 +1,911 @@
+/* ==========================================================================
+   BHIMA — Homepage global visual foundation (Phase 1)
+
+   Establishes the shared visual language for the homepage only: palette,
+   surfaces, container measure, vertical rhythm, section headings, buttons,
+   card/border treatment and the product-card foundation.
+
+   Scope
+   -----
+   Everything is scoped under `body.template-index .main-content`. The header
+   and footer live OUTSIDE `.main-content`, so the approved (locked) header
+   and footer cannot be reached by any rule in this file. Nothing here leaks
+   into product, collection, cart or page templates either.
+
+   What this file does NOT do
+   --------------------------
+   No section is redesigned, added or removed. No Liquid, schema, product,
+   collection, menu or URL is touched. Per-section colours and spacing come
+   from Theme Editor settings (templates/index.json); this file only supplies
+   the foundation those settings sit on, plus a safety net for sections that
+   expose no spacing setting of their own.
+   ========================================================================== */
+
+body.template-index {
+  background-color: var(--bhima-color-page, #FFFDF9);
+}
+
+/* --------------------------------------------------------------------------
+   1. Foundation tokens for the homepage body
+
+   Redefining the theme's scheme tokens here (rather than editing the global
+   colour schemes) keeps every other template untouched. The homepage only
+   renders light schemes; `.color-background-2` is re-asserted below so a dark
+   scheme still works if a merchant picks one later.
+   -------------------------------------------------------------------------- */
+body.template-index .main-content {
+  --color-background: var(--bhima-color-page, #FFFDF9);
+  --color-title: var(--bhima-color-text, #29231D);
+  --color-sub-title: var(--bhima-color-text-secondary, #71695F);
+  --color-text: var(--bhima-color-text-secondary, #71695F);
+  --color-link: var(--bhima-color-text, #29231D);
+  --color-hover: var(--bhima-color-gold, #B77A18);
+  --color-icons: var(--bhima-color-gold, #B77A18);
+  --color-border: var(--bhima-color-border-light, #E6D8C7);
+
+  /* Primary CTA — solid gold */
+  --color-button: var(--bhima-color-gold, #B77A18);
+  --color-button-text: #ffffff;
+  --color-button-border: var(--bhima-color-gold, #B77A18);
+  --color-button-hover: var(--bhima-color-gold-secondary, #C58A2A);
+  --color-button-text-hover: #ffffff;
+  --color-button-border-hover: var(--bhima-color-gold-secondary, #C58A2A);
+
+  /* Secondary CTA — warm ivory with a gold hairline */
+  --color-secondary-button: transparent;
+  --color-secondary-button-text: var(--bhima-color-gold, #B77A18);
+  --color-secondary-button-border: var(--bhima-color-gold, #B77A18);
+  --color-secondary-button-hover: var(--bhima-color-gold, #B77A18);
+  --color-secondary-button-text-hover: #ffffff;
+  --color-secondary-button-border-hover: var(--bhima-color-gold, #B77A18);
+
+  /* Product-card foundation. The two product sliders also carry their own
+     Theme Editor overrides; these values cover every other card on the page
+     (lookbook, and anything added later) so the palette stays consistent. */
+  --product-color-background: var(--bhima-color-page, #FFFDF9);
+  --product-color-border: var(--bhima-color-border-light, #E6D8C7);
+  --product-color-title: var(--bhima-color-text, #29231D);
+  --product-color-title-hover: var(--bhima-color-gold, #B77A18);
+  --product-color-type: var(--bhima-color-text-secondary, #71695F);
+  --product-color-price: var(--bhima-color-text, #29231D);
+  --product-color-reduced-price: var(--bhima-color-text-secondary, #71695F);
+  --product-color-button: var(--bhima-color-gold, #B77A18);
+  --product-color-button-text: #ffffff;
+  --product-color-button-border: var(--bhima-color-gold, #B77A18);
+  --product-color-button-hover: var(--bhima-color-gold-secondary, #C58A2A);
+  --product-color-button-text-hover: #ffffff;
+  --product-color-button-border-hover: var(--bhima-color-gold-secondary, #C58A2A);
+  --product-color-badge-sale: var(--bhima-color-gold, #B77A18);
+  --product-color-badge-sale-text: #ffffff;
+  --product-color-badge-new: var(--bhima-color-text, #29231D);
+  --product-color-badge-new-text: #ffffff;
+
+  /* Refined corners — the theme default is a very rounded 20px */
+  --product-corner-radius: var(--bhima-radius-card, 8px);
+  --product-corner-radius-image: var(--bhima-radius-media, 6px);
+
+  /* Section heading rhythm and scale */
+  --section-heading-font-size: var(--bhima-font-section, 26px);
+  --section-heading-font-weight: 500;
+  --section-subheading-font-size: var(--bhima-font-subsection, 16px);
+  --section-descheading-font-size: var(--bhima-font-body, 14.5px);
+  --section-heading-spacing: var(--bhima-space-heading, 24px);
+
+  /* Compact, readable CTAs — the theme default is 145x54 with a 50px radius */
+  --button-font-size: var(--bhima-font-button, 12.5px);
+  --button-normal-height: 44px;
+  --button-normal-width: 132px;
+  --button-medium-height: 48px;
+  --button-medium-width: 160px;
+  --button-large-height: 52px;
+  --button-large-width: 184px;
+  --button-corner: 2px;
+  --button-thickness: 1px;
+
+  color: var(--bhima-color-text-secondary, #71695F);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Regression guard: a dark colour scheme placed on the homepage keeps its own
+   colours instead of inheriting the ivory foundation above. */
+body.template-index .main-content .color-background-2 {
+  --color-background: #000000;
+  --color-text: #ffffff;
+  --color-title: #ffffff;
+  --color-link: #ffffff;
+  --color-border: #cfcfcf;
+}
+
+/* --------------------------------------------------------------------------
+   2. Content container
+
+   One measure for the whole homepage. `.container-full` is left alone so the
+   hero slideshow stays edge to edge.
+   -------------------------------------------------------------------------- */
+body.template-index .main-content .container,
+body.template-index .main-content .container-fluid {
+  width: 100%;
+  max-width: calc(var(--bhima-home-container, 1360px) + (var(--bhima-home-gutter, 24px) * 2));
+  margin-inline: auto;
+  padding-left: var(--bhima-home-gutter, 24px);
+  padding-right: var(--bhima-home-gutter, 24px);
+}
+
+/* Nested containers must not double the gutter. */
+body.template-index .main-content .container .container,
+body.template-index .main-content .container .container-fluid,
+body.template-index .main-content .container-fluid .container,
+body.template-index .main-content .container-fluid .container-fluid {
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* --------------------------------------------------------------------------
+   3. Vertical rhythm safety net
+
+   Section padding is driven by Theme Editor settings and has been retuned to
+   a consistent scale in templates/index.json. The only rule needed here is
+   for the one section whose padding no setting can reach.
+   -------------------------------------------------------------------------- */
+
+/* Custom app-download section: its own <style> hard-codes `padding: 60px 0`
+   (40px under 768px), which no setting can reach. Bring it onto the same
+   rhythm as the other untinted sections. */
+body.template-index .main-content .app-section-container {
+  padding-top: clamp(20px, 2vw, 24px);
+  padding-bottom: clamp(20px, 2vw, 24px);
+}
+
+/* Its "Section Width" setting is a range on a 50px grid, so it cannot express
+   the shared 1360px measure. The setting is left at its default and the
+   homepage container governs the render, keeping this section's content edges
+   aligned with every other section at every width. */
+body.template-index .main-content .app-section-wrapper {
+  max-width: calc(var(--bhima-home-container, 1360px) + (var(--bhima-home-gutter, 24px) * 2));
+  padding-left: var(--bhima-home-gutter, 24px);
+  padding-right: var(--bhima-home-gutter, 24px);
+}
+
+/* Its banner image carries a 20px radius and a 30px black shadow. */
+body.template-index .main-content .app-image-col img {
+  border-radius: var(--bhima-radius-card, 8px);
+  box-shadow: var(--bhima-shadow-card, 0 1px 2px rgba(41, 35, 29, 0.035));
+}
+
+/* Its CTA is styled inline from settings; align the shape with the CTA system
+   (the colours stay Theme Editor settings). */
+body.template-index .main-content .know-more-btn {
+  border-radius: 2px;
+  font-size: var(--bhima-font-button, 12.5px);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 13px 28px;
+}
+
+/* Custom social-video section: its own <style> uses a heading outside the
+   shared system, a heavy black plate shadow and cold grey/black placeholders. */
+body.template-index .main-content .social-bulge-heading {
+  font-family: var(--font-family-primary);
+  font-size: var(--bhima-font-section, 26px);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: var(--bhima-space-heading, 24px);
+}
+
+body.template-index .main-content .bulge-plate {
+  border-radius: var(--bhima-radius-card, 8px);
+  box-shadow: 0 10px 28px rgba(41, 35, 29, 0.14);
+}
+
+body.template-index .main-content .plate-inner,
+body.template-index .main-content .placeholder-svg {
+  background: var(--bhima-color-soft, #F8F1E7);
+}
+
+body.template-index .main-content .social-text {
+  font-size: var(--bhima-font-body, 14.5px);
+  color: var(--bhima-color-text-secondary, #71695F);
+}
+
+/* --------------------------------------------------------------------------
+   4. Typography foundation
+
+   Sizes are stated in px on purpose: the theme steps `html { font-size }`
+   down from 62.5% to 55% at small breakpoints, so rem values would shrink
+   twice. Nothing here reduces type to buy vertical space.
+   -------------------------------------------------------------------------- */
+body.template-index .main-content p,
+body.template-index .main-content li {
+  font-size: var(--bhima-font-body, 14.5px);
+  line-height: 1.65;
+}
+
+body.template-index .main-content h1,
+body.template-index .main-content h2,
+body.template-index .main-content h3,
+body.template-index .main-content h4,
+body.template-index .main-content h5,
+body.template-index .main-content h6 {
+  font-family: var(--font-family-primary);
+  color: var(--bhima-color-text, #29231D);
+  line-height: 1.28;
+  letter-spacing: var(--bhima-letterspacing-heading, 0.02em);
+}
+
+body.template-index .main-content h1 { font-size: var(--bhima-font-display, 38px); }
+body.template-index .main-content h2 { font-size: var(--bhima-font-section, 26px); }
+body.template-index .main-content h3 { font-size: clamp(17px, 1.4vw, 20px); }
+body.template-index .main-content h4 { font-size: clamp(15px, 1.2vw, 17px); }
+body.template-index .main-content h5 { font-size: 15px; }
+body.template-index .main-content h6 { font-size: 14px; }
+
+/* Links inside body copy pick up the gold on interaction only. */
+body.template-index .main-content a:hover {
+  color: var(--bhima-color-gold, #B77A18);
+}
+
+/* --------------------------------------------------------------------------
+   5. Section heading system
+
+   One editorial treatment for every homepage section heading, with a single
+   restrained gold hairline as the shared accent. The heading text colour
+   itself stays a Theme Editor setting (the theme prints it inline), so this
+   only owns size, weight, spacing and the accent.
+   -------------------------------------------------------------------------- */
+body.template-index .main-content .title_section {
+  margin-bottom: var(--bhima-space-heading, 24px);
+}
+
+body.template-index .main-content .title_section .title {
+  font-family: var(--font-family-primary);
+  font-size: var(--bhima-font-section, 26px);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  max-width: 34ch;
+}
+
+body.template-index .main-content .title_section .title > *,
+body.template-index .main-content .title_section .title p {
+  margin: 0;
+  font: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+}
+
+/* Gold hairline under the heading — the one decorative motif, not repeated
+   on sub-headings or descriptions. */
+body.template-index .main-content .title_section .title::after {
+  content: "";
+  display: block;
+  width: 46px;
+  height: 1px;
+  margin-top: 12px;
+  background-color: var(--bhima-color-gold, #B77A18);
+}
+
+body.template-index .main-content .title_section.text-center .title,
+body.template-index .main-content .title_section.text-center .sub_title,
+body.template-index .main-content .title_section.text-center .desc {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body.template-index .main-content .title_section.text-center .title::after {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body.template-index .main-content .title_section.text-right .title::after {
+  margin-left: auto;
+}
+
+/* Eyebrow / sub-heading */
+body.template-index .main-content .title_section .sub_title {
+  font-size: var(--bhima-font-subsection, 16px);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  max-width: 62ch;
+}
+
+body.template-index .main-content .title_section.subtop .sub_title {
+  font-size: 11.5px;
+  letter-spacing: var(--bhima-letterspacing-eyebrow, 0.14em);
+  text-transform: uppercase;
+}
+
+body.template-index .main-content .title_section .desc {
+  font-size: var(--bhima-font-body, 14.5px);
+  line-height: 1.65;
+  max-width: 68ch;
+}
+
+/* --------------------------------------------------------------------------
+   6. Button system
+
+   Primary  — solid #B77A18, white label.
+   Secondary — warm ivory / transparent with a #B77A18 hairline and label.
+   Compact but readable; never oversized.
+   -------------------------------------------------------------------------- */
+body.template-index .main-content .btn {
+  font-size: var(--bhima-font-button, 12.5px);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  padding: 0 26px;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+body.template-index .main-content .btn:hover {
+  background: var(--color-button-hover);
+  border-color: var(--color-button-border-hover);
+  color: var(--color-button-text-hover);
+}
+
+/* Secondary variant, available to any section that wants the outline CTA. */
+body.template-index .main-content .btn.bhima-btn-secondary,
+body.template-index .main-content .btn-secondary {
+  background: transparent;
+  border-color: var(--bhima-color-gold, #B77A18);
+  color: var(--bhima-color-gold, #B77A18);
+}
+
+body.template-index .main-content .btn.bhima-btn-secondary:hover,
+body.template-index .main-content .btn-secondary:hover {
+  background: var(--bhima-color-gold, #B77A18);
+  border-color: var(--bhima-color-gold, #B77A18);
+  color: #ffffff;
+}
+
+/* Text-link CTA ("Read more" style) */
+body.template-index .main-content a.link {
+  font-size: var(--bhima-font-button, 12.5px);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bhima-color-gold, #B77A18);
+}
+
+/* --------------------------------------------------------------------------
+   7. Cards, surfaces and borders
+
+   Warm ivory surfaces, hairline warm borders, controlled radius, minimal
+   shadow. No heavy shadows, no dark borders, no glassmorphism.
+   -------------------------------------------------------------------------- */
+body.template-index .main-content hr {
+  border: 0;
+  border-top: 1px solid var(--bhima-color-border-light, #E6D8C7);
+  opacity: 1;
+}
+
+/* Neutralise the old harsh-white / cold-grey card language wherever it is
+   still baked into a section's own markup rather than a setting. */
+body.template-index .main-content .ai-jewellery-categories__placeholder,
+body.template-index .main-content [class*="ai-jewellery-categories__placeholder"] {
+  background-color: var(--bhima-color-soft, #F8F1E7);
+}
+
+/* The theme's shared shadow helpers are heavy and directional
+   (4px 4px 6px / 7px 7px 13px). Soften them to a single quiet lift. */
+body.template-index .main-content .box-shadow,
+body.template-index .main-content .box-shadow-2 {
+  box-shadow: var(--bhima-shadow-card, 0 1px 2px rgba(41, 35, 29, 0.035));
+}
+
+/* Form fields (newsletter, in-section email capture) — warm ivory, hairline
+   border, ink text instead of the theme's cold navy on harsh white.
+   Restricted to text-entry fields so checkboxes, radios and buttons keep
+   their own styling. */
+body.template-index .main-content input[type="text"],
+body.template-index .main-content input[type="email"],
+body.template-index .main-content input[type="search"],
+body.template-index .main-content input[type="tel"],
+body.template-index .main-content input[type="number"],
+body.template-index .main-content input[type="password"],
+body.template-index .main-content input:not([type]),
+body.template-index .main-content select,
+body.template-index .main-content textarea {
+  background-color: var(--bhima-color-page, #FFFDF9);
+  border: 1px solid var(--bhima-color-border-light, #E6D8C7);
+  border-radius: 2px;
+  color: var(--bhima-color-text, #29231D);
+  font-size: var(--bhima-font-body, 14.5px);
+}
+
+body.template-index .main-content input:focus,
+body.template-index .main-content select:focus,
+body.template-index .main-content textarea:focus {
+  border-color: var(--bhima-color-gold, #B77A18);
+  outline: none;
+}
+
+body.template-index .main-content input::placeholder,
+body.template-index .main-content textarea::placeholder {
+  color: var(--bhima-color-text-secondary, #71695F);
+}
+
+/* Section-level cards — the radius only; their surfaces and borders remain
+   Theme Editor settings. */
+body.template-index .main-content .nov-policy-item,
+body.template-index .main-content .manufacture__item,
+body.template-index .main-content .article--listing,
+body.template-index .main-content .testimonial-item {
+  border-radius: var(--bhima-radius-card, 8px);
+}
+
+body.template-index .main-content .article__list-image-container,
+body.template-index .main-content .article__list-image-container img {
+  border-radius: var(--bhima-radius-media, 6px);
+}
+
+/* --------------------------------------------------------------------------
+   8. Product card visual foundation
+
+   Structure, wishlist, add-to-cart, badges, links and prices are untouched.
+   Only background, border, radius, type and spacing are brought onto the new
+   system so the card can be refined properly in a later phase.
+   -------------------------------------------------------------------------- */
+/* The theme paints the card border and surface on `.item-product::before`,
+   driven by --product-color-border / --product-color-background (both already
+   retuned above). Do not add a second border here — only the radius, the
+   card gutter and the hover lift belong to the foundation. */
+body.template-index .main-content .item-product {
+  border-radius: var(--bhima-radius-card, 8px);
+  box-shadow: none;
+  margin-bottom: var(--bhima-space-grid, 24px);
+  transition: box-shadow 0.25s ease;
+}
+
+body.template-index .main-content .item-product.h_bd:hover::before,
+body.template-index .main-content .item-product.bg:hover::before {
+  border-color: var(--bhima-color-gold, #B77A18);
+}
+
+body.template-index .main-content .item-product.h_bd:hover,
+body.template-index .main-content .item-product.bg:hover {
+  box-shadow: var(--bhima-shadow-card-hover, 0 6px 20px rgba(41, 35, 29, 0.07));
+}
+
+/* Warm placeholder behind the image while it loads, instead of harsh white. */
+body.template-index .main-content .item-product .respone_image {
+  background-color: var(--bhima-color-soft, #F8F1E7);
+}
+
+body.template-index .main-content .item-product .product__info {
+  padding: var(--bhima-space-card, 18px);
+}
+
+body.template-index .main-content .item-product .product__type {
+  font-size: var(--bhima-font-product-meta, 12px);
+  font-weight: 500;
+  letter-spacing: var(--bhima-letterspacing-eyebrow, 0.14em);
+  line-height: 1.4;
+  margin-bottom: 8px;
+  color: var(--bhima-color-text-secondary, #71695F);
+}
+
+/* The theme sizes the title on the inner <a> in rem; state it in px there or
+   it shrinks twice as html font-size steps down. */
+body.template-index .main-content .item-product .product__title,
+body.template-index .main-content .item-product .product__title a {
+  font-size: var(--bhima-font-product-title, 14px);
+  font-weight: 400;
+  line-height: 1.45;
+  text-transform: none;
+}
+
+body.template-index .main-content .item-product .product__title a {
+  color: var(--bhima-color-text, #29231D);
+}
+
+body.template-index .main-content .item-product .product__title a:hover {
+  color: var(--bhima-color-gold, #B77A18);
+}
+
+body.template-index .main-content .item-product .price-box {
+  margin-top: 10px;
+}
+
+body.template-index .main-content .item-product .price-regular,
+body.template-index .main-content .item-product .special-price {
+  color: var(--bhima-color-text, #29231D);
+  font-size: var(--bhima-font-price, 15px);
+  font-weight: 500;
+}
+
+/* The theme strikes the compare-at price through in bright red (#e82525). */
+body.template-index .main-content .item-product .old-price {
+  color: var(--bhima-color-text-secondary, #71695F);
+  font-weight: 400;
+  font-size: 13px;
+  margin-left: 10px;
+  -webkit-text-decoration-color: var(--bhima-color-text-secondary, #71695F);
+  text-decoration-color: var(--bhima-color-text-secondary, #71695F);
+}
+
+body.template-index .main-content .item-product .item-product__popup--variant .option-label {
+  color: var(--bhima-color-text, #29231D);
+}
+
+/* Badges — restrained, squared, no bright red or green */
+body.template-index .main-content .item-product .badge {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  min-width: 44px;
+  height: 22px;
+}
+
+/* The theme's product tooltip carries a heavy black shadow. */
+body.template-index .main-content .item-product .btn-tootip {
+  box-shadow: var(--bhima-shadow-card-hover, 0 6px 20px rgba(41, 35, 29, 0.07));
+  border-radius: 2px;
+}
+
+/* Wishlist — a quiet ivory chip that turns gold on interaction */
+body.template-index .main-content .item-product__wishlist {
+  background-color: var(--bhima-color-page, #FFFDF9);
+  border: 1px solid var(--bhima-color-border-light, #E6D8C7);
+  color: var(--bhima-color-text, #29231D);
+  border-radius: 999px;
+  box-shadow: var(--bhima-shadow-card, 0 1px 2px rgba(41, 35, 29, 0.035));
+}
+
+body.template-index .main-content .item-product__wishlist:hover,
+body.template-index .main-content .item-product__wishlist.added {
+  border-color: var(--bhima-color-gold, #B77A18);
+  color: var(--bhima-color-gold, #B77A18);
+}
+
+/* Add-to-cart / quick-add keep their existing behaviour and position; only
+   the colour and label treatment move onto the new system. */
+body.template-index .main-content .add-to-cart-btn,
+body.template-index .main-content .btn-quick-add {
+  font-size: var(--bhima-font-button, 12.5px);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   9. Slider chrome
+
+   Arrow and dot colours stay Theme Editor settings; this only softens the
+   shapes so they read as part of the same system.
+   -------------------------------------------------------------------------- */
+body.template-index .main-content .swiper-scrollbar {
+  border-radius: 999px;
+  height: 2px;
+}
+
+body.template-index .main-content .swiper-scrollbar-drag {
+  border-radius: 999px;
+}
+
+/* ==========================================================================
+   HERO / BANNER  (sections/nov-slideshow.liquid)
+
+   The banner artwork is a complete visual asset: the campaign heading,
+   supporting copy, CTA and offer card are all inside the image. So there is
+   no text, heading or button markup here — only the presentation of the
+   artwork itself and the slider controls the section already had.
+
+   Governing rules:
+     1. Never stretch the artwork. object-fit is always cover, never fill.
+     2. Crop as little as possible. The banner takes the uploaded image's own
+        aspect ratio, so at normal widths there is no crop at all.
+     3. Never change height between slides. All slides use the first slide's
+        ratio (--hero-ratio), fed from the section's {% style %} block.
+     4. Use the mobile artwork on phones rather than cropping the desktop one.
+
+   Scoped to .section-slideshow (the class the section's schema puts on its
+   Shopify wrapper) inside .main-content, so the locked header and footer and
+   every other template and section are untouched.
+   ========================================================================== */
+
+/* Full-bleed: the hero sits directly under the locked header, edge to edge,
+   and is not boxed into a card. */
+body.template-index .main-content .section-slideshow .container-full {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: none;
+}
+
+body.template-index .main-content .section-slideshow .slideshow {
+  background-color: var(--bhima-color-soft, #F8F1E7);
+  box-shadow: none;
+  border: 0;
+}
+
+/* --- Banner box -----------------------------------------------------------
+   aspect-ratio (not the theme's padding-top hack) so a max-height can cap the
+   banner on very wide screens. --hero-ratio comes from the FIRST slide, which
+   is what keeps the height stable across slides. */
+body.template-index .main-content .section-slideshow .image-content--ratio {
+  width: 100%;
+  aspect-ratio: var(--hero-ratio, 3.4);
+  max-height: var(--hero-max-h, 620px);
+  padding-top: 0;
+  margin: 0;
+}
+
+/* The mobile artwork is portrait, so it is allowed to be much taller than the
+   desktop ceiling — that is its designed shape. The only guard is that the
+   banner must never exceed the screen, which keeps the widest phones and
+   small portrait tablets sane. In practice this only engages around 760px
+   wide, where it trims about 2%. */
+body.template-index .main-content .section-slideshow .image-content--mobile {
+  aspect-ratio: var(--hero-ratio-mobile, var(--hero-ratio, 3.4));
+  max-height: 88vh;
+}
+
+/* --- Artwork --------------------------------------------------------------
+   The theme only sets object-fit: cover below 576px, which leaves the desktop
+   banner on object-fit: fill — it stretches the artwork as soon as the box
+   and the image disagree. Cover it at every width, and honour the merchant's
+   crop position for the rare case a crop is needed. */
+body.template-index .main-content .section-slideshow .image-entity {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--hero-crop, center);
+}
+
+/* --- Slider indicators ---------------------------------------------------
+   Small, round, unobtrusive: filled gold for the current slide, a quiet warm
+   outline for the rest. Colours and sizes stay Theme Editor settings. */
+/* Horizontal placement is left as the theme has it: inset from the left on
+   phones and on desktop, centred between 576px and 991px (the theme pins that
+   with `left: 50% !important`). Overriding it would mean matching that
+   !important for a difference no single device ever sees. */
+body.template-index .main-content .section-slideshow .block-direction {
+  gap: 4px;
+  z-index: 3;
+}
+
+body.template-index .main-content .section-slideshow .slick-dots {
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+}
+
+body.template-index .main-content .section-slideshow .slick-dots li {
+  margin: 0;
+  width: auto;
+  height: auto;
+  background: none;
+  border: 0;
+}
+
+body.template-index .main-content .section-slideshow .slick-dots li button {
+  padding: 0;
+  border-width: 1px;
+  transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+body.template-index .main-content .section-slideshow .slick-dots li:hover button {
+  border-color: var(--bhima-color-gold, #B77A18);
+}
+
+body.template-index .main-content .section-slideshow .slick-dots li.slick-active button {
+  transform: none;
+}
+
+/* --- Navigation arrows ---------------------------------------------------
+   Off by default (the approved design shows dots only), but kept fully
+   functional for the merchant. The theme forces slideshow arrows to a
+   transparent background with !important, so they are plain icons: sized
+   down from the theme's 50px and given a soft shadow so the chevron stays
+   legible over light or dark artwork without adding a chip over the design.
+   Held back below 768px so they never cover artwork on a phone, where the
+   dots and swipe are the affordance. */
+body.template-index .main-content .section-slideshow .nav-arrow {
+  font-size: 18px;
+  box-shadow: none;
+  text-shadow: 0 1px 3px rgba(41, 35, 29, 0.35);
+}
+
+body.template-index .main-content .section-slideshow .nav-arrow.nav-next {
+  margin-left: 8px;
+}
+
+body.template-index .main-content .section-slideshow .nav-arrow.nav-prev {
+  margin-right: 8px;
+}
+
+@media (max-width: 767px) {
+  body.template-index .main-content .section-slideshow .nav-arrow {
+    display: none;
+  }
+
+  /* The theme shifts the control block 20px left to make room for an arrow
+     (`.block-direction:has(.nav-arrow)`). With the arrows hidden that pulls
+     the dots almost onto the edge, so put the inset back. */
+  body.template-index .main-content .section-slideshow .block-direction,
+  body.template-index .main-content .section-slideshow .block-direction:has(.nav-arrow) {
+    left: 5%;
+  }
+}
+
+/* ==========================================================================
+   NEW ARRIVALS  (sections/nov-products-slider.liquid)
+
+   The section keeps its own Swiper carousel, its own collection and its own
+   product data. It now renders the LISTING PAGE card component
+   (snippets/product-grid-item-style-collection.liquid) in compact mode, so
+   the homepage and the collection pages share one card. Everything the card
+   looks like — border, radius, typography, prices, badges, wishlist chip,
+   add-to-cart — already comes from section 8 above, which is why there is no
+   card styling here: a second card style is exactly what we do not want.
+
+   Scoped to .bhima-new-arrivals, the section's own `class_section` setting.
+   The homepage has a second nov-products-slider ("Our Recommendations") and
+   the theme has several more, so an unscoped rule would reach all of them.
+   ========================================================================== */
+
+/* The theme's global --slider-arrow-size is 50px and --slider-arrow-corner is
+   never defined in settings_data.json, so the token is invalid and the arrows
+   render as 50px squares. Set both on this section only. */
+body.template-index .main-content .bhima-new-arrivals {
+  --slider-arrow-size: 34px;
+  --slider-arrow-corner: 999px;
+}
+
+/* The carousel needs a positioning context for the arrows; the Swiper root
+   itself is `overflow: hidden`, so they are pinned just inside the row. */
+body.template-index .main-content .bhima-new-arrivals .nov-swiper-carousel {
+  position: relative;
+}
+
+body.template-index .main-content .bhima-new-arrivals .slider-nav {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+body.template-index .main-content .bhima-new-arrivals .slider-nav .nav-arrow {
+  pointer-events: auto;
+  margin: 0;
+  font-size: 15px;
+  background-color: rgba(255, 253, 249, 0.94);
+  border: 1px solid var(--bhima-color-border-light, #E6D8C7);
+  color: var(--bhima-color-text, #29231D);
+  box-shadow: var(--bhima-shadow-card, 0 1px 2px rgba(41, 35, 29, 0.035));
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+}
+
+body.template-index .main-content .bhima-new-arrivals .slider-nav .nav-arrow:hover {
+  background-color: var(--bhima-color-gold, #B77A18);
+  border-color: var(--bhima-color-gold, #B77A18);
+  color: #ffffff;
+}
+
+body.template-index .main-content .bhima-new-arrivals .slider-nav .nav-arrow:focus-visible {
+  outline: 2px solid var(--bhima-color-gold, #B77A18);
+  outline-offset: 2px;
+}
+
+/* At the ends of the row Swiper adds .swiper-button-disabled; fade rather
+   than hide, so the control never jumps position. */
+body.template-index .main-content .bhima-new-arrivals .slider-nav .nav-arrow.swiper-button-disabled {
+  opacity: 0.35;
+}
+
+/* Arrows are a pointer affordance. Phones swipe, and the peeking part-card
+   already signals that, so they stay out of the way there. */
+@media (max-width: 767px) {
+  body.template-index .main-content .bhima-new-arrivals .slider-nav {
+    display: none;
+  }
+}
+
+/* The dots wrapper carries a 60px top margin in the shared markup, which is
+   most of the dead space under the row. Dots are off for this section, but
+   keep the spacing sane for anyone who turns them back on. */
+body.template-index .main-content .bhima-new-arrivals .swiper-pagination {
+  margin-top: 0;
+}
+
+body.template-index .main-content .bhima-new-arrivals .nov-swiper-carousel > .mt-60 {
+  margin-top: var(--bhima-space-heading, 24px) !important;
+}
+
+/* A carousel slide must not add the grid card's bottom margin on top of the
+   Swiper gap, or the row grows a phantom gutter. */
+body.template-index .main-content .bhima-new-arrivals .swiper-slide .item-product {
+  margin-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   10. Responsive foundation
+
+   No horizontal overflow at any width, and a deliberate mobile measure
+   rather than a squeezed desktop layout.
+   -------------------------------------------------------------------------- */
+body.template-index .main-content img,
+body.template-index .main-content video,
+body.template-index .main-content svg {
+  max-width: 100%;
+}
+
+@media (max-width: 991px) {
+  body.template-index .main-content {
+    --bhima-home-gutter: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  body.template-index .main-content {
+    --bhima-home-gutter: 16px;
+    --section-heading-spacing: 18px;
+  }
+
+  body.template-index .main-content .title_section .title {
+    font-size: 20px;
+    letter-spacing: 0.04em;
+    max-width: 100%;
+  }
+
+  body.template-index .main-content .title_section .title::after {
+    margin-top: 10px;
+  }
+
+  body.template-index .main-content .item-product .product__info {
+    padding: 14px;
+  }
+
+  /* The theme scales .btn down to 80% height below 768px, which lands at
+     ~35px. Hold a comfortable tap target instead. */
+  body.template-index .main-content .btn {
+    padding: 0 20px;
+    letter-spacing: 0.06em;
+    min-height: 42px;
+  }
+
+  body.template-index .main-content .item-product__wishlist,
+  body.template-index .main-content .btnProductQuickview {
+    width: 36px;
+    height: 36px;
+  }
+
+  body.template-index .main-content .app-section-container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}
+
+/* Very narrow phones (320px): keep the gutter but never clip. */
+@media (max-width: 359px) {
+  body.template-index .main-content {
+    --bhima-home-gutter: 14px;
+  }
+
+  body.template-index .main-content .title_section .title {
+    font-size: 18px;
+  }
+}

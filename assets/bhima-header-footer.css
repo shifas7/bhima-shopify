@@ -853,6 +853,30 @@ utility-bar[class*="ai-utility-bar-"] [class*="ai-utility-bar-rate-price-"] {
     color: #29231D !important;
     width: 100% !important;
   }
+
+  /* Touch-target audit: the hamburger, search, wishlist and cart triggers
+     are visually 28px (a deliberate compact size for this header), but a
+     28px box is below the ~44px comfortable tap-target minimum. Expand the
+     actual hit area with an invisible pseudo-element rather than growing
+     the icon or the header's visual footprint. */
+  .bhima-mobile-header__left #show-megamenu,
+  .bhima-mobile-header__left .mobile-btn_search,
+  .bhima-mobile-header__right .mobile_wishlist > a,
+  .bhima-mobile-header__right .mobile_cart .site-header__cart {
+    position: relative !important;
+  }
+
+  .bhima-mobile-header__left #show-megamenu::before,
+  .bhima-mobile-header__left .mobile-btn_search::before,
+  .bhima-mobile-header__right .mobile_wishlist > a::before,
+  .bhima-mobile-header__right .mobile_cart .site-header__cart::before {
+    content: '';
+    position: absolute;
+    /* Capped at 4px: the tightest icon gap on this header is 8px (the
+       <=360px bracket further down), so this stays just shy of touching
+       the neighbouring icon's own expanded hit area at every breakpoint. */
+    inset: -4px;
+  }
 }
 
 @media screen and (max-width: 360px) {
