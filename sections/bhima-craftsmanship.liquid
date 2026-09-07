@@ -255,8 +255,18 @@
       grid-column: 1;
       grid-row: 1;
       min-width: 0;
-      padding: 22px 20px 20px;
+      padding: 22px 26px 20px;
       justify-content: flex-start;
+      text-align: center;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__heading,
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__heading p,
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__description,
+    #shopify-section-{{ section.id }} .bhima-craftsmanship__description p {
+      margin-right: auto;
+      margin-left: auto;
+      text-align: center;
     }
 
     #shopify-section-{{ section.id }} .bhima-craftsmanship__media {
@@ -300,10 +310,14 @@
     }
 
     #shopify-section-{{ section.id }} .bhima-craftsmanship__cta {
-      max-width: 100%;
+      align-self: center;
+      width: min(100%, 240px);
+      max-width: 240px;
       min-height: 48px;
       margin-top: 18px;
       padding: 10px 22px;
+      justify-content: center;
+      text-align: center;
       font-size: 13px;
     }
 
@@ -342,7 +356,7 @@
     }
 
     #shopify-section-{{ section.id }} .bhima-craftsmanship__copy {
-      padding: 20px 18px 18px;
+      padding: 20px 24px 18px;
     }
 
     #shopify-section-{{ section.id }} .bhima-craftsmanship__trust {

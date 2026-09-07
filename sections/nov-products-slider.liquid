@@ -651,7 +651,7 @@
           <div class="col-lg-9 col-md-8">
             {% comment %} product slider {% endcomment %}
             <div class="collection__product-content collection-template" data-grid="grid-4" data-section-id="{{ section.id }}" data-section-type="nov-swiper">
-              <div class="grid--view-items nov-swiper-carousel swiper {{ sst.type_slider }}"
+              <div class="grid--view-items nov-swiper-carousel swiper {{ sst.type_slider }}" data-bhima-mobile-product-carousel
                 data-autoplay="false" 
                 data-loop="false"
                 data-row="{{ sst.row_number }}"
@@ -718,7 +718,7 @@
       {% else %}
         {% comment %} product slider {% endcomment %}
         <div class="collection__product-content collection-template" data-grid="grid-4" data-section-id="{{ section.id }}" data-section-type="nov-swiper">
-          <div class="grid--view-items nov-swiper-carousel swiper {{ sst.type_slider }}"
+          <div class="grid--view-items nov-swiper-carousel swiper {{ sst.type_slider }}" data-bhima-mobile-product-carousel
             data-autoplay="false" 
             data-loop="false"
             data-row="{{ sst.row_number }}"
@@ -817,6 +817,8 @@
     })();
   </script>
 {%- endif -%}
+
+{{ 'bhima-mobile-carousels.js' | asset_url | script_tag }}
 
 {% schema %}
   {

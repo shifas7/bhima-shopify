@@ -39,7 +39,7 @@
         </h2>
       </header>
 
-      <ul class="bhima-occasion__track" role="list">
+      <ul class="bhima-occasion__track" role="list" data-bhima-mobile-scroll-carousel>
         {%- for block in section.blocks -%}
           {%- if block.settings.show_card -%}
             {%- liquid
@@ -101,6 +101,7 @@
       </ul>
     </div>
   </section>
+  {{ 'bhima-mobile-carousels.js' | asset_url | script_tag }}
 {%- endif -%}
 
 {% schema %}

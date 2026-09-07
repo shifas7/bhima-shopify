@@ -8,10 +8,6 @@
     assign class_section = section.settings.class_section | prepend: ' '
   endif
   assign class = 'distance' | append: bg | append: ' ' | append: section.settings.background_position | append: class_section
-  assign special_offers_image = blank
-  if section.blocks.size > 0
-    assign special_offers_image = section.blocks[0].settings.lookbook_image
-  endif
 -%}
 
 {% style %}
@@ -52,8 +48,8 @@
     color: {{ sst.ct_cd }};
   }
 
-  /* Bhima Special Offers: the existing lookbook image is the full campaign
-     surface; all offer copy, timer, CTA and pins remain live HTML/Liquid. */
+  /* Bhima Special Offers: editorial split layout. The section settings,
+     countdown data attributes and lookbook image picker remain unchanged. */
   #shopify-section-{{ section.id }} .bhima-special-offers-section {
     background-color: #FFFDF9;
   }
@@ -62,68 +58,69 @@
     position: relative;
   }
 
-  #shopify-section-{{ section.id }} .bhima-special-offers-section > [class*="container"] > .row {
-    position: relative;
-    display: flex;
-    align-items: center;
-    min-height: clamp(280px, 22vw, 300px);
-    height: auto;
+  #shopify-section-{{ section.id }} .bhima-special-offers-card {
+    display: grid;
+    grid-template-columns: minmax(0, 45%) minmax(0, 55%);
+    align-items: stretch;
+    width: 100%;
+    min-height: clamp(420px, 34vw, 560px);
     margin: 0;
     overflow: hidden;
     border: 1px solid #E6D8C7;
-    border-radius: 8px;
-    background: #F8F1E7;
-    background-image: var(--bhima-special-offers-image, none);
-    background-position: {{ sst.background_img_position | default: 'center center' }};
-    background-size: cover;
+    border-radius: 16px;
+    background: #FFFDF9;
   }
 
-  #shopify-section-{{ section.id }} .bhima-special-offers-section > [class*="container"] > .row::before {
-    content: '';
-    position: absolute;
-    z-index: 1;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(90deg, rgba(255, 253, 249, 0.96) 0%, rgba(255, 253, 249, 0.82) 25%, rgba(255, 253, 249, 0.34) 52%, rgba(255, 253, 249, 0) 76%);
-  }
-
-  #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown {
-    position: relative !important;
-    z-index: 4;
-    top: auto;
-    left: auto;
-    width: min(520px, calc(50% - 48px)) !important;
-    max-width: 520px;
-    flex: 0 0 min(520px, calc(50% - 48px));
+  #shopify-section-{{ section.id }} .bhima-special-offers-content {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    padding: clamp(32px, 4.5vw, 72px) clamp(28px, 4vw, 64px);
     box-sizing: border-box;
-    padding: 10px 0 !important;
-    margin: 0 0 0 clamp(32px, 5vw, 72px) !important;
-    transform: none;
+    background: #FFFDF9;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-special-offers-content .block-countdown {
+    position: static;
+    width: 100%;
+    max-width: 560px;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section {
-    max-width: 520px;
+    max-width: 100%;
     margin: 0;
     text-align: left;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .sub_title {
     margin-top: 0;
-    margin-bottom: 10px !important;
+    margin-bottom: 14px !important;
     font-size: 11px;
     font-weight: 500;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.18em;
     line-height: 1.35;
     text-transform: uppercase;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .title {
-    max-width: 24ch;
+    max-width: 20ch;
     margin: 0;
-    font-size: clamp(22px, 2vw, 28px);
+    font-size: clamp(28px, 2.55vw, 40px);
     font-weight: 500;
-    line-height: 1.16;
-    letter-spacing: 0.02em;
+    line-height: 1.08;
+    letter-spacing: 0.015em;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .title::after {
+    content: '';
+    display: block;
+    width: 58px;
+    height: 1px;
+    margin-top: 22px;
+    background: #B77A18;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .title p,
@@ -137,43 +134,41 @@
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .desc {
-    max-width: 42ch;
-    margin-top: 10px !important;
-    font-size: 13px;
-    line-height: 1.45;
+    max-width: 40ch;
+    margin-top: 16px !important;
+    font-size: 14px;
+    line-height: 1.55;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .desc p {
     line-height: inherit;
   }
 
-  #shopify-section-{{ section.id }} .bhima-special-offers-section > [class*="container"] > .row > .col-lg-6:last-child {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
+  #shopify-section-{{ section.id }} .bhima-special-offers-image {
+    display: flex;
+    align-items: stretch;
+    min-width: 0;
+    min-height: 0;
     width: 100%;
-    max-width: 100%;
-    height: 100%;
-    flex: 0 0 100%;
     padding: 0;
+    background: #F8F1E7;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .Look__content {
-    position: relative;
-    z-index: 1;
+    width: 100%;
     height: 100%;
     margin: 0;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .Look__content > .row {
+    display: flex;
+    width: 100%;
     height: 100%;
     margin: 0;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .Look__content .item {
+    display: block;
     width: 100%;
     max-width: 100%;
     flex: 0 0 100%;
@@ -183,23 +178,17 @@
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .nov-content-lookbook {
     position: relative;
-    z-index: 2 !important;
     width: 100%;
     height: 100% !important;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible !important;
     border: 0;
     border-radius: 0;
-    background: #F8F1E7;
+    background: transparent;
   }
 
-  #shopify-section-{{ section.id }} .bhima-special-offers-section .nov-content-lookbook::after {
-    content: '';
-    position: absolute;
-    z-index: 3;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(90deg, rgba(255, 253, 249, 0.96) 0%, rgba(255, 253, 249, 0.82) 25%, rgba(255, 253, 249, 0.34) 52%, rgba(255, 253, 249, 0) 76%);
+  #shopify-section-{{ section.id }} .bhima-special-offers-section .item-lookbook {
+    z-index: 5;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .nov-content-lookbook > .position-relative {
@@ -230,95 +219,188 @@
     object-position: {{ sst.background_img_position | default: 'center center' }};
   }
 
-  #shopify-section-{{ section.id }} .bhima-special-offers-section .nov-content-lookbook .item-lookbook {
-    z-index: 5;
+  #shopify-section-{{ section.id }} .bhima-special-offers-section .nov-content-lookbook::after {
+    display: none !important;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .countdownfree {
     display: flex;
     justify-content: flex-start !important;
-    gap: 8px;
-    margin-top: 14px;
+    gap: clamp(6px, 1vw, 12px);
+    width: 100%;
+    margin-top: 24px;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .countdownfree .item-time {
     display: flex;
-    width: 48px;
-    flex: 0 0 48px;
+    width: clamp(54px, 5vw, 74px);
+    flex: 0 1 clamp(54px, 5vw, 74px);
     flex-direction: column;
     align-items: center;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .data-number {
     display: flex;
-    width: 48px;
-    height: 40px;
+    width: 100%;
+    height: clamp(48px, 4.5vw, 64px);
     align-items: center;
     justify-content: center;
     padding: 0;
-    font-size: 22px;
+    font-size: clamp(22px, 2.2vw, 30px);
     font-weight: 500;
     line-height: 1;
-    background: #FFFDF9;
-    border: 1px solid #E6D8C7;
-    border-radius: 6px;
+    border-radius: {{ sst.border_radius }}px;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .name-time {
-    margin-top: 5px;
+    margin-top: 8px;
     font-size: 9px;
     font-weight: 500;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     line-height: 1.2;
     text-transform: uppercase;
+    white-space: nowrap;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown > .mt-30 {
-    margin-top: 18px !important;
+    margin-top: 26px !important;
     text-align: left !important;
   }
 
   #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown > .mt-30 .btn {
-    min-height: 40px;
-    padding: 0 22px;
+    min-height: 46px;
+    padding: 0 26px;
     font-size: 11px;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
+  }
+
+  @media (min-width: 768px) and (max-width: 991px) {
+    #shopify-section-{{ section.id }} .bhima-special-offers-content {
+      padding: 32px 28px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .title {
+      font-size: 28px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .countdownfree {
+      gap: 6px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .countdownfree .item-time {
+      width: 52px;
+      flex-basis: 52px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .data-number {
+      height: 48px;
+      font-size: 22px;
+    }
   }
 
   @media (max-width: 767px) {
-    #shopify-section-{{ section.id }} .bhima-special-offers-section > [class*="container"] > .row {
+    #shopify-section-{{ section.id }} .bhima-special-offers-card {
       display: flex;
       flex-direction: column;
-      align-items: stretch;
-      background-position: 72% center;
       min-height: 0;
       height: auto;
-      padding: 16px;
     }
 
-    #shopify-section-{{ section.id }} .bhima-special-offers-section > [class*="container"] > .row::before {
-      background: linear-gradient(180deg, rgba(255, 253, 249, 0.78) 0%, rgba(255, 253, 249, 0.46) 52%, rgba(255, 253, 249, 0.14) 100%);
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .nov-content-lookbook::after {
-      background: linear-gradient(180deg, rgba(255, 253, 249, 0.22) 0%, rgba(255, 253, 249, 0.08) 58%, rgba(255, 253, 249, 0) 100%);
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown {
-      display: contents;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section > [class*="container"] > .row > .col-lg-6:last-child {
-      position: relative;
-      order: 2;
-      inset: auto;
+    #shopify-section-{{ section.id }} .bhima-special-offers-content {
+      display: flex;
+      justify-content: center;
       width: 100%;
-      max-width: 100%;
+      padding: clamp(30px, 8vw, 44px) 20px 34px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-content .block-countdown {
+      max-width: 480px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section {
+      text-align: center;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .sub_title {
+      margin-bottom: 12px !important;
+      font-size: 10px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .title {
+      max-width: 22ch;
+      margin-right: auto;
+      margin-left: auto;
+      font-size: clamp(24px, 7vw, 32px);
+      line-height: 1.1;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .title::after {
+      margin-right: auto;
+      margin-left: auto;
+      margin-top: 18px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .desc {
+      max-width: 38ch;
+      margin: 15px auto 0 !important;
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .countdownfree {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: flex-start;
+      flex-wrap: nowrap;
+      gap: clamp(4px, 2vw, 10px);
+      margin-top: 22px;
+      overflow: visible;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .countdownfree .item-time {
+      width: clamp(54px, 17vw, 72px);
+      flex: 1 1 0;
+      max-width: 72px;
+      min-width: 0;
+      margin-right: 0 !important;
+      margin-left: 0 !important;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .countdownfree .item-time:not(:last-child)::after {
+      right: clamp(-10px, -2vw, -6px);
+      top: calc(50% - 12px);
+      font-size: 18px;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .data-number {
+      height: clamp(50px, 15vw, 62px);
+      font-size: clamp(22px, 6vw, 28px);
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .name-time {
+      margin-top: 7px;
+      font-size: 9px;
+      letter-spacing: 0.07em;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown > .mt-30 {
+      margin-top: 22px !important;
+      text-align: center !important;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown > .mt-30 .btn {
+      display: inline-flex;
+      min-height: 46px;
+      width: min(190px, 100%);
+      align-items: center;
+      justify-content: center;
+    }
+
+    #shopify-section-{{ section.id }} .bhima-special-offers-image {
+      width: 100%;
       height: auto;
-      min-height: 0;
       flex: 0 0 auto;
-      margin-top: 20px;
-      padding: 0;
     }
 
     #shopify-section-{{ section.id }} .bhima-special-offers-section .Look__content,
@@ -331,7 +413,6 @@
 
     #shopify-section-{{ section.id }} .bhima-special-offers-section .Look__content > .row {
       display: block;
-      margin: 0;
     }
 
     #shopify-section-{{ section.id }} .bhima-special-offers-section .Look__content .item {
@@ -342,12 +423,10 @@
 
     #shopify-section-{{ section.id }} .bhima-special-offers-section .nov-content-lookbook {
       aspect-ratio: 16 / 9;
-      border-radius: 0;
-      background-color: transparent;
     }
 
     #shopify-section-{{ section.id }} .bhima-special-offers-section .nov-content-lookbook > .position-relative {
-      position: relative !important;
+      position: absolute !important;
       inset: 0;
       height: 100%;
     }
@@ -356,148 +435,34 @@
       position: absolute !important;
       inset: 0;
       height: 100% !important;
-      padding-top: 0 !important;
     }
 
     #shopify-section-{{ section.id }} .bhima-special-offers-section .nov-content-lookbook .respone_image img {
-      object-position: 72% center;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section {
-      order: 1;
-      position: relative;
-      z-index: 6;
-      text-align: center;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .sub_title {
-      margin-top: 0;
-      margin-bottom: 10px !important;
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      line-height: 1.3;
-      text-align: center;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .title {
-      max-width: 22ch;
-      margin-inline: auto;
-      font-size: clamp(22px, 6.2vw, 27px);
-      line-height: 1.15;
-      letter-spacing: 0.015em;
-      text-align: center;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .desc {
-      max-width: 320px;
-      margin: 12px auto 0 !important;
-      font-size: 14px;
-      line-height: 1.45;
-      text-align: center;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .countdownfree {
-      order: 3;
-      position: relative;
-      z-index: 6;
-      display: flex;
-      justify-content: center !important;
-      gap: clamp(4px, 2vw, 10px);
-      width: 100%;
-      margin-top: 24px;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .countdownfree .item-time {
-      position: relative;
-      display: flex;
-      width: clamp(52px, 17vw, 68px);
-      flex: 0 0 clamp(52px, 17vw, 68px);
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .countdownfree .item-time:not(:last-child)::after {
-      display: none !important;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .data-number {
-      display: flex;
-      width: 100%;
-      height: clamp(52px, 15vw, 60px);
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-      font-size: clamp(22px, 6vw, 28px);
-      line-height: 1;
-      border-radius: 8px;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .name-time {
-      margin-top: 7px;
-      font-size: 10px;
-      letter-spacing: 0.06em;
-      line-height: 1.2;
-      white-space: nowrap;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown > .mt-30 {
-      order: 4;
-      position: relative;
-      z-index: 6;
-      margin-top: 18px !important;
-      text-align: center !important;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown > .mt-30 .btn {
-      display: inline-flex;
-      width: min(180px, 100%);
-      min-height: 48px;
-      align-items: center;
-      justify-content: center;
-      padding: 0 20px;
-      font-size: 11px;
-      letter-spacing: 0.08em;
+      object-position: {{ sst.background_img_position | default: 'center center' }};
     }
   }
 
   @media (max-width: 380px) {
-    #shopify-section-{{ section.id }} .bhima-special-offers-section > [class*="container"] > .row,
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .nov-content-lookbook {
-      height: auto !important;
-      min-height: 0;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown {
-      margin: 0 !important;
+    #shopify-section-{{ section.id }} .bhima-special-offers-content {
+      padding-right: 16px;
+      padding-left: 16px;
     }
 
     #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown .title_section .title {
-      max-width: 21ch;
-      font-size: 21px;
+      font-size: 23px;
     }
 
     #shopify-section-{{ section.id }} .bhima-special-offers-section .countdownfree {
       gap: 4px;
-      margin-top: 20px;
     }
 
     #shopify-section-{{ section.id }} .bhima-special-offers-section .countdownfree .item-time {
-      width: 52px;
-      flex-basis: 52px;
+      max-width: 66px;
     }
 
     #shopify-section-{{ section.id }} .bhima-special-offers-section .data-number {
-      height: 52px;
+      height: 50px;
       font-size: 22px;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .name-time {
-      font-size: 9px;
-    }
-
-    #shopify-section-{{ section.id }} .bhima-special-offers-section .block-countdown > .mt-30 {
-      margin-top: 18px !important;
     }
   }
 {% endstyle %}
@@ -505,8 +470,9 @@
   <div class="{{ sst.container }}">
 
     {% if sst.countdown_timeend != blank %}
-    <div class="row align-items-center"{% if special_offers_image != blank %} style="--bhima-special-offers-image: url('{{ special_offers_image | image_url: width: 1800 }}');"{% endif %}>
-      <div class="block-countdown col-lg-6 mb-md-50">
+    <div class="bhima-special-offers-card">
+      <div class="bhima-special-offers-content">
+        <div class="block-countdown">
         {% render 'heading-section', sub_position: sst.subheading_position, class: 'text-center' %}
         {% if sst.countdown_timeend != blank %}
           <div class="countdownfree d-flex justify-content-center{% if sst.show_shadow %} shadow{% endif %}" data-countdown="{{ sst.countdown_timeend }}" data-show-days="{{ settings.show_day }}" data-restart="{{ settings.restart }}"></div>
@@ -519,8 +485,9 @@
             </a>
           </div>
         {% endif %}
+        </div>
       </div>
-      <div class="col-lg-6">
+      <div class="bhima-special-offers-image">
     {% endif %}
 
     {% if sst.countdown_timeend == blank %}
@@ -541,7 +508,7 @@
                 {{ 'collection-apparel-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
               {% endif %}
 
-              {% if sst.show_popup %}
+              {% if sst.show_popup and sst.countdown_timeend == blank %}
                 <div class="btn lb_btn position-absolute" data-toggle="modal" data-target="#Lookbook{{ section.id }}{{ block.id }}">
                   {{ 'sections.lookbook.shop_the_look' | t }}
                 </div>
@@ -646,6 +613,7 @@
                 {% endfor %}
               {% endunless %}
             </div>
+            {% if sst.countdown_timeend == blank %}
             {% unless sst.show_popup %}
               {% if bst.btn != blank or bst.title != blank or bst.desc != blank %}
                 <div class="lookbook-block_text position-absolute {{ bst.bt_alignment }} {{ bst.t_pos }}">
@@ -663,6 +631,7 @@
                 </div>
               {% endif %}
             {% endunless %}
+            {% endif %}
           </div>
         </div>
       {% endfor %}
@@ -678,7 +647,7 @@
 
     {% if sst.countdown_timeend != blank %}
       </div>
-    </div>
+      </div>
     {% endif %}
 
   </div>

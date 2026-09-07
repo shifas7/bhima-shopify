@@ -238,6 +238,7 @@ body.template-index .main-content .bhima-occasion .bhima-occasion__heading .titl
 @media (max-width: 767px) {
   .bhima-occasion {
     padding-block: 12px;
+    overflow: hidden;
   }
 
   .bhima-occasion .bhima-occasion__heading.title_section {
@@ -257,7 +258,9 @@ body.template-index .main-content .bhima-occasion .bhima-occasion__heading .titl
   }
 
   .bhima-occasion__track {
-    grid-template-columns: repeat(5, 74vw);
+    grid-auto-flow: column;
+    grid-auto-columns: 82vw;
+    grid-template-columns: none;
     gap: var(--occasion-gap, 14px);
     margin-inline: calc(var(--occasion-gutter) * -1);
     padding-inline: var(--occasion-gutter);
@@ -267,6 +270,7 @@ body.template-index .main-content .bhima-occasion .bhima-occasion__heading .titl
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    max-width: 100%;
   }
 
   .bhima-occasion__track::-webkit-scrollbar {

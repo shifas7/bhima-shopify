@@ -17,9 +17,9 @@
   CTA label, CTA link, text colour, text alignment, and a show/hide toggle.
 
   Layout is one CSS scroll-snap track: a swipeable carousel below 992px, a
-  plain three-up grid above it, no JavaScript, and only the track ever scrolls
-  horizontally. Same technique as the PDP rails, so the theme keeps one
-  carousel idiom.
+  plain three-up grid above it. The mobile track receives calm looping
+  autoplay from the shared homepage carousel helper; only the track ever
+  scrolls horizontally.
 
   Styles live in assets/bhima-editorial.css, loaded here rather than from
   bhima-home.css so the section is self-contained on any template.
@@ -71,7 +71,7 @@
         </header>
       {%- endif -%}
 
-      <ul class="bhima-edits__track" role="list">
+      <ul class="bhima-edits__track" role="list" data-bhima-mobile-scroll-carousel>
         {%- for block in section.blocks -%}
           {%- if block.settings.show_card -%}
             {%- liquid
@@ -140,6 +140,7 @@
       </ul>
     </div>
   </section>
+  {{ 'bhima-mobile-carousels.js' | asset_url | script_tag }}
 {%- endif -%}
 
 {% schema %}

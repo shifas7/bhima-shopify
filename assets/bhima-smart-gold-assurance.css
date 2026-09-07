@@ -1,7 +1,7 @@
-/* BHIMA — Smart Gold + Assurance combined row. Isolated to this section so
-   the homepage's approved header, footer and existing sections remain
-   unaffected. Two coordinated cards, one row on tablet and up; stacked
-   on mobile. */
+/* BHIMA — Smart Gold + Assurance. Isolated to this section so the
+   homepage's approved header, footer and existing sections remain
+   unaffected. Two rows: the Smart Gold + app-download composition first,
+   the Assurance card below it, full width. Stacked on mobile throughout. */
 
 .bhima-sga {
   --sga-measure: var(--bhima-home-container, 1360px);
@@ -15,7 +15,7 @@
   --sga-soft: #F8F1E7;
   --sga-ease: cubic-bezier(0.22, 1, 0.36, 1);
   background: var(--sga-ivory);
-  padding-block: 40px;
+  padding-block: 40px 24px;
 }
 
 .bhima-sga *,
@@ -31,10 +31,13 @@
   padding-inline: var(--sga-gutter);
 }
 
-.bhima-sga__row {
+/* ---------- Composition row: Smart Gold image + app-download panel ---------- */
+
+.bhima-sga__composition {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-bottom: 20px;
 }
 
 /* ---------- Smart Gold card ----------
@@ -61,23 +64,88 @@
   object-position: var(--gold-pos, center center);
 }
 
-/* ---------- Assurance card ---------- */
+/* ---------- App-download panel ---------- */
+
+.bhima-sga__app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 26px 24px;
+  border: 1px solid var(--sga-border);
+  border-radius: 14px;
+  background: var(--sga-soft);
+  text-align: center;
+}
+
+.bhima-sga__app-heading {
+  margin: 0;
+  color: var(--sga-ink);
+  font-family: var(--font-family-primary, Georgia, serif);
+  font-size: clamp(17px, 1.4vw, 20px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.bhima-sga__app-badge {
+  display: inline-flex;
+  line-height: 0;
+  transition: transform 0.3s var(--sga-ease);
+}
+
+.bhima-sga__app-badge:hover,
+.bhima-sga__app-badge:focus-visible {
+  transform: translateY(-2px);
+}
+
+.bhima-sga__app-badge-image {
+  display: block;
+  height: 48px;
+  width: auto;
+}
+
+.bhima-sga__app-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 11px 28px;
+  border: 1px solid var(--sga-gold);
+  border-radius: 999px;
+  color: var(--sga-gold);
+  font-family: var(--font-family-default, Arial, sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background-color 0.3s var(--sga-ease), color 0.3s var(--sga-ease);
+}
+
+.bhima-sga .bhima-sga__app .bhima-sga__app-cta:hover,
+.bhima-sga .bhima-sga__app .bhima-sga__app-cta:focus-visible {
+  background-color: var(--sga-gold);
+  color: var(--sga-ivory);
+}
+
+/* ---------- Assurance bar ----------
+   Compact horizontal trust bar — only 3 genuine assurance items, so this
+   is sized to its content instead of a tall card with empty space. */
 
 .bhima-sga__assurance {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 26px 24px;
+  padding: 22px 28px;
   border: 1px solid var(--sga-border);
-  border-radius: 14px;
+  border-radius: 16px;
   background: var(--sga-ivory);
 }
 
 .bhima-sga__assurance-heading {
-  margin: 0 0 20px;
+  margin: 0 0 12px;
   color: var(--sga-ink);
   font-family: var(--font-family-primary, Georgia, serif);
-  font-size: clamp(18px, 1.5vw, 22px);
+  font-size: clamp(17px, 1.4vw, 20px);
   font-weight: 600;
   letter-spacing: 0.03em;
   text-align: center;
@@ -85,10 +153,10 @@
 }
 
 .bhima-sga__assurance-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 12px;
-  row-gap: 22px;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -96,18 +164,26 @@
 
 .bhima-sga__assurance-item {
   display: flex;
+  flex: 1 1 0;
+  min-width: 0;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  padding-inline: 20px;
   text-align: center;
+  border-left: 1px solid var(--sga-border);
+}
+
+.bhima-sga__assurance-item:first-child {
+  border-left: none;
 }
 
 .bhima-sga__assurance-icon-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   flex: 0 0 auto;
   color: var(--sga-gold);
 }
@@ -124,13 +200,14 @@
 
 .bhima-sga__assurance-icon-image {
   display: block;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
 }
 
 .bhima-sga__assurance-title {
   margin: 0;
+  overflow-wrap: break-word;
   color: var(--sga-ink);
   font-family: var(--font-family-default, Arial, sans-serif);
   font-size: 12.5px;
@@ -142,20 +219,22 @@
 
 .bhima-sga__assurance-desc {
   margin: 0;
+  max-width: 20ch;
   color: var(--sga-muted);
   font-family: var(--font-family-default, Arial, sans-serif);
   font-size: 11.5px;
   line-height: 1.4;
 }
 
-/* ---------- Tablet and up: single row, two columns ---------- */
+/* ---------- Tablet and up: Smart Gold image + app panel side by side ---------- */
 
 @media (min-width: 768px) {
-  .bhima-sga__row {
+  .bhima-sga__composition {
     display: grid;
-    grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+    grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
     align-items: stretch;
     gap: 20px;
+    margin-bottom: 24px;
   }
 
   .bhima-sga__gold {
@@ -163,25 +242,29 @@
   }
 
   .bhima-sga__assurance-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    row-gap: 20px;
+    max-width: 720px;
+    margin-inline: auto;
   }
 }
 
-/* ---------- Desktop: full five-across assurance row ---------- */
+/* ---------- Desktop ---------- */
 
 @media (min-width: 1024px) {
   .bhima-sga {
-    padding-block: 48px;
+    padding-block: 48px 24px;
   }
 
   .bhima-sga__assurance {
-    padding: 30px 30px;
+    padding: 26px 32px;
   }
 
   .bhima-sga__assurance-list {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    column-gap: 14px;
+    max-width: 860px;
+    margin-inline: auto;
+  }
+
+  .bhima-sga__assurance-item {
+    padding-inline: 36px;
   }
 }
 
@@ -196,18 +279,54 @@
 
 @media (max-width: 767px) {
   .bhima-sga {
-    padding-block: 16px;
+    padding-block: 16px 20px;
   }
 
+  .bhima-sga__composition {
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .bhima-sga__app {
+    padding: 20px 18px;
+    gap: 12px;
+  }
+
+  /* Same 3-column row as desktop — just tightened. No carousel, no per-item
+     cards: all three items stay visible together, sized to the viewport. */
+
   .bhima-sga__assurance {
-    padding: 22px 18px;
+    padding: 14px 16px;
   }
 
   .bhima-sga__assurance-heading {
-    margin-bottom: 18px;
+    margin: 0 0 10px;
   }
 
-  .bhima-sga__assurance-list {
-    row-gap: 20px;
+  .bhima-sga__assurance-item {
+    gap: 4px;
+    padding-inline: 2px;
+  }
+
+  .bhima-sga__assurance-icon-wrap {
+    width: 26px;
+    height: 26px;
+  }
+
+  .bhima-sga__assurance-title {
+    width: 100%;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+  }
+
+  .bhima-sga__assurance-icon-image {
+    width: 24px;
+    height: 24px;
+  }
+
+  .bhima-sga__assurance-desc {
+    width: 100%;
+    max-width: none;
+    font-size: 11.5px;
   }
 }

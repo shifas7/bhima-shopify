@@ -19,7 +19,7 @@
     <div class="bhima-brands__rule" aria-hidden="true"><span></span></div>
 
     <div class="bhima-brands__stage">
-      <ul class="bhima-brands__row" role="list" aria-label="{{ sst.heading | strip_html | escape }} logos">
+      <ul class="bhima-brands__row" role="list" aria-label="{{ sst.heading | strip_html | escape }} logos" data-bhima-mobile-scroll-carousel>
         {%- for block in section.blocks -%}
           {%- liquid
             assign item = block.settings
@@ -54,6 +54,8 @@
     </div>
   </div>
 </section>
+
+{{ 'bhima-mobile-carousels.js' | asset_url | script_tag }}
 
 {% schema %}
 {

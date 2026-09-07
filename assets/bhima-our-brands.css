@@ -219,7 +219,7 @@ body.template-index .main-content .bhima-brands .title_section .title::after {
 /* Mobile presents two marks at a time, preserving a clear swipe affordance. */
 @media (max-width: 767px) {
   .bhima-brands {
-    padding-block: 12px;
+    padding-block: 16px 12px;
   }
 
   .bhima-brands .title_section {

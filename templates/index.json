@@ -1098,19 +1098,16 @@
             "columns_tablet": "3",
             "columns_mobile": "2",
             "grid_gap": 20,
+            "mobile_grid_gap": 12,
             "corner_radius": 8,
-            "image_corner_radius": 6,
-            "card_padding": 16,
-            "image_spacing": 12,
-            "card_background": "#FFFDF9",
             "border_width": 1,
             "border_color": "#E6D8C7",
             "border_hover_color": "#B77A18",
-            "hover_lift": 3,
-            "category_title_size": 14,
-            "category_title_weight": "500",
-            "category_title_color": "#29231D",
-            "category_title_hover_color": "#B77A18",
+            "overlay_color": "#29231D",
+            "category_title_size": 17,
+            "category_title_weight": "600",
+            "category_title_color": "#FFFDF9",
+            "category_title_hover_color": "#F3E0BE",
             "section_padding_top": 45,
             "section_padding_bottom": 25,
             "collection_1": "bangle",
@@ -1216,8 +1213,8 @@
             "btn": "",
             "btn_l": "",
             "pin_product_1": "nirav-18k-necklace-set",
-            "pin_position_top_1": 65,
-            "pin_position_left_1": 6,
+            "pin_position_top_1": 74,
+            "pin_position_left_1": 48,
             "pin_product_2": "",
             "pin_position_top_2": 16,
             "pin_position_left_2": 60,
@@ -1799,32 +1796,12 @@
             "title": "Free Delivery",
             "description": "Secure delivery across India"
           }
-        },
-        "benefit_exchange": {
-          "type": "benefit",
-          "settings": {
-            "icon_type": "exchange",
-            "custom_icon": "",
-            "title": "Easy Exchange",
-            "description": "100% value on exchange"
-          }
-        },
-        "benefit_buyback": {
-          "type": "benefit",
-          "settings": {
-            "icon_type": "buyback",
-            "custom_icon": "",
-            "title": "Lifetime Buyback",
-            "description": "At prevailing rate"
-          }
         }
       },
       "block_order": [
         "benefit_purity",
         "benefit_certified",
-        "benefit_delivery",
-        "benefit_exchange",
-        "benefit_buyback"
+        "benefit_delivery"
       ],
       "settings": {
         "gold_image": "shopify://shop_images/SchemeArtboard_1_jpg.jpg",
@@ -1832,7 +1809,12 @@
         "gold_link": "shopify://pages/schemes",
         "image_fit": "cover",
         "image_position": "center center",
-        "assurance_heading": "The Bhima Assurance"
+        "assurance_heading": "The Bhima Assurance",
+        "app_heading": "Download the app",
+        "play_store_img": "shopify://shop_images/Apps-01.png",
+        "play_store_link": "https://play.google.com/store/apps/details?id=com.acme.jewelloApp.bhimaTrivandrum",
+        "know_more_label": "Know More",
+        "know_more_link": ""
       }
     },
     "bhima_experience": {
@@ -1867,37 +1849,40 @@
             "alt": "Bhima Platinum Studio"
           }
         },
-        "option_store": {
-          "type": "experience_option",
+        "category_galleria": {
+          "type": "showroom_category",
           "settings": {
-            "icon_type": "store",
-            "custom_icon": "",
-            "title": "Visit a Store",
-            "description": "Find your nearest Bhima showroom",
-            "cta_text": "FIND A STORE →",
-            "cta_link": "shopify://pages/store-locations"
+            "title": "Galleria",
+            "description": "<p><strong>Galleria</strong>, a vibrant and modern space designed for the style-conscious customer. Here you’ll find chic contemporary sets, lightweight everyday wear, fusion jewellery, and trending designs curated from across India. The ambience combines sophistication with comfort, featuring boutique-style displays, soft lighting, and personalised styling guidance.<br/><strong>Perfect for young brides, office-goers, and fashion-forward jewellery lovers.</strong></p>",
+            "link_label": "Explore",
+            "link": ""
           }
         },
-        "option_shop": {
-          "type": "experience_option",
+        "category_celant": {
+          "type": "showroom_category",
           "settings": {
-            "icon_type": "shop",
-            "custom_icon": "",
-            "title": "Shop Online",
-            "description": "Explore thousands of beautiful designs",
-            "cta_text": "SHOP NOW →",
-            "cta_link": "shopify://collections/all"
+            "title": "Celant by Bhima",
+            "description": "<p>Immerse yourself in the splendour of India’s regal artistry.<br/>The <strong>Celant room</strong> showcases rare 18K Light weight  sourced from master artisans across India. Warm tones, classic décor, and expert consultants create a luxurious environment where every piece tells a story of tradition and royal elegance.<br/><strong>A destination for connoisseurs of heritage jewellery.</strong></p>",
+            "link_label": "Explore",
+            "link": ""
           }
         },
-        "option_expert": {
-          "type": "experience_option",
+        "category_diamond": {
+          "type": "showroom_category",
           "settings": {
-            "icon_type": "expert",
-            "custom_icon": "",
-            "title": "Talk to an Expert",
-            "description": "Get personalized assistance",
-            "cta_text": "CONTACT US →",
-            "cta_link": "shopify://pages/contact"
+            "title": "Diamond",
+            "description": "<p>Enter the world of sparkle.<br/>Our <strong>Diamond Lounge</strong> is designed as an intimate, elegant space where every diamond is handpicked, certified, and showcased with care.</p><p>Discover:<br/></p><ul><li>Solitaire masterpieces     <br/></li><li>Bridal diamond collections      <br/></li><li>Cocktail rings       <br/></li><li>Signature diamond sets   <br/></li><li>IGI/GIA certified pieces</li></ul><p>Interactive viewing counters, expert consultants, and a serene ambience ensure an extraordinary diamond-buying experience.<br/><br/><strong>Where luxury shines brighter.</strong></p>",
+            "link_label": "Explore",
+            "link": ""
+          }
+        },
+        "category_platinum": {
+          "type": "showroom_category",
+          "settings": {
+            "title": "Platinum",
+            "description": "<p>The <strong>Platinum Studio</strong> celebrates purity, strength, and understated elegance. Designed with a crisp, contemporary aesthetic, this section features:  </p><ul><li>Platinum love bands    <br/></li><li>Everyday platinum wear <br/></li><li>Men’s platinum collections<br/></li><li>Rare platinum-diamond fusion pieces</li></ul><p>Timeless, modern, and refined — the Platinum Studio is a sanctuary for those who love subtle luxury.</p>",
+            "link_label": "Explore",
+            "link": ""
           }
         }
       },
@@ -1906,14 +1891,20 @@
         "slide_celant",
         "slide_diamond",
         "slide_platinum",
-        "option_store",
-        "option_shop",
-        "option_expert"
+        "category_galleria",
+        "category_celant",
+        "category_diamond",
+        "category_platinum"
       ],
       "settings": {
+        "enable_section": true,
         "image_position": "center center",
-        "heading": "Experience Bhima",
-        "subheading": "Online or in-store. Jewellery should always feel personal."
+        "autoplay": true,
+        "autoplay_speed": 5,
+        "eyebrow": "EXPERIENCE BHIMA",
+        "heading": "SHOP TOUR — BHIMA JEWELLERY",
+        "subheading": "<p>Experience elegance. Discover craftsmanship. Celebrate 101 years of trust.</p>",
+        "intro": "<p>Step into the world of <strong>Bhima Jewellery</strong>, where tradition meets modern luxury. Every Bhima showroom is thoughtfully designed to offer a seamless, warm, and memorable jewellery-buying experience. Explore exclusive sections curated for every category — from antique treasures to contemporary diamond brilliance.</p>"
       }
     },
     "video_bulge_slider_7kK9wH": {
@@ -2423,7 +2414,7 @@
           "settings": {
             "show_card": true,
             "focal_point": "right center",
-            "text_theme": "dark",
+            "text_theme": "light",
             "text_align": "left",
             "cta_link": "",
             "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906222173.png",
@@ -2437,7 +2428,7 @@
           "settings": {
             "show_card": true,
             "focal_point": "right center",
-            "text_theme": "dark",
+            "text_theme": "light",
             "text_align": "left",
             "cta_link": "",
             "image": "shopify://shop_images/magnific_highend-jewelry-product-p_2907379372.png",
@@ -2451,7 +2442,7 @@
           "settings": {
             "show_card": true,
             "focal_point": "right center",
-            "text_theme": "dark",
+            "text_theme": "light",
             "text_align": "left",
             "cta_link": "",
             "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906943868.png",

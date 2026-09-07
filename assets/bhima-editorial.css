@@ -220,14 +220,16 @@
 }
 
 /* A card set to light text needs the fade to darken instead. Warm ink
-   (#29231D), never black, and it still clears before mid-card. */
+   (#29231D), never black — kept tight and low-alpha so it reads as a soft
+   shadow behind the copy rather than a panel, and is fully clear well
+   before mid-card so the photograph stays the dominant element. */
 .bhima-edit--text-light .bhima-edit__scrim {
   background-image: linear-gradient(
     to right,
-    rgba(41, 35, 29, calc(0.62 * var(--edits-scrim, 0.85))) 0%,
-    rgba(41, 35, 29, calc(0.44 * var(--edits-scrim, 0.85))) 32%,
-    rgba(41, 35, 29, calc(0.16 * var(--edits-scrim, 0.85))) 58%,
-    rgba(41, 35, 29, 0) 80%
+    rgba(41, 35, 29, calc(0.40 * var(--edits-scrim, 0.85))) 0%,
+    rgba(41, 35, 29, calc(0.22 * var(--edits-scrim, 0.85))) 22%,
+    rgba(41, 35, 29, calc(0.06 * var(--edits-scrim, 0.85))) 38%,
+    rgba(41, 35, 29, 0) 50%
   );
 }
 
@@ -249,9 +251,11 @@
 .bhima-edit--align-center.bhima-edit--text-light .bhima-edit__scrim {
   background-image: linear-gradient(
     to right,
-    rgba(41, 35, 29, calc(0.18 * var(--edits-scrim, 0.85))) 0%,
-    rgba(41, 35, 29, calc(0.56 * var(--edits-scrim, 0.85))) 50%,
-    rgba(41, 35, 29, calc(0.18 * var(--edits-scrim, 0.85))) 100%
+    rgba(41, 35, 29, 0) 0%,
+    rgba(41, 35, 29, calc(0.10 * var(--edits-scrim, 0.85))) 32%,
+    rgba(41, 35, 29, calc(0.34 * var(--edits-scrim, 0.85))) 50%,
+    rgba(41, 35, 29, calc(0.10 * var(--edits-scrim, 0.85))) 68%,
+    rgba(41, 35, 29, 0) 100%
   );
 }
 
@@ -409,6 +413,13 @@
   .bhima-edits {
     padding-top: 16px;
     padding-bottom: 12px;
+    overflow: hidden;
+  }
+
+  .bhima-edits__track {
+    grid-auto-columns: calc(var(--edits-peek, 86) * 1vw);
+    gap: 14px;
+    max-width: 100%;
   }
 
   .bhima-edit__content {
@@ -430,10 +441,10 @@
   .bhima-edit--text-light .bhima-edit__scrim {
     background-image: linear-gradient(
       to right,
-      rgba(41, 35, 29, calc(0.68 * var(--edits-scrim, 0.85))) 0%,
-      rgba(41, 35, 29, calc(0.54 * var(--edits-scrim, 0.85))) 46%,
-      rgba(41, 35, 29, calc(0.22 * var(--edits-scrim, 0.85))) 74%,
-      rgba(41, 35, 29, 0) 96%
+      rgba(41, 35, 29, calc(0.48 * var(--edits-scrim, 0.85))) 0%,
+      rgba(41, 35, 29, calc(0.30 * var(--edits-scrim, 0.85))) 30%,
+      rgba(41, 35, 29, calc(0.10 * var(--edits-scrim, 0.85))) 50%,
+      rgba(41, 35, 29, 0) 68%
     );
   }
 
