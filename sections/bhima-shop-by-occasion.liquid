@@ -59,16 +59,24 @@
                 {% if has_link %}aria-label="{{ title | escape }}"{% endif %}
               >
                 {%- if card.image != blank -%}
-                  {{
-                    card.image
-                    | image_url: width: 1600
-                    | image_tag:
-                      loading: 'lazy',
-                      widths: '320, 480, 640, 800, 1000, 1200, 1600',
-                      sizes: '(min-width: 1200px) 20vw, (min-width: 992px) 25vw, 74vw',
-                      class: 'bhima-occasion__image',
-                      alt: alt_text
-                  }}
+                  <picture class="bhima-occasion__picture">
+                    {%- if card.image_mobile != blank -%}
+                      <source
+                        media="(max-width: 767px)"
+                        srcset="{{ card.image_mobile | image_url: width: 1200 }}"
+                      >
+                    {%- endif -%}
+                    {{
+                      card.image
+                      | image_url: width: 1600
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '320, 480, 640, 800, 1000, 1200, 1600',
+                        sizes: '(min-width: 1200px) 20vw, (min-width: 992px) 25vw, 74vw',
+                        class: 'bhima-occasion__image',
+                        alt: alt_text
+                    }}
+                  </picture>
                 {%- else -%}
                   <span class="bhima-occasion__image bhima-occasion__image--empty" aria-hidden="true"></span>
                 {%- endif -%}
@@ -191,6 +199,12 @@
           "id": "image",
           "label": "Card image",
           "info": "The image fills the whole card. Alt text falls back to the occasion title."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile image",
+          "info": "Optional image used below 768px. Leave blank to use the card image."
         },
         {
           "type": "text",

@@ -431,10 +431,17 @@
   }
 
   #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 > a,
-  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 > .respone_image {
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 > .respone_image,
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 > .recommendation-featured-picture,
+  #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 > a > .recommendation-featured-picture {
     display: block;
     width: 100%;
     height: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .bhima-recommendations .recommendation-featured-picture {
+    position: absolute;
+    inset: 0;
   }
 
   #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 .respone_image {
@@ -565,6 +572,10 @@
       margin-inline: 0;
     }
 
+    #shopify-section-{{ section.id }} .bhima-recommendations .nov-sh-image-2 {
+      aspect-ratio: var(--recommendation-mobile-aspect-ratio, 1.6) !important;
+    }
+
     #shopify-section-{{ section.id }} .bhima-recommendations .row > [class*="col-"] {
       display: block;
       width: 100%;
@@ -621,22 +632,27 @@
           <div class="col-lg-3 col-md-4 mb-sm-{{ sst.spacing }} mb-xs-10" data-section-id="{{ section.id }}" data-section-type="nov-slick">
             <div class="nov-slick-carousel overflow_hidden" data-dots="false" data-nav="{{ sst.show_arrow }}" data-row="1" data-fade="true" data-speed="700">
               {% for block in section.blocks %}
-              <div class="item position-relative nov-sh-image-2"{% if block.settings.img != blank %} style="aspect-ratio: {{ block.settings.img.aspect_ratio }};"{% endif %}>
+              <div class="item position-relative nov-sh-image-2"{% if block.settings.img != blank %} style="aspect-ratio: {{ block.settings.img.aspect_ratio }};{% if block.settings.img_mobile != blank %} --recommendation-mobile-aspect-ratio: {{ block.settings.img_mobile.aspect_ratio }};{% endif %}"{% endif %}>
                 {% if block.settings.img_link != blank %}
                   <a href="{{ block.settings.img_link }}">
                 {% endif %}
                     {% if block.settings.img != blank %}
                       {% assign featured_alt = block.settings.img.alt | default: 'Featured jewellery' %}
-                      {{
-                        block.settings.img
-                        | image_url: width: 1600
-                        | image_tag:
-                          loading: 'lazy',
-                          widths: '480, 640, 800, 1000, 1200, 1600',
-                          sizes: '(min-width: 992px) 32vw, 100vw',
-                          class: 'recommendation-featured-image',
-                          alt: featured_alt
-                      }}
+                      <picture class="recommendation-featured-picture">
+                        {% if block.settings.img_mobile != blank %}
+                          <source media="(max-width: 767px)" srcset="{{ block.settings.img_mobile | image_url: width: 1600 }}">
+                        {% endif %}
+                        {{
+                          block.settings.img
+                          | image_url: width: 1600
+                          | image_tag:
+                            loading: 'lazy',
+                            widths: '480, 640, 800, 1000, 1200, 1600',
+                            sizes: '(min-width: 992px) 32vw, 100vw',
+                            class: 'recommendation-featured-image',
+                            alt: featured_alt
+                        }}
+                      </picture>
                     {% else %}
                       {%- capture current -%}{% cycle 1, 2, 3 %}{%- endcapture -%}
                       {{ 'collection-apparel-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
@@ -1471,6 +1487,12 @@
             "id": "img",
             "label": "Image",
             "info": "435 x 694 recommend"
+          },
+          {
+            "type": "image_picker",
+            "id": "img_mobile",
+            "label": "Mobile image",
+            "info": "Optional image used below 768px. Leave blank to use the desktop image."
           },
           {
             "type": "url",

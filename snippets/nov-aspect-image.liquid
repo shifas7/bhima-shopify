@@ -20,6 +20,10 @@
   endif
 -%}
 <div class="respone_image{% if class != blank %} {{ class }}{% endif %}" style="padding-top: {{ padding_top | append: '%' }}">
+  {% if mobile_image != blank %}
+    <picture>
+      <source media="(max-width: 767px)" srcset="{{ mobile_image | image_url: width: 2048 }}">
+  {% endif %}
   {% if aspect == '11' %}
     <img class="lazyload"
     src="{{ image | image_url: width: 1 }}"
@@ -40,5 +44,8 @@
     src="{{ image | image_url: width: 1 }}"
     data-src="{{ image | image_url: width: 180 }}"
     data-srcset="{{ image | image_url: width: 380 }} 380w,{{ image | image_url:width: 580 }} 580w,{{ image | image_url: width: 768 }} 768w,{{ image | image_url: width: 900 }} 900w,{{ image | image_url: width: 1080 }} 1080w,{{ image | image_url: width: 1296 }} 1296w,{{ image | image_url: width: 1512 }} 1512w,{{ image | image_url: width: 1728 }} 1728w, {{ image | image_url: width: 2048 }} 2048w" data-sizes="auto" alt="{{ image.alt }}" width="{{ image.width }}" height="{{ image.height }}" loading="lazy">
+  {% endif %}
+  {% if mobile_image != blank %}
+    </picture>
   {% endif %}
 </div>

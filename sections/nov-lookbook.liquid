@@ -422,7 +422,7 @@
     }
 
     #shopify-section-{{ section.id }} .bhima-special-offers-section .nov-content-lookbook {
-      aspect-ratio: 16 / 9;
+      aspect-ratio: var(--lookbook-mobile-aspect-ratio, 16 / 9);
     }
 
     #shopify-section-{{ section.id }} .bhima-special-offers-section .nov-content-lookbook > .position-relative {
@@ -499,10 +499,10 @@
       {% for block in section.blocks %}
         {% assign bst = block.settings %}
         <div class="item{% render 'number-to-col' %}{% if bst.class != blank %} {{ bst.class }}{% endif %}{% if forloop.index <= sst.limit %} show{% endif %}{% if forloop.index > sst.limit %} hide{% endif %}" data-position="{{ forloop.index }}">
-          <div class="nov-content-lookbook overflow_hidden position-relative">
+          <div class="nov-content-lookbook overflow_hidden position-relative"{% if bst.lookbook_image_mobile != blank %} style="--lookbook-mobile-aspect-ratio: {{ bst.lookbook_image_mobile.aspect_ratio }};"{% endif %}>
             <div class="position-relative">
               {% if bst.lookbook_image != blank %}
-                {% render 'nov-aspect-image', image: bst.lookbook_image %}
+                {% render 'nov-aspect-image', image: bst.lookbook_image, mobile_image: bst.lookbook_image_mobile %}
               {% else %}
                 {%- capture current -%}{% cycle 1, 2, 3 %}{%- endcapture -%}
                 {{ 'collection-apparel-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
@@ -520,7 +520,7 @@
                         <div class="row spacing-0 h-100 align-items-center align-items-lg-start">
                           <div class="col-xl-7 col-lg-8 col-md-7">
                             <div class="lookbook__thumb position-relative">
-                              {% render 'nov-aspect-image', image: bst.lookbook_image %}
+                              {% render 'nov-aspect-image', image: bst.lookbook_image, mobile_image: bst.lookbook_image_mobile %}
                               {% if bst.pin_product_1 != blank %}
                                 <div class="item-lookbook position-absolute" style="top: {{ bst.pin_position_top_1 }}%; left: {{ bst.pin_position_left_1 }}%">
                                   <span class="number-lookbook active" data-position="0">+</span>
@@ -1218,6 +1218,12 @@
             "type": "image_picker",
             "id": "lookbook_image",
             "label": "Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "lookbook_image_mobile",
+            "label": "Mobile image",
+            "info": "Optional image used below 768px. Leave blank to use the desktop image."
           },
            {
             "type": "header",
