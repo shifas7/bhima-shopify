@@ -14,308 +14,256 @@
       "disabled": true,
       "settings": {}
     },
-    "lookbook_hero_9jGi7A": {
-      "type": "lookbook-hero",
-      "name": "Lookbook Hero Banner",
-      "settings": {
-        "image_desktop": "shopify://shop_images/Web_Earing_Fest_.jpg_1.jpg",
-        "image_mobile": "shopify://shop_images/1x1_Earing_Fest_jpg.jpg",
-        "button_text": "Explore Collections",
-        "scroll_target": "lookbook-collections"
-      }
-    },
-    "lookbook_collections_3WHMUV": {
-      "type": "lookbook-collections",
+    "bhima_lookbook_mbhnXU": {
+      "type": "bhima-lookbook",
       "blocks": {
-        "collection_plate_nd6cQk": {
-          "type": "collection_plate",
+        "look_KwH3Ld": {
+          "type": "look",
           "settings": {
-            "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906222173.png",
-            "title": "Ear Drops",
-            "subtitle": "Designed to frame your face and elevate every look.",
-            "text_color": "#ffffff",
-            "link": "#Ear Drops",
-            "button_text": "Explore Collections"
+            "image": "shopify://shop_images/WD_10_91c39166-f1a2-46a7-afac-e2711f1df890.jpg",
+            "title": "5 sovereigns bridal set",
+            "whatsapp_message": ""
           }
         },
-        "collection_plate_WbeFfg": {
-          "type": "collection_plate",
+        "look_Fn9aCG": {
+          "type": "look",
           "settings": {
-            "image": "shopify://shop_images/magnific_highend-jewelry-product-p_2907379372.png",
-            "title": "Stud",
-            "subtitle": "Crafted to highlight your natural elegance.",
-            "text_color": "#000000",
-            "link": "#Ear Stud",
-            "button_text": "Explore Collections"
+            "image": "shopify://shop_images/WD_22_8ba56124-f71b-4216-8faa-688ba8898c24.jpg",
+            "title": "15 sovereigns bridal set",
+            "whatsapp_message": ""
           }
         },
-        "collection_plate_g3iFGf": {
-          "type": "collection_plate",
+        "look_banEVw": {
+          "type": "look",
           "settings": {
-            "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906943868.png",
-            "title": "Rings",
-            "subtitle": "Made to bring balance, shine, and confidence to your style.",
-            "text_color": "#000000",
-            "link": "#Rings",
-            "button_text": "Explore Collections"
+            "image": "shopify://shop_images/WD_24_f6c1a38b-9f01-400a-b159-51e4aa8d3ab2.jpg",
+            "title": "15 sovereigns bridal set",
+            "whatsapp_message": ""
           }
         },
-        "collection_plate_xRizGL": {
-          "type": "collection_plate",
+        "look_Jr8dd3": {
+          "type": "look",
           "settings": {
-            "image": "shopify://shop_images/Nose_pin-05_587edfee-8d2e-4cf2-a12a-3e53cc052688.jpg",
-            "title": "Nose Studs",
-            "subtitle": "Enhances your features with effortless shine.",
-            "text_color": "#000000",
-            "link": "#Nose Stud",
-            "button_text": "Explore Collections"
+            "image": "shopify://shop_images/WD_21_e0a1f602-7325-4f4d-a557-ffb3a3cff5a7.jpg",
+            "title": "15 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_HgWwFL": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_25_03b42a03-e0ef-4efa-90e4-18c01e05958a.jpg",
+            "title": "40 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_dEcXUY": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_23_2f75f220-b5a5-43f6-aa1f-91c9d136bdc1.jpg",
+            "title": "20 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_z6q8U4": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_20_2098a0f3-0690-487b-a51f-7d7f090d9a45.jpg",
+            "title": "25 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_3iNCgg": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_19_ea5232e6-7bce-4665-918e-473356b4d3b5.jpg",
+            "title": "50 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_TJkJYH": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_18_50dab41c-a275-4c26-8598-ddaaa3150144.jpg",
+            "title": "40 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_rffNC9": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_17_3a3a4ba8-69bb-4a2c-a4bf-f4fe330d32c1.jpg",
+            "title": "45 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_3VnM37": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_16_8a4bfd45-369d-4328-80a1-7c5c0b0cfab1.jpg",
+            "title": "70 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_ewwnVM": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_15_d9af6b29-079f-494a-be10-3b3587cf8924.jpg",
+            "title": "75 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_Ekyycy": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_14_870b5fe9-3d5f-407c-9add-27849c7f4edc.jpg",
+            "title": "20 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_GfbMgd": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_13_1d9ef550-0c0e-486d-9d2c-27b8730f79f5.jpg",
+            "title": "10 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_A8Cfz4": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_12_8e76462d-e76e-430d-ad85-2a86daa4334c.jpg",
+            "title": "10 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_Y8Dae3": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_11_ca71ec9f-78d4-427a-8b80-ab958a7f7efa.jpg",
+            "title": "30 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_xY4cbU": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_9_0b32029f-1f27-4b4c-84da-fc5c188f335a.jpg",
+            "title": "35 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_4UTyA9": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_8_06fba99d-2046-4dcf-b647-59be2d255601.jpg",
+            "title": "30 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_tp77fy": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_7_076267a1-8130-4c8f-b717-bad6b5e8b8e0.jpg",
+            "title": "85 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_pybkJD": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_1_d0c22841-2b6c-4104-a52f-cdc43e6584ad.jpg",
+            "title": "15 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_LedQdV": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_2_f33dae4e-b95f-4fee-b3db-81c2ef634cef.jpg",
+            "title": "25 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_zBKwpg": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_3_a2bca481-88d2-40bb-9def-5a7b778446e4.jpg",
+            "title": "10 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_aQY9cc": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_4_6e0868a7-1854-4a8f-94e4-90bc3845a7ac.jpg",
+            "title": "15 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_NN7mD3": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_5_07f624a6-da71-478a-be2b-e69e5eee55b7.jpg",
+            "title": "10 sovereigns bridal set",
+            "whatsapp_message": ""
+          }
+        },
+        "look_pDPB3E": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/WD_6_9751c1e2-9730-4993-9e71-fc4b848562de.jpg",
+            "title": "20 sovereigns bridal set",
+            "whatsapp_message": ""
           }
         }
       },
       "block_order": [
-        "collection_plate_nd6cQk",
-        "collection_plate_WbeFfg",
-        "collection_plate_g3iFGf",
-        "collection_plate_xRizGL"
+        "look_KwH3Ld",
+        "look_Fn9aCG",
+        "look_banEVw",
+        "look_Jr8dd3",
+        "look_HgWwFL",
+        "look_dEcXUY",
+        "look_z6q8U4",
+        "look_3iNCgg",
+        "look_TJkJYH",
+        "look_rffNC9",
+        "look_3VnM37",
+        "look_ewwnVM",
+        "look_Ekyycy",
+        "look_GfbMgd",
+        "look_A8Cfz4",
+        "look_Y8Dae3",
+        "look_xY4cbU",
+        "look_4UTyA9",
+        "look_tp77fy",
+        "look_pybkJD",
+        "look_LedQdV",
+        "look_zBKwpg",
+        "look_aQY9cc",
+        "look_NN7mD3",
+        "look_pDPB3E"
       ],
-      "name": "Lookbook Collections",
+      "name": "Bhima Lookbook",
       "settings": {
-        "enable_autoplay": true,
-        "autoplay_interval": 5
-      }
-    },
-    "lookbook_product_grid_nfN9dT": {
-      "type": "lookbook-product-grid",
-      "blocks": {
-        "card_kddkW6": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906599366.png",
-            "image_2": "shopify://shop_images/magnific_luxury-jewellery-product-_2906603836.png",
-            "image_3": "shopify://shop_images/magnific_luxury-jewellery-product-_2907678895.png",
-            "image_4": "shopify://shop_images/magnific_luxury-jewellery-product-_2907673726.png",
-            "overlay_color": "#2c0e0e",
-            "button_text": "Enquire Now"
-          }
-        },
-        "card_RYbmLy": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906702546.png",
-            "image_2": "shopify://shop_images/magnific_luxury-jewellery-product-_2906706953.png",
-            "image_3": "shopify://shop_images/magnific_luxury-jewellery-product-_2906707593.png",
-            "image_4": "shopify://shop_images/magnific_luxury-jewellery-product-_2906708772.png",
-            "overlay_color": "#2c0e0e",
-            "button_text": "Enquire Now"
-          }
-        },
-        "card_JD3hxf": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906290279.png",
-            "image_2": "shopify://shop_images/magnific_luxury-jewellery-product-_2906286595.png",
-            "image_3": "shopify://shop_images/magnific_luxury-jewellery-product-_2906284646.png",
-            "image_4": "shopify://shop_images/magnific_luxury-jewellery-product-_2906276064.png",
-            "overlay_color": "#331413",
-            "button_text": "Enquire Now"
-          }
-        },
-        "card_rJBBrh": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906028688.png",
-            "image_2": "shopify://shop_images/magnific_luxury-jewellery-product-_2906032851.png",
-            "image_3": "shopify://shop_images/magnific_luxury-jewellery-product-_2906041030.png",
-            "image_4": "shopify://shop_images/magnific_luxury-jewellery-product-_2906337726.png",
-            "overlay_color": "#a68266",
-            "button_text": "Enquire Now"
-          }
-        },
-        "card_hKYaJr": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906513875.png",
-            "image_2": "shopify://shop_images/magnific_luxury-jewellery-product-_2906519129.png",
-            "image_3": "shopify://shop_images/magnific_luxury-jewellery-product-_2906524544.png",
-            "image_4": "shopify://shop_images/magnific_luxury-jewellery-product-_2906528530.png",
-            "overlay_color": "#2c0e0e",
-            "button_text": "Enquire Now"
-          }
-        }
-      },
-      "block_order": [
-        "card_kddkW6",
-        "card_RYbmLy",
-        "card_JD3hxf",
-        "card_rJBBrh",
-        "card_hKYaJr"
-      ],
-      "name": "Lookbook Product Grid",
-      "settings": {
-        "title": "EAR DROPS",
-        "columns_desktop": 3,
+        "banner_image": "shopify://shop_images/Pavithra_vivaha-01_deebd122-d0c3-4431-a03e-7fcae9b19fcd.jpg",
+        "banner_image_mobile": "shopify://shop_images/Pavithra_vivaha-02_605b6899-fc8a-4078-895b-52ba1e2d1bf0.jpg",
+        "banner_gradient": false,
+        "eyebrow": "",
+        "heading": "",
+        "subheading": "",
+        "heading_size": 56,
         "whatsapp_number": "918547771777",
-        "anchor_id": "Ear Drops"
-      }
-    },
-    "lookbook_product_grid_L8rTwU": {
-      "type": "lookbook-product-grid",
-      "blocks": {
-        "card_nAJAXA": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/magnific_highend-jewelry-product-p_2907375410.png",
-            "image_2": "shopify://shop_images/magnific_highend-jewelry-product-p_2907379372_aa1412bc-2b8f-4932-bbf9-ae855703e3a3.png",
-            "image_3": "shopify://shop_images/magnific_highend-jewelry-product-p_2907387296.png",
-            "image_4": "shopify://shop_images/magnific_highend-jewelry-product-p_2907394378.png",
-            "overlay_color": "#8c6e53",
-            "button_text": "Enquire Now"
-          }
-        },
-        "card_jXawTp": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/magnific_highend-jewelry-product-p_2907477600.png",
-            "image_2": "shopify://shop_images/magnific_highend-jewelry-product-p_2907482272.png",
-            "image_3": "shopify://shop_images/magnific_highend-jewelry-product-p_2907486489.png",
-            "image_4": "shopify://shop_images/magnific_highend-jewelry-product-p_2907487098.png",
-            "overlay_color": "#8a6145",
-            "button_text": "Enquire Now"
-          }
-        },
-        "card_KfwApc": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906290279.png",
-            "image_2": "shopify://shop_images/magnific_luxury-jewellery-product-_2906286595.png",
-            "image_3": "shopify://shop_images/magnific_luxury-jewellery-product-_2906284646.png",
-            "image_4": "shopify://shop_images/magnific_luxury-jewellery-product-_2906276064.png",
-            "overlay_color": "#331413",
-            "button_text": "Enquire Now"
-          }
-        }
-      },
-      "block_order": [
-        "card_nAJAXA",
-        "card_jXawTp",
-        "card_KfwApc"
-      ],
-      "name": "Lookbook Product Grid",
-      "settings": {
-        "title": "EAR STUDS",
-        "columns_desktop": 3,
-        "whatsapp_number": "918547771777",
-        "anchor_id": "Ear Stud"
-      }
-    },
-    "lookbook_product_grid_3azwyX": {
-      "type": "lookbook-product-grid",
-      "blocks": {
-        "card_aipRfW": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/magnific_a-highend-detailed-macro-_2907224875.png",
-            "image_2": "shopify://shop_images/magnific_a-highend-detailed-macro-_2907230782.png",
-            "image_3": "shopify://shop_images/magnific_a-highend-detailed-macro-_2907233786.png",
-            "image_4": "shopify://shop_images/magnific_a-highend-detailed-macro-_2907238240.png",
-            "overlay_color": "#2c0e0e",
-            "button_text": "Enquire Now"
-          }
-        },
-        "card_wrqtra": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/magnific_a-highend-product-photogr_2907012461.png",
-            "image_2": "shopify://shop_images/magnific_a-highend-product-photogr_2907016453.png",
-            "image_3": "shopify://shop_images/magnific_a-highend-product-photogr_2907021927.png",
-            "image_4": "shopify://shop_images/magnific_a-highend-product-photogr_2907026607.png",
-            "overlay_color": "#7a645a",
-            "button_text": "Enquire Now"
-          }
-        },
-        "card_zAztAh": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/magnific_a-luxurious-product-photo_2907157037.png",
-            "image_2": "shopify://shop_images/magnific_a-luxurious-product-photo_2907160729.png",
-            "image_3": "shopify://shop_images/magnific_a-luxurious-product-photo_2907161438.png",
-            "image_4": "shopify://shop_images/magnific_a-luxurious-product-photo_2907182917.png",
-            "overlay_color": "#70523a",
-            "button_text": "Enquire Now"
-          }
-        },
-        "card_nd46d6": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906943868_67286ae9-8c73-4eff-936f-bc6b41dca110.png",
-            "image_2": "shopify://shop_images/magnific_luxury-jewellery-product-_2906949250.png",
-            "image_3": "shopify://shop_images/magnific_luxury-jewellery-product-_2906972400.png",
-            "image_4": "shopify://shop_images/magnific_luxury-jewellery-product-_2906981590.png",
-            "overlay_color": "#a68266",
-            "button_text": "Enquire Now"
-          }
-        },
-        "card_6TtjkW": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/magnific_professional-jewelry-prod_2907067103.png",
-            "image_2": "shopify://shop_images/magnific_professional-jewelry-prod_2907084002.png",
-            "image_3": "shopify://shop_images/magnific_professional-jewelry-prod_2907091119.png",
-            "image_4": "shopify://shop_images/magnific_professional-jewelry-prod_2907092573.png",
-            "overlay_color": "#897260",
-            "button_text": "Enquire Now"
-          }
-        }
-      },
-      "block_order": [
-        "card_aipRfW",
-        "card_wrqtra",
-        "card_zAztAh",
-        "card_nd46d6",
-        "card_6TtjkW"
-      ],
-      "name": "Lookbook Product Grid",
-      "settings": {
-        "title": "Rings",
-        "columns_desktop": 3,
-        "whatsapp_number": "918547771777",
-        "anchor_id": "Rings"
-      }
-    },
-    "lookbook_product_grid_CqCwE8": {
-      "type": "lookbook-product-grid",
-      "blocks": {
-        "card_UqjngG": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/Nose_pin-01.jpg",
-            "image_2": "shopify://shop_images/Nose_pin-03_fa321c1a-fb0b-4331-803e-cf05f3abe0f8.jpg",
-            "image_3": "shopify://shop_images/Nose_pin-05_b2a48236-bc8b-40fd-af0e-d5120104e020.jpg",
-            "image_4": "shopify://shop_images/Nose_pin-07_76381bd5-c999-4b8a-9666-1b2fc11c1f7e.jpg",
-            "overlay_color": "#f1d7b3",
-            "button_text": "Enquire Now"
-          }
-        }
-      },
-      "block_order": [
-        "card_UqjngG"
-      ],
-      "name": "Lookbook Product Grid",
-      "settings": {
-        "title": "NOSE STUDS",
-        "columns_desktop": 3,
-        "whatsapp_number": "918547771777",
-        "anchor_id": "Nose Stud"
+        "color_wine": "#b02f3d",
+        "color_gold_deep": "#a9812e",
+        "color_bg": "#fffdf9",
+        "color_ink": "#2b1b12"
       }
     }
   },
   "order": [
     "main",
-    "lookbook_hero_9jGi7A",
-    "lookbook_collections_3WHMUV",
-    "lookbook_product_grid_nfN9dT",
-    "lookbook_product_grid_L8rTwU",
-    "lookbook_product_grid_3azwyX",
-    "lookbook_product_grid_CqCwE8"
+    "bhima_lookbook_mbhnXU"
   ]
 }

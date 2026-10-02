@@ -5,7 +5,7 @@
     1. A composition row: the Smart Gold card renders the merchant's
        uploaded creative as-is (the image already carries its own heading,
        copy and CTA, so no text is overlaid in Liquid) beside a supporting
-       app-download panel (heading, Play Store badge, "Know More" CTA).
+       app-download panel (heading, Play Store + App Store badges, "Know More" CTA).
     2. The Assurance card below it, full width — its benefit items are
        Theme Editor blocks so the merchant can add, edit or reorder them
        without touching Liquid.
@@ -67,19 +67,38 @@
           <p class="bhima-sga__app-heading">{{ sst.app_heading | escape }}</p>
         {%- endif -%}
 
-        {%- if sst.play_store_img != blank -%}
-          <a
-            href="{{ sst.play_store_link }}"
-            class="bhima-sga__app-badge"
-            aria-label="Get it on Google Play"
-            {% if sst.play_store_link contains '://' %}target="_blank" rel="noopener"{% endif %}
-          >
-            {{
-              sst.play_store_img
-              | image_url: width: 400
-              | image_tag: loading: 'lazy', alt: 'Get it on Google Play', class: 'bhima-sga__app-badge-image'
-            }}
-          </a>
+        {%- if sst.play_store_img != blank or sst.app_store_img != blank -%}
+          <div class="bhima-sga__app-badges">
+            {%- if sst.play_store_img != blank -%}
+              <a
+                href="{{ sst.play_store_link }}"
+                class="bhima-sga__app-badge"
+                aria-label="Get it on Google Play"
+                {% if sst.play_store_link contains '://' %}target="_blank" rel="noopener"{% endif %}
+              >
+                {{
+                  sst.play_store_img
+                  | image_url: width: 400
+                  | image_tag: loading: 'lazy', alt: 'Get it on Google Play', class: 'bhima-sga__app-badge-image'
+                }}
+              </a>
+            {%- endif -%}
+
+            {%- if sst.app_store_img != blank -%}
+              <a
+                href="{{ sst.app_store_link }}"
+                class="bhima-sga__app-badge"
+                aria-label="Download on the App Store"
+                {% if sst.app_store_link contains '://' %}target="_blank" rel="noopener"{% endif %}
+              >
+                {{
+                  sst.app_store_img
+                  | image_url: width: 400
+                  | image_tag: loading: 'lazy', alt: 'Download on the App Store', class: 'bhima-sga__app-badge-image'
+                }}
+              </a>
+            {%- endif -%}
+          </div>
         {%- endif -%}
 
         {%- if sst.know_more_label != blank -%}
@@ -208,6 +227,16 @@
       "type": "url",
       "id": "play_store_link",
       "label": "Google Play link"
+    },
+    {
+      "type": "image_picker",
+      "id": "app_store_img",
+      "label": "App Store badge image"
+    },
+    {
+      "type": "url",
+      "id": "app_store_link",
+      "label": "App Store link"
     },
     {
       "type": "text",

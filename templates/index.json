@@ -920,6 +920,8 @@
         "zoom": false,
         "autoplay_speed": "5",
         "slideshow_corner": 0,
+        "hero_max_height": 620,
+        "hero_intro_zoom": false,
         "enable_mh": false,
         "img_crop_position": "center",
         "h_xxxl": 560,
@@ -930,25 +932,28 @@
         "h_sm": 300,
         "h_xs": 280,
         "loading_bar": false,
-        "bg_load": "#FFFDF9",
+        "bg_load": "#fffdf9",
         "bg_load_opacity": 15,
         "show_arrow": false,
-        "slider_arrow_color": "#29231D",
-        "slider_arrow_color_act": "#B77A18",
+        "arrow_size": 38,
+        "slider_arrow_color": "#29231d",
+        "slider_arrow_color_act": "#b77a18",
         "show_dots": true,
-        "c_dot": "#29231D",
+        "dot_size": 8,
+        "dot_corner": 20,
+        "c_dot": "#29231d",
         "c_dot_opacity": 32,
-        "c_dot_a": "#B77A18",
+        "c_dot_a": "#b77a18",
         "dot_bottom": "26px",
         "show_dots_number": false,
-        "dot_number_color": "#71695F",
-        "dot_number_color_act": "#B77A18",
+        "dot_number_color": "#71695f",
+        "dot_number_color_act": "#b77a18",
         "wave": false,
-        "wave_bg": "#FFFDF9",
+        "wave_bg": "#fffdf9",
         "container": "container-full",
         "class_section": "",
         "ss_bg_enable": false,
-        "background_color": "#FFFDF9",
+        "background_color": "#fffdf9",
         "background_corner": 0,
         "background_img_size": "cover",
         "enable_background_img_size_custom": false,
@@ -969,12 +974,7 @@
         "distance_bottom_xl": 24,
         "distance_bottom_lg": 24,
         "distance_bottom_md": 22,
-        "distance_bottom_sm": 20,
-        "dot_size": 8,
-        "dot_corner": 20,
-        "arrow_size": 38,
-        "hero_max_height": 620,
-        "hero_intro_zoom": false
+        "distance_bottom_sm": 20
       }
     },
     "1764840557e7856a76": {
@@ -990,11 +990,11 @@
             "heading_font_size": 40,
             "mobile_heading_font_size": 28,
             "heading_font_weight": "500",
-            "heading_color": "#29231D",
+            "heading_color": "#29231d",
             "subheading_font_size": 16,
             "mobile_subheading_font_size": 14,
             "subheading_font_weight": "400",
-            "subheading_color": "#71695F",
+            "subheading_color": "#71695f",
             "subheading_spacing": 10,
             "heading_spacing": 40,
             "mobile_heading_spacing": 30,
@@ -1007,10 +1007,10 @@
             "mobile_card_padding": 12,
             "card_min_height": 200,
             "mobile_card_min_height": 150,
-            "card_background": "#F8F1E7",
+            "card_background": "#f8f1e7",
             "border_width": 1,
-            "border_color": "#E6D8C7",
-            "border_hover_color": "#B77A18",
+            "border_color": "#e6d8c7",
+            "border_hover_color": "#b77a18",
             "hover_lift": 5,
             "hover_shadow": 10,
             "section_padding_top": 40,
@@ -1024,11 +1024,11 @@
             "title_font_size": 16,
             "mobile_title_font_size": 14,
             "title_font_weight": "600",
-            "title_color": "#29231D",
-            "title_hover_color": "#B77A18",
+            "title_color": "#29231d",
+            "title_hover_color": "#b77a18",
             "description_font_size": 13,
             "mobile_description_font_size": 12,
-            "description_color": "#71695F",
+            "description_color": "#71695f",
             "description_spacing": 8,
             "category_1_title": "Rings",
             "category_1_image": "shopify://shop_images/1_52c84f4b-7336-4596-8dbf-9592a394a504.png",
@@ -1086,13 +1086,13 @@
             "heading_size": 26,
             "heading_weight": "500",
             "heading_alignment": "center",
-            "heading_color": "#29231D",
+            "heading_color": "#29231d",
             "heading_padding_bottom": 24,
             "heading_spacing": 20,
             "show_divider": true,
             "divider_width": 200,
             "divider_height": 1,
-            "divider_color": "#B77A18",
+            "divider_color": "#b77a18",
             "divider_spacing": 11,
             "columns_desktop": "6",
             "columns_tablet": "3",
@@ -1101,13 +1101,13 @@
             "mobile_grid_gap": 12,
             "corner_radius": 8,
             "border_width": 1,
-            "border_color": "#E6D8C7",
-            "border_hover_color": "#B77A18",
-            "overlay_color": "#29231D",
+            "border_color": "#e6d8c7",
+            "border_hover_color": "#b77a18",
+            "overlay_color": "#29231d",
             "category_title_size": 17,
             "category_title_weight": "600",
-            "category_title_color": "#FFFDF9",
-            "category_title_hover_color": "#F3E0BE",
+            "category_title_color": "#fffdf9",
+            "category_title_hover_color": "#f3e0be",
             "section_padding_top": 45,
             "section_padding_bottom": 25,
             "collection_1": "bangle",
@@ -1125,28 +1125,99 @@
       ],
       "settings": {}
     },
+    "bhima_editorial_edits": {
+      "type": "bhima-editorial-edits",
+      "blocks": {
+        "edit_bridal": {
+          "type": "edit_card",
+          "settings": {
+            "show_card": true,
+            "image": "shopify://shop_images/magnific_using-the-reference-image_BhbP5knoQR.jpg",
+            "focal_point": "right center",
+            "title": "The Bridal Edit",
+            "description": "For the moments that become memories.",
+            "cta_label": "Explore now",
+            "cta_link": "shopify://pages/look-book",
+            "text_theme": "dark",
+            "text_align": "left"
+          }
+        },
+        "edit_everyday": {
+          "type": "edit_card",
+          "settings": {
+            "show_card": true,
+            "image": "shopify://shop_images/magnific_luxury-jewellery-campaign_6ADQR4riJO.jpg",
+            "focal_point": "right center",
+            "title": "Everyday Elegance",
+            "description": "Jewellery you will never want to take off.",
+            "cta_label": "Shop now",
+            "cta_link": "shopify://collections/celant",
+            "text_theme": "dark",
+            "text_align": "left"
+          }
+        },
+        "edit_festive": {
+          "type": "edit_card",
+          "settings": {
+            "show_card": true,
+            "image": "shopify://shop_images/magnific_luxury-jewellery-campaign_SyA8J0PUb8.jpg",
+            "focal_point": "right center",
+            "title": "Festive Edit",
+            "description": "Celebrate every occasion in brilliance.",
+            "cta_label": "View collection",
+            "cta_link": "shopify://collections",
+            "text_theme": "dark",
+            "text_align": "left"
+          }
+        }
+      },
+      "block_order": [
+        "edit_bridal",
+        "edit_everyday",
+        "edit_festive"
+      ],
+      "settings": {
+        "heading": "",
+        "subheading": "",
+        "heading_alignment": "left",
+        "card_height": 200,
+        "card_height_mobile": 210,
+        "card_gap": 20,
+        "corner_radius": 6,
+        "mobile_card_width": 86,
+        "text_inset": 28,
+        "text_width": 48,
+        "overlay_strength": 85,
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
     "nov_products_slider_UnqidA": {
       "type": "nov-products-slider",
       "settings": {
         "heading": "<p>New Arrivals</p>",
-        "heading_color": "#29231D",
+        "heading_color": "#29231d",
         "subheading": "<p>OUR PRODUCTS</p>",
-        "subheading_color": "#71695F",
+        "subheading_color": "#71695f",
         "descheading": "",
-        "descheading_color": "#71695F",
+        "descheading_color": "#71695f",
         "subheading_position": "top",
         "heading_alignment": "text-center",
         "viewall": false,
         "type_slider": "type1",
-        "collection": "stone-collection",
+        "collection": "celant",
         "enable_custom_style": false,
-        "product_border_color": "#E6D8C7",
-        "product_background_color": "#FFFDF9",
-        "product_title_color": "#29231D",
-        "product_title_color_hover": "#B77A18",
-        "product_type_color": "#71695F",
-        "product_price_color": "#29231D",
-        "product_price_reduced_color": "#71695F",
+        "product_border_color": "#e6d8c7",
+        "product_background_color": "#fffdf9",
+        "product_title_color": "#29231d",
+        "product_title_color_hover": "#b77a18",
+        "product_type_color": "#71695f",
+        "product_price_color": "#29231d",
+        "product_price_reduced_color": "#71695f",
+        "card_style": "collection",
+        "card_image_ratio": "11",
+        "sync_slide_group": true,
+        "mobile_peek": true,
         "xxl": 6,
         "xl": 5,
         "lg": 4,
@@ -1160,18 +1231,18 @@
         "show_dots": false,
         "dots_color": "dots_on_light",
         "show_nav": true,
-        "slider_arrow_color": "#29231D",
-        "slider_arrow_color_act": "#B77A18",
+        "slider_arrow_color": "#29231d",
+        "slider_arrow_color_act": "#b77a18",
         "btn_nav_link": "shopify://products/18kt-clementine-diamond-necklace-set",
         "show_pagination_progress": false,
-        "pagination_progress_bg": "#E6D8C7",
-        "progress_bg": "#B77A18",
+        "pagination_progress_bg": "#e6d8c7",
+        "progress_bg": "#b77a18",
         "show_arrow": false,
         "animate": true,
         "container": "container-fluid",
         "class_section": "bhima-new-arrivals",
         "ss_bg_enable": false,
-        "background_color": "#FFFDF9",
+        "background_color": "#fffdf9",
         "background_corner": 0,
         "background_img_size": "cover",
         "enable_background_img_size_custom": false,
@@ -1192,11 +1263,7 @@
         "distance_bottom_xl": 24,
         "distance_bottom_lg": 24,
         "distance_bottom_md": 22,
-        "distance_bottom_sm": 12,
-        "card_style": "collection",
-        "mobile_peek": true,
-        "card_image_ratio": "11",
-        "sync_slide_group": true
+        "distance_bottom_sm": 12
       }
     },
     "nov_lookbook_NVLERX": {
@@ -1205,16 +1272,17 @@
         "lookbook_Kn77hJ": {
           "type": "lookbook",
           "settings": {
-            "lookbook_image": "shopify://shop_images/Artboard_1_00d5696a-32c5-40fc-8f35-ffb8bce8c30b.jpg",
+            "lookbook_image": "shopify://shop_images/Artboard_1.png",
+            "lookbook_image_mobile": "shopify://shop_images/Artboard_1_copy.png",
             "t_pos": "left-center",
             "bt_alignment": "text-left",
             "title": "",
             "desc": "",
             "btn": "",
             "btn_l": "",
-            "pin_product_1": "nirav-18k-necklace-set",
-            "pin_position_top_1": 74,
-            "pin_position_left_1": 48,
+            "pin_product_1": "18k-niva-gold-necklace",
+            "pin_position_top_1": 73,
+            "pin_position_left_1": 5,
             "pin_product_2": "",
             "pin_position_top_2": 16,
             "pin_position_left_2": 60,
@@ -1230,18 +1298,18 @@
       ],
       "settings": {
         "heading": "<p>Countless Attractive Offers Are Waiting For You</p>",
-        "heading_color": "#29231D",
+        "heading_color": "#29231d",
         "subheading": "<p>SPECIAL DEALS </p>",
-        "subheading_color": "#71695F",
+        "subheading_color": "#71695f",
         "descheading": "<p>Hurry up, these attractive offers are limited in quantity!</p>",
-        "descheading_color": "#71695F",
+        "descheading_color": "#71695f",
         "subheading_position": "top",
         "heading_alignment": "text-left",
         "show_popup": false,
         "heading_popup": "<p>Vinova Lookbook</p>",
-        "heading_popup_c": "#29231D",
+        "heading_popup_c": "#29231d",
         "subheading_popup": "<p>Subtitle from happy customers</p>",
-        "subheading_popup_c": "#71695F",
+        "subheading_popup_c": "#71695f",
         "social": true,
         "xl": 1,
         "lg": 1,
@@ -1252,27 +1320,27 @@
         "limit": 8,
         "radius": 20,
         "round": false,
-        "lb_t": "#29231D",
-        "lb_desc": "#71695F",
+        "lb_t": "#29231d",
+        "lb_desc": "#71695f",
         "c_btn": "#ffffff",
-        "b_btn": "#B77A18",
+        "b_btn": "#b77a18",
         "c_btn_h": "#ffffff",
-        "b_btn_h": "#C58A2A",
-        "countdown_timeend": "2026/07/03",
+        "b_btn_h": "#c58a2a",
+        "countdown_timeend": "2026/09/30",
         "border_radius": 8,
-        "c_cd": "#29231D",
-        "bg_cd": "#FFFDF9",
-        "bd_cd": "#E6D8C7",
-        "ct_cd": "#71695F",
-        "cd_cd": "#29231D",
+        "c_cd": "#29231d",
+        "bg_cd": "#fffdf9",
+        "bd_cd": "#e6d8c7",
+        "ct_cd": "#71695f",
+        "cd_cd": "#29231d",
         "show_shadow": false,
         "btn": "Shop now",
-        "btn_link": "shopify://products/nirav-18k-necklace-set",
+        "btn_link": "shopify://products/18k-niva-gold-necklace",
         "color_section": "scheme-b7fb7d5a-9d35-4971-aa90-beb7f15aa139",
         "container": "container-fluid",
         "class_section": "",
         "ss_bg_enable": true,
-        "background_color": "#F8F1E7",
+        "background_color": "#f8f1e7",
         "background_img_size": "cover",
         "enable_background_img_size_custom": false,
         "background_img_size_custom": "",
@@ -1301,60 +1369,60 @@
           "type": "occasion_card",
           "settings": {
             "show_card": true,
-            "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906222173.png",
+            "image": "shopify://shop_images/Artboard_1_copy_2_6a41c37a-4c88-4e6f-b9d5-61bafedcfad1.jpg",
+            "image_mobile": "shopify://shop_images/Artboard_1_copy_3_e2d700b6-6045-41cf-959d-a939db3e7716.jpg",
             "title": "Weddings",
             "link": "",
             "image_position": "center center",
-            "icon": "ring",
-            "icon_image": ""
+            "icon": "ring"
           }
         },
         "occasion_festivals": {
           "type": "occasion_card",
           "settings": {
             "show_card": true,
-            "image": "shopify://shop_images/Pavithra_vivaha-01.jpg",
+            "image": "shopify://shop_images/Artboard_1_3d4d3bbb-c571-4fec-80d0-7706277548e6.jpg",
+            "image_mobile": "shopify://shop_images/Artboard_1_copy_5f443955-5001-48b2-9260-cbbdaf55dede.jpg",
             "title": "Festivals",
             "link": "",
-            "image_position": "center center",
-            "icon": "diya",
-            "icon_image": ""
+            "image_position": "right center",
+            "icon": "diya"
           }
         },
         "occasion_everyday": {
           "type": "occasion_card",
           "settings": {
             "show_card": true,
-            "image": "shopify://shop_images/magnific_highend-jewelry-product-p_2907379372.png",
+            "image": "shopify://shop_images/Artboard_1_copy_6_47b5dab8-8956-42cc-a92e-adba1708b3eb.jpg",
+            "image_mobile": "shopify://shop_images/Artboard_1_copy_7_9664192a-9ce4-44eb-973a-0588258713d8.jpg",
             "title": "Everyday",
             "link": "",
             "image_position": "center center",
-            "icon": "jewel",
-            "icon_image": ""
+            "icon": "jewel"
           }
         },
         "occasion_office": {
           "type": "occasion_card",
           "settings": {
             "show_card": true,
-            "image": "shopify://shop_images/Artboard_1_66ac1e27-4b6c-4e64-b9a9-cc17d43b9379.jpg",
+            "image": "shopify://shop_images/Artboard_1_copy_8.jpg",
+            "image_mobile": "shopify://shop_images/Artboard_1_copy_9.jpg",
             "title": "Office",
             "link": "",
             "image_position": "center center",
-            "icon": "briefcase",
-            "icon_image": ""
+            "icon": "briefcase"
           }
         },
         "occasion_gifting": {
           "type": "occasion_card",
           "settings": {
             "show_card": true,
-            "image": "shopify://shop_images/Artboard_1_copy_3e82c091-8b73-4275-aaab-00ac18ad0d94.jpg",
+            "image": "shopify://shop_images/Artboard_1_copy_10.jpg",
+            "image_mobile": "shopify://shop_images/Artboard_1_copy_11.jpg",
             "title": "Gifting",
             "link": "",
             "image_position": "center center",
-            "icon": "gift",
-            "icon_image": ""
+            "icon": "gift"
           }
         }
       },
@@ -1370,7 +1438,7 @@
         "card_gap": 14,
         "corner_radius": 6,
         "overlay_strength": 60,
-        "label_color": "#FFFDF9",
+        "label_color": "#fffdf9",
         "padding_top": 40,
         "padding_bottom": 40
       }
@@ -1415,24 +1483,28 @@
       ],
       "settings": {
         "heading": "<p>Our Recommendations</p>",
-        "heading_color": "#29231D",
+        "heading_color": "#29231d",
         "subheading": "",
-        "subheading_color": "#71695F",
+        "subheading_color": "#71695f",
         "descheading": "",
-        "descheading_color": "#71695F",
+        "descheading_color": "#71695f",
         "subheading_position": "top",
         "heading_alignment": "text-center",
         "viewall": false,
         "type_slider": "type1",
         "collection": "rings",
         "enable_custom_style": false,
-        "product_border_color": "#E6D8C7",
-        "product_background_color": "#FFFDF9",
-        "product_title_color": "#29231D",
-        "product_title_color_hover": "#B77A18",
-        "product_type_color": "#71695F",
-        "product_price_color": "#29231D",
-        "product_price_reduced_color": "#71695F",
+        "product_border_color": "#e6d8c7",
+        "product_background_color": "#fffdf9",
+        "product_title_color": "#29231d",
+        "product_title_color_hover": "#b77a18",
+        "product_type_color": "#71695f",
+        "product_price_color": "#29231d",
+        "product_price_reduced_color": "#71695f",
+        "card_style": "collection",
+        "card_image_ratio": "11",
+        "sync_slide_group": true,
+        "mobile_peek": true,
         "xxl": 4,
         "xl": 4,
         "lg": 3,
@@ -1446,18 +1518,18 @@
         "show_dots": false,
         "dots_color": "dots_on_light",
         "show_nav": true,
-        "slider_arrow_color": "#29231D",
-        "slider_arrow_color_act": "#B77A18",
+        "slider_arrow_color": "#29231d",
+        "slider_arrow_color_act": "#b77a18",
         "btn_nav_link": "",
         "show_pagination_progress": false,
-        "pagination_progress_bg": "#E6D8C7",
-        "progress_bg": "#B77A18",
+        "pagination_progress_bg": "#e6d8c7",
+        "progress_bg": "#b77a18",
         "show_arrow": true,
         "animate": true,
         "container": "container-fluid",
         "class_section": "bhima-new-arrivals bhima-recommendations",
         "ss_bg_enable": false,
-        "background_color": "#FFFDF9",
+        "background_color": "#fffdf9",
         "background_corner": 0,
         "background_img_size": "cover",
         "enable_background_img_size_custom": false,
@@ -1478,17 +1550,12 @@
         "distance_bottom_xl": 24,
         "distance_bottom_lg": 24,
         "distance_bottom_md": 22,
-        "distance_bottom_sm": 16,
-        "card_style": "collection",
-        "mobile_peek": true,
-        "card_image_ratio": "11",
-        "sync_slide_group": true
+        "distance_bottom_sm": 16
       }
     },
     "bhima_craftsmanship": {
       "type": "bhima-craftsmanship",
       "settings": {
-        "workshop_image": "",
         "workshop_alt": "Bhima jewellery artisans at work",
         "heading": "<p>A CENTURY OF<br/>CRAFTSMANSHIP<br/>SINCE 1925</p>",
         "description": "<p>From generations of craftsmanship to<br/>today’s contemporary designs.</p>",
@@ -1520,12 +1587,12 @@
           "type": "text",
           "settings": {
             "text": "<p>Gift Cards</p>",
-            "tb_c": "#29231D",
+            "tb_c": "#29231d",
             "t_s": 12,
             "t_s_lg": 12,
             "t_s_md": 12,
-            "t_c": "#29231D",
-            "c_link_h": "#B77A18",
+            "t_c": "#29231d",
+            "c_link_h": "#b77a18",
             "ff": "f_df",
             "t_fw": "font-400",
             "t_tt": "uppercase",
@@ -1542,12 +1609,12 @@
           "type": "text",
           "settings": {
             "text": "<p>Want to gift to someone special</p>",
-            "tb_c": "#29231D",
+            "tb_c": "#29231d",
             "t_s": 45,
             "t_s_lg": 34,
             "t_s_md": 28,
-            "t_c": "#29231D",
-            "c_link_h": "#B77A18",
+            "t_c": "#29231d",
+            "c_link_h": "#b77a18",
             "ff": "f_pr",
             "t_fw": "font-500",
             "t_tt": "none",
@@ -1564,12 +1631,12 @@
           "type": "text",
           "settings": {
             "text": "<p>Please select a gift card and send it to your dearest one</p>",
-            "tb_c": "#29231D",
+            "tb_c": "#29231d",
             "t_s": 20,
             "t_s_lg": 13,
             "t_s_md": 13,
-            "t_c": "#29231D",
-            "c_link_h": "#B77A18",
+            "t_c": "#29231d",
+            "c_link_h": "#b77a18",
             "ff": "f_df",
             "t_fw": "font-400",
             "t_tt": "none",
@@ -1592,13 +1659,13 @@
             "price": "",
             "btn_size": "btn-large",
             "c_btn": "#ffffff",
-            "b_btn": "#B77A18",
-            "bd_btn": "#B77A18",
+            "b_btn": "#b77a18",
+            "bd_btn": "#b77a18",
             "c_btn_h": "#ffffff",
-            "b_btn_h": "#C58A2A",
-            "bd_btn_h": "#C58A2A",
+            "b_btn_h": "#c58a2a",
+            "bd_btn_h": "#c58a2a",
             "c_btn_video": "#ffffff",
-            "c_btn_video_h": "#C58A2A",
+            "c_btn_video_h": "#c58a2a",
             "distance_bottom_xl": 0,
             "distance_bottom_lg": 0,
             "distance_bottom_md": 0,
@@ -1615,17 +1682,17 @@
       "settings": {
         "enable_section": false,
         "heading": "",
-        "heading_color": "#29231D",
+        "heading_color": "#29231d",
         "subheading": "",
-        "subheading_color": "#71695F",
+        "subheading_color": "#71695f",
         "descheading": "",
-        "descheading_color": "#71695F",
+        "descheading_color": "#71695f",
         "subheading_position": "bottom",
         "heading_alignment": "text-left",
         "image1": "shopify://shop_images/Artboard3_cf2197a9-0c18-457d-b13f-5d988e96c295.jpg",
         "image2": "shopify://shop_images/Artboard2.jpg",
         "image3": "shopify://shop_images/Artboard_1_449950ec-9d25-420a-8d9d-0d5a2823d3fd.jpg",
-        "bg_block_img": "#FFFDF9",
+        "bg_block_img": "#fffdf9",
         "img_radius": 7,
         "image_animate": false,
         "autoplay": true,
@@ -1646,7 +1713,7 @@
         "container": "container-fluid",
         "class_section": "",
         "ss_bg_enable": true,
-        "background_color": "#F8F1E7",
+        "background_color": "#f8f1e7",
         "background_corner": 0,
         "background_img_size": "cover",
         "enable_background_img_size_custom": false,
@@ -1724,25 +1791,25 @@
       "settings": {
         "enable_section": false,
         "heading": "<h4><strong>Shop Tour – Bhima Jewellery</strong></h4>",
-        "heading_color": "#29231D",
+        "heading_color": "#29231d",
         "subheading": "<h6>Experience Elegance. Discover Craftsmanship. Celebrate 101 Years of<br/>Trust.</h6>",
-        "subheading_color": "#71695F",
+        "subheading_color": "#71695f",
         "descheading": "<p>Step into the world of <strong>Bhima Jewellery</strong>, where tradition meets modern luxury. Every Bhima showroom is thoughtfully designed to offer a seamless, warm, and memorable jewellery-buying experience. Explore exclusive sections curated for every category — from antique treasures to contemporary diamond brilliance.</p>",
-        "descheading_color": "#71695F",
+        "descheading_color": "#71695f",
         "subheading_position": "bottom",
         "heading_alignment": "text-left",
         "img_corner": 21,
         "enable_mw": false,
         "max_width": 1920,
-        "title_c": "#29231D",
-        "title_ca": "#B77A18",
-        "content_c": "#71695F",
+        "title_c": "#29231d",
+        "title_ca": "#b77a18",
+        "content_c": "#71695f",
         "animate": true,
         "container": "container",
         "color_section": "",
         "class_section": "",
         "ss_bg_enable": true,
-        "background_color": "#F8F1E7",
+        "background_color": "#f8f1e7",
         "background_corner": 0,
         "background_img_size": "cover",
         "enable_background_img_size_custom": false,
@@ -1768,13 +1835,11 @@
     },
     "bhima_smart_gold_assurance": {
       "type": "bhima-smart-gold-assurance",
-      "name": "Smart Gold + Assurance",
       "blocks": {
         "benefit_purity": {
           "type": "benefit",
           "settings": {
             "icon_type": "purity",
-            "custom_icon": "",
             "title": "Purity Guaranteed",
             "description": "Assured purity in every piece"
           }
@@ -1783,7 +1848,6 @@
           "type": "benefit",
           "settings": {
             "icon_type": "certified",
-            "custom_icon": "",
             "title": "Certified Jewellery",
             "description": "BIS Hallmarked & Certified"
           }
@@ -1792,7 +1856,6 @@
           "type": "benefit",
           "settings": {
             "icon_type": "delivery",
-            "custom_icon": "",
             "title": "Free Delivery",
             "description": "Secure delivery across India"
           }
@@ -1803,23 +1866,89 @@
         "benefit_certified",
         "benefit_delivery"
       ],
+      "name": "Smart Gold + Assurance",
       "settings": {
-        "gold_image": "shopify://shop_images/SchemeArtboard_1_jpg.jpg",
+        "gold_image": "shopify://shop_images/Artboard_1_0520a586-85f7-436f-b262-a4170f1db6ff.jpg",
+        "gold_image_mobile": "shopify://shop_images/Artboard_1_copy_b624f9e7-0e16-4424-8fa6-f2e17a32e071.jpg",
         "gold_image_alt": "Bhima Smart Gold",
         "gold_link": "shopify://pages/schemes",
         "image_fit": "cover",
         "image_position": "center center",
-        "assurance_heading": "The Bhima Assurance",
         "app_heading": "Download the app",
         "play_store_img": "shopify://shop_images/Apps-01.png",
         "play_store_link": "https://play.google.com/store/apps/details?id=com.acme.jewelloApp.bhimaTrivandrum",
+        "app_store_img": "shopify://shop_images/Apps-02.png",
+        "app_store_link": "https://apps.apple.com/in/app/bhima-smart-gold/id6801819688",
         "know_more_label": "Know More",
-        "know_more_link": ""
+        "know_more_link": "shopify://pages/schemes",
+        "assurance_heading": "The Bhima Assurance"
+      }
+    },
+    "bhima_our_brands": {
+      "type": "bhima-our-brands",
+      "blocks": {
+        "logo_image_6cb6K4": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/Logos-03.png",
+            "name": "",
+            "link": "#"
+          }
+        },
+        "logo_image_J76zUk": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/Logos-01.png",
+            "name": "",
+            "link": "#"
+          }
+        },
+        "logo_image_FkDXtM": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/Logos-02.png",
+            "name": "",
+            "link": "#"
+          }
+        },
+        "logo_image_D7mVHT": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/Logos-04.png",
+            "name": "",
+            "link": "#"
+          }
+        },
+        "logo_image_YeU4wi": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/Logos.png",
+            "name": "",
+            "link": "#"
+          }
+        }
+      },
+      "block_order": [
+        "logo_image_6cb6K4",
+        "logo_image_J76zUk",
+        "logo_image_FkDXtM",
+        "logo_image_D7mVHT",
+        "logo_image_YeU4wi"
+      ],
+      "settings": {
+        "heading": "<p>Our Brands</p>",
+        "heading_color": "#29231d",
+        "subheading": "",
+        "subheading_color": "#71695f",
+        "descheading": "",
+        "descheading_color": "#71695f",
+        "subheading_position": "bottom",
+        "heading_alignment": "text-center",
+        "logo_max_height": 60
       }
     },
     "bhima_experience": {
       "type": "bhima-experience",
-      "name": "Experience Bhima",
       "blocks": {
         "slide_galleria": {
           "type": "carousel_image",
@@ -1896,6 +2025,7 @@
         "category_diamond",
         "category_platinum"
       ],
+      "name": "Experience Bhima",
       "settings": {
         "enable_section": true,
         "image_position": "center center",
@@ -2039,71 +2169,8 @@
         "twitter_url": "https://x.com/Bhima_Jewellery",
         "pinterest_url": "https://in.pinterest.com/bhimajewelleryofficial/",
         "snapchat_url": "",
-        "bg_color": "#FFFDF9",
-        "text_color": "#29231D"
-      }
-    },
-    "bhima_our_brands": {
-      "type": "bhima-our-brands",
-      "blocks": {
-        "logo_image_6cb6K4": {
-          "type": "brand",
-          "settings": {
-            "image": "shopify://shop_images/Logos-03.png",
-            "name": "",
-            "link": "#"
-          }
-        },
-        "logo_image_J76zUk": {
-          "type": "brand",
-          "settings": {
-            "image": "shopify://shop_images/Logos-01.png",
-            "name": "",
-            "link": "#"
-          }
-        },
-        "logo_image_FkDXtM": {
-          "type": "brand",
-          "settings": {
-            "image": "shopify://shop_images/Logos-02.png",
-            "name": "",
-            "link": "#"
-          }
-        },
-        "logo_image_D7mVHT": {
-          "type": "brand",
-          "settings": {
-            "image": "shopify://shop_images/Logos-04.png",
-            "name": "",
-            "link": "#"
-          }
-        },
-        "logo_image_YeU4wi": {
-          "type": "brand",
-          "settings": {
-            "image": "shopify://shop_images/Logos.png",
-            "name": "",
-            "link": "#"
-          }
-        }
-      },
-      "block_order": [
-        "logo_image_6cb6K4",
-        "logo_image_J76zUk",
-        "logo_image_FkDXtM",
-        "logo_image_D7mVHT",
-        "logo_image_YeU4wi"
-      ],
-      "settings": {
-        "heading": "<p>Our Brands</p>",
-        "heading_color": "#29231D",
-        "subheading": "",
-        "subheading_color": "#71695F",
-        "descheading": "",
-        "descheading_color": "#71695F",
-        "subheading_position": "bottom",
-        "heading_alignment": "text-center",
-        "logo_max_height": 60
+        "bg_color": "#fffdf9",
+        "text_color": "#29231d"
       }
     },
     "nov_text_AKGc4d": {
@@ -2113,7 +2180,7 @@
           "type": "text",
           "settings": {
             "text": "ABOUT US",
-            "t_c": "#B77A18",
+            "t_c": "#b77a18",
             "tb_c": "",
             "text_animate": false,
             "fz": 14,
@@ -2129,7 +2196,7 @@
           "type": "text",
           "settings": {
             "text": "Create fresh youthfulness with each creative design",
-            "t_c": "#29231D",
+            "t_c": "#29231d",
             "tb_c": "",
             "text_animate": false,
             "fz": 40,
@@ -2145,7 +2212,7 @@
           "type": "text",
           "settings": {
             "text": "For overa century, <strong>Bhima Jewellery</strong> has been a trusted name in purity,craftsmanship, and timeless design. Established in 1925, Bhima pioneered thejewellery retail revolution in South India with a simple promise — <strong>uncompromisingauthenticity and transparent pricing</strong>.Today, as we celebrate <strong>101 years of legacy</strong>,Bhima continues to craft jewellery that blends tradition, innovation, andemotion. Every piece reflects the artistry of master craftsmen, the heritage ofIndian culture, and the trust of millions of customers across generations",
-            "t_c": "#71695F",
+            "t_c": "#71695f",
             "tb_c": "",
             "text_animate": false,
             "fz": 16,
@@ -2180,13 +2247,13 @@
         "enable_section": false,
         "title_alignment": "text-center",
         "show_seemore": false,
-        "bg_seemore": "#FFFDF9",
+        "bg_seemore": "#fffdf9",
         "height_seemore": 160,
         "animate": true,
         "container": "container",
         "class_section": "",
         "ss_bg_enable": false,
-        "background_color": "#FFFDF9",
+        "background_color": "#fffdf9",
         "background_corner": 0,
         "background_img_size": "cover",
         "enable_background_img_size_custom": false,
@@ -2215,12 +2282,12 @@
       "name": "Vinova Line",
       "settings": {
         "height": 1,
-        "color": "#E6D8C7",
+        "color": "#e6d8c7",
         "style": "solid",
         "opacity": 100,
         "animate": true,
         "container": "container",
-        "background_color": "#FFFDF9",
+        "background_color": "#fffdf9",
         "class": "",
         "distance_top_xl": 16,
         "distance_top_lg": 16,
@@ -2287,17 +2354,12 @@
         "quote_7PUqrF"
       ],
       "settings": {
-        "autoplay": true,
-        "autoplay_speed": 5500,
-        "arc_intensity": 18,
-        "side_scale": 84,
-        "animation_speed": 650,
         "heading": "<p>Our Customers Reviews</p>",
-        "heading_color": "#29231D",
+        "heading_color": "#29231d",
         "subheading": "<p>TESTIMONIALS</p>",
-        "subheading_color": "#71695F",
+        "subheading_color": "#71695f",
         "descheading": "",
-        "descheading_color": "#71695F",
+        "descheading_color": "#71695f",
         "subheading_position": "top",
         "heading_alignment": "text-center",
         "xxl": 3,
@@ -2307,13 +2369,18 @@
         "sm": 1,
         "xs": 1,
         "row_number": 1,
+        "autoplay": true,
+        "autoplay_speed": 5500,
+        "arc_intensity": 18,
+        "side_scale": 84,
+        "animation_speed": 650,
         "show_dots": true,
         "dots_color": "dots_on_light",
         "show_nav": true,
-        "slider_arrow_color": "#29231D",
-        "slider_arrow_color_act": "#B77A18",
+        "slider_arrow_color": "#29231d",
+        "slider_arrow_color_act": "#b77a18",
         "s_star": true,
-        "color_rating": "#B77A18",
+        "color_rating": "#b77a18",
         "show_avatar": true,
         "text_mw": 500,
         "animate": true,
@@ -2321,7 +2388,7 @@
         "color_section": "scheme-b7fb7d5a-9d35-4971-aa90-beb7f15aa139",
         "class_section": "",
         "ss_bg_enable": false,
-        "background_color": "#FFFDF9",
+        "background_color": "#fffdf9",
         "background_corner": 0,
         "background_img_size": "cover",
         "enable_background_img_size_custom": false,
@@ -2349,11 +2416,11 @@
       "type": "bhima-blog",
       "settings": {
         "heading": "<p>Latest Articles</p>",
-        "heading_color": "#29231D",
+        "heading_color": "#29231d",
         "subheading": "<p>OUR BLOGS</p>",
-        "subheading_color": "#71695F",
+        "subheading_color": "#71695f",
         "descheading": "",
-        "descheading_color": "#71695F",
+        "descheading_color": "#71695f",
         "subheading_position": "top",
         "heading_alignment": "text-center",
         "show_view_all_blog": false,
@@ -2382,7 +2449,7 @@
         "color_section": "",
         "class_section": "",
         "ss_bg_enable": true,
-        "background_color": "#FFFDF9",
+        "background_color": "#fffdf9",
         "background_corner": 0,
         "background_img_size": "cover",
         "enable_background_img_size_custom": false,
@@ -2404,73 +2471,6 @@
         "distance_bottom_lg": 20,
         "distance_bottom_md": 18,
         "distance_bottom_sm": 12
-      }
-    },
-    "bhima_editorial_edits": {
-      "type": "bhima-editorial-edits",
-      "blocks": {
-        "edit_bridal": {
-          "type": "edit_card",
-          "settings": {
-            "show_card": true,
-            "focal_point": "right center",
-            "text_theme": "light",
-            "text_align": "left",
-            "cta_link": "",
-            "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906222173.png",
-            "title": "The Bridal Edit",
-            "description": "For the moments that become memories.",
-            "cta_label": "Explore now"
-          }
-        },
-        "edit_everyday": {
-          "type": "edit_card",
-          "settings": {
-            "show_card": true,
-            "focal_point": "right center",
-            "text_theme": "light",
-            "text_align": "left",
-            "cta_link": "",
-            "image": "shopify://shop_images/magnific_highend-jewelry-product-p_2907379372.png",
-            "title": "Everyday Elegance",
-            "description": "Jewellery you will never want to take off.",
-            "cta_label": "Shop now"
-          }
-        },
-        "edit_festive": {
-          "type": "edit_card",
-          "settings": {
-            "show_card": true,
-            "focal_point": "right center",
-            "text_theme": "light",
-            "text_align": "left",
-            "cta_link": "",
-            "image": "shopify://shop_images/magnific_luxury-jewellery-product-_2906943868.png",
-            "title": "Festive Edit",
-            "description": "Celebrate every occasion in brilliance.",
-            "cta_label": "View collection"
-          }
-        }
-      },
-      "block_order": [
-        "edit_bridal",
-        "edit_everyday",
-        "edit_festive"
-      ],
-      "settings": {
-        "heading": "",
-        "subheading": "",
-        "heading_alignment": "left",
-        "card_height": 200,
-        "card_height_mobile": 210,
-        "card_gap": 20,
-        "corner_radius": 6,
-        "mobile_card_width": 86,
-        "text_inset": 28,
-        "text_width": 48,
-        "overlay_strength": 85,
-        "padding_top": 28,
-        "padding_bottom": 28
       }
     }
   },

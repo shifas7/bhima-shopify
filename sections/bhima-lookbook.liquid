@@ -1,0 +1,259 @@
+{% comment %}
+  Bhima Jewellery — Lookbook (editorial jewellery-set gallery with WhatsApp enquiry).
+  Minimal cards on purpose: rounded image, title underneath, nothing else —
+  no price, no description clutter. Click a set to open it large in a
+  lightbox; "Enquire on WhatsApp" opens a pre-filled wa.me chat naming that
+  exact set. Images, copy, the WhatsApp number and every look are settings.
+{% endcomment %}
+
+{% style %}
+  #lb-{{ section.id }}{
+    --wine:{{ section.settings.color_wine }};
+    --gold-deep:{{ section.settings.color_gold_deep }};
+    --bg:{{ section.settings.color_bg }}; --line:rgba(75,13,20,.12);
+    --ink:{{ section.settings.color_ink }}; --ink-soft:#8A7A65;
+    --shadow:0 26px 50px -28px rgba(43,27,18,.35);
+    --radius: 18px;
+    --font-serif:Georgia,'Iowan Old Style','Apple Garamond','Times New Roman',serif;
+    --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --pad-x: clamp(20px, 5vw, 72px);
+  }
+  #lb-{{ section.id }} *{box-sizing:border-box;}
+  #lb-{{ section.id }}{ background:var(--bg); font-family:var(--font-body); padding:clamp(20px,3vw,32px) 0 clamp(56px,7vw,96px);}
+  #lb-{{ section.id }} img,#lb-{{ section.id }} svg{display:block; max-width:100%;}
+  #lb-{{ section.id }} a{color:inherit;}
+  #lb-{{ section.id }} button{font-family:inherit; cursor:pointer;}
+  #lb-{{ section.id }} .wrap{max-width:1280px; margin:0 auto; padding-inline:var(--pad-x);}
+
+  /* Editorial banner — full-bleed image, heading overlaid bottom-left */
+  #lb-{{ section.id }} .lb-banner{position:relative; margin:0 var(--pad-x) clamp(40px,5vw,64px); border-radius:var(--radius); overflow:hidden; aspect-ratio:21/9; background:var(--line);}
+  @media (max-width:760px){ #lb-{{ section.id }} .lb-banner{aspect-ratio:4/5;} }
+  #lb-{{ section.id }} .lb-banner img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  #lb-{{ section.id }} .lb-banner-mobile{display:none;}
+  @media (max-width:760px){ #lb-{{ section.id }} .lb-banner.has-mobile .lb-banner-desktop{display:none;} #lb-{{ section.id }} .lb-banner.has-mobile .lb-banner-mobile{display:block;} }
+  #lb-{{ section.id }} .lb-banner.has-gradient::after{content:""; position:absolute; inset:0; background:linear-gradient(0deg, rgba(20,12,8,.68), rgba(20,12,8,0) 60%);}
+  #lb-{{ section.id }} .lb-banner-text{position:absolute; left:0; right:0; bottom:0; padding:clamp(24px,4vw,52px); z-index:2; color:#fff;}
+  #lb-{{ section.id }} .lb-banner-text .lb-label{color:var(--gold, #E9D6A8);}
+  #lb-{{ section.id }} .lb-banner-text h2{color:#fff;}
+  #lb-{{ section.id }} .lb-banner-text p{color:rgba(255,255,255,.85);}
+  #lb-{{ section.id }} .lb-banner-text .lb-head{text-align:left; margin:0; max-width:640px;}
+
+  #lb-{{ section.id }} .lb-head{text-align:center; max-width:640px; margin:0 auto clamp(36px,5vw,56px); display:flex; flex-direction:column; gap:12px;}
+  #lb-{{ section.id }} .lb-label{font-size:.76rem; letter-spacing:.18em; text-transform:uppercase; color:var(--gold-deep); font-weight:700;}
+  #lb-{{ section.id }} .lb-head h2{font-family:var(--font-serif); font-weight:400; font-size:clamp(1.9rem, 5.2vw, {{ section.settings.heading_size | default: 56 }}px); line-height:1.05; color:var(--ink); margin:0;}
+  #lb-{{ section.id }} .lb-head p{color:var(--ink-soft); font-size:1.02rem; margin:0;}
+
+  #lb-{{ section.id }} .lb-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(16px,2vw,24px);}
+  @media (max-width:980px){ #lb-{{ section.id }} .lb-grid{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:700px){ #lb-{{ section.id }} .lb-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:440px){ #lb-{{ section.id }} .lb-grid{grid-template-columns:1fr; max-width:340px; margin:0 auto;} }
+
+  #lb-{{ section.id }} .lb-card{display:flex; flex-direction:column; gap:14px; text-align:center;}
+  #lb-{{ section.id }} .lb-media{position:relative; aspect-ratio:4/5; overflow:hidden; border-radius:var(--radius); background:var(--line);}
+  #lb-{{ section.id }} .lb-media-trigger{position:absolute; inset:0; cursor:zoom-in; border:none; padding:0; width:100%; height:100%; display:block; background:none;}
+  #lb-{{ section.id }} .lb-media img{width:100%; height:100%; object-fit:cover; transition:transform .5s ease; pointer-events:none;}
+  #lb-{{ section.id }} .lb-card:hover .lb-media img{transform:scale(1.05);}
+  #lb-{{ section.id }} a.lb-wa-chip{
+    position:absolute; right:12px; bottom:12px; width:40px; height:40px; border-radius:50%;
+    background:#25D366; color:#fff; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px -4px rgba(0,0,0,.4); transition:transform .2s ease, background .2s ease;
+  }
+  #lb-{{ section.id }} .lb-card:hover a.lb-wa-chip{transform:scale(1.08); background:#1EBE5A;}
+  #lb-{{ section.id }} a.lb-wa-chip svg{width:20px; height:20px; fill:#fff; stroke:none;}
+  #lb-{{ section.id }} .lb-title{font-family:var(--font-serif); font-size:clamp(1.3rem, 1.5vw, 1.6rem); color:var(--ink); margin:0;}
+
+  /* Lightbox */
+  #lb-{{ section.id }} .lb-modal{position:fixed; inset:0; z-index:500; display:none;}
+  #lb-{{ section.id }} .lb-modal.open{display:flex;}
+  #lb-{{ section.id }} .lb-modal-backdrop{position:absolute; inset:0; background:rgba(24,14,9,.72);}
+  #lb-{{ section.id }} .lb-modal-inner{position:relative; margin:auto; width:min(640px,92vw); max-height:90vh; overflow-y:auto; background:var(--bg); border-radius:var(--radius); display:flex; flex-direction:column; box-shadow:var(--shadow);}
+  #lb-{{ section.id }} .lb-modal-media{aspect-ratio:4/5; background:var(--line);}
+  #lb-{{ section.id }} .lb-modal-media img{width:100%; height:100%; object-fit:cover; display:block;}
+  #lb-{{ section.id }} .lb-modal-body{padding:22px clamp(20px,3vw,30px) clamp(26px,3vw,32px); display:flex; flex-direction:column; align-items:center; gap:16px; text-align:center;}
+  #lb-{{ section.id }} .lb-modal-body h3{font-family:var(--font-serif); font-weight:400; font-size:clamp(1.4rem,2vw,1.7rem); color:var(--ink); margin:0;}
+  #lb-{{ section.id }} .lb-modal-close{position:absolute; top:14px; right:14px; z-index:2; background:rgba(252,248,241,.94); width:34px; height:34px; display:flex; align-items:center; justify-content:center; color:var(--ink); border-radius:50%;}
+
+  #lb-{{ section.id }} .lb-whatsapp{
+    display:inline-flex; align-items:center; justify-content:center; gap:9px;
+    background:#25D366; color:#fff; text-decoration:none; padding:13px 26px; border-radius:999px;
+    font-size:.84rem; letter-spacing:.03em; font-weight:700; border:none;
+  }
+  #lb-{{ section.id }} .lb-whatsapp:hover{background:#1EBE5A;}
+  #lb-{{ section.id }} .lb-whatsapp svg{width:17px; height:17px; fill:#fff; stroke:none; flex:none;}
+{% endstyle %}
+
+<section id="lb-{{ section.id }}">
+  {%- assign has_head_text = false -%}
+  {%- if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.subheading != blank -%}
+    {%- assign has_head_text = true -%}
+  {%- endif -%}
+
+  {%- if section.settings.banner_image != blank -%}
+  <div class="lb-banner{% if section.settings.banner_image_mobile != blank %} has-mobile{% endif %}{% if section.settings.banner_gradient %} has-gradient{% endif %}">
+    <img class="lb-banner-desktop" src="{{ section.settings.banner_image | image_url: width: 1800 }}" alt="{{ section.settings.heading | escape }}" width="1800" height="{{ 1800 | divided_by: section.settings.banner_image.aspect_ratio }}" loading="lazy">
+    {%- if section.settings.banner_image_mobile != blank -%}
+      <img class="lb-banner-mobile" src="{{ section.settings.banner_image_mobile | image_url: width: 1000 }}" alt="{{ section.settings.heading | escape }}" width="1000" height="{{ 1000 | divided_by: section.settings.banner_image_mobile.aspect_ratio }}" loading="lazy">
+    {%- endif -%}
+    {%- if has_head_text -%}
+    <div class="lb-banner-text">
+      <div class="lb-head">
+        {%- if section.settings.eyebrow != blank -%}<span class="lb-label">{{ section.settings.eyebrow }}</span>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
+        {%- if section.settings.subheading != blank -%}<p>{{ section.settings.subheading }}</p>{%- endif -%}
+      </div>
+    </div>
+    {%- endif -%}
+  </div>
+  {%- endif -%}
+
+  <div class="wrap">
+    {%- if has_head_text and section.settings.banner_image == blank -%}
+    <div class="lb-head">
+      {%- if section.settings.eyebrow != blank -%}<span class="lb-label">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- if section.settings.subheading != blank -%}<p>{{ section.settings.subheading }}</p>{%- endif -%}
+    </div>
+    {%- endif -%}
+
+    {%- assign looks = section.blocks | where: "type", "look" -%}
+    {%- if looks.size > 0 -%}
+    <div class="lb-grid">
+      {%- for block in looks -%}
+        {%- assign wa_text = block.settings.whatsapp_message -%}
+        {%- if wa_text == blank -%}
+          {%- capture wa_text -%}Hi {{ shop.name }}, I'm interested in the {{ block.settings.title }}. Could you share more details?{%- endcapture -%}
+        {%- endif -%}
+        {%- assign wa_number = section.settings.whatsapp_number | remove: " " | remove: "+" | remove: "-" -%}
+        {%- assign wa_text_enc = wa_text | url_encode -%}
+        {%- assign wa_link = "https://wa.me/" | append: wa_number | append: "?text=" | append: wa_text_enc -%}
+        <article class="lb-card" {{ block.shopify_attributes }}>
+          <div class="lb-media">
+            <button type="button" class="lb-media-trigger" data-look-trigger data-look-index="{{ forloop.index0 }}" aria-label="View {{ block.settings.title | escape }}">
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 700 }}" alt="{{ block.settings.title | escape }}" width="700" height="{{ 700 | divided_by: block.settings.image.aspect_ratio }}" loading="lazy">
+              {%- endif -%}
+            </button>
+            <a class="lb-wa-chip" href="{{ wa_link }}" target="_blank" rel="noopener" aria-label="Enquire about {{ block.settings.title | escape }} on WhatsApp">
+              <svg viewBox="0 0 32 32"><path d="M16 3C9 3 3.3 8.7 3.3 15.7c0 2.5.7 4.8 1.9 6.8L3 29l6.7-2.1c1.9 1 4 1.6 6.3 1.6 7 0 12.7-5.7 12.7-12.7C28.7 8.7 23 3 16 3zm0 23c-2 0-3.9-.5-5.5-1.5l-.4-.2-4 1.2 1.2-3.9-.3-.4c-1.1-1.7-1.7-3.7-1.7-5.8C5.3 9.8 10.1 5 16 5s10.7 4.8 10.7 10.7S21.9 26 16 26zm5.9-8c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.2-.2.2-.3.3-.5.1-.2.1-.4 0-.6-.1-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.9-.8 2.1-1.5.3-.7.3-1.4.2-1.5-.1-.1-.3-.2-.6-.3z"/></svg>
+            </a>
+          </div>
+          <h3 class="lb-title">{{ block.settings.title }}</h3>
+        </article>
+      {%- endfor -%}
+    </div>
+    {%- endif -%}
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lb-modal" id="lbModal-{{ section.id }}">
+    <div class="lb-modal-backdrop" data-look-close></div>
+    <div class="lb-modal-inner">
+      <button class="lb-modal-close" data-look-close aria-label="Close">
+        <svg viewBox="0 0 48 48" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M10 10 L38 38 M38 10 L10 38"/></svg>
+      </button>
+      <div class="lb-modal-media"><img id="lbModalImg-{{ section.id }}" alt="" width="800" height="1000"></div>
+      <div class="lb-modal-body">
+        <h3 id="lbModalTitle-{{ section.id }}"></h3>
+        <a class="lb-whatsapp" id="lbModalWa-{{ section.id }}" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 32 32"><path d="M16 3C9 3 3.3 8.7 3.3 15.7c0 2.5.7 4.8 1.9 6.8L3 29l6.7-2.1c1.9 1 4 1.6 6.3 1.6 7 0 12.7-5.7 12.7-12.7C28.7 8.7 23 3 16 3zm0 23c-2 0-3.9-.5-5.5-1.5l-.4-.2-4 1.2 1.2-3.9-.3-.4c-1.1-1.7-1.7-3.7-1.7-5.8C5.3 9.8 10.1 5 16 5s10.7 4.8 10.7 10.7S21.9 26 16 26zm5.9-8c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.2-.2.2-.3.3-.5.1-.2.1-.4 0-.6-.1-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.9-.8 2.1-1.5.3-.7.3-1.4.2-1.5-.1-.1-.3-.2-.6-.3z"/></svg>
+          Enquire on WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var root = document.getElementById('lb-{{ section.id }}');
+  if (!root) return;
+
+  var looks = [
+    {%- for block in looks -%}
+      {%- assign wa_text = block.settings.whatsapp_message -%}
+      {%- if wa_text == blank -%}
+        {%- capture wa_text -%}Hi {{ shop.name }}, I'm interested in the {{ block.settings.title }}. Could you share more details?{%- endcapture -%}
+      {%- endif -%}
+      {%- assign wa_number = section.settings.whatsapp_number | remove: " " | remove: "+" | remove: "-" -%}
+      {%- assign wa_text_enc = wa_text | url_encode -%}
+      {%- assign wa_link = "https://wa.me/" | append: wa_number | append: "?text=" | append: wa_text_enc -%}
+      {
+        image: {{ block.settings.image | image_url: width: 1200 | json }},
+        title: {{ block.settings.title | json }},
+        wa: {{ wa_link | json }}
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ];
+
+  root.querySelectorAll('.lb-media-trigger').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var look = looks[parseInt(btn.dataset.lookIndex, 10)];
+      if (!look) return;
+      document.getElementById('lbModalImg-{{ section.id }}').src = look.image || '';
+      document.getElementById('lbModalImg-{{ section.id }}').alt = look.title || '';
+      document.getElementById('lbModalTitle-{{ section.id }}').textContent = look.title || '';
+      document.getElementById('lbModalWa-{{ section.id }}').href = look.wa;
+      document.getElementById('lbModal-{{ section.id }}').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeModal(){
+    document.getElementById('lbModal-{{ section.id }}').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  root.querySelectorAll('[data-look-close]').forEach(function(el){ el.addEventListener('click', closeModal); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && document.getElementById('lbModal-{{ section.id }}').classList.contains('open')) closeModal();
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Bhima Lookbook",
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "image_picker", "id": "banner_image", "label": "Banner image", "info": "Optional. When set, the heading overlays this full-width banner instead of sitting on plain background." },
+    { "type": "image_picker", "id": "banner_image_mobile", "label": "Banner image (mobile)", "info": "Optional. Shown instead of the banner image above on small screens. Leave blank to reuse the same image on mobile." },
+    { "type": "checkbox", "id": "banner_gradient", "label": "Darken banner for text readability", "default": false, "info": "Turn on if your heading text is hard to read against the banner photo." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Lookbook" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Sets Worth Saying Yes To" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Complete jewellery sets, styled together. Tap any set to enquire on WhatsApp." },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 28, "max": 88, "step": 2, "unit": "px", "default": 56, "info": "Caps the heading's largest size — it still scales down on small screens." },
+
+    { "type": "header", "content": "WhatsApp" },
+    { "type": "text", "id": "whatsapp_number", "label": "WhatsApp number (with country code)", "default": "918547771777", "info": "Digits only, country code first — + and spaces are stripped automatically either way." },
+
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "color_wine", "label": "Wine", "default": "#4B0D14" },
+    { "type": "color", "id": "color_gold_deep", "label": "Gold (deep)", "default": "#A9812E" },
+    { "type": "color", "id": "color_bg", "label": "Background", "default": "#F3EAD9" },
+    { "type": "color", "id": "color_ink", "label": "Text", "default": "#2B1B12" }
+  ],
+  "blocks": [
+    {
+      "type": "look",
+      "name": "Jewellery set",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Set name", "default": "Bridal Set" },
+        { "type": "textarea", "id": "whatsapp_message", "label": "WhatsApp message override", "info": "Leave blank to auto-generate: \"Hi {shop}, I'm interested in the {set name}...\"" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bhima Lookbook",
+      "blocks": [
+        { "type": "look", "settings": { "title": "Sitara Bridal Set" } },
+        { "type": "look", "settings": { "title": "Aanya Diamond Set" } },
+        { "type": "look", "settings": { "title": "Meher Antique Set" } },
+        { "type": "look", "settings": { "title": "Ruhi Emerald Polki Set" } },
+        { "type": "look", "settings": { "title": "Zara Fusion Set" } },
+        { "type": "look", "settings": { "title": "Noor Pearl Set" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

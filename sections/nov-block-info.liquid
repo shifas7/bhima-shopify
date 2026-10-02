@@ -44,8 +44,8 @@
                   {% if block.settings.p != blank or block.settings.title != blank %}
                     {% if sst.show_number %}
                       <div class="item-icon item-hexagon style-1 mb-25 d-inline-flex" style="--fill: {{ sst.hexagon_fill }};--stroke: {{ sst.hexagon_stroke }};--size: {{ sst.hexagon_size }}px;--dasharray: {{ sst.hexagon_dasharray }}; --fill-second: {{ sst.hexagon_fill_2 }}">
-                        {% render 'icon-hexagon' id: section.id | append: forloop.index, stroke_width: sst.hexagon_stroke_width %}
-                        {% render 'icon-hexagon' id: section.id | append: 'second' | append: forloop.index %}
+                        {% render 'icon-hexagon', id: section.id, append: forloop.index, stroke_width: sst.hexagon_stroke_width %}
+                        {% render 'icon-hexagon', id: section.id, append: forloop.index %}
                         <span class="number position-absolute center-center h4">
                           {% if forloop.index < 10 %}
                             0{{ forloop.index }}
@@ -95,8 +95,8 @@
                   {% if block.settings.p != blank or block.settings.title != blank %}
                     {% if sst.show_number %}
                       <div class="item-icon item-hexagon style-1 mb-25 d-inline-flex" style="--fill: {{ sst.hexagon_fill }};--stroke: {{ sst.hexagon_stroke }};--size: {{ sst.hexagon_size }}px;--dasharray: {{ sst.hexagon_dasharray }}; --fill-second: {{ sst.hexagon_fill_2 }}">
-                        {% render 'icon-hexagon' id: section.id | append: forloop.index, stroke_width: sst.hexagon_stroke_width %}
-                        {% render 'icon-hexagon' id: section.id | append: 'second' | append: forloop.index %}
+                        {% render 'icon-hexagon', id: section.id, append: forloop.index, stroke_width: sst.hexagon_stroke_width %}
+                        {% render 'icon-hexagon', id: section.id, append: forloop.index %}
                         <span class="number position-absolute center-center h4">
                           {% if forloop.index < 10 %}
                             0{{ forloop.index }}
@@ -619,4 +619,28 @@
       }
     ]
   }
-{% endschema %}
+{% endschema %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'icon-hexagon' id: section.id | append: forloop.index, stroke_width:
+    sst.hexagon_stroke_width %}"
+  to: "{% render 'icon-hexagon', id: section.id, append: forloop.index, stroke_width:
+    sst.hexagon_stroke_width %}"
+  position: 2089..2195
+- from: "{% render 'icon-hexagon' id: section.id | append: 'second' | append: forloop.index
+    %}"
+  to: "{% render 'icon-hexagon', id: section.id, append: forloop.index %}"
+  position: 2221..2287
+- from: "{% render 'icon-hexagon' id: section.id | append: forloop.index, stroke_width:
+    sst.hexagon_stroke_width %}"
+  to: "{% render 'icon-hexagon', id: section.id, append: forloop.index, stroke_width:
+    sst.hexagon_stroke_width %}"
+  position: 5115..5221
+- from: "{% render 'icon-hexagon' id: section.id | append: 'second' | append: forloop.index
+    %}"
+  to: "{% render 'icon-hexagon', id: section.id, append: forloop.index %}"
+  position: 5247..5313
+{%- endcomment -%}
