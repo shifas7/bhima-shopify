@@ -43,7 +43,7 @@
         "deliv-3": {
           "type": "delivery_feature",
           "settings": {
-            "title": "5-10 Business Days",
+            "title": "2-7 Business Days",
             "text": "Shipping Timeline",
             "icon": "calendar"
           }
@@ -162,7 +162,7 @@
         "certified_image": "shopify://shop_images/Certified_By.jpg",
         "certified_width": 300,
         "show_cert_items": false,
-        "ship_time": "Orders ship within 5 to 10 business days.",
+        "ship_time": "Orders ship within 2 to 7 business days.",
         "ship_free": "",
         "show_delivery_check": true,
         "delivery_provider": "auto",
@@ -172,7 +172,7 @@
         "delivery_serviceable_prefixes": "",
         "delivery_express_prefixes": "",
         "delivery_blocked_prefixes": "",
-        "delivery_standard_days": 10,
+        "delivery_standard_days": 7,
         "delivery_express_days": 7,
         "delivery_spread": 5,
         "delivery_heading": "Check Delivery Availability",
@@ -182,7 +182,7 @@
         "delivery_checking_text": "Checking availability…",
         "delivery_available_text": "Delivery Available",
         "delivery_eta_label": "Estimated Delivery:",
-        "delivery_days_word": "Days",
+        "delivery_days_word": "Business Days",
         "delivery_free_text": "Free Delivery",
         "delivery_insured_text": "Secure / Insured Delivery",
         "delivery_cod_text": "Cash on Delivery available",

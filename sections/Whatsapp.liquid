@@ -117,12 +117,36 @@
      (#stickymenu_bottom_mobile, ~55px tall). The offsets above alone sit
      the icon inside that bar, overlapping its last tab. Lift it clear on
      that breakpoint only — desktop/tablet positioning is untouched. */
-  @media (max-width: 767px) {
+  @media (max-width: 767.98px) {
     .whatsapp-pos-bottom-right,
     .whatsapp-pos-bottom-left {
       bottom: calc({{ section.settings.offset_y }}px + 64px);
     }
   }
+
+  {%- comment -%}
+    The theme's back-to-top button (#_desktop_back_top, 40px, css-novstyle.css)
+    is fixed at right:15px / bottom:70px — it overlaps this icon and sits off its
+    centre line. When both share the right edge, stack it above the icon,
+    centred on the same vertical axis with a fixed gap.
+  {%- endcomment -%}
+  {%- if section.settings.position == 'bottom-right' -%}
+    {%- assign wa_size = section.settings.icon_size -%}
+    {%- assign top_size = 40 -%}
+    {%- assign stack_gap = 12 -%}
+    {%- assign top_right = wa_size | minus: top_size | divided_by: 2 | plus: section.settings.offset_x -%}
+    {%- assign top_bottom = section.settings.offset_y | plus: wa_size | plus: stack_gap -%}
+    #_desktop_back_top {
+      right: {{ top_right }}px;
+      bottom: {{ top_bottom }}px;
+    }
+
+    @media (max-width: 767.98px) {
+      #_desktop_back_top {
+        bottom: {{ top_bottom | plus: 64 }}px;
+      }
+    }
+  {%- endif -%}
 </style>
 
 <a
